@@ -1,0 +1,106 @@
+//
+// forms-control.scss
+//
+
+.form-control {
+  background-clip: border-box;
+
+  @if $enable-transitions {
+    transition: $transition-base;
+    transition-property: border;
+  }
+}
+
+// Sizing 
+
+.form-select-lg, .form-control-lg {
+  line-height: $input-line-height-lg;
+}
+
+.form-select-sm, .form-control-sm {
+  line-height: $input-line-height-sm;
+}
+
+.form-select-xs, .form-control-xs {
+  height: calc(#{$input-font-size-xs} * #{$line-height-base} + #{$input-padding-y-xs} * 2 + #{$input-border-width * 2});
+  padding-top: $input-padding-y-xs;
+  padding-bottom: $input-padding-y-xs;
+  padding-left: $input-padding-x-xs;
+  line-height: $input-line-height-xs;
+  font-size: $input-font-size-xs;
+}
+
+.form-control-xs {
+  padding-right: $input-padding-x-xs;
+}
+
+.form-select-xxs, .form-control-xxs {
+  height: calc(#{$input-font-size-xxs} * #{$line-height-base} + #{$input-padding-y-xxs} * 2 + #{$input-border-width * 2});
+  padding-top: $input-padding-y-xxs;
+  padding-bottom: $input-padding-y-xxs;
+  padding-left: $input-padding-x-xxs;
+  line-height: $input-line-height-xxs;
+  font-size: $input-font-size-xxs;
+}
+
+.form-control-xxs {
+  padding-right: $input-padding-x-xxs;
+}
+
+// Colors
+
+.form-control-gray-700 {
+  background-color: $gray-700;
+  border-color: $gray-700;
+  color: $white;
+
+  &::placeholder {
+    color: $gray-350;
+  }
+
+  &:focus {
+    background-color: $gray-700;
+    border-color: $gray-700;
+    color: $white;
+  }
+}
+
+.form-control-light {
+  background-color: transparent;
+  border-color: $white;
+  color: $white;
+
+  &::placeholder {
+    color: fade-out($white, .25);
+  }
+
+  &:hover, &:focus {
+    background-color: transparent;
+    border-color: $white;
+    color: $white;
+  }
+
+}
+
+.form-control-dark {
+  background-color: fade-out($dark, .6);
+  border-color: transparent;
+  color: $white;
+
+  &::placeholder {
+    color: $white;
+  }
+
+  &:hover, &:focus {
+    background-color: fade-out($dark, .6);
+    border-color: transparent;
+    color: $white;
+  }
+}
+
+
+// Underline
+
+.form-control-underline {
+  border-width: 0 0 $border-width 0;
+}

@@ -1,0 +1,1589 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shop Categories{% endblock %}
+
+{% block content %} 
+
+    <!-- MODALS -->
+    <!-- Newsletter: Horizontal -->
+    <div class="modal fade" id="modalNewsletterHorizontal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content" style="border-radius: 10px;">
+
+          <!-- Close -->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fe fe-x" aria-hidden="true" style="color: #8B4513;"></i>
+          </button>
+
+          <!-- Content -->
+          <div class="row gx-0">
+            <div class="col-12 col-lg-5">
+
+              <!-- Image -->
+              <img class="img-fluid" src="./assets/img/covers/cover-25.jpg" alt="..." style="border-radius: 10px 0 0 10px;">
+
+            </div>
+            <div class="col-12 col-lg-7 d-flex flex-column px-md-8" style="background-color: #FFF8DC;">
+
+              <!-- Body -->
+              <div class="modal-body my-auto py-10">
+
+                <!-- Heading -->
+                <h4 style="color: #8B4513;">Subscribe to Our Newsletter for 15% Off</h4>
+
+                <!-- Text -->
+                <p class="mb-7 fs-lg">
+                  Get a discount on your next purchase.
+                </p>
+
+                <!-- Form -->
+                <form>
+                  <div class="row gx-5">
+                    <div class="col">
+
+                      <!-- Input -->
+                      <label class="visually-hidden" for="modalNewsletterHorizontalEmail">Enter Email *</label>
+                      <input class="form-control form-control-sm" id="modalNewsletterHorizontalEmail" type="email" placeholder="Enter Email *" style="border: 1px solid #8B4513;">
+
+                    </div>
+                    <div class="col-auto">
+
+                      <!-- Button -->
+                      <button class="btn btn-sm" type="submit" style="background-color: #4CAF50; color: white;">
+                        <i class="fe fe-send"></i>
+                      </button>
+
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+
+              <!-- Footer -->
+              <div class="modal-footer pt-0">
+
+                <!-- Checkbox -->
+                <div class="form-check">
+
+                  <!-- Input -->
+                  <input class="form-check-input" id="modalNewsletterHorizontalCheckbox" type="checkbox">
+
+                  <!-- Label -->
+                  <label class="form-check-label fs-xs" for="modalNewsletterHorizontalCheckbox" style="color: #8B4513;">
+                    Prevent this pop-up
+                  </label>
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+        
+    <!-- Newsletter: Vertical -->
+    <div class="modal fade" id="modalNewsletterVertical" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+          <!-- Close -->
+          <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+
+          <!-- Body -->
+          <div class="modal-body mt-2 me-2 ms-2 py-10 bg-cover text-center text-white" style="background-image: url(./assets/img/covers/cover-26.jpg); background-size: cover;">
+            <h4>Subscribe for 15% Off</h4>
+            <p class="mb-0 fs-lg">On your next purchase</p>
+          </div>
+
+          <!-- Form -->
+          <div class="modal-body py-9" style="background-color: #FFF8DC;">
+            <form>
+              <div class="row gx-5">
+                <div class="col">
+                  <label class="visually-hidden" for="modalNewsletterVerticalEmail">Enter Email *</label>
+                  <input class="form-control form-control-sm" id="modalNewsletterVerticalEmail" type="email" placeholder="Enter Email *" style="border: 1px solid #8B4513;">
+                </div>
+                <div class="col-auto">
+                  <button class="btn btn-sm" type="submit" style="background-color: #4CAF50; color: white;">Subscribe</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Footer -->
+          <div class="modal-footer justify-content-center pt-0">
+            <div class="form-check">
+              <input class="form-check-input" id="modalNewsletterVerticalCheckbox" type="checkbox">
+              <label class="form-check-label fs-xs" for="modalNewsletterVerticalCheckbox" style="color: #8B4513;">Prevent this pop-up</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- Password Reset -->
+    <div class="modal fade" id="modalPasswordReset" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+    
+          <!-- Close -->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+    
+          <!-- Header-->
+          <div class="modal-header lh-fixed fs-lg">
+            <strong class="mx-auto">Forgot Password?</strong>
+          </div>
+    
+          <!-- Body -->
+          <div class="modal-body text-center">
+    
+            <!-- Text -->
+            <p class="mb-7 fs-sm text-gray-500">
+              Please enter your Email Address. You will receive a link
+              to create a new password via Email.
+            </p>
+    
+            <!-- Form -->
+            <form>
+    
+              <!-- Email -->
+              <div class="form-group">
+                <label class="visually-hidden" for="modalPasswordResetEmail">
+                  Email Address *
+                </label>
+                <input class="form-control form-control-sm" id="modalPasswordResetEmail" type="email" placeholder="Email Address *" required>
+              </div>
+    
+              <!-- Button -->
+              <button class="btn btn-sm btn-dark">
+                Reset Password
+              </button>
+    
+            </form>
+    
+          </div>
+    
+        </div>
+    
+      </div>
+    </div>
+    
+    <!-- Product Modal with African Food Theme -->
+    <div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content" style="border-radius: 10px; overflow: hidden;">
+
+          <!-- Close Button -->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fe fe-x" aria-hidden="true" style="color: #8B4513;"></i>
+          </button>
+
+          <!-- Content -->
+          <div class="container-fluid px-xl-0">
+            <div class="row align-items-center mx-xl-0">
+              <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0 px-xl-0">
+
+                <!-- Product Image -->
+                <img class="img-fluid" src="./assets/img/products/product-7.jpg" alt="..." style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+
+                <!-- More Info Button -->
+                <a class="btn btn-sm w-100 mt-4" href="./product.html" style="background-color: #FFA726; color: white; border-radius: 5px;">
+                  More Product Info <i class="fe fe-info ms-2"></i>
+                </a>
+
+              </div>
+              <div class="col-12 col-lg-6 col-xl-7 py-9 px-md-9" style="background-color: #FFF8E1; border-radius: 10px;">
+
+                <!-- Product Name -->
+                <h4 class="mb-3" style="color: #8B4513;">Leather Sneakers</h4>
+
+                <!-- Product Price and Availability -->
+                <div class="mb-7">
+                  <span class="h5" style="color: #4CAF50;">$85.00</span>
+                  <span class="fs-sm" style="color: #6B4226;">(In Stock)</span>
+                </div>
+
+                <!-- Form for Product Options -->
+                <form>
+                  <div class="form-group">
+
+                    <!-- Color Options -->
+                    <p>
+                      Color: <strong id="modalProductColorCaption">White</strong>
+                    </p>
+
+                    <!-- Radio Buttons for Color -->
+                    <div class="mb-8 ms-n1">
+                      <div class="form-check form-check-inline form-check-img">
+                        <input type="radio" class="form-check-input" id="modalProductColorOne" name="modalProductColor" data-toggle="form-caption" data-target="#modalProductColorCaption" value="White" style="background-image: url(./assets/img/products/product-7.jpg);" checked>
+                      </div>
+                      <div class="form-check form-check-inline form-check-img">
+                        <input type="radio" class="form-check-input" id="modalProductColorTwo" name="modalProductColor" data-toggle="form-caption" data-target="#modalProductColorCaption" value="Black" style="background-image: url(./assets/img/products/product-49.jpg);">
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="form-group">
+
+                    <!-- Size Options -->
+                    <p>
+                      Size: <strong><span id="modalProductSizeCaption">7.5</span> US</strong>
+                    </p>
+
+                    <!-- Add sizes similarly with appropriate styles if needed -->
+                    <div class="mb-2">
+                      <!-- Size options will go here -->
+                    </div>
+
+                  </div>
+                  <div class="form-group mb-0">
+                    <div class="row gx-5">
+                      <div class="col-12 col-lg-auto">
+
+                        <!-- Quantity Selector -->
+                        <select class="form-select mb-2" style="border: 1px solid #8B4513; color: #8B4513;">
+                          <option value="1" selected>1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+
+                      </div>
+                      <div class="col-12 col-lg">
+
+                        <!-- Add to Cart Button -->
+                        <button type="submit" class="btn w-100 mb-2" style="background-color: #4CAF50; color: white;">
+                          Add to Cart <i class="fe fe-shopping-cart ms-2"></i>
+                        </button>
+
+                      </div>
+                      <div class="col-12 col-lg-auto">
+
+                        <!-- Wishlist Button -->
+                        <button class="btn btn-outline-dark w-100 mb-2" data-toggle="button" style="border-color: #FFA726; color: #8B4513;">
+                          Wishlist <i class="fe fe-heart ms-2"></i>
+                        </button>
+
+                      </div>
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Search Modal with African Food Theme -->
+    <div class="offcanvas offcanvas-end" id="modalSearch" tabindex="-1" role="dialog" aria-hidden="true">
+
+      <!-- Close Button -->
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" style="color: #8B4513;">
+        <i class="fe fe-x" aria-hidden="true"></i>
+      </button>
+
+      <!-- Header -->
+      <div class="offcanvas-header lh-fixed fs-lg" style="background-color: #FFF8E1;">
+        <strong class="mx-auto" style="color: #8B4513;">Search Products</strong>
+      </div>
+
+      <!-- Body: Search Form -->
+      <div class="offcanvas-body" style="background-color: #FAF3E0;">
+        <form>
+          <div class="form-group mb-3">
+            <label class="visually-hidden" for="modalSearchCategories">Categories:</label>
+            <select class="form-select" id="modalSearchCategories" style="border-color: #8B4513; color: #8B4513;">
+              <option selected>All Categories</option>
+              <option>Grains</option>
+              <option>Spices</option>
+              <option>Vegetables</option>
+            </select>
+          </div>
+          <div class="input-group input-group-merge">
+            <input class="form-control" type="search" placeholder="Search" style="border-color: #8B4513; color: #8B4513;">
+            <div class="input-group-append">
+              <button class="btn" type="submit" style="background-color: #4CAF50; color: white;">
+                <i class="fe fe-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Body: Search Results -->
+      <div class="offcanvas-body border-top fs-sm" style="background-color: #FFF8E1;">
+        <!-- Heading -->
+        <p style="color: #8B4513;">Search Results:</p>
+
+        <!-- Items -->
+        <div class="row align-items-center position-relative mb-5">
+          <div class="col-4 col-md-3">
+            <!-- Image -->
+            <img class="img-fluid" src="./assets/img/products/product-5.jpg" alt="..." style="border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          </div>
+          <div class="col position-static">
+            <!-- Text -->
+            <p class="mb-0 fw-bold">
+              <a class="stretched-link text-body" href="./product.html" style="color: #8B4513;">Leather mid-heel Sandals</a> <br>
+              <span class="text-muted">$129.00</span>
+            </p>
+          </div>
+        </div>
+        <!-- Repeat similar blocks for other search results -->
+
+        <!-- View All Button -->
+        <a class="btn btn-link px-0 text-reset" href="#" style="color: #8B4513;">
+          View All <i class="fe fe-arrow-right ms-2"></i>
+        </a>
+      </div>
+
+      <!-- Body: Empty Search Result -->
+      <div class="offcanvas-body d-none" style="background-color: #FFF8E1;">
+        <!-- Text -->
+        <p class="mb-3 fs-sm text-center" style="color: #8B4513;">
+          Nothing matches your search
+        </p>
+        <!-- Smiley -->
+        <p class="mb-0 fs-sm text-center" style="color: #8B4513;">
+          😞
+        </p>
+      </div>
+    </div>
+
+    <!-- Shopping Cart Section (cart.html) -->
+   
+    <!-- Included in includes folder -->
+
+    
+    <!-- Sidebar with African Food Theme -->
+    <div class="offcanvas offcanvas-end" id="modalSidebar" tabindex="-1" role="dialog" aria-hidden="true">
+
+      <!-- Close Button -->
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" style="color: #8B4513;">
+        <i class="fe fe-x" aria-hidden="true"></i>
+      </button>
+
+      <!-- Body -->
+      <div class="offcanvas-body px-10 my-auto" style="background-color: #FAF3E0;">
+        <!-- Nav -->
+        <ul class="nav nav-vertical nav-unstyled fs-2" id="sidebarNav">
+          <li class="nav-item">
+            <!-- Toggle -->
+            <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#sidebarHome" style="color: #8B4513;">
+              Home
+            </a>
+            <!-- Collapse -->
+            <div class="collapse" id="sidebarHome" data-bs-parent="#sidebarNav">
+              <ul class="list-styled fs-lg py-3 mb-0">
+                <li class="list-styled-item">
+                  <a class="list-styled-link" href="./index.html" style="color: #6B4226;">Default</a>
+                </li>
+                <!-- Add other links similarly with the new color scheme -->
+              </ul>
+            </div>
+          </li>
+          
+          <li class="nav-item">
+            <!-- Toggle -->
+            <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#sidebarCatalog" style="color: #8B4513;">
+              Catalog
+            </a>
+            <!-- Collapse -->
+            <div class="collapse" id="sidebarCatalog" data-bs-parent="#sidebarNav">
+              <div class="row">
+                <div class="col-12 py-3">
+                  <!-- Heading -->
+                  <h6 class="mb-5 fw-bold" style="color: #8B4513;">Food Categories</h6>
+                  <!-- Links -->
+                  <ul class="list-styled fs-lg py-3">
+                    <li class="list-styled-item">
+                      <a class="list-styled-link" href="#" style="color: #6B4226;">All Products</a>
+                    </li>
+                    <li class="list-styled-item">
+                      <a class="list-styled-link" href="#" style="color: #6B4226;">Grains</a>
+                    </li>
+                    <!-- Add more food categories here -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <!-- Shop Section -->
+          <li class="nav-item">
+            <!-- Toggle -->
+            <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#sidebarShop" style="color: #8B4513;">
+              Shop
+            </a>
+            <!-- Collapse -->
+            <div class="collapse" id="sidebarShop" data-bs-parent="#sidebarNav">
+              <div class="row">
+                <div class="col-12 py-3">
+                  <!-- Heading -->
+                  <h6 class="mb-5" style="color: #8B4513;">Shop</h6>
+                  <!-- Links -->
+                  <ul class="list-styled fs-lg">
+                    <li class="list-styled-item">
+                      <a class="list-styled-link" href="#" style="color: #6B4226;">Default</a>
+                    </li>
+                    <!-- Add more shop links here -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <!-- Pages Section -->
+          <li class="nav-item">
+            <!-- Toggle -->
+            <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#sidebarPages" style="color: #8B4513;">
+              Pages
+            </a>
+            <!-- Collapse -->
+            <div class="collapse" id="sidebarPages" data-bs-parent="#sidebarNav">
+              <ul class="list-styled fs-lg py-3 mb-0">
+                <li class="list-styled-item">
+                  <a class="list-styled-link" href="./about.html" style="color: #6B4226;">About Us</a>
+                </li>
+                <!-- Add other page links similarly -->
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Footer Body -->
+      <div class="moda-body px-10 py-9" style="background-color: #FFF8E1;">
+        <!-- Social links -->
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            <a class="text-gray-350" href="#!" style="color: #8B4513;">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+          </li>
+          <!-- Add other social icons similarly -->
+        </ul>
+
+        <!-- Footer Text -->
+        <div class="fs-xxs text-gray-350" style="color: #8B4513;">
+          © 2024 African Food San Diego. All rights reserved.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Size Chart Modal with African Food Theme -->
+    <div class="modal fade" id="modalSizeChart" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content" style="border-radius: 10px; overflow: hidden; background-color: #FAF3E0;">
+
+          <!-- Close Button -->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: #8B4513;">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+
+          <!-- Header -->
+          <div class="modal-header lh-fixed fs-lg" style="background-color: #FFF8E1;">
+            <strong class="mx-auto" style="color: #8B4513;">Size Chart</strong>
+          </div>
+
+          <!-- Clothing Size Chart Body -->
+          <div class="modal-body border-bottom">
+            <!-- Header -->
+            <div class="d-flex mb-7">
+              <!-- Heading -->
+              <h5 class="mb-0" style="color: #8B4513;">Clothing</h5>
+
+              <!-- Unit Selection -->
+              <div class="ms-auto">
+                <!-- IN -->
+                <input type="radio" class="btn-check" name="modalSizeChartUnitOne" id="inOne" checked>
+                <label class="btn btn-xxs btn-circle btn-outline-dark fs-xxxs rounded-0" for="inOne">IN</label>
+                <!-- CM -->
+                <input type="radio" class="btn-check" name="modalSizeChartUnitOne" id="cmOne">
+                <label class="btn btn-xxs btn-circle btn-outline-dark fs-xxxs rounded-0" for="cmOne">CM</label>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm table-hover mb-0" style="color: #6B4226;">
+                <thead style="background-color: #FFF8E1;">
+                  <tr>
+                    <th>Size</th>
+                    <th>US</th>
+                    <th>Bust</th>
+                    <th>Waist</th>
+                    <th>Hips</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>XS</td>
+                    <td>2</td>
+                    <td>32</td>
+                    <td>24 - 25</td>
+                    <td>33 - 34</td>
+                  </tr>
+                  <!-- Add other clothing sizes here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Shoes Size Chart Body -->
+          <div class="modal-body">
+            <!-- Header -->
+            <div class="d-flex mb-7">
+              <!-- Heading -->
+              <h5 class="mb-0" style="color: #8B4513;">Shoes</h5>
+
+              <!-- Unit Selection -->
+              <div class="ms-auto">
+                <!-- IN -->
+                <input type="radio" class="btn-check" name="modalSizeChartUnitTwo" id="inTwo" checked>
+                <label class="btn btn-xxs btn-circle btn-outline-dark fs-xxxs rounded-0" for="inTwo">IN</label>
+                <!-- CM -->
+                <input type="radio" class="btn-check" name="modalSizeChartUnitTwo" id="cmTwo">
+                <label class="btn btn-xxs btn-circle btn-outline-dark fs-xxxs rounded-0" for="cmTwo">CM</label>
+              </div>
+            </div>
+
+            <!-- Tables -->
+            <div class="row">
+              <div class="col-12 col-lg-6">
+                <!-- Table -->
+                <div class="table-responsive">
+                  <table class="table table-bordered table-sm table-hover mb-lg-0" style="color: #6B4226;">
+                    <thead style="background-color: #FFF8E1;">
+                      <tr>
+                        <th>Size</th>
+                        <th>US</th>
+                        <th>Foot Length</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>36</td>
+                        <td>5</td>
+                        <td>22.8</td>
+                      </tr>
+                      <!-- Add other shoe sizes here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- Add second shoe size table similarly -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Wait List -->
+    <div class="modal fade" id="modalWaitList" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="border-radius: 10px; overflow: hidden; background-color: #FFF8E1;">
+
+          <!-- Close Button -->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: #8B4513;">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+
+          <!-- Header -->
+          <div class="modal-header lh-fixed fs-lg" style="background-color: #FAF3E0;">
+            <strong class="mx-auto" style="color: #8B4513;">Wait List</strong>
+          </div>
+
+          <!-- Body -->
+          <div class="modal-body" style="background-color: #FAF3E0;">
+            <div class="row mb-6">
+              <div class="col-12 col-md-3">
+                <!-- Image -->
+                <a href="./product.html">
+                  <img class="img-fluid mb-7 mb-md-0" src="./assets/img/products/product-6.jpg" alt="..." style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                </a>
+              </div>
+              <div class="col-12 col-md-9">
+                <!-- Label -->
+                <p>
+                  <a class="fw-bold" href="./product.html" style="color: #8B4513;">Cotton floral print Dress</a>
+                </p>
+
+                <!-- Radio Buttons for Sizes -->
+                <div class="form-check form-check-inline form-check-size mb-2">
+                  <input type="radio" class="form-check-input" name="modalWaitListSize" id="modalWaitListSizeOne" value="3XS" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+                  <label class="form-check-label" for="modalWaitListSizeOne" style="color: #6B4226;">3XS</label>
+                </div>
+                <!-- Add other sizes similarly with appropriate styles -->
+                <div class="form-check form-check-inline form-check-size mb-2">
+                  <input type="radio" class="form-check-input" name="modalWaitListSize" id="modalWaitListSizeFour" value="S" data-toggle="form-caption" data-target="#modalWaitListSizeCaption" checked>
+                  <label class="form-check-label" for="modalWaitListSizeFour" style="color: #6B4226;">S</label>
+                </div>
+                <!-- Continue adding other sizes as needed -->
+              </div>
+            </div>
+            
+            <!-- Description -->
+            <div class="row">
+              <div class="col-12">
+                <p class="fs-sm text-center" style="color: #8B4513;">
+                  Justo ut diam erat hendrerit morbi porttitor, per eu curabitur diam sociis.
+                </p>
+              </div>
+            </div>
+
+            <!-- Input Fields -->
+            <div class="row gx-5 mb-2">
+              <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <label class="visually-hidden" for="listName">Your Name</label>
+                  <input class="form-control" id="listName" type="text" placeholder="Your Name *" required style="border: 1px solid #8B4513; color: #8B4513;">
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <label class="visually-hidden" for="listEmail">Your Email</label>
+                  <input class="form-control" id="listEmail" type="email" placeholder="Your Email *" required style="border: 1px solid #8B4513; color: #8B4513;">
+                </div>
+              </div>
+            </div>
+
+            <!-- Subscribe Button -->
+            <div class="row">
+              <div class="col-12 text-center">
+                <button class="btn" type="submit" style="background-color: #FFA726; color: white;">
+                  Subscribe
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #FFF8E1;">
+      <div class="container">
+
+        <!-- Brand -->
+        <a class="navbar-brand" href="./overview.html" style="color: #8B4513; font-weight: bold;">
+          African Food San Diego
+        </a>
+
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+
+          <!-- Nav -->
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item dropdown">
+
+              <!-- Toggle -->
+              <a class="nav-link" data-bs-toggle="dropdown" href="#" style="color: #8B4513;">Home</a>
+
+              <!-- Menu -->
+              <div class="dropdown-menu" style="border-radius: 8px;">
+                <div class="card card-lg">
+                  <div class="card-body">
+                    <ul class="list-styled fs-sm">
+                      <li class="list-styled-item">
+                        <a class="list-styled-link" href="./index.html" style="color: #6B4226;">Default</a>
+                      </li>
+                      <!-- Add other items similarly -->
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+            </li>
+            <li class="nav-item dropdown position-static">
+
+              <!-- Toggle -->
+              <a class="nav-link" data-bs-toggle="dropdown" href="#" style="color: #8B4513;">Catalog</a>
+
+              <!-- Menu -->
+              <div class="dropdown-menu w-100" style="border-radius: 8px;">
+                <!-- Tabs -->
+                <div class="mb-2 mb-lg-0 border-bottom-lg">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-12">
+                        <!-- Nav -->
+                        <nav class="nav nav-tabs nav-overflow fs-xs border-bottom border-bottom-lg-0">
+                          <a class="nav-link text-uppercase active" data-bs-toggle="tab" href="#navTab" style="color: #8B4513;">
+                            Women
+                          </a>
+                          <!-- Add other tabs similarly -->
+                        </nav>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tab content -->
+                <div class="card card-lg">
+                  <div class="card-body">
+                    <div class="tab-content">
+                      <div class="tab-pane fade show active" id="navTab">
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-6 col-md">
+
+                              <!-- Heading -->
+                              <div class="mb-5 fw-bold" style="color: #8B4513;">Clothing</div>
+
+                              <!-- Links -->
+                              <ul class="list-styled mb-6 mb-md-0 fs-sm">
+                                <li class="list-styled-item">
+                                  <a class="list-styled-link" href="#" style="color: #6B4226;">All Clothing</a>
+                                </li>
+                                <!-- Add other items similarly -->
+                              </ul>
+
+                            </div>
+                            <!-- Add other columns similarly -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </li>
+            <!-- Add other navbar items similarly -->
+
+            <!-- Nav -->
+            <ul class="navbar-nav flex-row">
+              <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="offcanvas" href="#modalSearch">
+                  <i class="fe fe-search" style="color: #8B4513;"></i>
+                </a>
+              </li>
+              <li class="nav-item ms-lg-n4">
+                <a class="nav-link" href="./account-orders.html">
+                  <i class="fe fe-user" style="color: #8B4513;"></i>
+                </a>
+              </li>
+              <li class="nav-item ms-lg-n4">
+                <a class="nav-link" href="./account-wishlist.html">
+                  <i class="fe fe-heart" style="color: #8B4513;"></i>
+                </a>
+              </li>
+              <li class="nav-item ms-lg-n4">
+                <a class="nav-link" data-bs-toggle="offcanvas" href="#modalShoppingCart">
+                  <span data-cart-items="2">
+                    <i class="fe fe-shopping-cart" style="color: #8B4513;"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+
+          </ul>
+
+        </div>
+
+      </div>
+    </nav>
+
+    <!-- PROMO -->
+    <div class="py-3 bg-dark bg-pattern mb-4" style="background-color: #8B4513; background-image: url('assets/img/patterns/food-pattern.png');">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+
+            <!-- Text -->
+            <div class="text-center text-white">
+              <span class="heading-xxs letter-spacing-xl">
+                🌽 Fresh African Produce Delivered to Your Door 🚚
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <section>
+      <div class="row gx-0 d-block d-lg-flex flickity flickity-lg-none" data-flickity='{"watchCSS": true}'>
+
+        <!-- Item -->
+        <div class="col-12 col-md-6 col-lg-4 d-flex flex-column bg-cover" style="background-image: url(assets/img/covers/african-food-1.jpg);">
+          <div class="card bg-dark-5 bg-hover text-white text-center" style="min-height: 470px;">
+            <div class="card-body mt-auto mb-n11 py-8">
+
+              <!-- Heading -->
+              <h1 class="mb-0 fw-bolder">
+                Grains
+              </h1>
+
+            </div>
+            <div class="card-body mt-auto py-8">
+
+              <!-- Button -->
+              <a class="btn btn-white stretched-link" href="shop.html">
+                Shop Grains <i class="fe fe-arrow-right ms-2"></i>
+              </a>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Card -->
+        <div class="col-12 col-md-6 col-lg-4 d-flex flex-column bg-cover" style="background-image: url(assets/img/covers/african-food-2.jpg);">
+          <div class="card bg-dark-5 bg-hover text-white text-center" style="min-height: 470px;">
+            <div class="card-body mt-auto mb-n11 py-8">
+
+              <!-- Heading -->
+              <h1 class="mb-0 fw-bolder">
+                Vegetables
+              </h1>
+
+            </div>
+            <div class="card-body mt-auto py-8">
+
+              <!-- Button -->
+              <a class="btn btn-white stretched-link" href="shop.html">
+                Shop Vegetables <i class="fe fe-arrow-right ms-2"></i>
+              </a>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Card -->
+        <div class="col-12 col-md-6 col-lg-4 d-flex flex-column bg-cover" style="background-image: url(assets/img/covers/african-food-3.jpg);">
+          <div class="card bg-dark-5 bg-hover text-white text-center" style="min-height: 470px;">
+            <div class="card-body mt-auto mb-n11 py-8">
+
+              <!-- Heading -->
+              <h1 class="mb-0 fw-bolder">
+                Spices
+              </h1>
+
+            </div>
+            <div class="card-body mt-auto py-8">
+
+              <!-- Button -->
+              <a class="btn btn-white stretched-link" href="shop.html">
+                Shop Spices <i class="fe fe-arrow-right ms-2"></i>
+              </a>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="pt-7">
+      <div class="container">
+        <div class="row pb-7 border-bottom">
+          <div class="col-12 col-md-6 col-lg-3">
+
+            <!-- Item -->
+            <div class="d-flex mb-6 mb-lg-0">
+
+              <!-- Icon -->
+              <i class="fe fe-truck fs-lg" style="color: #FFA726;"></i>
+
+              <!-- Body -->
+              <div class="ms-6">
+
+                <!-- Heading -->
+                <h6 class="heading-xxs mb-1" style="color: #8B4513;">
+                  Fast Delivery
+                </h6>
+
+                <!-- Text -->
+                <p class="mb-0 fs-sm text-muted">
+                  To all states in the USA
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+          <div class="col-12 col-md-6 col-lg-3">
+
+            <!-- Item -->
+            <div class="d-flex mb-6 mb-lg-0">
+
+              <!-- Icon -->
+              <i class="fe fe-repeat fs-lg" style="color: #FFA726;"></i>
+
+              <!-- Body -->
+              <div class="ms-6">
+
+                <!-- Heading -->
+                <h6 class="mb-1 heading-xxs" style="color: #8B4513;">
+                  Easy Returns
+                </h6>
+
+                <!-- Text -->
+                <p class="mb-0 fs-sm text-muted">
+                  Within 15 days of purchase
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+          <div class="col-12 col-md-6 col-lg-3">
+
+            <!-- Item -->
+            <div class="d-flex mb-6 mb-md-0">
+
+              <!-- Icon -->
+              <i class="fe fe-lock fs-lg" style="color: #FFA726;"></i>
+
+              <!-- Body -->
+              <div class="ms-6">
+
+                <!-- Heading -->
+                <h6 class="mb-1 heading-xxs" style="color: #8B4513;">
+                  Secure Payments
+                </h6>
+
+                <!-- Text -->
+                <p class="mb-0 fs-sm text-muted">
+                  Safe and reliable transactions
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+          <div class="col-12 col-md-6 col-lg-3">
+
+            <!-- Item -->
+            <div class="d-flex">
+
+              <!-- Icon -->
+              <i class="fe fe-tag fs-lg" style="color: #FFA726;"></i>
+
+              <!-- Body -->
+              <div class="ms-6">
+
+                <!-- Heading -->
+                <h6 class="mb-1 heading-xxs" style="color: #8B4513;">
+                  Wide Selection
+                </h6>
+
+                <!-- Text -->
+                <p class="mb-0 fs-sm text-muted">
+                  Authentic African foodstuff
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BEST PICKS -->
+    <section class="pt-12">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-10 col-lg-8 col-xl-6 text-center">
+
+            <!-- Preheading -->
+            <h6 class="heading-xxs mb-3 text-gray-400">
+              Fresh Picks
+            </h6>
+
+            <!-- Heading -->
+            <h2 class="mb-4">Best of African Harvest</h2>
+
+            <!-- Subheading -->
+            <p class="mb-10 text-gray-500">
+              Experience the vibrant flavors and rich heritage of Africa's finest produce, curated just for you.
+            </p>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-md-5 col-lg-4 d-flex flex-column">
+
+            <!-- Card -->
+            <div class="card mb-7 text-white" style="min-height: 400px; background-image: url(assets/img/products/grains.jpg)">
+
+              <!-- Background -->
+              <div class="card-bg">
+                <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/grains.jpg);"></div>
+              </div>
+
+              <!-- Body -->
+              <div class="card-body my-auto text-center">
+
+                <!-- Heading -->
+                <h4 class="mb-0">Heritage Grains</h4>
+
+                <!-- Link -->
+                <a class="btn btn-link stretched-link text-reset" href="shop.html">
+                  Explore Now <i class="fe fe-arrow-right ms-2"></i>
+                </a>
+
+              </div>
+
+            </div>
+
+          </div>
+          <div class="col-12 col-md-7 col-lg-8 d-flex flex-column">
+
+            <!-- Card -->
+            <div class="card mb-7 text-body" style="min-height: 400px;">
+
+              <!-- Background -->
+              <div class="card-bg">
+                <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/veggies.jpg);"></div>
+              </div>
+
+              <!-- Body -->
+              <div class="card-body my-auto px-md-10 text-center text-md-start">
+
+                <!-- Circle -->
+                <div class="card-circle card-circle-lg card-circle-end">
+                  <strong>save</strong>
+                  <span class="fs-4 fw-bold">20%</span>
+                </div>
+
+                <!-- Heading -->
+                <h4 class="mb-0">Fresh Vegetables</h4>
+
+                <!-- Link -->
+                <a class="btn btn-link stretched-link px-0 text-reset" href="shop.html">
+                  Shop Now <i class="fe fe-arrow-right ms-2"></i>
+                </a>
+
+              </div>
+
+            </div>
+
+          </div>
+          <div class="col-12 col-md-7 col-lg-8 d-flex flex-column">
+
+            <!-- Card -->
+            <div class="card mb-7 mb-md-0 text-body" style="min-height: 400px;">
+
+              <!-- Background -->
+              <div class="card-bg">
+                <div class="card-bg-img bg-cover" style="background-image: url(static/img/products/shop.jpg);"></div>
+              </div>
+
+              <!-- Body -->
+              <div class="card-body my-auto px-md-10 text-center text-md-start">
+
+                <!-- Heading -->
+                <h4 class="mb-0">Exotic Spices</h4>
+
+                <!-- Link -->
+                <a class="btn btn-link stretched-link px-0 text-reset" href="shop.html">
+                  Spice It Up <i class="fe fe-arrow-right ms-2"></i>
+                </a>
+
+              </div>
+
+            </div>
+
+          </div>
+          <div class="col-12 col-md-5 col-lg-4 d-flex flex-column">
+
+            <!-- Card -->
+            <div class="card text-white" style="min-height: 400px;">
+
+              <!-- Background -->
+              <div class="card-bg">
+                <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/fruits.jpg);"></div>
+              </div>
+
+              <!-- Body -->
+              <div class="card-body my-auto text-center">
+
+                <!-- Heading -->
+                <h4 class="mb-0">Tropical Fruits</h4>
+
+                <!-- Link -->
+                <a class="btn btn-link stretched-link text-reset" href="shop.html">
+                  Taste the Tropics <i class="fe fe-arrow-right ms-2"></i>
+                </a>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOP SELLERS -->
+    <section class="py-12">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+
+            <!-- Heading -->
+            <h2 class="mb-4 text-center">Top Picks of the Month</h2>
+
+            <!-- Nav -->
+            <div class="nav justify-content-center mb-10">
+              <a class="nav-link active" href="#topSellersTab" data-bs-toggle="tab">Grains</a>
+              <a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">Vegetables</a>
+              <a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">Spices</a>
+            </div>
+
+          </div>
+        </div>
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="topSellersTab">
+            <div class="row">
+              <div class="col-6 col-md-4 col-lg-3">
+
+                <!-- Card -->
+                <div class="card mb-7">
+
+                  <!-- Badge -->
+                  <div class="badge bg-white text-body card-badge card-badge-start text-uppercase">
+                    New
+                  </div>
+
+                  <!-- Image -->
+                  <div class="card-img">
+
+                    <!-- Image -->
+                    <a class="card-img-hover" href="product.html">
+                      <img class="card-img-top card-img-back" src="assets/img/products/rice.jpg" alt="...">
+                      <img class="card-img-top card-img-front" src="assets/img/products/rice-back.jpg" alt="...">
+                    </a>
+
+                    <!-- Actions -->
+                    <div class="card-actions">
+                      <span class="card-action">
+                        <button class="btn btn-xs btn-circle btn-white-primary" data-bs-toggle="modal" data-bs-target="#modalProduct">
+                          <i class="fe fe-eye"></i>
+                        </button>
+                      </span>
+                      <span class="card-action">
+                        <button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button">
+                          <i class="fe fe-shopping-cart"></i>
+                        </button>
+                      </span>
+                      <span class="card-action">
+                        <button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button">
+                          <i class="fe fe-heart"></i>
+                        </button>
+                      </span>
+                    </div>
+
+                  </div>
+
+                  <!-- Body -->
+                  <div class="card-body px-0">
+
+                    <!-- Category -->
+                    <div class="fs-xs">
+                      <a class="text-muted" href="shop.html">Grains</a>
+                    </div>
+
+                    <!-- Title -->
+                    <div class="fw-bold">
+                      <a class="text-body" href="product.html">
+                        Premium Basmati Rice
+                      </a>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="fw-bold text-muted">
+                      $25.00
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+              <!-- Add more top-selling products here... -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+
+            <!-- Link  -->
+            <div class="mt-7 text-center">
+              <a class="link-underline" href="#!">Discover more flavors</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COUNTDOWN -->
+    <section class="py-13 bg-cover" style="background-image: url(assets/img/covers/african-harvest.jpg)">
+      <div class="container">
+        <div class="row justify-content-end">
+          <div class="col-12 col-md-8 col-lg-6">
+
+            <!-- Heading -->
+            <h3 class="mb-7">
+              Get up to 50% Off on <br />Our Harvest Collection
+            </h3>
+
+            <!-- Counter -->
+            <div class="d-flex mb-9" data-countdown data-date="Dec 31, 2025 00:00:00">
+              <div class="text-center">
+                <div class="fs-1 fw-bolder text-primary" data-days>00</div>
+                <div class="heading-xxs text-muted">Days</div>
+              </div>
+              <div class="px-1 px-md-4">
+                <div class="fs-2 fw-bolder text-primary">:</div>
+              </div>
+              <div class="text-center">
+                <div class="fs-1 fw-bolder text-primary" data-hours>00</div>
+                <div class="heading-xxs text-muted">Hours</div>
+              </div>
+              <div class="px-1 px-md-4">
+                <div class="fs-2 fw-bolder text-primary">:</div>
+              </div>
+              <div class="text-center">
+                <div class="fs-1 fw-bolder text-primary" data-minutes>00</div>
+                <div class="heading-xxs text-muted">Minutes</div>
+              </div>
+              <div class="px-1 px-md-4">
+                <div class="fs-2 fw-bolder text-primary">:</div>
+              </div>
+              <div class="text-center">
+                <div class="fs-1 fw-bolder text-primary" data-seconds>00</div>
+                <div class="heading-xxs text-muted">Seconds</div>
+              </div>
+            </div>
+
+            <!-- Button -->
+            <a class="btn btn-dark" href="shop.html">
+              Shop Now <i class="fe fe-arrow-right ms-2"></i>
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- REVIEWS -->
+    <section class="py-12">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-10 col-lg-8 col-xl-6 text-center">
+
+            <!-- Preheading -->
+            <h6 class="heading-xxs mb-3 text-gray-400">
+              What our customers say
+            </h6>
+
+            <!-- Heading -->
+            <h2 class="mb-10">Savor the Taste, Feel the Love</h2>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+
+            <!-- Slider -->
+            <div data-flickity='{"pageDots": true}'>
+              <div class="col-12 col-sm-8 col-md-6 col-lg-4 px-4">
+
+                <!-- Card -->
+                <div class="card-lg card border">
+                  <div class="card-body">
+
+                    <!-- Header -->
+                    <div class="row align-items-center mb-6">
+                      <div class="col-4">
+
+                        <!-- Image -->
+                        <img src="assets/img/products/african-grains.jpg" alt="..." class="img-fluid">
+
+                      </div>
+                      <div class="col-8 ms-n2">
+
+                        <!-- Preheading -->
+                        <a class="fs-xs text-muted" href="shop.html">
+                          Heritage Grains
+                        </a>
+
+                        <!-- Heading -->
+                        <a class="d-block fw-bold text-body" href="product.html">
+                          Organic Fonio
+                        </a>
+
+                        <!-- Rating -->
+                        <div class="rating fs-xxs text-warning" data-value="5">
+                          <div class="rating-item">
+                            <i class="fas fa-star"></i>
+                          </div>
+                          <div class="rating-item">
+                            <i class="fas fa-star"></i>
+                          </div>
+                          <div class="rating-item">
+                            <i class="fas fa-star"></i>
+                          </div>
+                          <div class="rating-item">
+                            <i class="fas fa-star"></i>
+                          </div>
+                          <div class="rating-item">
+                            <i class="fas fa-star"></i>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <!-- Blockquote -->
+                    <blockquote class="mb-0">
+                      <p class="text-muted">
+                        "The taste and texture of these grains are unmatched! It brought back so many childhood memories. Highly recommend the Organic Fonio!"
+                      </p>
+                      <footer class="fs-xs text-muted">
+                        Aisha Adebayo, <time datetime="2024-09-15">15 Sep 2024</time>
+                      </footer>
+                    </blockquote>
+
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-12 col-sm-8 col-md-6 col-lg-4 px-4">
+
+                <!-- Card -->
+                <div class="card-lg card border">
+                  <div class="card-body">
+
+                    <!-- Header -->
+                    <div class="row align-items-center mb-6">
+                      <div class="col-4">
+
+                        <!-- Image -->
+                        <img src="assets/img/products/spices.jpg" alt="..." class="img-fluid">
+
+                      </div>
+                      <div class="col-8 ms-n2">
+
+                        <!-- Preheading -->
+                        <a class="fs-xs text-muted" href="shop.html">
+                          Spices
+                        </a>
+
+                        <!-- Heading -->
+                        <a class="d-block fw-bold text-body" href="product.html">
+                          Authentic Suya Spice
+                        </a>
+
+                        <!-- Rating -->
+                        <div class="rating fs-xxs text-warning" data-value="5">
+                          <div class="rating-item">
+                            <i class="fas fa-star"></i>
+                          </div>
+                          <div class="rating-item">
+                            <i class="fas fa-star"></i>
+                          </div>
+                          <div class="rating-item">
+                            <i class="fas fa-star"></i>
+                          </div>
+                          <div class="rating-item">
+                            <i class="fas fa-star"></i>
+                          </div>
+                          <div class="rating-item">
+                            <i class="fas fa-star"></i>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <!-- Blockquote -->
+                    <blockquote class="mb-0">
+                      <p class="text-muted">
+                        "This Suya spice is the real deal! It transformed our BBQ nights. The aroma and flavor are just like the street food back home."
+                      </p>
+                      <footer class="fs-xs text-muted">
+                        Kwame Mensah, <time datetime="2024-08-22">22 Aug 2024</time>
+                      </footer>
+                    </blockquote>
+
+                  </div>
+                </div>
+
+              </div>
+              <!-- Add more customer reviews here... -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BRANDS -->
+    <section class="py-12 bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 text-center">
+
+            <!-- Heading -->
+            <h2 class="mb-3">@africanfoodsd</h2>
+
+            <!-- Subheading -->
+            <p class="mb-10 fs-lg text-gray-500">
+              Dive into the world of African flavors and culture with us.
+            </p>
+
+          </div>
+        </div>
+        <div class="row mx-n1 mb-10">
+          <div class="col-6 col-sm-4 col-md px-1">
+
+            <!-- Card -->
+            <div class="card mb-2">
+
+              <!-- Image -->
+              <img src="assets/img/products/african-spices.jpg" alt="..." class="card-img">
+
+              <!-- Overlay -->
+              <a class="card-img-overlay card-img-overlay-hover align-items-center bg-dark-40" href="blog-post.html">
+                <p class="my-0 fs-xxs text-center text-white">
+                  <i class="fe fe-heart me-2"></i> 312 <i class="fe fe-message-square me-2 ms-3"></i> 14
+                </p>
+              </a>
+
+            </div>
+
+          </div>
+          <!-- Add more brand images here... -->
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark bg-cover" style="background-image: url(./assets/img/patterns/african-pattern.svg)">
+      <div class="py-12 border-bottom border-gray-700">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+
+              <!-- Heading -->
+              <h5 class="mb-7 text-center text-white">Stay Updated with Our Latest Flavors</h5>
+
+              <!-- Form -->
+              <form class="mb-11">
+                <div class="row gx-5 align-items-start">
+                  <div class="col">
+                    <input type="email" class="form-control form-control-gray-700 form-control-lg" placeholder="Enter Email *">
+                  </div>
+                  <div class="col-auto">
+                    <button type="submit" class="btn btn-gray-500 btn-lg">Subscribe</button>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-md-3">
+
+              <!-- Heading -->
+              <h4 class="mb-6 text-white">African Food SD</h4>
+
+              <!-- Social -->
+              <ul class="list-unstyled list-inline mb-7 mb-md-0">
+                <li class="list-inline-item">
+                  <a href="#!" class="text-gray-350">
+                    <i class="fab fa-facebook-f"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="#!" class="text-gray-350">
+                    <i class="fab fa-youtube"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="#!" class="text-gray-350">
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="#!" class="text-gray-350">
+                    <i class="fab fa-instagram"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="#!" class="text-gray-350">
+                    <i class="fab fa-medium"></i>
+                  </a>
+                </li>
+              </ul>
+
+            </div>
+            <div class="col-6 col-sm">
+
+              <!-- Heading -->
+              <h6 class="heading-xxs mb-4 text-white">
+                Support
+              </h6>
+
+              <!-- Links -->
+              <ul class="list-unstyled mb-7 mb-sm-0">
+                <li>
+                  <a class="text-gray-300" href="./contact-us.html">Contact Us</a>
+                </li>
+                <li>
+                  <a class="text-gray-300" href="./faq.html">FAQs</a>
+                </li>
+                <li>
+                  <a class="text-gray-300" data-bs-toggle="modal" href="#modalSizeChart">Size Guide</a>
+                </li>
+                <li>
+                  <a class="text-gray-300" href="./shipping-and-returns.html">Shipping & Returns</a>
+                </li>
+              </ul>
+
+            </div>
+            <!-- Add other footer columns here... -->
+          </div>
+        </div>
+      </div>
+    </footer>
+
+
+{% endblock %}
+

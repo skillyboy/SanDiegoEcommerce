@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Alerts"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Alerts</h3>
+
+            <p class="text-gray-500">
+              Provide contextual feedback messages for typical user actions with the handful of available and flexible alert messages. <br>
+              <a href="http://getbootstrap.com/docs/5.1/components/alerts/" target="_blank">Bootstrap documentation</a>
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <!-- Primary -->
+                <div class="alert alert-primary" role="alert">
+                  A simple primary alert—check it out!
+                </div>
+
+                <!-- Secondary -->
+                <div class="alert alert-secondary" role="alert">
+                  A simple secondary alert—check it out!
+                </div>
+
+                <!-- Success -->
+                <div class="alert alert-success" role="alert">
+
+                  <!-- Heading -->
+                  <h6 class="alert-heading">Well done!</h6>
+
+                  <!-- Text -->
+                  <p>
+                    Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.
+                  </p>
+
+                  <!-- Divider -->
+                  <hr>
+
+                  <!-- Text -->
+                  <p class="mb-0">
+                    Whenever you need to, be sure to use margin utilities to keep things nice and tidy.
+                  </p>
+
+                </div>
+
+                <!-- Danger -->
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+
+                  <!-- Text -->
+                  <strong>Danger Will Robinson!</strong> This is a dismissable alert!
+
+                  <!-- Button -->
+                  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+
+                </div>
+
+                <!-- Warning-->
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+
+                  <!-- Text -->
+                  <strong>Holy guacamole!</strong> Notice how the text/UI have high contrast?
+
+                  <!-- Button -->
+                  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+
+                </div>
+
+                <!-- Info -->
+                <div class="alert alert-info" role="alert">
+                  A simple info alert—check it out!
+                </div>
+
+                <!-- Light -->
+                <div class="alert alert-light" role="alert">
+                  A simple light alert—check it out!
+                </div>
+
+                <!-- Dark -->
+                <div class="alert alert-dark" role="alert">
+                  A simple dark alert—check it out!
+                </div>
+
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

@@ -1,0 +1,66 @@
+<!-- FOOTER -->
+<footer class="bg-dark text-white py-5 bg-cover" style="background-image: url(./assets/img/patterns/pattern-2.svg);">
+  <div class="container">
+    <div class="row">
+      <!-- Company Info -->
+      <div class="col-md-4">
+        <h5 class="text-white">African Food San Diego</h5>
+        <p>We source and deliver authentic African foods to your doorstep, anywhere in the USA. Explore the richness of African cuisine from the comfort of your home.</p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-md-4">
+        <h5 class="text-white">Quick Links</h5>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'shop' %}" class="text-white">Shop</a></li>
+          <li><a href="{% url 'about' %}" class="text-white">About Us</a></li>
+          <li><a href="{% url 'contact_us' %}" class="text-white">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <!-- Follow Us -->
+      <div class="col-md-4">
+        <h5 class="text-white">Follow Us</h5>
+        <ul class="list-unstyled list-inline mb-0">
+          <li class="list-inline-item"><a href="#" class="text-white"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+          <li class="list-inline-item"><a href="#" class="text-white"><i class="fab fa-twitter"></i> Twitter</a></li>
+          <li class="list-inline-item"><a href="#" class="text-white"><i class="fab fa-instagram"></i> Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Newsletter Section -->
+    <div class="row justify-content-center mt-5">
+      <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+        <h5 class="mb-4 text-center text-white">Want delicious African food ideas and updates?</h5>
+        <form class="mb-7">
+          <div class="row gx-3 align-items-start">
+            <div class="col">
+              <input type="email" class="form-control form-control-gray-700 form-control-lg" placeholder="Enter Email *" required>
+            </div>
+            <div class="col-auto">
+              <button type="submit" class="btn btn-primary btn-lg">Subscribe</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment and Footer Bottom -->
+  <div class="py-6 border-top border-gray-700">
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-md-6 text-center text-md-left">
+          <p class="mb-3 mb-md-0 text-muted">&copy; {{ current_year }} African Food San Diego. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-right">
+          <img class="footer-payment" src="./assets/img/payment/mastercard.svg" alt="Mastercard" width="40">
+          <img class="footer-payment" src="./assets/img/payment/visa.svg" alt="Visa" width="40">
+          <img class="footer-payment" src="./assets/img/payment/amex.svg" alt="Amex" width="40">
+          <img class="footer-payment" src="./assets/img/payment/paypal.svg" alt="Paypal" width="40">
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

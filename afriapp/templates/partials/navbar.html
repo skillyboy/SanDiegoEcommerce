@@ -1,0 +1,191 @@
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #FFE5B4; border-bottom: 4px solid #8B4513; box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3); border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+      <div class="container">
+
+        <!-- Brand -->
+        <a class="navbar-brand" href="./overview.html" style="color: #8B4513; font-family: 'Poppins', sans-serif; font-size: 1.5rem;">
+          African Food.
+        </a>
+
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+
+          <!-- Nav -->
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item dropdown">
+              <!-- Toggle -->
+              <a class="nav-link" data-bs-toggle="dropdown" href="#" style="color: #4E342E;">Home</a>
+              <!-- Menu -->
+              <div class="dropdown-menu">
+                <div class="card card-lg">
+                  <div class="card-body">
+                    <ul class="list-styled fs-sm">
+                      <li class="list-styled-item">
+                        <a class="list-styled-link" href="./index.html" style="color: #8B4513;">Default</a>
+                      </li>
+                      <li class="list-styled-item">
+                        <a class="list-styled-link" href="./index-sidenav.html" style="color: #8B4513;">Sidenav</a>
+                      </li>
+                      <li class="list-styled-item">
+                        <a class="list-styled-link" href="./index-landing.html" style="color: #8B4513;">Landing</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="nav-item dropdown position-static">
+              <!-- Toggle -->
+              <a class="nav-link" data-bs-toggle="dropdown" href="#" data-bs-auto-close="outside" style="color: #4E342E;">Shop</a>
+              <!-- Menu -->
+              <div class="dropdown-menu w-100">
+                <!-- Tabs -->
+                <div class="mb-2 mb-lg-0 border-bottom-lg">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-12">
+                        <!-- Nav -->
+                        <nav class="nav nav-tabs nav-overflow fs-xs border-bottom border-bottom-lg-0">
+                          {% for category in categories %}
+                          <a class="nav-link text-uppercase {% if forloop.first %}active{% endif %}" data-bs-toggle="tab" href="#navTab{{ category.id }}" style="color: #6B4226;">
+                            {{ category.name }}
+                          </a>
+                          {% endfor %}
+                        </nav>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tab content -->
+                <div class="card card-lg">
+                  <div class="card-body">
+                    <div class="tab-content">
+                      {% for category in categories %}
+                      <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="navTab{{ category.id }}">
+                        <div class="container">
+                          <div class="row">
+                            {% for subcategory in category.subcategories.all %}
+                            <div class="col-6 col-md">
+                              <!-- Subcategory Heading -->
+                              <h6 class="mb-5 fw-bold" style="color: #388E3C;">{{ subcategory.name }}</h6>
+
+                              <!-- Product Links -->
+                              <ul class="list-styled mb-6 mb-md-0 fs-sm">
+                                {% for product in subcategory.products.all %}
+                                <li class="list-styled-item">
+                                  <a class="list-styled-link" href="#" style="color: #4CAF50;">
+                                    {{ product.name }}
+                                  </a>
+                                </li>
+                                {% empty %}
+                                <li class="list-styled-item">
+                                  <p style="color: #8B4513;">No products available in this subcategory.</p>
+                                </li>
+                                {% endfor %}
+                              </ul>
+                            </div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="nav-item dropdown">
+              <!-- Toggle -->
+              <a class="nav-link" data-bs-toggle="dropdown" href="#" style="color: #4E342E;">Pages</a>
+              <!-- Menu -->
+              <div class="dropdown-menu">
+                <div class="card card-lg">
+                  <div class="card-body">
+                    <ul class="list-styled fs-sm">
+                      <li class="list-styled-item">
+                        <a class="list-styled-link" href="./about.html" style="color: #8B4513;">About</a>
+                      </li>
+                      <li class="list-styled-item">
+                        <a class="list-styled-link" href="./contact-us.html" style="color: #8B4513;">Contact Us</a>
+                      </li>
+                      <li class="list-styled-item">
+                        <a class="list-styled-link" href="./store-locator.html" style="color: #8B4513;">Store Locator</a>
+                      </li>
+                      <li class="list-styled-item">
+                        <a class="list-styled-link" href="./faq.html" style="color: #8B4513;">FAQ</a>
+                      </li>
+                      <li class="list-styled-item">
+                        <a class="list-styled-link" href="./coming-soon.html" style="color: #8B4513;">Coming Soon</a>
+                      </li>
+                      <li class="list-styled-item">
+                        <a class="list-styled-link" href="./404.html" style="color: #8B4513;">404</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="nav-item dropdown">
+              <!-- Toggle -->
+              <a class="nav-link" data-bs-toggle="dropdown" href="#" style="color: #4E342E;">Blog</a>
+              <!-- Menu -->
+              <div class="dropdown-menu">
+                <div class="card card-lg">
+                  <div class="card-body">
+                    <ul class="list-styled fs-sm">
+                      <li class="list-styled-item">
+                        <a class="list-styled-link" href="./blog.html" style="color: #8B4513;">Blog</a>
+                      </li>
+                      <li class="list-styled-item">
+                        <a class="list-styled-link" href="./blog-post.html" style="color: #8B4513;">Blog Post</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="docs/getting-started.html" style="color: #4E342E;">Docs</a>
+            </li>
+          </ul>
+
+          <!-- Nav -->
+          <ul class="navbar-nav flex-row">
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="offcanvas" href="#modalSearch" style="color: #8B4513;">
+                <i class="fe fe-search"></i>
+              </a>
+            </li>
+            <li class="nav-item ms-lg-n4">
+              <a class="nav-link" href="./account-orders.html" style="color: #8B4513;">
+                <i class="fe fe-user"></i>
+              </a>
+            </li>
+            <li class="nav-item ms-lg-n4">
+              <a class="nav-link" href="./account-wishlist.html" style="color: #8B4513;">
+                <i class="fe fe-heart"></i>
+              </a>
+            </li>
+            <li class="nav-item ms-lg-n4">
+              <a class="nav-link" data-bs-toggle="offcanvas" href="#modalShoppingCart" style="color: #8B4513;">
+                <span data-cart-items="2">
+                  <i class="fe fe-shopping-cart"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+
+      </div>
+    </nav>

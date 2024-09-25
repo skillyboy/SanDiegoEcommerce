@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Text"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Text</h3>
+
+            <p class="text-gray-500">
+              Text utilities to easily change line height, font size, letter spacing, and color of your text. <br>
+              <a href="https://getbootstrap.com/docs/5.1/utilities/text/" target="_blank">Bootstrap documentation</a>
+            </p>
+
+            <hr class="my-7">
+
+            <h5>Font size</h5>
+
+            <ul>
+              <li>
+                <code>.fs-{lg|base|sm|xs|xxs|xxxs}</code> - changes the font size to a specified value.
+              </li>
+              <li>
+                <code>.fs-{1|2|3|4|5|6}</code> - changes the font size to a specified value. Different from the corresponding <code>.h{1-6}</code> utilities because it preserves the default line height and doesn't add additonal margins.
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>Letter spacing</h5>
+
+            <ul>
+              <li>
+                <code>.letter-spacing-{lg}|xl}</code> - changes the letter spacing to a specified value.
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>Color</h5>
+
+            <ul>
+              <li>
+                <code>.text-gray-{300|350|400|450|500}</code> - changes the text color to a specified gray color. Also changes the hover color if used with links.
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>Decoration</h5>
+
+            <ul>
+              <li>
+                <code>.text-decoration-underline</code> - sets the text decoration property to <code>underline</code>. Removes it on hover for links.
+              </li>
+              <li>
+                <code>.text-decoration-line-through</code> - sets the text decoration property to <code>line-through</code>.
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>Style</h5>
+
+            <ul>
+              <li>
+                <code>.fst-normal</code> - changes the font style back to normal.
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>Line height</h5>
+
+            <ul>
+              <li>
+                <code>.lh-base</code> - changes the line height to the default value.
+              </li>
+              <li>
+                <code>.lh-fixed</code> - changes the default line height to a fixed value (instead of being specified relatively to the font size).
+              </li>
+            </ul>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

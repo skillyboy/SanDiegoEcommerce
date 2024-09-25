@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Breadcrumb"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Breadcrumb</h3>
+
+            <p class="text-gray-500">
+              Indicate the current page’s location within a navigational hierarchy that automatically adds separators via CSS. <br>
+              <a href="https://getbootstrap.com/docs/5.1/components/breadcrumb/" target=_blank>Bootstrap documentation</a>
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <ol class="breadcrumb mb-3">
+                  <li class="breadcrumb-item">
+                    <a href="index.html">Home</a>
+                  </li>
+                  <li class="breadcrumb-item">
+                    <a href="shop.html">Shop</a>
+                  </li>
+                  <li class="breadcrumb-item active">
+                    Product
+                  </li>
+                </ol>
+
+                <ol class="breadcrumb mb-3 fs-xs">
+                  <li class="breadcrumb-item">
+                    <a href="index.html">Home</a>
+                  </li>
+                  <li class="breadcrumb-item">
+                    <a href="shop.html">Shop</a>
+                  </li>
+                  <li class="breadcrumb-item active">
+                    Product
+                  </li>
+                </ol>
+
+                <ol class="breadcrumb mb-3 fs-xs text-gray-400">
+                  <li class="breadcrumb-item">
+                    <a class="text-gray-400" href="index.html">Home</a>
+                  </li>
+                  <li class="breadcrumb-item">
+                    <a class="text-gray-400" href="shop.html">Shop</a>
+                  </li>
+                  <li class="breadcrumb-item active">
+                    Product
+                  </li>
+                </ol>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;ol&nbsp;class=&quot;breadcrumb&nbsp;mb-3&quot;&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;breadcrumb-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;href=&quot;index.html&quot;&gt;Home&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;breadcrumb-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;href=&quot;shop.html&quot;&gt;Shop&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;breadcrumb-item&nbsp;active&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;Product<br />&nbsp;&nbsp;&lt;/li&gt;<br />&lt;/ol&gt;<br /><br />&lt;ol&nbsp;class=&quot;breadcrumb&nbsp;mb-3&nbsp;fs-xs&quot;&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;breadcrumb-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;href=&quot;index.html&quot;&gt;Home&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;breadcrumb-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;href=&quot;shop.html&quot;&gt;Shop&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;breadcrumb-item&nbsp;active&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;Product<br />&nbsp;&nbsp;&lt;/li&gt;<br />&lt;/ol&gt;<br /><br />&lt;ol&nbsp;class=&quot;breadcrumb&nbsp;mb-3&nbsp;fs-xs&nbsp;text-gray-400&quot;&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;breadcrumb-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;text-gray-400&quot;&nbsp;href=&quot;index.html&quot;&gt;Home&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;breadcrumb-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;text-gray-400&quot;&nbsp;href=&quot;shop.html&quot;&gt;Shop&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;breadcrumb-item&nbsp;active&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;Product<br />&nbsp;&nbsp;&lt;/li&gt;<br />&lt;/ol&gt;<br />
+                </code>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

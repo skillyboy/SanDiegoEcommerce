@@ -1,0 +1,165 @@
+<!-- Product Modals -->
+{% for product in selected_products %}
+<div class="modal  fade"  id="modalProduct{{ product.id }}" tabindex="-1" role="dialog" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content" style="border-radius: 10px; overflow: hidden;">
+
+      <!-- Close Button -->
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 15px; right: 15px; color: #8B4513;">
+        <i class="fe fe-x" aria-hidden="true"></i>
+      </button>
+
+      <!-- Content -->
+      <div class="container-fluid px-xl-0" >
+        <div class="row align-items-center mx-xl-0" >
+          <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0 px-xl-0" >
+            <!-- Product Image -->
+            <img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+
+            <!-- Button -->
+            <a class="btn btn-sm w-100 mt-4" href="#" style="background-color: #FFA726; color: white; border-radius: 5px;">
+              More Product Info <i class="fe fe-info ms-2"></i>
+            </a>
+          </div>
+          <div class="col-12 col-lg-6 col-xl-7 py-9 px-md-9" style="background-color: #FFF8E1; border-radius: 10px;">
+            <!-- Product Title -->
+            <h4 class="mb-3" style="color: #8B4513;">{{ product.name }}</h4>
+
+            <!-- Price -->
+            <div class="mb-7">
+              <span class="h5" style="color: #4CAF50;">${{ product.price }}</span>
+              <span class="fs-sm" style="color: #6B4226;">(In Stock)</span>
+            </div>
+
+            <!-- Color Options -->
+            <div class="form-group mb-4">
+              <p>
+                Color: <strong id="modalProductColorCaption">White</strong>
+              </p>
+              <div class="mb-8 ms-n1">
+                <!-- Example Color Options Loop -->
+                <div class="form-check form-check-inline form-check-img">
+                  <input type="radio" class="form-check-input" id="modalProductColorOne" name="modalProductColor" data-toggle="form-caption" data-target="#modalProductColorCaption" value="White" style="background-image: url('./assets/img/products/product-7.jpg');" checked>
+                </div>
+                <div class="form-check form-check-inline form-check-img">
+                  <input type="radio" class="form-check-input" id="modalProductColorTwo" name="modalProductColor" data-toggle="form-caption" data-target="#modalProductColorCaption" value="Black" style="background-image: url('./assets/img/products/product-49.jpg');">
+                </div>
+              </div>
+            </div>
+
+            <!-- Size Options -->
+            <div class="form-group mb-4">
+              <p>
+                Size: <strong><span id="modalProductSizeCaption">7.5</span> US</strong>
+              </p>
+              <div class="mb-2">
+                <div class="form-check form-check-inline form-check-size mb-2">
+                  <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeOne" value="6" data-toggle="form-caption" data-target="#modalProductSizeCaption">
+                  <label class="form-check-label" for="modalProductSizeOne">7</label>
+                </div>                        
+                <div class="form-check form-check-inline form-check-size mb-2">
+                  <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeOne" value="6" data-toggle="form-caption" data-target="#modalProductSizeCaption">
+                  <label class="form-check-label" for="modalProductSizeOne">6</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <p>Description: <strong id="modalProductColorCaption" style="color: #8B4513;">{{ product.description }}</strong></p>
+
+            <!-- Quantity Selection -->
+            <div class="form-group mb-4">
+              <p>Quantity:</p>
+              <div class="input-group">
+                <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity({{ product.id }})" style="border-color: #8B4513; color: #8B4513;">-</button>
+                <input type="number" id="quantity{{ product.id }}" class="form-control text-center" value="1" min="1" style="border: 1px solid #4CAF50;">
+                <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity({{ product.id }})" style="border-color: #8B4513; color: #8B4513;">+</button>
+              </div>
+            </div>
+
+            <!-- Add to Cart and Wishlist -->
+            <div class="form-group mb-0">
+              <div class="row gx-5">
+                <!-- Add to Cart Button -->
+                <form method="POST" action="{% url 'addtocart' product.id %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="product_id" value="{{ product.id }}">
+                  <input type="hidden" name="quantity" id="quantityInput{{ product.id }}" value="1">
+                  <button type="submit" class="btn w-100 btn-dark mb-2" style="background-color: #4CAF50; color: white;">
+                    Add to Cart <i class="fe fe-shopping-cart ms-2"></i>
+                  </button>
+                </form>
+
+                <!-- Add to Wishlist -->
+                <button type="button" class="btn btn-outline-dark w-100 mb-2" onclick="addToWishlist({{ product.id }})" style="border-color: #FFA726; color: #8B4513;">
+                  Wishlist <i class="fe fe-heart ms-2"></i>
+                </button>
+
+                <!-- Remove from Wishlist -->
+                <button type="button" class="btn btn-outline-danger w-100 mb-2" onclick="removeFromWishlist({{ product.id }})" style="border-color: #d9534f; color: #d9534f;">
+                  Remove from Wishlist <i class="fe fe-trash ms-2"></i>
+                </button>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<script>
+  function addToWishlist(productId) {
+    $.ajax({
+      type: "POST",
+      url: "{% url 'add_to_wishlist' %}",
+      data: {
+        product_id: productId,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+      success: function(response) {
+        alert("Product added to wishlist!");
+      },
+      error: function(error) {
+        alert("Error adding product to wishlist.");
+      }
+    });
+  }
+
+  function removeFromWishlist(productId) {
+    const url = "{% url 'remove_from_wishlist' 0 %}".replace('0', productId);
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: {
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+      success: function(response) {
+        alert(response.message);
+        // Optionally, update the UI to remove the product without refreshing the page
+        document.getElementById(`product-${productId}`).remove();
+      },
+      error: function(error) {
+        alert("Error removing product from wishlist.");
+      }
+    });
+  }
+
+  function increaseQuantity(productId) {
+    let quantityInput = document.getElementById(`quantity${productId}`);
+    let currentValue = parseInt(quantityInput.value);
+    quantityInput.value = currentValue + 1;
+  }
+
+  function decreaseQuantity(productId) {
+    let quantityInput = document.getElementById(`quantity${productId}`);
+    let currentValue = parseInt(quantityInput.value);
+
+    // Ensure the quantity doesn't go below 1
+    if (currentValue > 1) {
+      quantityInput.value = currentValue - 1;
+    }
+  }
+</script>

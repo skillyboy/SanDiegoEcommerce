@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Navs"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Navs</h3>
+
+            <p class="text-gray-500">
+              <a href="http://getbootstrap.com/docs/5.1/components/navs/" target="_blank">Bootstrap documentation</a>
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <ul class="nav">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#!">Active</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">Link</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">Link</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link disabled" href="#!">Disabled</a>
+                  </li>
+                </ul>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;ul&nbsp;class=&quot;nav&quot;&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&nbsp;active&quot;&nbsp;href=&quot;#!&quot;&gt;Active&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&quot;&nbsp;href=&quot;#!&quot;&gt;Link&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&quot;&nbsp;href=&quot;#!&quot;&gt;Link&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&nbsp;disabled&quot;&nbsp;href=&quot;#!&quot;&gt;Disabled&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&lt;/ul&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Unstyled</h5>
+
+            <p class="text-gray-500">
+              Removes the bottom underline of the <code>.active</code> link.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <ul class="nav nav-unstyled">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#!">Active</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">Link</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">Link</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link disabled" href="#!">Disabled</a>
+                  </li>
+                </ul>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;ul&nbsp;class=&quot;nav&nbsp;nav-unstyled&quot;&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&nbsp;active&quot;&nbsp;href=&quot;#!&quot;&gt;Active&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&quot;&nbsp;href=&quot;#!&quot;&gt;Link&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&quot;&nbsp;href=&quot;#!&quot;&gt;Link&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&nbsp;disabled&quot;&nbsp;href=&quot;#!&quot;&gt;Disabled&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&lt;/ul&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Vertical</h5>
+
+            <p class="text-gray-500">
+              Positions the links vertically.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <ul class="nav nav-vertical">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#!">Active</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">Link</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">Link</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link disabled" href="#!">Disabled</a>
+                  </li>
+                </ul>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;ul&nbsp;class=&quot;nav&nbsp;nav-vertical&quot;&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&nbsp;active&quot;&nbsp;href=&quot;#!&quot;&gt;Active&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&quot;&nbsp;href=&quot;#!&quot;&gt;Link&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&quot;&nbsp;href=&quot;#!&quot;&gt;Link&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&nbsp;disabled&quot;&nbsp;href=&quot;#!&quot;&gt;Disabled&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&lt;/ul&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Divider</h5>
+
+            <p class="text-gray-500">
+              Adds a divider between nav items.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <ul class="nav nav-unstyled nav-divided">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#!">Active</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">Link</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">Link</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link disabled" href="#!">Disabled</a>
+                  </li>
+                </ul>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;ul&nbsp;class=&quot;nav&nbsp;nav-unstyled&nbsp;nav-divided&quot;&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&nbsp;active&quot;&nbsp;href=&quot;#!&quot;&gt;Active&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&quot;&nbsp;href=&quot;#!&quot;&gt;Link&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&quot;&nbsp;href=&quot;#!&quot;&gt;Link&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;nav-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&nbsp;disabled&quot;&nbsp;href=&quot;#!&quot;&gt;Disabled&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&lt;/ul&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Tabs</h5>
+
+            <p class="text-gray-500">
+              Removes the horizontal padding of the first and last link and changes the underline styles. Works with <code>.nav-link</code> items as direct children of <code>.nav</code>.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <nav class="nav nav-tabs">
+                  <a class="nav-link active" href="#!">Active</a>
+                  <a class="nav-link" href="#!">Link</a>
+                  <a class="nav-link" href="#!">Link</a>
+                  <a class="nav-link disabled" href="#!">Disabled</a>
+                </nav>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;nav&nbsp;class=&quot;nav&nbsp;nav-tabs&quot;&gt;<br />&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&nbsp;active&quot;&nbsp;href=&quot;#!&quot;&gt;Active&lt;/a&gt;<br />&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&quot;&nbsp;href=&quot;#!&quot;&gt;Link&lt;/a&gt;<br />&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&quot;&nbsp;href=&quot;#!&quot;&gt;Link&lt;/a&gt;<br />&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&nbsp;disabled&quot;&nbsp;href=&quot;#!&quot;&gt;Disabled&lt;/a&gt;<br />&lt;/nav&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Overflow</h5>
+
+            <p class="text-gray-500">
+              Creates a horizontally scrollable variation of the nav component. Items do not get stacked if they don't fit the viewport. Instead, they stay on the same line and become scrollable in the x axes.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <nav class="nav nav-overflow">
+                  <a class="nav-link active" href="#!">Active</a>
+                  <a class="nav-link" href="#!">Link</a>
+                  <a class="nav-link" href="#!">Link</a>
+                  <a class="nav-link disabled" href="#!">Disabled</a>
+                </nav>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;nav&nbsp;class=&quot;nav&nbsp;nav-overflow&quot;&gt;<br />&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&nbsp;active&quot;&nbsp;href=&quot;#!&quot;&gt;Active&lt;/a&gt;<br />&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&quot;&nbsp;href=&quot;#!&quot;&gt;Link&lt;/a&gt;<br />&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&quot;&nbsp;href=&quot;#!&quot;&gt;Link&lt;/a&gt;<br />&nbsp;&nbsp;&lt;a&nbsp;class=&quot;nav-link&nbsp;disabled&quot;&nbsp;href=&quot;#!&quot;&gt;Disabled&lt;/a&gt;<br />&lt;/nav&gt;<br />
+                </code>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

@@ -1,0 +1,16 @@
+//
+// shadow.scss
+//
+
+// Hover
+
+.shadow-hover {
+  @if $enable-transitions {
+    transition: $transition-lg;
+    transition-property: box-shadow;
+  }
+
+  &:hover {
+    box-shadow: $box-shadow-lg !important;
+  }
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Map"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Map</h3>
+
+            <p class="text-gray-500">
+              Adds an interactive map powered by Google Maps. Make sure to replace the default Google Maps API key in <code>src/partials/script.html</code> with your custom one to enable maps on your local server or custom domain.<br>
+              <a href="https://cloud.google.com/maps-platform/?utm_source=google&utm_medium=cpc&utm_campaign=FY18-Q2-global-demandgen-paidsearchonnetworkhouseads-cs-maps_contactsal_saf&utm_content=text-ad-none-none-DEV_c-CRE_269776056235-ADGP_Hybrid+%7C+AW+SEM+%7C+BKWS+~+EXA_%5BM:1%5D_EMEAOt_EN_Converters_API-KWID_43700027750115852-kwd-313687199737-userloc_2752&utm_term=KW_google%20mapping%20api-ST_google+mapping+api&gclid=EAIaIQobChMI2JDW_JGL5gIVx4KyCh3tSAvbEAAYASAAEgLivPD_BwE" target="_blank">Plugin documentation</a>
+            </p>
+
+            <ul>
+              <li>
+                <code>data-map</code> - initializes the map plugin.
+              </li>
+              <li>
+                <code>data-zoom</code> - initial map zooming level. Ignore if you want to allow the map scale automatically to show all markers specified in the <code>data-marker</code> attribute.
+              </li>
+              <li>
+                <code>data-markers</code> - an array of objects with markers info. E.g. <code>data-markers='[{"position": [53.5508748,9.9985808], "info": "Popup content."}]'</code>.
+              </li>
+            </ul>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="ratio ratio-21x9">
+                  <div class="ratio-item" data-map
+                    data-markers='[{"position": [53.5508748,9.9985808], "info": "<div class=\"card card-sm\"><div class=\"card-body\"><p class=\"mb-2 fw-bold\">Baldwin Hills Crenshaw Plaza</p><p class=\"mb-3 text-gray-500\">Mönckebergstrasse 11 20095 Hamburg, Germany</p><p class=\"mb-1 fw-bold\">Phone:</p><p class=\"mb-3 text-grat-500\">6-146-389-574</p><p class=\"mb-1 fw-bold\">Store Hours:</p><p class=\"mb-0 text-grat-500\">10 am - 10 pm EST, 7 days a week</p></div>"}, {"position": [45.4646477,9.1935083], "info": "<div class=\"card card-sm\"><div class=\"card-body\"><p class=\"mb-2 fw-bold\">Stonewood Center</p><p class=\"mb-3 text-gray-500\">Largo Corsia Dei Servi 3 20122 Milan, Italy</p><p class=\"mb-1 fw-bold\">Phone:</p><p class=\"mb-3 text-grat-500\">6-146-389-574</p><p class=\"mb-1 fw-bold\">Store Hours:</p><p class=\"mb-0 text-grat-500\">10 am - 10 pm EST, 7 days a week</p></div>"}, {"position": [53.332769,-6.2663917], "info": "<div class=\"card card-sm\"><div class=\"card-body\"><p class=\"mb-2 fw-bold\">Shalyapin Palace</p><p class=\"mb-3 text-gray-500\">Block 5, 5th Floor, Harcourt Centre, Harcourt Road Dublin, Ireland</p><p class=\"mb-1 fw-bold\">Phone:</p><p class=\"mb-3 text-grat-500\">6-146-389-574</p><p class=\"mb-1 fw-bold\">Store Hours:</p><p class=\"mb-0 text-grat-500\">10 am - 10 pm EST, 7 days a week</p></div>"}]'>
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;ratio&nbsp;ratio-21x9&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;ratio-item&quot;&nbsp;data-map<br />&nbsp;&nbsp;&nbsp;&nbsp;data-markers='[{&quot;position&quot;:&nbsp;[53.5508748,9.9985808],&nbsp;&quot;info&quot;:&nbsp;&quot;&lt;div&nbsp;class=\&quot;card&nbsp;card-sm\&quot;&gt;&lt;div&nbsp;class=\&quot;card-body\&quot;&gt;&lt;p&nbsp;class=\&quot;mb-2&nbsp;fw-bold\&quot;&gt;Baldwin&nbsp;Hills&nbsp;Crenshaw&nbsp;Plaza&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-3&nbsp;text-gray-500\&quot;&gt;M&ouml;nckebergstrasse&nbsp;11&nbsp;20095&nbsp;Hamburg,&nbsp;Germany&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-1&nbsp;fw-bold\&quot;&gt;Phone:&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-3&nbsp;text-grat-500\&quot;&gt;6-146-389-574&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-1&nbsp;fw-bold\&quot;&gt;Store&nbsp;Hours:&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-0&nbsp;text-grat-500\&quot;&gt;10&nbsp;am&nbsp;-&nbsp;10&nbsp;pm&nbsp;EST,&nbsp;7&nbsp;days&nbsp;a&nbsp;week&lt;/p&gt;&lt;/div&gt;&quot;},&nbsp;{&quot;position&quot;:&nbsp;[45.4646477,9.1935083],&nbsp;&quot;info&quot;:&nbsp;&quot;&lt;div&nbsp;class=\&quot;card&nbsp;card-sm\&quot;&gt;&lt;div&nbsp;class=\&quot;card-body\&quot;&gt;&lt;p&nbsp;class=\&quot;mb-2&nbsp;fw-bold\&quot;&gt;Stonewood&nbsp;Center&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-3&nbsp;text-gray-500\&quot;&gt;Largo&nbsp;Corsia&nbsp;Dei&nbsp;Servi&nbsp;3&nbsp;20122&nbsp;Milan,&nbsp;Italy&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-1&nbsp;fw-bold\&quot;&gt;Phone:&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-3&nbsp;text-grat-500\&quot;&gt;6-146-389-574&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-1&nbsp;fw-bold\&quot;&gt;Store&nbsp;Hours:&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-0&nbsp;text-grat-500\&quot;&gt;10&nbsp;am&nbsp;-&nbsp;10&nbsp;pm&nbsp;EST,&nbsp;7&nbsp;days&nbsp;a&nbsp;week&lt;/p&gt;&lt;/div&gt;&quot;},&nbsp;{&quot;position&quot;:&nbsp;[53.332769,-6.2663917],&nbsp;&quot;info&quot;:&nbsp;&quot;&lt;div&nbsp;class=\&quot;card&nbsp;card-sm\&quot;&gt;&lt;div&nbsp;class=\&quot;card-body\&quot;&gt;&lt;p&nbsp;class=\&quot;mb-2&nbsp;fw-bold\&quot;&gt;Shalyapin&nbsp;Palace&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-3&nbsp;text-gray-500\&quot;&gt;Block&nbsp;5,&nbsp;5th&nbsp;Floor,&nbsp;Harcourt&nbsp;Centre,&nbsp;Harcourt&nbsp;Road&nbsp;Dublin,&nbsp;Ireland&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-1&nbsp;fw-bold\&quot;&gt;Phone:&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-3&nbsp;text-grat-500\&quot;&gt;6-146-389-574&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-1&nbsp;fw-bold\&quot;&gt;Store&nbsp;Hours:&lt;/p&gt;&lt;p&nbsp;class=\&quot;mb-0&nbsp;text-grat-500\&quot;&gt;10&nbsp;am&nbsp;-&nbsp;10&nbsp;pm&nbsp;EST,&nbsp;7&nbsp;days&nbsp;a&nbsp;week&lt;/p&gt;&lt;/div&gt;&quot;}]'&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

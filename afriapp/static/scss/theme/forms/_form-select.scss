@@ -1,0 +1,18 @@
+//
+// form-select.scss
+//
+
+.form-select-sm {
+  padding-right: $form-select-indicator-padding-sm;
+  background-position: $form-select-bg-position-sm;
+}
+
+.form-select-xs {
+  padding-right: $form-select-indicator-padding-xs;
+  background-position: $form-select-bg-position-xs;
+}
+
+.form-select-xxs {
+  padding-right: $form-select-indicator-padding-xxs;
+  background-position: $form-select-bg-position-xxs;
+}

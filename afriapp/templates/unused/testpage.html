@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Montserrat:wght@400;600&display=swap">
+    <link rel="stylesheet" href="{% static 'css/libs.bundle.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.bundle.css' %}">
+   
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to African Food San Diego</title>
+    <!-- <link rel="stylesheet" href="{% static 'css/styles.css' %}"> -->
+</head>
+
+
+<body>
+
+    <!-- NAVBAR -->
+    {% include 'partials/navbar.html' %}
+
+    <!-- HERO SECTION -->
+    <section class="hero bg-cover py-10" style="background-image: url('{% static 'img/hero-bg.jpg' %}');">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6">
+                    <h1 class="text-white">Discover Authentic African Foods</h1>
+                    <p class="text-white">We source and deliver all African foods to your doorstep, anywhere in the USA.</p>
+                    <a href="{% url 'products' %}" class="btn btn-primary">Shop Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED CATEGORIES -->
+    <section class="py-10">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2>Shop by Category</h2>
+                    <p>Explore our wide range of authentic African products.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <div class="card">
+                        <img src="{% static 'img/category-grains.jpg' %}" class="card-img-top" alt="Grains & Cereals">
+                        <div class="card-body text-center">
+                            <h3>Grains & Cereals</h3>
+                            <p>Rice, Maize, Garri, and more.</p>
+                            <a href="{% url 'products' %}?category=grains" class="btn btn-outline-primary">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="card">
+                        <img src="{% static 'img/category-dairy.jpg' %}" class="card-img-top" alt="Dairy Products">
+                        <div class="card-body text-center">
+                            <h3>Dairy Products</h3>
+                            <p>Powdered Milk, Yogurt, and more.</p>
+                            <a href="{% url 'products' %}?category=dairy" class="btn btn-outline-primary">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="card">
+                        <img src="{% static 'img/category-specialty.jpg' %}" class="card-img-top" alt="Specialty Items">
+                        <div class="card-body text-center">
+                            <h3>Specialty Items</h3>
+                            <p>Orogbo, Ilarun, and more.</p>
+                            <a href="{% url 'products' %}?category=specialty" class="btn btn-outline-primary">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROMOTIONAL BANNER -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 text-center">
+                    <h2>Free Shipping on Orders Over $50</h2>
+                    <p>Get your favorite African products delivered to your doorstep with no extra cost.</p>
+                    <a href="{% url 'products' %}" class="btn btn-primary">Start Shopping</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CUSTOMER TESTIMONIALS -->
+    <section class="py-10">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2>What Our Customers Are Saying</h2>
+                </div>
+                <div class="col-12 col-md-4">
+                    <blockquote class="blockquote text-center">
+                        <p>"African Food San Diego always delivers fresh and authentic products. I can’t go a month without their Garri and Suya Spice!"</p>
+                        <footer class="blockquote-footer">John Doe</footer>
+                    </blockquote>
+                </div>
+                <div class="col-12 col-md-4">
+                    <blockquote class="blockquote text-center">
+                        <p>"Ilarun has been a lifesaver for my hair care routine. Highly recommend this store!"</p>
+                        <footer class="blockquote-footer">Jane Smith</footer>
+                    </blockquote>
+                </div>
+                <div class="col-12 col-md-4">
+                    <blockquote class="blockquote text-center">
+                        <p>"Their Orogbo is of the highest quality. I’ve been a loyal customer for years."</p>
+                        <footer class="blockquote-footer">Mary Johnson</footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCT OF THE WEEK -->
+    <section class="py-10 bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6">
+                    <img src="{% static 'img/product-garri.jpg' %}" alt="Garri" class="img-fluid">
+                </div>
+                <div class="col-12 col-md-6">
+                    <h2>Product of the Week: Garri</h2>
+                    <p>Enjoy the finest quality Garri sourced directly from Africa. Perfect for all your traditional meals.</p>
+                    <a href="{% url 'products' %}?product=garri" class="btn btn-outline-primary">Buy Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JAVASCRIPT -->
+    <script src="{% static 'js/libs.bundle.js' %}"></script>
+    <script src="{% static 'js/theme.bundle.js' %}"></script>
+    <script>
+      // Optional: Add some simple JS animations or interactivity
+      document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          card.classList.add('shadow-lg');
+        });
+        card.addEventListener('mouseleave', () => {
+          card.classList.remove('shadow-lg');
+        });
+      });
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+//
+// close.scss
+//
+
+*:not(.toast-header):not(.alert) > .btn-close {
+  position: absolute;
+  top: $btn-close-spacer;
+  right: $btn-close-spacer;
+  z-index: $zindex-fixed;
+  display: inline-flex;
+}
+
+.btn-close {
+  @if $enable-transitions {
+    transition: $transition-base;
+    transition-property: color;
+  }
+}

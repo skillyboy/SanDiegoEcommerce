@@ -1,0 +1,52 @@
+\\<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Z-index"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Z-index</h3>
+
+            <p class="text-gray-500">
+              Z-index utilities
+            </p>
+
+            <hr class="my-7">
+
+            <ul>
+              <li>
+                <code>.z-index-1</code> - sets the <code>z-index</code> property value to <code>1</code>.
+              </li>
+              <li>
+                <code>.z-index-fixed</code> - sets the <code>z-index</code> property value to the value of the default <code>$zindex-fixed</code> variable.
+              </li>
+            </ul>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

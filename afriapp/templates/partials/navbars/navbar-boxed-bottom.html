@@ -1,0 +1,407 @@
+<div class="navbar navbar-boxed navbar-expand-md navbar-dark {{classList}}">
+  <div class="container">
+    <div class="dropdown flex-grow-1 flex-md-grow-0">
+
+      <!-- Toggle -->
+      <button class="btn btn-lg w-100 btn-dark" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+        <span class="navbar-toggler-icon me-4"></span> Browse Categories
+      </button>
+
+      <!-- Menu -->
+      <div class="dropdown-menu dropdown-menu-lg w-100">
+        <form>
+          <a class="dropdown-item dropend-toggle" data-bs-toggle="collapse" href="#womensClothes">
+            <span class="me-4">
+              {{> icons/icon-dress}}
+            </span> Women's Clothes
+          </a>
+          <a class="dropdown-item dropend-toggle" data-bs-toggle="collapse" href="#mensClothes">
+            <span class="me-4">
+              {{> icons/icon-shirt}}
+            </span> Men's Clothes
+          </a>
+          <a class="dropdown-item dropend-toggle" data-bs-toggle="collapse" href="#girlsClothes">
+            <span class="me-4">
+              {{> icons/icon-skirt}}
+            </span> Girls' Clothes
+          </a>
+          <a class="dropdown-item dropend-toggle" data-bs-toggle="collapse" href="#boysClothes">
+            <span class="me-4">
+              {{> icons/icon-t-shirt}}
+            </span> Boys' Clothes
+          </a>
+          <a class="dropdown-item dropend-toggle" data-bs-toggle="collapse" href="#bagsAccessories">
+            <span class="me-4">
+              {{> icons/icon-bag}}
+            </span> Accessories
+          </a>
+          <a class="dropdown-item dropend-toggle" data-bs-toggle="collapse" href="#womensShoes">
+            <span class="me-4">
+              {{> icons/icon-shoe}}
+            </span> Women's Shoes
+          </a>
+          <a class="dropdown-item dropend-toggle" data-bs-toggle="collapse" href="#mensShoes">
+            <span class="me-4">
+              {{> icons/icon-sneaker}}
+            </span> Men's Shoes
+          </a>
+        </form>
+      </div>
+
+    </div>
+    <div class="flex-grow-1 position-relative">
+
+      <!-- Form -->
+      <form class="navbar-form">
+        <div class="input-group">
+
+          <!-- Input -->
+          <input type="search" class="form-control form-control-lg" placeholder="Search for items and brands">
+
+          <!-- Select -->
+          <select class="form-select form-select-lg d-none d-md-block">
+            <option selected>All Categories</option>
+            <option>Women</option>
+            <option>Men</option>
+            <option>Kids</option>
+          </select>
+
+          <!-- Button -->
+          <div class="input-group-append">
+            <button class="btn btn-outline-border btn-lg">
+              <i class="fe fe-search"></i>
+            </button>
+          </div>
+
+        </div>
+      </form>
+
+      <!-- Collapse -->
+      <div class="dropdown-menu dropdown-collapse" id="navbarMenu">
+
+        <!-- Women clothes -->
+        <div class="collapse" id="womensClothes" data-bs-parent="#navbarMenu">
+
+          <!-- Close -->
+          <button type="button" class="btn-close d-md-none" data-bs-toggle="collapse" data-bs-target="#womensClothes">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+
+          <!-- Card -->
+          <div class="card card-lg shadow-border">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <div class="row">
+
+                    <div class="col-6 col-md-4">
+
+                      <!-- Heading -->
+                      <div class="mb-5 fw-bold">Bottoms</div>
+
+                      <!-- Links -->
+                      <ul class="list-styled fs-sm">
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">All Bottoms</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Jeans</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Trousers</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Shorts</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Skirts</a>
+                        </li>
+                      </ul>
+
+                    </div>
+                    <div class="col-6 col-md-4">
+
+                      <!-- Heading -->
+                      <div class="mb-5 fw-bold">Dresses</div>
+
+                      <!-- Links -->
+                      <ul class="list-styled mb-0 fs-sm">
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">All Dresses</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">A-Line Dresses</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Shift Dresses</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Wrap Dresses</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Maxi Dresses</a>
+                        </li>
+                      </ul>
+
+                    </div>
+                    <div class="col-6 col-md-4">
+
+                      <!-- Heading -->
+                      <div class="mb-5 fw-bold">Outwear</div>
+
+                      <!-- Links -->
+                      <ul class="list-styled fs-sm">
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">All Outwear</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Coats</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Jackets</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Classic Blazers</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Faux Fur Coats</a>
+                        </li>
+                      </ul>
+
+                    </div>
+                    <div class="col-6 col-md-4">
+
+                      <!-- Heading -->
+                      <div class="mb-5 fw-bold">Sweaters</div>
+
+                      <!-- Links -->
+                      <ul class="list-styled mb-md-0 fs-sm">
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">All Sweaters</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Pullovers</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Cardigans</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Crop Top</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Sweatshirts</a>
+                        </li>
+                      </ul>
+
+                    </div>
+                    <div class="col-6 col-md-4">
+
+                      <!-- Heading -->
+                      <div class="mb-5 fw-bold">T-Shirts & Tops</div>
+
+                      <!-- Links -->
+                      <ul class="list-styled mb-md-0 fs-sm">
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">All T-Shirts & Tops</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">T-Shirts</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Blouses</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Tanks Tops</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Polos</a>
+                        </li>
+                      </ul>
+
+                    </div>
+                    <div class="col-6 col-md-4">
+
+                      <!-- Heading -->
+                      <div class="mb-5 fw-bold">Underwear</div>
+
+                      <!-- Links -->
+                      <ul class="list-styled mb-0 fs-sm">
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">All Underwear</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Bras</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Panties</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Shapewear & Slips</a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="{{webRoot}}/shop.html">Lingerie</a>
+                        </li>
+                      </ul>
+
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-4 d-none d-md-flex flex-column">
+
+                  <!-- Card -->
+                  <a class="card mb-6 bg-cover" href="{{webRoot}}/shop.html" style="min-height: 185px;">
+
+                    <!-- Background -->
+                    <div class="card-bg">
+                      <div class="card-bg-img bg-cover" style="background-image: url({{webRoot}}/assets/img/products/product-1.jpg);"></div>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="card-body my-auto">
+
+                      <!-- Heading -->
+                      <h6 class="text-center text-white">
+                        Bags Collection
+                      </h6>
+
+                    </div>
+
+                  </a>
+
+                  <!-- Card -->
+                  <a class="card bg-cover" href="{{webRoot}}/shop.html" style="min-height: 185px;">
+
+                    <!-- Background -->
+                    <div class="card-bg">
+                      <div class="card-bg-img bg-cover" style="background-image: url({{webRoot}}/assets/img/products/product-111.jpg);"></div>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="card-body my-auto">
+
+                      <!-- Heading -->
+                      <h6 class="text-center text-white">
+                        Watch Collection
+                      </h6>
+
+                    </div>
+
+                  </a>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Men clothes -->
+        <div class="collapse" id="mensClothes" data-bs-parent="#navbarMenu">
+
+          <!-- Close -->
+          <button type="button" class="btn-close d-md-none" data-bs-toggle="collapse" data-bs-target="#mensClothes">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+
+          <!-- Card -->
+          <div class="card card-lg shadow-border">
+            <div class="card-body">
+              This category is empty.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Girls clothes -->
+        <div class="collapse" id="girlsClothes" data-bs-parent="#navbarMenu">
+
+          <!-- Close -->
+          <button type="button" class="btn-close d-md-none" data-bs-toggle="collapse" data-bs-target="#girlsClothes">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+
+          <!-- Card -->
+          <div class="card card-lg shadow-border">
+            <div class="card-body">
+              This category is empty.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Boys clothes -->
+        <div class="collapse" id="boysClothes" data-bs-parent="#navbarMenu">
+
+          <!-- Close -->
+          <button type="button" class="btn-close d-md-none" data-bs-toggle="collapse" data-bs-target="#boysClothes">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+
+          <!-- Card -->
+          <div class="card card-lg shadow-border">
+            <div class="card-body">
+              This category is empty.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bags & Accessories -->
+        <div class="collapse" id="bagsAccessories" data-bs-parent="#navbarMenu">
+
+          <!-- Close -->
+          <button type="button" class="btn-close d-md-none" data-bs-toggle="collapse" data-bs-target="#bagsAccessories">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+
+          <!-- Card -->
+          <div class="card card-lg shadow-border">
+            <div class="card-body">
+              This category is empty.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Women shoes -->
+        <div class="collapse" id="womensShoes" data-bs-parent="#navbarMenu">
+
+          <!-- Close -->
+          <button type="button" class="btn-close d-md-none" data-bs-toggle="collapse" data-bs-target="#womensShoes">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+
+          <!-- Card -->
+          <div class="card card-lg shadow-border">
+            <div class="card-body">
+              This category is empty.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Men shoes -->
+        <div class="collapse" id="mensShoes" data-bs-parent="#navbarMenu">
+
+          <!-- Close -->
+          <button type="button" class="btn-close d-md-none" data-bs-toggle="collapse" data-bs-target="#mensShoes">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+
+          <!-- Card -->
+          <div class="card card-lg shadow-border">
+            <div class="card-body">
+              This category is empty.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+</div>

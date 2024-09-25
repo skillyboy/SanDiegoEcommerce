@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Rating"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Rating</h3>
+
+            <p class="text-gray-500">
+              A simple rating component. The size of stars can be set with <code>.fs-x</code> text utilities. The color of stars can be set with <code>.text-x</code> text utilities. The number of stars to highlight is set with the <code>data-value</code> attribute.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="rating fs-xs text-primary me-3 mb-3" data-value="4">
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                </div>
+
+                <div class="rating fs-xs text-success me-3 mb-3" data-value="4">
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                </div>
+
+                <div class="rating fs-xs text-warning me-3 mb-3" data-value="4">
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                </div>
+
+                <div class="rating fs-xs text-info me-3 mb-3" data-value="4">
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="rating-item">
+                    <i class="fas fa-star"></i>
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;rating&nbsp;fs-xs&nbsp;text-dark&quot;&nbsp;data-value=&quot;4&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;rating-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fas&nbsp;fa-star&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;rating-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fas&nbsp;fa-star&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;rating-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fas&nbsp;fa-star&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;rating-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fas&nbsp;fa-star&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;rating-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fas&nbsp;fa-star&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Input</h5>
+
+            <p class="text-gray-500">
+              Easily turn a rating component into a form input with the following markup:
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="rating-form">
+
+                  <!-- Input -->
+                  <input class="rating-input" type="range" min="1" max="5" value="5">
+
+                  <!-- Rating -->
+                  <div class="rating text-dark" data-value="5">
+                    <div class="rating-item">
+                      <i class="fas fa-star"></i>
+                    </div>
+                    <div class="rating-item">
+                      <i class="fas fa-star"></i>
+                    </div>
+                    <div class="rating-item">
+                      <i class="fas fa-star"></i>
+                    </div>
+                    <div class="rating-item">
+                      <i class="fas fa-star"></i>
+                    </div>
+                    <div class="rating-item">
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;rating-form&quot;&gt;<br /><br />&nbsp;&nbsp;&lt;!--&nbsp;Input&nbsp;--&gt;<br />&nbsp;&nbsp;&lt;input&nbsp;class=&quot;rating-input&quot;&nbsp;type=&quot;range&quot;&nbsp;min=&quot;1&quot;&nbsp;max=&quot;5&quot;&nbsp;value=&quot;5&quot;&gt;<br /><br />&nbsp;&nbsp;&lt;!--&nbsp;Rating&nbsp;--&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;rating&nbsp;text-dark&quot;&nbsp;data-value=&quot;5&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;rating-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fas&nbsp;fa-star&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;rating-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fas&nbsp;fa-star&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;rating-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fas&nbsp;fa-star&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;rating-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fas&nbsp;fa-star&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;rating-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fas&nbsp;fa-star&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br /><br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

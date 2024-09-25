@@ -1,0 +1,28 @@
+{% extends 'admininterface/admin_base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Sales Reports</h2>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Total Sales</th>
+        <th>Total Orders</th>
+        <th>Total Revenue</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for report in sales_reports %}
+      <tr>
+        <td>{{ report.date }}</td>
+        <td>{{ report.total_sales }}</td>
+        <td>{{ report.total_orders }}</td>
+        <td>${{ report.total_revenue }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

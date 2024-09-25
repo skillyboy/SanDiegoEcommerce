@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Background"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Background</h3>
+
+            <p class="text-gray-500">
+              Background utilities to easily change background sizing, position, and color properties.
+            </p>
+
+            <hr class="my-7">
+
+            <h5>Sizing</h5>
+
+            <ul>
+              <li>
+                <code>.bg-cover</code> - sets the background image position to <code>cover</code> and centers it.
+              </li>
+              <li>
+                <code>.bg-h-100</code> - sets the background image size to <code>auto 100%</code> and centers it.
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>Positioning</h5>
+
+            <ul>
+              <li>
+                <code>.bg-start</code> - sets the background image positioning to <code>center left</code>.
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>Clip</h5>
+
+            <ul>
+              <li>
+                <code>.bg-clip-content</code> changes the background clip property to <code>content-box</code>.
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>Images</h5>
+
+            <ul>
+              <li>
+                <code>.bg-pattern</code> - adds a semi-transparent background pattern image and repeats it to fit the whole available space.
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>Colors</h5>
+
+            <ul>
+              <li>
+                <code>.bg-white-90</code> - sets the background color to <code>$white</code> with 10% opacity.
+              </li>
+              <li>
+                <code>.bg-dark-5</code> - sets the background color to <code>$dark</code> with 95% opacity.
+              </li>
+              <li>
+                <code>.bg-dark-10</code> - sets the background color to <code>$dark</code> with 90% opacity.
+              </li>
+              <li>
+                <code>.bg-dark-20</code> - sets the background color to <code>$dark</code> with 80% opacity.
+              </li>
+              <li>
+                <code>.bg-dark-40</code> - sets the background color to <code>$dark</code> with 60% opacity.
+              </li>
+              <li>
+                <code>.bg-{$color}-soft</code> - changes the background color to the soft variation of the specified theme color. E.g. <code>.bg-primary-soft</code>.
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>None</h5>
+
+            <ul>
+              <li>
+                <code>.bg-none</code> - removes the background color.
+              </li>
+            </ul>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

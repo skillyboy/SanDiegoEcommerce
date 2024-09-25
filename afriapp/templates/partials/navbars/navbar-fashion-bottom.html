@@ -1,0 +1,79 @@
+<div class="navbar navbar-fashion navbar-expand-lg navbar-dark {{classList}}">
+  <div class="container">
+
+    <!-- Search-->
+    <form class="navbar-form me-auto order-lg-1">
+      <div class="input-group">
+        <input type="search" class="form-control" placeholder="Search for items and brands" />
+        <div class="input-group-append">
+          <button class="btn btn-dark">
+            <i class="fe fe-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Toggler -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFashionBottomCollapse" aria-controls="navbarFashionBottomCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapse -->
+    <div class="collapse navbar-collapse" id="navbarFashionBottomCollapse">
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+
+          <!-- Toggle -->
+          <a class="nav-link" data-bs-toggle="dropdown" href="#">Home</a>
+
+          <!-- Menu -->
+          {{> dropdowns/dropdown-home}}
+
+        </li>
+        <li class="nav-item dropdown">
+
+          <!-- Toggle -->
+          <a class="nav-link" data-bs-toggle="dropdown" href="#">Catalog</a>
+
+          <!-- Menu -->
+          {{> dropdowns/dropdown-catalog-fashion}}
+
+        </li>
+        <li class="nav-item dropdown">
+
+          <!-- Toggle -->
+          <a class="nav-link" data-bs-toggle="dropdown" href="#">Shop</a>
+
+          <!-- Menu -->
+          {{> dropdowns/dropdown-shop}}
+
+        </li>
+        <li class="nav-item dropdown">
+
+          <!-- Toggle -->
+          <a class="nav-link" data-bs-toggle="dropdown" href="#">Pages</a>
+
+          <!-- Menu -->
+          {{> dropdowns/dropdown-pages}}
+
+        </li>
+        <li class="nav-item dropdown">
+
+          <!-- Toggle -->
+          <a class="nav-link" data-bs-toggle="dropdown" href="#">Blog</a>
+
+          <!-- Menu -->
+          {{> dropdowns/dropdown-blog}}
+
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="docs/getting-started.html">Docs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-primary" href="#!">Sale %</a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</div>

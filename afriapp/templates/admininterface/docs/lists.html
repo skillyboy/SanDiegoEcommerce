@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Lists"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Lists</h3>
+
+            <p class="text-gray-500">
+              List groups are a flexible and powerful component for displaying a series of content. Modify and extend them to support just about any content within. <br>
+              <a href="http://getbootstrap.com/docs/5.1/components/list-group/" target="_blank">Bootstrap documentation</a>
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <ul class="list-group">
+                  <li class="list-group-item active">Cras justo odio</li>
+                  <li class="list-group-item">Dapibus ac facilisis in</li>
+                  <li class="list-group-item">Morbi leo risus</li>
+                  <li class="list-group-item">Porta ac consectetur ac</li>
+                </ul>
+
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Sizing</h5>
+
+            <p class="text-gray-500">
+              Change <code>.list-group-item</code> padding with three sizing options.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <ul class="list-group list-group-lg mb-5">
+                  <li class="list-group-item active">Cras justo odio</li>
+                  <li class="list-group-item">Dapibus ac facilisis in</li>
+                  <li class="list-group-item">Morbi leo risus</li>
+                </ul>
+
+                <ul class="list-group mb-5">
+                  <li class="list-group-item active">Cras justo odio</li>
+                  <li class="list-group-item">Dapibus ac facilisis in</li>
+                  <li class="list-group-item">Morbi leo risus</li>
+                </ul>
+
+                <ul class="list-group list-group-sm">
+                  <li class="list-group-item active">Cras justo odio</li>
+                  <li class="list-group-item">Dapibus ac facilisis in</li>
+                  <li class="list-group-item">Morbi leo risus</li>
+                </ul>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;ul&nbsp;class=&quot;list-group&nbsp;list-group-lg&nbsp;mb-5&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-group-item&nbsp;active&quot;&gt;Cras&nbsp;justo&nbsp;odio&lt;/li&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-group-item&quot;&gt;Dapibus&nbsp;ac&nbsp;facilisis&nbsp;in&lt;/li&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-group-item&quot;&gt;Morbi&nbsp;leo&nbsp;risus&lt;/li&gt;<br />&nbsp;&nbsp;&lt;/ul&gt;<br /><br />&nbsp;&nbsp;&lt;ul&nbsp;class=&quot;list-group&nbsp;mb-5&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-group-item&nbsp;active&quot;&gt;Cras&nbsp;justo&nbsp;odio&lt;/li&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-group-item&quot;&gt;Dapibus&nbsp;ac&nbsp;facilisis&nbsp;in&lt;/li&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-group-item&quot;&gt;Morbi&nbsp;leo&nbsp;risus&lt;/li&gt;<br />&nbsp;&nbsp;&lt;/ul&gt;<br /><br />&nbsp;&nbsp;&lt;ul&nbsp;class=&quot;list-group&nbsp;list-group-sm&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-group-item&nbsp;active&quot;&gt;Cras&nbsp;justo&nbsp;odio&lt;/li&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-group-item&quot;&gt;Dapibus&nbsp;ac&nbsp;facilisis&nbsp;in&lt;/li&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-group-item&quot;&gt;Morbi&nbsp;leo&nbsp;risus&lt;/li&gt;<br />&nbsp;&nbsp;&lt;/ul&gt;
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Flush</h5>
+
+            <p class="text-gray-500">
+              Add <code>.list-group-flush</code> to remove some borders and rounded corners to render list group items edge-to-edge in a parent container (e.g., cards).
+            </p>
+
+            <div class="card mb-6">
+              <div class="card-body border">
+
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item active">Cras justo odio</li>
+                  <li class="list-group-item">Dapibus ac facilisis in</li>
+                  <li class="list-group-item">Morbi leo risus</li>
+                </ul>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;ul&nbsp;class=&quot;list-group&nbsp;list-group-flush&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-group-item&nbsp;active&quot;&gt;Cras&nbsp;justo&nbsp;odio&lt;/li&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-group-item&quot;&gt;Dapibus&nbsp;ac&nbsp;facilisis&nbsp;in&lt;/li&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-group-item&quot;&gt;Morbi&nbsp;leo&nbsp;risus&lt;/li&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;
+                </code>
+              </div>
+            </div>
+
+            <p class="text-gray-500">
+              Additionally use <code>.list-group-flush-x</code> or <code>.list-group-flush-y</code> to remove only vertical or horizontal borders and paddings of a <code>.list-group</code>.
+            </p>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Badges"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Badges</h3>
+
+            <p class="text-gray-500">
+              A small count and labeling component. <br>
+              <a href="https://getbootstrap.com/docs/5.1/components/badge/" target="_blank">Bootstrap documentation</a>
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <span class="badge bg-primary">Primary</span>
+                <span class="badge bg-secondary">Secondary</span>
+                <span class="badge bg-success">Success</span>
+                <span class="badge bg-danger">Danger</span>
+                <span class="badge bg-warning">Warning</span>
+                <span class="badge bg-info">Info</span>
+                <span class="badge bg-light text-body">Light</span>
+                <span class="badge bg-dark">Dark</span>
+                <span class="badge bg-white text-body">White</span>
+
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Links</h5>
+
+            <p class="text-gray-500">
+              Using the contextual <code>.badge-*</code> classes on an <code>&lt;a&gt;</code> element quickly provide actionable badges with hover and focus states.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <a class="badge bg-primary" href="#!">Primary</a>
+                <a class="badge bg-secondary" href="#!">Secondary</a>
+                <a class="badge bg-success" href="#!">Success</a>
+                <a class="badge bg-danger" href="#!">Danger</a>
+                <a class="badge bg-warning" href="#!">Warning</a>
+                <a class="badge bg-info" href="#!">Info</a>
+                <a class="badge bg-light text-body" href="#!">Light</a>
+                <a class="badge bg-dark" href="#!">Dark</a>
+                <a class="badge bg-white text-body" href="#!">White</a>
+
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

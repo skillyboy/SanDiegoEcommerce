@@ -1,0 +1,98 @@
+<!-- Shopping Cart Modal -->
+<div class="offcanvas offcanvas-end" id="modalShoppingCart" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- Close Button -->
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
+      <i class="fe fe-x" aria-hidden="true"></i>
+  </button>
+
+  <!-- Cart with Items -->
+  {% if cart.items.count > 0 %}
+  <!-- Header with Cart Summary -->
+  <div class="offcanvas-header lh-fixed fs-lg d-flex justify-content-between align-items-center">
+      <strong>Your Cart ({{ cart.items.count }})</strong>
+      <a href="{% url 'wishlist' %}" class="text-gray-500 fs-sm">
+          <i class="fe fe-heart me-1"></i> Wishlist
+      </a>
+  </div>
+
+  <!-- Progress Bar for Free Shipping -->
+  <div class="px-4 py-2 bg-light">
+      <div class="d-flex justify-content-between align-items-center">
+          <span class="fs-xs">Spend $ more to get FREE SHIPPING!</span>
+          <span class="fs-xs"> / $50</span>
+      </div>
+      <div class="progress mt-2" style="height: 5px;">
+          <div class="progress-bar bg-success" role="progressbar" aria-valuenow="{{ cart.subtotal }}" aria-valuemin="0" aria-valuemax="50"></div>
+      </div>
+  </div>
+
+  <!-- Cart Items List -->
+  <ul class="list-group list-group-lg list-group-flush">
+      {% for item in cart.items.all %}
+      <li class="list-group-item">
+          <div class="row align-items-center">
+              <div class="col-4">
+                  <!-- Product Image with Hover Effect -->
+                  <a href="{{ item.product.get_absolute_url }}" class="position-relative">
+                      <img class="img-fluid rounded shadow-sm" src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                      <div class="product-hover-overlay position-absolute start-0 top-0 w-100 h-100 bg-dark opacity-50 d-none"></div>
+                  </a>
+              </div>
+              <div class="col-8">
+                  <!-- Product Details -->
+                  <p class="fs-sm fw-bold mb-1">
+                      <a class="text-body" href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a>
+                  </p>
+                  <span class="text-muted d-block mb-3">${{ item.total_price }} x {{ item.quantity }}</span>
+
+                  <!-- Quantity Selector & Remove Button -->
+                  <div class="d-flex align-items-center">
+                      <!-- Quantity Selector -->
+                      <form method="POST" action="#" class="me-3">
+                          {% csrf_token %}
+                          <select class="form-select form-select-xxs w-auto" name="quantity" onchange="this.form.submit()">
+                              
+                           <option value="{{ i }}" {% if item.quantity == i %}selected{% endif %}>{{ i }}</option>
+                            
+                          </select>
+                      </form>
+
+                      <!-- Remove Button with Confirmation Tooltip -->
+                      <a class="fs-xs text-danger ms-auto remove-item" data-bs-toggle="tooltip" title="Remove this item?" href="{% url 'remove_from_cart' item.id %}">
+                          <i class="fe fe-x"></i> Remove
+                      </a>
+                  </div>
+              </div>
+          </div>
+      </li>
+      {% endfor %}
+  </ul>
+
+  <!-- Cart Summary & Estimated Delivery Time -->
+  <div class="offcanvas-footer justify-between lh-fixed fs-sm bg-light mt-auto px-4 py-3">
+      <strong>Subtotal</strong> 
+      <strong class="ms-auto">${{ cart.subtotal }}</strong>
+  </div>
+  <div class="px-4 py-2 text-muted fs-xs">
+      Estimated delivery: <strong>2-3 business days</strong>
+  </div>
+
+  <!-- Cart Actions -->
+  <div class="offcanvas-body d-flex flex-column">
+      <a class="btn w-100 btn-dark btn-lg mb-2" href="{% url 'checkout' %}">Proceed to Checkout</a>
+      <a class="btn w-100 btn-outline-dark btn-lg" href="{% url 'cart' %}">View Full Cart</a>
+      <a class="btn w-100 btn-outline-success mt-3" href="{% url 'shop' %}">
+          <i class="fe fe-arrow-left"></i> Continue Shopping
+      </a>
+  </div>
+
+  {% else %}
+  <!-- Empty Cart -->
+  <div class="d-flex flex-column justify-content-center align-items-center text-center p-5">
+      <i class="fe fe-shopping-cart fs-1 mb-4"></i>
+      <h5 class="mb-4">Your cart is empty 😞</h5>
+      <p class="fs-sm text-muted mb-4">Add products to your cart and they will appear here.</p>
+      <a class="btn w-100 btn-outline-dark btn-lg" href="{% url 'shop' %}">Continue Shopping</a>
+  </div>
+  {% endif %}
+</div>

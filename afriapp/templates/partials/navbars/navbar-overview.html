@@ -1,0 +1,75 @@
+<nav class="navbar navbar-expand-xl navbar-light {{classList}}">
+  <div class="container">
+
+    <!-- Brand -->
+    <a class="navbar-brand" href="{{webRoot}}/overview.html">
+      Shopper.
+    </a>
+
+    <!-- Toggler -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDocsTopCollapse" aria-controls="navbarDocsTopCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapse -->
+    <div class="collapse navbar-collapse" id="navbarDocsTopCollapse">
+
+      <!-- Nav -->
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item dropdown">
+
+          <!-- Toggle -->
+          <a class="nav-link" data-bs-toggle="dropdown" href="#">Home</a>
+
+          <!-- Menu -->
+          {{> dropdowns/dropdown-home}}
+
+        </li>
+        <li class="nav-item dropdown position-static">
+
+          <!-- Toggle -->
+          <a class="nav-link" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#">Catalog</a>
+
+          <!-- Menu -->
+          {{> dropdowns/dropdown-catalog}}
+
+        </li>
+        <li class="nav-item dropdown">
+
+          <!-- Toggle -->
+          <a class="nav-link" data-bs-toggle="dropdown" href="#">Shop</a>
+
+          <!-- Menu -->
+          {{> dropdowns/dropdown-shop}}
+
+        </li>
+        <li class="nav-item dropdown">
+
+          <!-- Toggle -->
+          <a class="nav-link" data-bs-toggle="dropdown" href="#">Pages</a>
+
+          <!-- Menu -->
+          {{> dropdowns/dropdown-pages}}
+
+        </li>
+        <li class="nav-item dropdown">
+
+          <!-- Toggle -->
+          <a class="nav-link" data-bs-toggle="dropdown" href="#">Blog</a>
+
+          <!-- Menu -->
+          {{> dropdowns/dropdown-blog}}
+
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{webRoot}}/docs/getting-started.html">Docs</a>
+        </li>
+      </ul>
+
+      <!-- Button -->
+      <a class="btn w-100 btn-sm btn-dark w-xl-auto mt-2 my-xl-n2" href="https://themes.getbootstrap.com/product/shopper/" target="_blank">Buy Now for $49</a>
+
+    </div>
+
+  </div>
+</nav>

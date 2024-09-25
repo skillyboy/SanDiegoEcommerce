@@ -1,0 +1,197 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}African Food San Diego{% endblock title %}</title>
+  
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+
+    <!-- Link to CSS files -->
+    <link rel="stylesheet" href="{% static 'css/libs.bundle.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.bundle.css' %}">
+
+    <!-- Custom Styles for Navbar and Theme -->
+    <style>
+        .navbar-topbar {
+            background-color: #146d19; /* Dark green for a warm, inviting theme */
+            color: #FFFFFF; /* White text for contrast */
+        }
+
+        .navbar-topbar .nav-link {
+            color: #FFFFFF; /* White text for nav links */
+        }
+
+        .navbar-topbar .nav-link:hover {
+            color: #FFD700; /* Gold color on hover */
+        }
+
+        .navbar-topbar .dropdown-menu {
+            background-color: #8B4513; /* Match dropdown background with navbar */
+            color: #FFFFFF;
+        }
+
+        .navbar-topbar .dropdown-item:hover {
+            background-color: #A0522D; /* Slightly lighter brown on hover */
+        }
+
+        .navbar-topbar .heading-xxxs {
+            color: #FFD700; /* Gold for the promo text */
+        }
+        
+        .messages {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1050;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .message {
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+    
+    <!-- NAVBAR -->
+    <div class="navbar navbar-topbar navbar-expand-xl">
+        <div class="container">
+    
+            <!-- Promo -->
+            <div class="me-xl-8">
+                <i class="fe fe-truck me-2"></i> <span class="heading-xxxs">Delivering to Your Doorstep Across the USA!</span>
+            </div>
+    
+            <!-- Toggler -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topbarCollapse" aria-controls="topbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <!-- Collapse -->
+            <div class="collapse navbar-collapse" id="topbarCollapse">
+    
+                <!-- Nav -->
+                <ul class="nav nav-divided navbar-nav me-auto">
+                    <li class="nav-item dropdown">
+                        <!-- Toggle -->
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+                            <img class="mb-1 me-1" src="{% static 'img/flags/usa.svg' %}" alt="USA" /> United States
+                        </a>
+    
+                        <!-- Menu -->
+                        <div class="dropdown-menu min-w-0">
+                            <a class="dropdown-item" href="#!">
+                                <img class="mb-1 me-2" src="{% static 'img/flags/usa.svg' %}" alt="USA">United States
+                            </a>
+                            <a class="dropdown-item" href="#!">
+                                <img class="mb-1 me-2" src="{% static 'img/flags/canada.svg' %}" alt="Canada">Canada
+                            </a>
+                            <a class="dropdown-item" href="#!">
+                                <img class="mb-1 me-2" src="{% static 'img/flags/germany.svg' %}" alt="Germany">Germany
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <!-- Toggle -->
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">USD</a>
+    
+                        <!-- Menu -->
+                        <div class="dropdown-menu min-w-0">
+                            <a class="dropdown-item" href="#!">USD</a>
+                            <a class="dropdown-item" href="#!">EUR</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <!-- Toggle -->
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">English</a>
+    
+                        <!-- Menu -->
+                        <div class="dropdown-menu min-w-0">
+                            <a class="dropdown-item" href="#">English</a>
+                            <a class="dropdown-item" href="#">French</a>
+                            <a class="dropdown-item" href="#">German</a>
+                        </div>
+                    </li>
+                </ul>
+    
+                <!-- Nav -->
+                <ul class="nav navbar-nav me-8">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shipping_and_returns' %}">Shipping</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'faq' %}">FAQ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contact_us' %}">Contact</a>
+                    </li>
+                </ul>
+    
+                <!-- Social Links -->
+                <ul class="nav navbar-nav flex-row">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#!">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item ms-xl-n4">
+                        <a class="nav-link text-white" href="#!">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item ms-xl-n4">
+                        <a class="nav-link text-white" href="#!">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item ms-xl-n4">
+                        <a class="nav-link text-white" href="#!">
+                            <i class="fab fa-medium"></i>
+                        </a>
+                    </li>
+                </ul>
+    
+            </div>
+        </div>
+    </div>
+
+    <!-- Flash Messages -->
+    <div class="messages">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} message" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Main Content -->
+    <main role="main" style="background-color: #F5F5DC;" class="container-fluid row align-items-center mb-7">
+        {% block content %}{% endblock content %}
+    </main>
+    <!-- Search -->
+    {% include 'includes/search.html' %}
+
+    <!-- Footer -->
+    {% include 'partials/footer.html' %}
+
+    <!-- Include the Cart Modal -->
+    {% include 'includes/cartmodal.html' %}
+
+    <!-- Link to JS files -->
+    <script src="{% static 'js/vendor.bundle.js' %}"></script>
+    <script src="{% static 'js/theme.bundle.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    {% block extra_js %}
+    {% endblock %}
+</body>
+</html>

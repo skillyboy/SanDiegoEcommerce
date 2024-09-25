@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Simplebar"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Simplebar</h3>
+
+            <p class="text-gray-500">
+              SimpleBar is a plugin that tries to solve a long time problem: how to get custom scrollbars for your web-app while keeping a good user experience? SimpleBar does NOT implement a custom scroll behaviour. It keeps the native <code>overflow: auto</code> scroll and only replaces the scrollbar visual appearance. <br>
+              <a href="https://github.com/Grsmto/simplebar/tree/master/packages/simplebar" target="_blank">Plugin documentation</a>
+            </p>
+
+            <hr class="my-7">
+
+            <h5></h5>
+
+            <div class="card">
+              <div class="card-body border">
+                <div data-simplebar style="max-height: 160px;">
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laudantium doloremque, necessitatibus voluptates, praesentium saepe odio dolor dignissimos officiis laborum magni sint repellat laboriosam. Et quo earum laborum quis distinctio maxime. Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos perspiciatis ad cumque aperiam soluta provident quae cum temporibus facere magnam dolores laudantium quaerat, nostrum voluptate! Inventore quo qui magnam est. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quam quasi minima necessitatibus fugiat nisi exercitationem molestiae, quo assumenda corporis enim voluptas quidem veniam nobis earum numquam nostrum optio blanditiis recusandae. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ullam repellendus veritatis iusto aperiam nisi aliquid qui, reprehenderit, dolorem, tenetur animi expedita sunt commodi similique soluta dolore nobis labore cum nihil? Lorem ipsum dolor sit, amet consectetur adipisicing
+                  elit. Laudantium doloremque, necessitatibus voluptates, praesentium saepe odio dolor dignissimos officiis laborum magni sint repellat laboriosam. Et quo earum laborum quis distinctio maxime. Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos perspiciatis ad cumque aperiam soluta provident quae cum temporibus facere magnam dolores laudantium quaerat, nostrum voluptate! Inventore quo qui magnam est. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quam quasi minima necessitatibus fugiat nisi exercitationem molestiae, quo assumenda corporis enim voluptas quidem veniam nobis earum numquam nostrum optio blanditiis recusandae. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ullam repellendus veritatis iusto aperiam nisi aliquid qui, reprehenderit, dolorem, tenetur animi expedita sunt commodi similique soluta dolore nobis labore cum nihil?
+                </div>
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;data-simplebar&nbsp;style=&quot;max-height:&nbsp;160px;&quot;&gt;<br />&nbsp;&nbsp;Lorem&nbsp;ipsum&nbsp;dolor&nbsp;sit&nbsp;amet&nbsp;consectetur&nbsp;adipisicing&nbsp;elit.&nbsp;Maxime&nbsp;ratione&nbsp;ullam&nbsp;totam&nbsp;tempore&nbsp;quasi,&nbsp;provident&nbsp;eos&nbsp;saepe&nbsp;reprehenderit&nbsp;aperiam&nbsp;laborum&nbsp;sed,&nbsp;voluptas&nbsp;non&nbsp;corporis&nbsp;id&nbsp;minus&nbsp;doloribus&nbsp;sint&nbsp;sapiente&nbsp;aliquam.<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>
