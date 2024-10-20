@@ -167,9 +167,6 @@ def account_address(request):
     return render(request, 'account/account-address.html')
 
 
-# 13. Account Orders View
-def account_orders(request):
-    return render(request, 'account/account-orders.html')
 
 
 # 14. Account Wishlist View
@@ -715,19 +712,20 @@ class CompletedPaymentView(View):
 class OrderHistory(View):
 
     def get(self, request):
+        user = request.user
         try:
-            user = request.user
-            orders = Payment.objects.filter(user=user)
+            orders = Order.objects.filter()
 
             if not orders.exists():
-                return Response({"message": "No order history found."}, status=status.HTTP_404_NOT_FOUND)
+                messages.info(request, "No order history found.")  # Using messages framework for user feedback
+                return render(request, 'account/account-orders.html', {"orders": orders})  # Render even if empty
 
-            serializer = PaymentSerializer(orders, many=True)
-
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return render(request, 'account/account-orders.html', {"orders": orders})
 
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            messages.error(request, f"An error occurred: {str(e)}")  # Using messages for error
+            return render(request, 'account/account-orders.html', {"orders": []})  # Pass an empty list on error
+
 
 
 

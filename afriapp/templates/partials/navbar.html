@@ -160,83 +160,90 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <!-- Main Nav Items -->
           <ul class="navbar-nav mx-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'index' %}" style="color: #4E342E;">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'shop' %}" style="color: #4E342E;">Shop</a>
-            </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'index' %}" style="color: #4E342E;">Home</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'shop' %}" style="color: #4E342E;">Shop</a>
+              </li>
 
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #4E342E;">
-                Select Store
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                {% for service in services %}
-                  <li><a class="dropdown-item" href="{% url 'service' service.id %}">{{ service.name }}</a></li>
-                {% endfor %}
-              </ul>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'clearance' %}" style="color: #4E342E;">Clearance</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'file_claim' %}" style="color: #4E342E;">File a Claim</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'about' %}" style="color: #4E342E;">Our Stores</a>
-            </li>
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #4E342E;">
+                      Select Store
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      {% for service in services %}
+                      <li><a class="dropdown-item" href="{% url 'service' service.id %}">{{ service.name }}</a></li>
+                      {% endfor %}
+                  </ul>
+              </li>
+
+              <li class="nav-item">
+                  <a class="nav-link" href="https://wa.me/2349077254729" target="_blank" style="color: #4E342E;">Clearance</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="https://wa.me/2349077254729?text=Hello,%20my%20name%20is%20{{ user.first_name|default:'Guest' }}.%20I%20need%20assistance." target="_blank" style="color: #4E342E;">File a claim</a>
+              </li>
+
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'about' %}" style="color: #4E342E;">Our Stores</a>
+              </li>
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'order_history' %}" target="_blank" style="color: #4E342E;">Orders</a>
+              </li>
+              {% endif %}
           </ul>
-    
+
           <!-- Utility Nav -->
           <ul class="navbar-nav flex-row align-items-center">
 
-            <!-- Search -->
-            <li class="nav-item ms-lg-n2">
-              <a class="nav-link" href="#modalSearch" data-bs-toggle="offcanvas" style="color: #8B4513;">
-                <i class="fe fe-search"></i>
-              </a>
-            </li>
-    
-            <!-- Shopping Cart -->
-            <li class="nav-item ms-lg-n2 position-relative">
-              <a class="nav-link" href="#modalShoppingCart" data-bs-toggle="offcanvas" style="color: #8B4513;">
-                <i class="fe fe-shopping-cart"></i>
-                <span id="navbar-cart-count" class="badge bg-danger position-absolute top-0 start-100 translate-middle" style="border-radius: 50%; font-size: 0.75rem;">
-                  {{ cart.count }}
-                </span>
-              </a>
-            </li>
-    
-            <!-- User Account or Login/Logout -->
-            {% if user.is_authenticated %}
+              <!-- Search -->
+              <li class="nav-item ms-lg-n2">
+                  <a class="nav-link" href="#modalSearch" data-bs-toggle="offcanvas" style="color: #8B4513;">
+                      <i class="fe fe-search"></i>
+                  </a>
+              </li>
+              <!-- User Account or Login/Logout -->
+
+              <!-- Shopping Cart -->
+              <li class="nav-item ms-lg-n2 position-relative">
+                  <a class="nav-link" href="#modalShoppingCart" data-bs-toggle="offcanvas" style="color: #8B4513;">
+                      <i class="fe fe-shopping-cart"></i>
+                      <span id="navbar-cart-count" class="badge bg-danger position-absolute top-0 start-100 translate-middle" style="border-radius: 50%; font-size: 0.75rem;">
+                          {{ cart.count }}
+                      </span>
+                  </a>
+              </li>
+              {% if user.is_authenticated %}
+
               <!-- User dropdown -->
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" style="color: #8B4513;">
-                  <i class="fe fe-user"></i> Welcome, {{ user.first_name }}
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{% url 'account_personal_info' %}">Profile</a></li>
-                  <li><a class="dropdown-item" href="{% url 'account_orders' %}">My Orders</a></li>
-                  <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                </ul>
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" style="color: #8B4513;">
+                      <i class="fe fe-user"></i> Welcome, {{ user.first_name|default:'Guest' }}
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{% url 'account_personal_info' %}">Profile</a></li>
+                      <li><a class="dropdown-item" href="{% url 'order_history' %}">My Orders</a></li>
+                      <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                  </ul>
               </li>
-            {% else %}
+              {% else %}
               <!-- Show Login and Sign Up buttons for guests -->
               <li class="nav-item ms-lg-n2">
-                <a class="nav-link" href="{% url 'login' %}" style="color: #8B4513;">
-                  <i class="fe fe-log-in"></i> Login
-                </a>
+                  <a class="nav-link" href="{% url 'login' %}" style="color: #8B4513;">
+                      <i class="fe fe-log-in"></i> Login
+                  </a>
               </li>
               <li class="nav-item ms-lg-n2">
-                <a class="nav-link" href="{% url 'signupform' %}" style="color: #8B4513;">
-                  <i class="fe fe-user-plus"></i> Sign Up
-                </a>
+                  <a class="nav-link" href="{% url 'signupform' %}" style="color: #8B4513;">
+                      <i class="fe fe-user-plus"></i> Sign Up
+                  </a>
               </li>
-            {% endif %}
+              {% endif %}
           </ul>
         </div>
+
       </div>
     </nav>
     

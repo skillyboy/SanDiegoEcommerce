@@ -44,7 +44,7 @@
             <!-- Nav -->
             <nav class="mb-10 mb-md-0">
               <div class="list-group list-group-sm list-group-strong list-group-flush-x">
-                <a class="list-group-item list-group-item-action dropend-toggle active" href="{% url 'account_orders' %}">
+                <a class="list-group-item list-group-item-action dropend-toggle active" href="{% url 'order_history' %}">
                   Orders
                 </a>
                 <a class="list-group-item list-group-item-action dropend-toggle " href="{% url 'account_personal_info' %}">
@@ -63,126 +63,61 @@
           </div>
           <div class="col-12 col-md-9 col-lg-8 offset-lg-1">
 
-          <!-- loops order and filter by user -->
-            <!-- Order -->
-            <div class="card card-lg mb-5 border">
-              <div class="card-body pb-0">
-
-                <!-- Info -->
-                <div class="card card-sm">
-                  <div class="card-body bg-light">
-                    <div class="row">
-                      <div class="col-6 col-lg-3">
-
-                        <!-- Heading -->
-                        <h6 class="heading-xxxs text-muted">Order No:</h6>
-
-                        <!-- Text -->
-                        <p class="mb-lg-0 fs-sm fw-bold">
-                          673290789
-                        </p>
-
-                      </div>
-                      <div class="col-6 col-lg-3">
-
-                        <!-- Heading -->
-                        <h6 class="heading-xxxs text-muted">Shipped date:</h6>
-
-                        <!-- Text -->
-                        <p class="mb-lg-0 fs-sm fw-bold">
-                          <time datetime="2019-10-01">
-                            01 Oct, 2019
-                          </time>
-                        </p>
-
-                      </div>
-                      <div class="col-6 col-lg-3">
-
-                        <!-- Heading -->
-                        <h6 class="heading-xxxs text-muted">Status:</h6>
-
-                        <!-- Text -->
-                        <p class="mb-0 fs-sm fw-bold">
-                          Awating Delivery
-                        </p>
-
-                      </div>
-                      <div class="col-6 col-lg-3">
-
-                        <!-- Heading -->
-                        <h6 class="heading-xxxs text-muted">Order Amount:</h6>
-
-                        <!-- Text -->
-                        <p class="mb-0 fs-sm fw-bold">
-                          $259.00
-                        </p>
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-              <div class="card-footer">
-                <div class="row align-items-center">
-                  <div class="col-12 col-lg-6">
-                    <div class="row gx-5 mb-4 mb-lg-0">
-                      <div class="col-3">
-
-                        <!-- Image -->
-                        <div class="ratio ratio-1x1 bg-cover" style="background-image: url(assets/img/products/product-5.jpg);"></div>
-
-                      </div>
-                      <div class="col-3">
-
-                        <!-- Image -->
-                        <div class="ratio ratio-1x1 bg-cover" style="background-image: url(assets/img/products/product-112.jpg);"></div>
-
-                      </div>
-                      <div class="col-3">
-
-                        <!-- Image -->
-                        <div class="ratio ratio-1x1 bg-cover" style="background-image: url(assets/img/products/product-7.jpg);"></div>
-
-                      </div>
-                      <div class="col-3">
-
-                        <!-- Image -->
-                        <div class="ratio ratio-1x1 bg-light">
-                          <a class="ratio-item ratio-item-text text-reset" href="#!">
-                            <div class="fs-xxs fw-bold">
-                              +2 <br> more
+            {% if orders %}
+            {% for order in orders %}
+                <div class="card card-lg mb-5 border">
+                    <div class="card-body pb-0">
+                        <div class="card card-sm">
+                            <div class="card-body bg-light">
+                                <div class="row">
+                                    <div class="col-6 col-lg-3">
+                                        <h6 class="heading-xxxs text-muted">Order No:</h6>
+                                        <p class="mb-lg-0 fs-sm fw-bold">{{ order.id }}</p>
+                                    </div>
+                                    <div class="col-6 col-lg-3">
+                                        <h6 class="heading-xxxs text-muted">Shipped Date:</h6>
+                                        <p class="mb-lg-0 fs-sm fw-bold">
+                                            <time datetime="{{ order.date_created|date:'c' }}">
+                                                {{ order.date_created|date:"d M, Y" }}
+                                            </time>
+                                        </p>
+                                    </div>
+                                    <div class="col-6 col-lg-3">
+                                        <h6 class="heading-xxxs text-muted">Status:</h6>
+                                        <p class="mb-0 fs-sm fw-bold">{{ order.status }}</p>
+                                    </div>
+                                    <div class="col-6 col-lg-3">
+                                        <h6 class="heading-xxxs text-muted">Order Amount:</h6>
+                                        <p class="mb-0 fs-sm fw-bold">${{ order.total_amount }}</p>
+                                    </div>
+                                </div>
                             </div>
-                          </a>
                         </div>
-
-                      </div>
                     </div>
-                  </div>
-                  <div class="col-12 col-lg-6">
-                    <div class="row gx-5">
-                      <div class="col-6">
-
-                        <!-- Button -->
-                        <a class="btn btn-sm w-100 btn-outline-dark" href="account-order.html">
-                          Order Details
-                        </a>
-
-                      </div>
-                      <div class="col-6">
-
-                        <!-- Button -->
-                        <a class="btn btn-sm w-100 btn-outline-dark" href="#!">
-                          Track order
-                        </a>
-
-                      </div>
+                    <div class="card-footer">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-lg-6">
+                                <!-- Include product images or details here if applicable -->
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="row gx-5">
+                                    <div class="col-6">
+                                        <a class="btn btn-sm w-100 btn-outline-dark" href="{% url 'order_history' %}">Order Details</a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a class="btn btn-sm w-100 btn-outline-dark" href="#!">Track Order</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                  </div>
                 </div>
-              </div>
-            </div>
+            {% endfor %}
+        {% else %}
+            <p>No orders found.</p>
+        {% endif %}
+        
+        
 
 
             <!-- Pagination -->

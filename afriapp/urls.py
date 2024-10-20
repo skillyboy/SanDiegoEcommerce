@@ -24,7 +24,6 @@ urlpatterns = [
     # Account Management
     path('shipping-and-returns/', views.shipping_and_returns, name='shipping_and_returns'),
     path('account-address/', views.account_address, name='account_address'),
-    path('account-orders/', views.account_orders, name='account_orders'),
     path('account-wishlist/', views.account_wishlist, name='account_wishlist'),
     path('account-personal-info/', views.account_personal_info, name='account_personal_info'),
     path('wishlist/', views.account_wishlist, name='wishlist'),
@@ -53,8 +52,7 @@ urlpatterns = [
     path('successpayment/', CompletedPaymentView.as_view(), name='successpayment'),
 
     # Orders
-    path('orders/history/', OrderHistory.as_view(), name='order_history'),
-
+    path('orders/history/', OrderHistory.as_view(), name='order_history'),  # Corrected URL pattern
     # Wishlist
     path('add_to_wishlist/', add_to_wishlist, name='add_to_wishlist'),
 
