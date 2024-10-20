@@ -1,0 +1,95 @@
+//
+// text.scss
+//
+
+// Font size
+
+@include media-breakpoint-down(md) {
+
+  .fs-1 {
+    font-size: $h1-font-size-sm !important;
+  }
+
+  .fs-2 {
+    font-size: $h2-font-size-sm !important;
+  }
+
+  .fs-3 {
+    font-size: $h3-font-size-sm !important;
+  }
+
+  .fs-4 {
+    font-size: $h4-font-size-sm !important;
+  }
+
+  .fs-5 {
+    font-size: $h5-font-size-sm !important;
+  }
+}
+
+
+// Text color
+
+.text-gray-300 {
+  color: $gray-300 !important;
+
+  &[href]:hover {
+    color: $gray-350 !important;
+  }
+}
+
+.text-gray-350 {
+  color: $gray-350 !important;
+
+  &[href]:hover {
+    color: $gray-400 !important;
+  }
+}
+
+.text-gray-400 {
+  color: $gray-400 !important;
+
+  &[href]:hover {
+    color: $gray-450 !important;
+  }
+}
+
+.text-gray-450 {
+  color: $gray-450 !important;
+
+  &[href]:hover {
+    color: $gray-500 !important;
+  }
+}
+
+.text-gray-500 {
+  color: $gray-500 !important;
+
+  &[href]:hover {
+    color: $gray-600 !important;
+  }
+}
+
+.text-body[href] {
+
+  &:hover, &:focus {
+    color: $gray-700 !important;
+  }
+}
+
+.text-muted[href] {
+
+  &:hover, &:focus {
+    color: $gray-500 !important;
+  }
+}
+
+
+// Text decoration
+
+a.text-decoration-underline {
+
+  &:hover, &:focus {
+    text-decoration: none !important;
+  }
+}

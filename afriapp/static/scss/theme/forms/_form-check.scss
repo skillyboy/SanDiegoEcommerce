@@ -1,0 +1,128 @@
+//
+// form-check.scss
+//
+
+.form-check {
+  display: flex;
+  align-items: center;
+}
+
+.form-check > .form-check-input {
+  float: none;
+  margin-top: 0;
+  background-size: $form-check-input-checked-bg-image-size;
+  background-position: center center;
+}
+
+.form-check > .form-check-label {
+  margin-left: $form-check-label-spacing;
+}
+
+.form-check > .form-check-input:checked + .form-check-label {
+  color: $body-color;
+}
+
+.form-check > .form-check-input:disabled + .form-check-label {
+  color: $secondary !important;
+  text-decoration: line-through;
+}
+
+// Inline
+
+.form-check-inline {
+  display: inline-flex;
+}
+
+// Color
+
+.form-check-color > .form-check-input {
+  width: $form-check-color-input-size;
+  height: $form-check-color-input-size;
+  background-color: $form-check-input-bg;
+  background-image: none;
+  border-radius: 50%;
+  cursor: $form-check-label-cursor;
+}
+
+.form-check-color > .form-check-input:checked {
+  background-image: escape-svg($form-check-color-input-checked-bg-image);
+}
+
+// Text
+
+.form-check-text > .form-check-input {
+  display: none;
+}
+
+.form-check-text > .form-check-label {
+  margin-left: 0;
+}
+
+.form-check-text > .form-check-input:checked + .form-check-label {
+  color: $form-check-text-focus-color;
+}
+
+// Image
+
+.form-check-img > .form-check-input {
+  width: 100%;
+  height: 100%;
+  width: $form-check-img-input-size;
+  height: $form-check-img-input-size;
+  background-size: cover;
+  background-clip: padding-box;
+  border: 0;
+  border-bottom: $border-width * 2 solid transparent;
+  border-radius: 0;
+  opacity: .8;
+  cursor: $form-check-label-cursor;
+}
+
+.form-check-img > .form-check-input:checked {
+  opacity: 1;
+  border-bottom-color: $body-color;
+}
+
+// Size
+
+.form-check-size > .form-check-input {
+  display: none;
+}
+
+.form-check-size > .form-check-label {
+  min-width: $form-check-size-label-width;
+  margin-left: 0;
+  padding: $form-check-size-label-spacing;
+  border: $border-width solid $form-check-size-label-border-color;
+  text-align: center;
+  transition: $transition-base;
+}
+
+.form-check-size > .form-check-input:checked ~ .form-check-label {
+  border-color: currentColor;
+}
+
+.form-check-size > .form-check-input:disabled ~ .form-check-label {
+  background-color: $light;
+}
+
+// Switch
+
+.form-switch > .form-check-input {
+  border-radius: $form-switch-border-radius;
+  border: $form-switch-border-width solid $form-switch-border-color;
+  background-color: $form-switch-bg-color;
+  background-size: $form-switch-bg-size;
+  background-position: center left;
+}
+
+.form-switch > .form-check-input:checked,
+.form-switch > .form-check-input:checked:focus {
+  background-color: $form-switch-color;
+}
+
+// Button
+
+.btn-check:checked + .btn-outline-border {
+  border-color: $black;
+}

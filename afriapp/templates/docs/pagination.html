@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Pagination"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Pagination</h3>
+
+            <p class="text-gray-500">
+              Indicates a series of related content exists across multiple pages. <br>
+              <a href="http://getbootstrap.com/docs/5.1/components/pagination/" target="_blank">Bootstrap documentation</a>
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <ul class="pagination pagination-lg mb-5">
+                  <li class="page-item">
+                    <a class="page-link page-link-arrow" href="#">
+                      <i class="fa fa-caret-left"></i>
+                    </a>
+                  </li>
+                  <li class="page-item active">
+                    <a class="page-link" href="#">1</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">2</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">4</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">5</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">6</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link page-link-arrow" href="#">
+                      <i class="fa fa-caret-right"></i>
+                    </a>
+                  </li>
+                </ul>
+
+                <ul class="pagination mb-5">
+                  <li class="page-item">
+                    <a class="page-link page-link-arrow" href="#">
+                      <i class="fa fa-caret-left"></i>
+                    </a>
+                  </li>
+                  <li class="page-item active">
+                    <a class="page-link" href="#">1</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">2</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">4</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">5</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">6</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link page-link-arrow" href="#">
+                      <i class="fa fa-caret-right"></i>
+                    </a>
+                  </li>
+                </ul>
+
+                <ul class="pagination pagination-sm">
+                  <li class="page-item">
+                    <a class="page-link page-link-arrow" href="#">
+                      <i class="fa fa-caret-left"></i>
+                    </a>
+                  </li>
+                  <li class="page-item active">
+                    <a class="page-link" href="#">1</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">2</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">4</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">5</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">6</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link page-link-arrow" href="#">
+                      <i class="fa fa-caret-right"></i>
+                    </a>
+                  </li>
+                </ul>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;ul&nbsp;class=&quot;pagination&nbsp;pagination-lg&quot;&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;page-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;page-link&nbsp;page-link-arrow&quot;&nbsp;href=&quot;#&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fa&nbsp;fa-caret-left&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;page-item&nbsp;active&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;page-link&quot;&nbsp;href=&quot;#&quot;&gt;...&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;page-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;page-link&nbsp;page-link-arrow&quot;&nbsp;href=&quot;#&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fa&nbsp;fa-caret-right&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&lt;/ul&gt;<br /><br />&lt;ul&nbsp;class=&quot;pagination&quot;&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;page-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;page-link&nbsp;page-link-arrow&quot;&nbsp;href=&quot;#&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fa&nbsp;fa-caret-left&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;page-item&nbsp;active&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;page-link&quot;&nbsp;href=&quot;#&quot;&gt;...&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;page-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;page-link&nbsp;page-link-arrow&quot;&nbsp;href=&quot;#&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fa&nbsp;fa-caret-right&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&lt;/ul&gt;<br /><br /><br />&lt;ul&nbsp;class=&quot;pagination&nbsp;pagination-sm&quot;&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;page-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;page-link&nbsp;page-link-arrow&quot;&nbsp;href=&quot;#&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fa&nbsp;fa-caret-left&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;page-item&nbsp;active&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;page-link&quot;&nbsp;href=&quot;#&quot;&gt;...&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&lt;li&nbsp;class=&quot;page-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;page-link&nbsp;page-link-arrow&quot;&nbsp;href=&quot;#&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fa&nbsp;fa-caret-right&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/a&gt;<br />&nbsp;&nbsp;&lt;/li&gt;<br />&lt;/ul&gt;<br />
+                </code>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

@@ -1,0 +1,291 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Cart {% endblock %}
+
+{% block content %} 
+
+    <!-- NAVBAR -->
+    <div class="navbar navbar-boxed navbar-expand-md navbar-dark mb-7 mt-1">
+      <div class="container">
+        <div class="dropdown flex-grow-1 flex-md-grow-0">
+    
+          <!-- Toggle -->
+          <button class="btn btn-lg w-100 btn-dark" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+            <span class="navbar-toggler-icon me-4"></span> Select Store
+          </button>
+    
+          <!-- Menu -->
+          <div class="dropdown-menu dropdown-menu-lg w-100">
+            <!-- Categories Loop -->
+            {% for service in services %}
+              <a class="dropdown-item" href="{% url 'service' service.id %}">
+                <span class="me-4">
+                  <svg width="17" height="20" viewBox="0 0 17 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="..."></path> <!-- Replace with the appropriate SVG icon or use service.icon if SVGs are stored -->
+                  </svg>
+                </span> 
+                {{ service.name }}
+              </a>
+            {% endfor %}
+          </div>
+          
+    
+        </div>
+        <div class="flex-grow-1 position-relative">
+    
+        <form class="navbar-form">
+          <div class="input-group">
+              <input type="search" class="form-control form-control-lg" placeholder="Search for items and brands">
+              <select class="form-select form-select-lg d-none d-md-block">
+                  <option selected>All Categories</option>
+                  {% for service in services %}
+                      <option>{{ service.name }}</option>
+
+                  {% endfor %}
+                  {% if service.id %}  Ensure service.id is not None or empty
+                    <li>>Shop {{ service.name }}</a></li>
+                  {% endif %}
+              </select>
+              <div class="input-group-append">
+                  <button class="btn btn-outline-border btn-lg">
+                      <i class="fe fe-search"></i>
+                  </button>
+              </div>
+          </div>
+        </form>
+
+
+        <div class="dropdown-menu dropdown-collapse" id="navbarMenu">
+          {% for category in categories %}
+              <div class="collapse" id="{{ category.name|slugify }}" data-bs-parent="#navbarMenu">
+                  <button type="button" class="btn-close d-md-none" data-bs-toggle="collapse" data-bs-target="#{{ category.name|slugify }}">
+                      <i class="fe fe-x" aria-hidden="true"></i>
+                  </button>
+                  <div class="card card-lg shadow-border">
+                      <div class="card-body">
+                          <h5 class="mb-5">{{ category.name }}</h5>
+                          <!-- Additional content for each category can go here -->
+                      </div>
+                  </div>
+              </div>
+          {% endfor %}
+        </div>
+
+    
+        </div>
+    
+    
+      </div>
+    </div>
+
+    <!-- WELCOME -->
+    <section>
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-12 col-lg-8 d-flex flex-column mb-7">
+            
+            <!-- Featured Collection Card -->
+            <div class="card card-lg justify-content-end bg-cover" style="min-height: 490px;">
+              <!-- Background -->
+              <div class="card-bg">
+                <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/grocery-banner.jpg);"></div>
+              </div>
+              
+              <!-- Content -->
+              <div class="row">
+                <div class="col-12 col-md-7 position-static">
+                  <div class="card-body m-6 bg-white">
+                    <!-- Heading -->
+                    <h4 class="text-dark">Fresh Produce, Daily Essentials</h4>
+                    <!-- Button -->
+                    <a class="btn btn-link stretched-link px-0 text-body" href="{% url 'shop'%}">Shop Now <i class="fe fe-arrow-right ms-2"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4 d-flex flex-column mb-7">
+            <!-- Promotional Card -->
+            <a class="card justify-content-center bg-cover" href="shop.html" style="min-height: 490px;">
+              <div class="card-bg">
+                <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/food-discount.jpg);"></div>
+              </div>
+              <div class="card-body text-center text-white">
+                <p class="text-uppercase">Weekly Special</p>
+                <h2 class="display-4">30% OFF</h2>
+                <h4>On Selected Grocery Items</h4>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4 d-flex flex-column mb-7 mb-lg-0">
+            <!-- Newsletter Subscription Card -->
+            <div class="card card-lg justify-content-center h-100 bg-pattern bg-success" style="min-height: 320px;">
+              <div class="card-body text-center text-white">
+                <h5 class="mb-4">Stay Updated with Our Offers!</h5>
+                <p class="mb-8">Subscribe to our newsletter and receive a 10% discount on your first order!</p>
+                <form>
+                  <div class="input-group input-group-merge">
+                    <input type="email" class="form-control form-control-light form-control-sm" placeholder="Enter Your Email *" required>
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-white btn-sm bg-none text-white" type="submit">Subscribe</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4 d-flex flex-column mb-7 mb-md-0">
+            <!-- Featured Products Card -->
+            <div class="card justify-content-center bg-cover" style="min-height: 320px;">
+              <div class="card-bg">
+                <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/fresh-fruits.jpg);"></div>
+              </div>
+              <div class="card-body text-center text-white">
+                <h5 class="mb-0">Fresh Fruits</h5>
+                <a class="btn btn-link stretched-link px-0 text-white" href="shop.html">Shop now <i class="fe fe-arrow-right ms-2"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4 d-flex flex-column">
+            <!-- Featured Products Card -->
+            <div class="card justify-content-center bg-cover" style="min-height: 320px;">
+              <div class="card-bg">
+                <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/bakery.jpg);"></div>
+              </div>
+              <div class="card-body text-center text-white">
+                <h5 class="mb-0">Bakery Treats</h5>
+                <a class="btn btn-link stretched-link px-0 text-white" href="shop.html">Shop now <i class="fe fe-arrow-right ms-2"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW ARRIVALS -->
+    <section class="pt-12">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h2 class="mb-10 text-center">New Arrivals</h2>
+          </div>
+        </div>
+
+        <div class="row">
+          {% for product in latest_products %}
+          <div class="col-6 col-md-3 col-lg">
+            <div class="card mb-7" data-toggle="card-collapse">
+              <a href="{% url 'product' product.id %}">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top">
+              </a>
+              <div class="card-collapse-parent">
+                <div class="card-body px-0 bg-white text-center">
+                  <div class="mb-1 fw-bold">
+                    <a class="text-body" href="{% url 'product' product.id %}">{{ product.name }}</a>
+                  </div>
+                  <div class="mb-1 fw-bold text-muted">${{ product.price }}</div>
+                  <div class="rating fs-xxs text-dark justify-content-center">
+                    {% if product.rating %}
+                      {% for i in "12345" %}
+                        <div class="rating-item">
+                          <i class="fas fa-star {% if i|add:0 <= product.rating %}text-warning{% endif %}"></i>
+                        </div>
+                      {% endfor %}
+                    {% else %}
+                      <div class="text-muted">No ratings yet</div> <!-- Default message -->
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="card-collapse collapse">
+                  <div class="card-footer px-0 pt-0 bg-white text-center">
+                    <button class="btn btn-xs btn-link btn-circle" data-bs-toggle="modal" data-bs-target="#modalProduct{{ product.id }}">
+                      <i class="fe fe-eye"></i>
+                    </button>
+                    <button class="btn btn-xs btn-link btn-circle" onclick="add_to_cart({{ product.id }})">
+                      <i class="fe fe-shopping-cart"></i>
+                    </button>
+                    <button class="btn btn-xs btn-link btn-circle" onclick="add_to_wishlist({{ product.id }})">
+                      <i class="fe fe-heart"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% if forloop.counter|divisibleby:"2" and not forloop.last %}
+            <div class="w-100 d-none d-lg-block"></div>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+
+
+    <script type="text/javascript">
+
+      // Unified function for quantity control (increase or decrease)
+      function updateQuantity(productId, change) {
+        const quantityInput = document.getElementById('quantity-' + productId);
+        let quantity = parseInt(quantityInput.value, 10) || 1; // Default to 1 if input is invalid
+
+        // Update the quantity with the provided change (positive or negative)
+        quantity = Math.max(1, Math.min(10, quantity + change)); // Ensure quantity is between 1 and 10
+
+        quantityInput.value = quantity;
+    }
+      function add_to_cart(product_id) {
+          // Fetch the quantity input value for the given product ID
+          let quantityElement = document.getElementById(`quantity-${product_id}`);
+          let quantity = quantityElement ? quantityElement.value : 1; // Default quantity to 1 if no element
+      
+          // AJAX request to add the product to the cart
+          $.ajax({
+              url: "{% url 'add_to_cart' 0 %}".replace('0', product_id),
+              type: "POST",
+              data: {
+                  'quantity': quantity,
+                  'csrfmiddlewaretoken': '{{ csrf_token }}'
+              },
+              success: function(response) {
+                  console.log(response);  // Log response for debugging
+                  if (response.success) {
+                      // Display a success alert with SweetAlert2
+                      Swal.fire({
+                          title: 'Success!',
+                          text: response.message,
+                          icon: 'success',
+                          showConfirmButton: false,
+                          timer: 1500 // Automatically close after 1.5 seconds
+                      });
+                      //  update the cart count dynamically
+                      $('#navbar-cart-count').text(response.cart_count); // Update navbar cart count
+                      $('#cart-button-count').text(response.cart_count); // Update cart button count
+                  } else {
+                      Swal.fire({
+                          title: 'Error!',
+                          text: 'Failed to add product to cart. Please ensure you are logged in.',
+                          icon: 'error',
+                          confirmButtonText: 'Okay'
+                      });
+                  }
+              },
+              error: function(xhr, status, error) {
+                  Swal.fire({
+                      title: 'Oops!',
+                      text: 'Something went wrong. Please ensure you are logged in.',
+                      icon: 'error',
+                      confirmButtonText: 'Okay'
+                  });
+              }
+          });
+      }
+      
+  </script>
+
+{% endblock %}

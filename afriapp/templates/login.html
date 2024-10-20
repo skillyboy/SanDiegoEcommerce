@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Product {% endblock %}
+
+{% block content %}
+
+
+    <!-- CONTENT -->
+    <section class="py-12" style="background-color: #F5F5DC;"> <!-- Added background color -->
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-12">
+
+            <!-- Card for Returning Customers -->
+            <div class="card card-lg mb-10 mb-md-0">
+              <div class="card-body" style="background-color: #FFF8E1; border: 1px solid #8B4513;">
+
+                <!-- Heading -->
+                <h6 class="mb-7" style="color: #8B4513;">Returning Customer</h6>
+
+                <!-- Form -->
+                <form method="post" action="{% url 'login' %}">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-12">
+                      <!-- Email -->
+                      <div class="form-group">
+                        <label class="visually-hidden" for="loginEmail">Email Address *</label>
+                        <input class="form-control form-control-sm" id="loginEmail" name="username" type="email" placeholder="Email Address *" required style="border: 1px solid #4CAF50;">
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <!-- Password -->
+                      <div class="form-group">
+                        <label class="visually-hidden" for="loginPassword">Password *</label>
+                        <input class="form-control form-control-sm" id="loginPassword" name="password" type="password" placeholder="Password *" required style="border: 1px solid #4CAF50;">
+                      </div>
+                    </div>
+                    <div class="col-12 col-md">
+                      <!-- Remember Me -->
+                      <div class="form-group">
+                        <div class="form-check">
+                          <input class="form-check-input" id="loginRemember" type="checkbox" name="remember_me">
+                          <label class="form-check-label" for="loginRemember">Remember me</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-auto">
+                      <!-- Forgot Password Link -->
+                      <div class="form-group">
+                        <a class="fs-sm text-reset" data-bs-toggle="modal" href="#modalPasswordReset" style="color: #FFA726;">Forgot Password?</a>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <!-- Sign In Button -->
+                      <button class="btn btn-sm" type="submit" style="background-color: #4CAF50; color: #FFF;">Sign In</button>
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 col-md-6">
+
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+{% endblock %}

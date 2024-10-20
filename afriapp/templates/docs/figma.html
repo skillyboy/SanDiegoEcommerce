@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Figma"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Figma</h3>
+
+            <p class="text-gray-500">
+              Shopper was designed in Figma. Please use the link provided in the README.md file you can find in the root folder to download an <i>unofficial</i> Figma file that can be useful to rough out new pages or modify existing ones.
+            </p>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Cards"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Cards</h3>
+
+            <p class="text-gray-500">
+              Bootstrap’s cards provide a flexible and extensible content container with multiple variants and options. <br>
+              <a href="https://getbootstrap.com/docs/5.1/components/card/" target="_blank">Bootstrap documentation</a>
+            </p>
+
+            <div class="card" style="max-width: 320px;">
+
+              <!-- Image -->
+              <img class="card-img-top" src="{{webRoot}}/assets/img/covers/cover-28.jpg" alt="...">
+
+              <!-- Body -->
+              <div class="card-body border">
+
+                <!-- Title -->
+                <h6>Card title</h6>
+
+                <!-- Text -->
+                <p class="text-gray-500">
+                  Some quick example text to build on the card title and make up the bulk of the card's content.
+                </p>
+
+                <!-- Link -->
+                <a href="#" class="btn btn-primary btn-sm">
+                  Go somewhere <i class="fe fe-arrow-right ms-2"></i>
+                </a>
+
+              </div>
+
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Sizing</h5>
+
+            <p class="text-gray-500">
+              Control the padding of <code>.card-body</code> and <code>.card-footer</code> elements with the following modifiers:
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="card card-xl mb-5">
+                  <div class="card-body border">
+
+                    <!-- Heading -->
+                    <h6>Extra Large</h6>
+
+                    <!-- Text -->
+                    <p class="mb-0 text-gray-500">
+                      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Excepturi debitis accusamus saepe, inventore quas, dolorem porro, quod iure neque maxime vel amet!
+                    </p>
+
+                  </div>
+                </div>
+
+                <div class="card card-lg mb-5">
+                  <div class="card-body border">
+
+                    <!-- Heading -->
+                    <h6>Large</h6>
+
+                    <!-- Text -->
+                    <p class="mb-0 text-gray-500">
+                      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Excepturi debitis accusamus saepe, inventore quas, dolorem porro, quod iure neque maxime vel amet!
+                    </p>
+
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-body border">
+
+                    <!-- Heading -->
+                    <h6>Base</h6>
+
+                    <!-- Text -->
+                    <p class="mb-0 text-gray-500">
+                      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Excepturi debitis accusamus saepe, inventore quas, dolorem porro, quod iure neque maxime vel amet!
+                    </p>
+
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;!--&nbsp;Extra&nbsp;Large&nbsp;--&gt;<br />&lt;div&nbsp;class=&quot;card&nbsp;card-xl&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-body&quot;&gt;...&lt;/div&gt;<br />&lt;/div&gt;<br /><br />&lt;!--&nbsp;Large&nbsp;--&gt;<br />&lt;div&nbsp;class=&quot;card&nbsp;card-lg&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-body&quot;&gt;...&lt;/div&gt;<br />&lt;/div&gt;<br /><br />&lt;!--&nbsp;Base&nbsp;--&gt;<br />&lt;div&nbsp;class=&quot;card&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-body&quot;&gt;...&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Image hover</h5>
+
+            <p class="text-gray-500">
+              Switch between two images on hover with the following markup:
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <!-- Card -->
+                <div class="card" style="max-width: 320px;">
+                  <div class="card-img">
+                    <div class="card-img-hover">
+                      <img class="card-img-top card-img-back" src="{{webRoot}}/assets/img/products/product-120.jpg" alt="...">
+                      <img class="card-img-top card-img-front" src="{{webRoot}}/assets/img/products/product-5.jpg" alt="...">
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;card&quot;&nbsp;style=&quot;max-width:&nbsp;320px;&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-img&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-img-hover&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;class=&quot;card-img-top&nbsp;card-img-back&quot;&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-120.jpg&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;class=&quot;card-img-top&nbsp;card-img-front&quot;&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-5.jpg&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Background</h5>
+
+            <p class="text-gray-500">
+              Add a background image that translates on hover with the following markup:
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <!-- Card-->
+                <div class="card card-xl" style="min-height: 280px; max-width: 320px;">
+
+                  <!-- Background -->
+                  <div class="card-bg">
+                    <div class="card-bg-img bg-cover" style="background-image: url({{webRoot}}/assets/img/products/product-22.jpg);"></div>
+                  </div>
+
+                  <!-- Body -->
+                  <div class="card-body my-auto">
+
+                    <!-- Heading -->
+                    <h5 class="mb-0">Summer Hats</h5>
+
+                    <!-- Link -->
+                    <a class="btn btn-link stretched-link px-0 text-reset" href="#!">
+                      Shop Now <i class="fe fe-arrow-right ms-2"></i>
+                    </a>
+
+                  </div>
+
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;card&nbsp;card-xl&quot;&nbsp;style=&quot;min-height:&nbsp;280px;&nbsp;max-width:&nbsp;320px;&quot;&gt;<br /><br />&nbsp;&nbsp;&lt;!--&nbsp;Background&nbsp;--&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-bg&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-bg-img&nbsp;bg-cover&quot;&nbsp;style=&quot;background-image:&nbsp;url({{webRoot}}/assets/img/products/product-22.jpg);&quot;&gt;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br /><br />&nbsp;&nbsp;&lt;!--&nbsp;Body&nbsp;--&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-body&nbsp;my-auto&quot;&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Heading&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;h5&nbsp;class=&quot;mb-0&quot;&gt;Summer&nbsp;Hats&lt;/h5&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Link&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;btn&nbsp;btn-link&nbsp;stretched-link&nbsp;px-0&nbsp;text-reset&quot;&nbsp;href=&quot;shop.html&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Shop&nbsp;Now&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-arrow-right&nbsp;ms-2&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/a&gt;<br /><br />&nbsp;&nbsp;&lt;/div&gt;<br /><br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Circle</h5>
+
+            <p class="text-gray-500">
+              A circle badge with two sizing and three positioning options.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="card-circle card-circle-lg position-relative" style="top: 0;">
+                  <strong>save</strong>
+                  <span class="fs-4 fw-bold">30%</span>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;card&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-body&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-circle&nbsp;card-circle-lg&nbsp;card-circle-left&quot;&gt;...&lt;/div&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br /><br />&lt;div&nbsp;class=&quot;card&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-body&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-circle&nbsp;card-circle-end&quot;&gt;...&lt;/div&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br /><br /><br />&lt;div&nbsp;class=&quot;card&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-body&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-circle&nbsp;card-circle-sm&nbsp;card-circle-top-end&quot;&gt;...&lt;/div&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Badge</h5>
+
+            <p class="text-gray-500">
+              A standard badge component with two positioning options.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="badge bg-dark text-uppercase">New!</div>
+                <div class="badge bg-white text-body text-uppercase">New!</div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;card&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-badge&nbsp;card-badge-start&nbsp;badge&nbsp;bg-dark&nbsp;text-uppercase&quot;&gt;New!&lt;/div&gt;<br />&lt;/div&gt;<br /><br />&lt;div&nbsp;class=&quot;card&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-badge&nbsp;card-badge-end&nbsp;badge&nbsp;bg-white&nbsp;text-uppercase&quot;&gt;New!&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Price</h5>
+
+            <p class="text-gray-500">
+              Adds a pricing badge in the top left or right corner of a card.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="card" style="max-width: 320px;">
+
+                  <!-- Price -->
+                  <div class="btn btn-white btn-sm card-price card-price-start">$59.00</div>
+
+                  <!-- Image -->
+                  <img src="{{webRoot}}/assets/img/products/product-65.jpg" alt="..." class="card-img-top">
+
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;card&quot;&nbsp;style=&quot;max-width:&nbsp;320px;&quot;&gt;<br /><br />&nbsp;&nbsp;&lt;!--&nbsp;Price&nbsp;--&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;btn&nbsp;btn-white&nbsp;btn-sm&nbsp;card-price&nbsp;card-price-start&quot;&gt;$59.00&lt;/div&gt;<br /><br />&nbsp;&nbsp;&lt;!--&nbsp;Image&nbsp;--&gt;<br />&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-65.jpg&quot;&nbsp;alt=&quot;...&quot;&nbsp;class=&quot;card-img-top&quot;&gt;<br /><br />&lt;/div&gt;<br /><br />&lt;div&nbsp;class=&quot;card&quot;&nbsp;style=&quot;max-width:&nbsp;320px;&quot;&gt;<br /><br />&nbsp;&nbsp;&lt;!--&nbsp;Price&nbsp;--&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;btn&nbsp;btn-white&nbsp;btn-sm&nbsp;card-price&nbsp;card-price-end&quot;&gt;$59.00&lt;/div&gt;<br /><br />&nbsp;&nbsp;&lt;!--&nbsp;Image&nbsp;--&gt;<br />&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-65.jpg&quot;&nbsp;alt=&quot;...&quot;&nbsp;class=&quot;card-img-top&quot;&gt;<br /><br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Actions</h5>
+
+            <p class="text-gray-500">
+              Card action buttons fading in on hover.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="card" style="max-width: 320px;">
+                  <div class="card-img">
+
+                    <!-- Image -->
+                    <img class="card-img-top" src="{{webRoot}}/assets/img/products/product-6.jpg" alt="...">
+
+                    <!-- Actions -->
+                    <div class="card-actions">
+                      <span class="card-action">
+                        <button class="btn btn-xs btn-circle btn-white-primary" data-bs-toggle="modal" data-bs-target="#modalProduct">
+                          <i class="fe fe-eye"></i>
+                        </button>
+                      </span>
+                      <span class="card-action">
+                        <button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button">
+                          <i class="fe fe-shopping-cart"></i>
+                        </button>
+                      </span>
+                      <span class="card-action">
+                        <button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button">
+                          <i class="fe fe-heart"></i>
+                        </button>
+                      </span>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;card&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-img&quot;&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Image&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;class=&quot;card-img-top&quot;&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-6.jpg&quot;&nbsp;alt=&quot;...&quot;&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Actions&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-actions&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&nbsp;class=&quot;card-action&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button&nbsp;class=&quot;btn&nbsp;btn-xs&nbsp;btn-circle&nbsp;btn-white-primary&quot;&nbsp;data-bs-toggle=&quot;modal&quot;&nbsp;data-bs-target=&quot;#modalProduct&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-eye&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/button&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/span&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&nbsp;class=&quot;card-action&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button&nbsp;class=&quot;btn&nbsp;btn-xs&nbsp;btn-circle&nbsp;btn-white-primary&quot;&nbsp;data-toggle=&quot;button&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-shopping-cart&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/button&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/span&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&nbsp;class=&quot;card-action&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button&nbsp;class=&quot;btn&nbsp;btn-xs&nbsp;btn-circle&nbsp;btn-white-primary&quot;&nbsp;data-toggle=&quot;button&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-heart&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/button&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/span&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br /><br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Action</h5>
+
+            <p class="text-gray-500">
+              Card action button always visible in the top left or right corner.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="card" style="max-width: 320px;">
+                  <div class="card-img">
+
+                    <!-- Image -->
+                    <img class="card-img-top" src="{{webRoot}}/assets/img/products/product-7.jpg" alt="...">
+
+                    <!-- Action -->
+                    <button class="btn btn-xs btn-circle btn-white-primary card-action card-acton-start" data-toggle="button">
+                      <i class="fe fe-heart"></i>
+                    </button>
+
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;card&quot;&nbsp;style=&quot;max-width:&nbsp;320px;&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-img&quot;&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Image&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;class=&quot;card-img-top&quot;&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-7.jpg&quot;&nbsp;alt=&quot;...&quot;&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Action&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;button&nbsp;class=&quot;btn&nbsp;btn-xs&nbsp;btn-circle&nbsp;btn-white-primary&nbsp;card-action&nbsp;card-acton-start&quot;&nbsp;data-toggle=&quot;button&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-heart&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/button&gt;<br /><br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br /><br />&lt;div&nbsp;class=&quot;card&quot;&nbsp;style=&quot;max-width:&nbsp;320px;&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-img&quot;&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Image&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;class=&quot;card-img-top&quot;&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-7.jpg&quot;&nbsp;alt=&quot;...&quot;&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Action&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;button&nbsp;class=&quot;btn&nbsp;btn-xs&nbsp;btn-circle&nbsp;btn-white-primary&nbsp;card-action&nbsp;card-action-end&quot;&nbsp;data-toggle=&quot;button&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-heart&quot;&gt;&lt;/i&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/button&gt;<br /><br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Button</h5>
+
+            <p class="text-gray-500">
+              Card button visible in the bottom of a card on hover.
+            </p>
+
+            <div class="card w-auto">
+              <div class="card-body border">
+
+                <div class="card" style="max-width: 320px;">
+                  <div class="card-img">
+
+                    <!-- Image -->
+                    <img class="card-img-top" src="{{webRoot}}/assets/img/products/product-9.jpg" alt="...">
+
+                    <!-- Button -->
+                    <button class="btn btn-xs w-100 btn-dark card-btn" data-bs-toggle="modal" data-bs-target="#modalProduct">
+                      <i class="fe fe-eye me-2 mb-1"></i> Quick View
+                    </button>
+
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;card&quot;&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-img&quot;&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Image&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;class=&quot;card-img-top&quot;&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-6.jpg&quot;&nbsp;alt=&quot;...&quot;&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Button&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;button&nbsp;class=&quot;btn&nbsp;btn-xs&nbsp;w-100&nbsp;btn-dark&nbsp;card-btn&quot;&nbsp;data-bs-toggle=&quot;modal&quot;&nbsp;data-bs-target=&quot;#modalProduct&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-eye&nbsp;me-2&nbsp;mb-1&quot;&gt;&lt;/i&gt;&nbsp;Quick&nbsp;View<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/button&gt;<br /><br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Collapse</h5>
+
+            <p class="text-gray-500">
+              Card collapse toggled on hover.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="card" data-toggle="card-collapse" style="max-width: 320px;">
+
+                  <!-- Image -->
+                  <img class="card-img-top" src="{{webRoot}}/assets/img/products/product-7.jpg" alt="..." />
+
+                  <!-- Collapse -->
+                  <div class="card-collapse-parent">
+
+                    <!-- Body -->
+                    <div class="card-body px-0 pb-0 bg-white">
+                      <div class="row gx-0">
+                        <div class="col">
+
+                          <!-- Title -->
+                          <a class="d-block fw-bold text-body" href="{{webRoot}}/product.html">
+                            Leather Sneakers
+                          </a>
+
+                          <!-- Category -->
+                          <a class="fs-xs text-muted" href="{{webRoot}}/shop.html">
+                            Shoes
+                          </a>
+
+                        </div>
+                        <div class="col-auto">
+
+                          <!-- Price -->
+                          <div class="fs-xs fw-bold text-gray-350 text-decoration-line-through">
+                            $115.00
+                          </div>
+                          <div class="fs-sm fw-bold text-primary">
+                            $85.00
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="card-collapse collapse">
+                      <div class="card-footer px-0 bg-white">
+                        <form>
+                          <div class="mb-1">
+                            <div class="form-check form-check-inline form-check-color">
+                              <input type="radio" id="docsProductThreeColorOne" name="docsProductThreeColor" class="form-check-input" style="background-color: #f9f9f9" checked />
+                            </div>
+                          </div>
+                          <div>
+                            <div class="form-check form-check-inline form-check-text fs-xs">
+                              <input class="form-check-input" id="docsProductThreeSizeOne" type="radio" name="sizeRadio" />
+                              <label class="form-check-label" for="docsProductThreeSizeOne">6</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-text fs-xs">
+                              <input class="form-check-input" id="docsProductThreeSizeTwo" type="radio" name="sizeRadio" />
+                              <label class="form-check-label" for="docsProductThreeSizeTwo">6.5</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-text fs-xs">
+                              <input class="form-check-input" id="docsProductThreeSizeThree" type="radio" name="sizeRadio" />
+                              <label class="form-check-label" for="docsProductThreeSizeThree">7</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-text fs-xs">
+                              <input class="form-check-input" id="docsProductThreeSizeFour" type="radio" name="sizeRadio" />
+                              <label class="form-check-label" for="docsProductThreeSizeFour">7.5</label>
+                            </div>
+                            <div class="form-check form-check-inline form-check-text fs-xs">
+                              <input class="form-check-input" id="docsProductThreeSizeFive" type="radio" name="sizeRadio" />
+                              <label class="form-check-label" for="docsProductThreeSizeFive">8.5</label>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;card&quot;&nbsp;data-toggle=&quot;card-collapse&quot;&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Image&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;class=&quot;card-img-top&quot;&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-7.jpg&quot;&nbsp;alt=&quot;...&quot;&nbsp;/&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Collapse&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-collapse-parent&quot;&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Body&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-body&nbsp;px-0&nbsp;pb-0&nbsp;bg-white&quot;&gt;...&lt;/div&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Footer&nbsp;--&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-collapse&nbsp;collapse&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-footer&nbsp;px-0&nbsp;bg-white&quot;&gt;...&lt;/div&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br /><br />&nbsp;&nbsp;&lt;/div&gt;
+                </code>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

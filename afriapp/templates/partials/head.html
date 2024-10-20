@@ -1,0 +1,62 @@
+{% load static %}
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}African Food San Diego{% endblock title %}</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+
+    <!-- Link to CSS files -->
+    <link rel="stylesheet" href="{% static 'css/libs.bundle.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.bundle.css' %}">
+
+    <!-- Custom Styles for Navbar and Theme -->
+    <style>
+        .navbar-topbar {
+            background-color: #146d19; /* Dark green for a warm, inviting theme */
+            color: #FFFFFF; /* White text for contrast */
+        }
+
+        .navbar-topbar .nav-link {
+            color: #FFFFFF; /* White text for nav links */
+        }
+
+        .navbar-topbar .nav-link:hover {
+            color: #FFD700; /* Gold color on hover */
+        }
+
+        .navbar-topbar .dropdown-menu {
+            background-color: #8B4513; /* Match dropdown background with navbar */
+            color: #FFFFFF;
+        }
+
+        .navbar-topbar .dropdown-item:hover {
+            background-color: #A0522D; /* Slightly lighter brown on hover */
+        }
+
+        .navbar-topbar .heading-xxxs {
+            color: #FFD700; /* Gold for the promo text */
+        }
+        
+        .messages {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1050;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .message {
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</head>

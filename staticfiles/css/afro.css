@@ -1,0 +1,14 @@
+@font-face {
+     font-family: 'ShopperFont';
+     src: url('{% static "fonts/shopper-font.woff2" %}') format('woff2'),
+          url('{% static "fonts/shopper-font.woff" %}') format('woff');
+     font-weight: normal;
+     font-style: normal;
+   }
+   
+   body {
+     font-family: 'ShopperFont', sans-serif;
+   }
+   
+
+   

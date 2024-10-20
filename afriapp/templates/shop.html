@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shop Products{% endblock %}
+{% block content %}
+<style>
+    .product-card:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s;
+    }
+
+    .card {
+        border: none;
+    }
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .quantity-control input {
+        width: 60px;
+        text-align: center;
+    }
+
+    .quantity-button {
+        border-radius: 5px;
+        width: 40px;
+    }
+
+    .add-to-cart-button {
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    .modal-content {
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: #f8f9fa;
+    }
+</style>
+
+<body>
+    <!-- BREADCRUMB -->
+    <nav class="py-5">
+        <div class="container">
+            <ol class="breadcrumb mb-0 fs-xs text-gray-400">
+                <li class="breadcrumb-item">
+                    <a class="text-gray-400" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="breadcrumb-item active">Shop</li>
+            </ol>
+        </div>
+    </nav>
+
+<!-- CONTENT -->
+<div class="container-fluid">
+    <div class="row gx-0">
+
+        <!-- Category Selection -->
+        <div class="col-12 col-lg-auto">
+            <nav class="navbar navbar-expand-lg navbar-vertical navbar-light sticky-start px-lg-7">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSidenavLeftCollapse" aria-controls="navbarSidenavLeftCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div id="navbarSidenavLeftCollapse">
+                    <ul class="navbar-nav fs-lg mb-6 my-lg-12 mx-sm-3" id="sidenavParent">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="all-products" data-category-id="">All Products</a>
+                        </li>
+                        {% for category in categories %}
+                            <li class="nav-item">
+                                <a class="nav-link dropdown-toggle" 
+                                   data-bs-toggle="collapse" 
+                                   href="#category-{{ category.id }}" 
+                                   data-category-id="{{ category.id }}" 
+                                   class="category-link">
+                                   {{ category.name }}
+                                </a>
+                                
+                                <div class="collapse" id="category-{{ category.id }}" data-bs-parent="#sidenavParent">
+                                    <div class="row">
+                                        <div class="col-12 py-3">
+                                            <ul class="list-styled fs-base">
+                                                {% for subcategory in category.services.all %}
+                                                    <li class="list-styled-item">
+                                                        <a class="list-styled-link category-link" href="#" data-category-id="{{ subcategory.id }}">
+                                                            {{ subcategory.name }}
+                                                        </a>
+                                                    </li>
+                                                {% empty %}
+                                                    <li class="list-styled-item">No subcategories available</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <!-- Category ends -->
+
+        <div class="col-12 col-lg">
+            <!-- Search bar -->
+            <nav class="navbar navbar-expand navbar-light pt-0 pt-lg-6">
+                <div class="container-fluid d-flex justify-content-between align-items-center">
+                    <form class="navbar-form w-100" method="GET" action="{% url 'shop' %}" style="max-width: 550px;">
+                        <div class="input-group">
+                            <input class="form-control form-control-underline form-control-sm border-dark" type="search" name="search" placeholder="Search for items and brands" aria-label="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-underline btn-sm border-dark" type="submit">
+                                    <i class="fe fe-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="cart-button-count">
+                        <a href="{% url 'cart' %}" class="btn btn-dark btn-sm cart-button-count">
+                            <i class="fe fe-shopping-cart"></i> Cart <span id="cart-button-count">{{ cart_count }}</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- PRODUCT CARDS DISPLAY -->
+            <section class="pb-12">
+                <div class="row" id="product-list">
+                    {% for product in products %}
+                        <div class="col-12 col-md-6 col-xl-3 product-card" data-category-id="{{ product.category.id }}">
+                            <div class="card mb-7 bg-cover rounded shadow-sm" style="min-height: 240px; background-image: url({{ product.image.url }}); transition: transform 0.3s;">
+                                <div class="badge bg-danger card-badge text-uppercase">
+                                    {% if product.is_on_sale %}Sale{% endif %}
+                                </div>
+                                <div class="card-img-overlay card-img-overlay-hover align-items-center bg-white-90 rounded">
+                                    <div class="text-center">
+                                        <p class="fw-bold">{{ product.name }} <br><span class="text-muted">${{ product.price }}</span></p>
+                                        <p class="mb-0">
+                                            <button class="btn btn-xs btn-link btn-circle" data-bs-toggle="modal" data-bs-target="#modalProduct{{ product.id }}">
+                                                <i class="fe fe-eye"></i>
+                                            </button>
+                                            <button class="btn btn-xs btn-link btn-circle" onclick="add_to_cart({{ product.id }})">
+                                                <i class="fe fe-shopping-cart"></i>
+                                            </button>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% include 'partials/modals/modal-product.html' %}
+
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- JavaScript to Handle Filter and Cart Actions -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const categoryLinks = document.querySelectorAll('.category-link');
+        const allProductsButton = document.getElementById('all-products');
+
+        allProductsButton.addEventListener('click', function() {
+            filterProducts('all');
+        });
+
+        categoryLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                const categoryId = this.getAttribute('data-category-id');
+                filterProducts(categoryId);
+            });
+        });
+
+        function filterProducts(categoryId) {
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach(card => {
+                const productcategoryId = card.getAttribute('data-category-id');
+                card.style.display = (categoryId === 'all' || productcategoryId === categoryId) ? 'block' : 'none';
+            });
+        }
+    });
+
+    // Unified function for quantity control (increase or decrease)
+    function updateQuantity(productId, change) {
+        const quantityInput = document.getElementById('quantity-' + productId);
+        let quantity = parseInt(quantityInput.value, 10) || 1; // Default to 1 if input is invalid
+
+        // Update the quantity with the provided change (positive or negative)
+        quantity = Math.max(1, Math.min(10, quantity + change)); // Ensure quantity is between 1 and 10
+
+        quantityInput.value = quantity;
+    }
+
+</script>
+
+<script type="text/javascript">
+    
+
+    const isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
+    
+    function add_to_cart(product_id) {
+      if (!isAuthenticated) {
+        Swal.fire({
+          title: 'Please log in!',
+          text: 'You need to log in to add products to the cart.',
+          icon: 'warning',
+          showConfirmButton: true,
+          confirmButtonText: 'Log In',
+          showCancelButton: true,
+          cancelButtonText: 'Cancel'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = '{% url "login" %}';
+          }
+        });
+        return;
+      }
+  
+      let quantityElement = document.getElementById(`quantity-${product_id}`);
+      let quantity = quantityElement ? quantityElement.value : 1;
+  
+      $.ajax({
+        url: "{% url 'add_to_cart' 0 %}".replace('0', product_id),
+        type: "POST",
+        data: {
+          'quantity': quantity,
+          'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(response) {
+          if (response.success) {
+            Swal.fire({
+              title: 'Success!',
+              text: response.message,
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1500
+            });
+            $('#navbar-cart-count').text(response.cart_count);
+            $('#cart-button-count').text(response.cart_count);
+          } else {
+            Swal.fire({
+              title: 'Error!',
+              text: response.message,
+              icon: 'error',
+              confirmButtonText: 'Okay'
+            });
+          }
+        },
+        error: function() {
+          Swal.fire({
+            title: 'Oops!',
+            text: 'Something went wrong. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'Okay'
+          });
+        }
+      });
+    }
+  
+
+
+
+</script>
+
+</body>
+{% endblock %}

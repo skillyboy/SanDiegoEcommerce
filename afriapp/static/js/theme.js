@@ -1,0 +1,35 @@
+// Vendor
+import '@fortawesome/fontawesome-free/js/brands';
+import '@fortawesome/fontawesome-free/js/fontawesome';
+import '@fortawesome/fontawesome-free/js/regular';
+import '@fortawesome/fontawesome-free/js/solid';
+import 'bootstrap';
+import 'flickity-as-nav-for';
+import 'flickity-fade';
+import 'flickity-imagesloaded';
+import 'flickity';
+
+// Theme
+import './bigpicture';
+import './bootstrap';
+import './card';
+import './collapse';
+import './countdown';
+import './dropdown';
+import './flickity';
+import './form';
+import './highlight';
+import './img-comp';
+import './jarallax';
+import './list';
+import './map';
+import './navbar';
+import './popover';
+import './rating';
+import './simplebar';
+import './smooth-scroll';
+import './tooltip';
+import './vote';
+
+// User
+import './user.js';

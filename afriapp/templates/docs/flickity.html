@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Flickity"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Flickity</h3>
+
+            <p class="text-gray-500">
+              Touch, responsive, flickable carousels. <br>
+              <a href="https://flickity.metafizzy.co/" target="_blank">Plugin documentation</a>
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div data-flickity='{"prevNextButtons": true}'>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-25.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-26.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-27.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-28.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-29.jpg" class="img-fluid" alt="...">
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;data-flickity='{&quot;prevNextButtons&quot;:&nbsp;true}'&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-25.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-26.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-27.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-28.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-29.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Responsive initialization</h5>
+
+            <p class="text-gray-500">
+              Easily initialize Flickity depending on the viewport width with <code>.flickity-{breakpoint}</code> or <code>.flickity-{breakpoint}-none</code> modifiers. Flickity will be enabled or disabled at the specified and all subsequent breakpoints. Requires <code>watchCSS</code> to be set to <code>true</code>.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="flickity-none flickity-md" data-flickity='{"watchCSS": true}'>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-25.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-26.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-27.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-28.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-29.jpg" class="img-fluid" alt="...">
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;flickity-none&nbsp;flickity-md&quot;&nbsp;data-flickity='{&quot;watchCSS&quot;:&nbsp;true}'&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-25.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-26.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-27.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-28.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-29.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Progress</h5>
+
+            <p class="text-gray-500">
+              Turn page dots into a progress bar with the <code>.flickity-page-dots-progress</code> modifier. Requires <code>pageDots</code> to be set to <code>true</code>.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="flickity-page-dots-progress" data-flickity='{"pageDots": true}'>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-25.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-26.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-27.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-28.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-29.jpg" class="img-fluid" alt="...">
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;flickity-page-dots-progress&quot;&nbsp;data-flickity='{&quot;pageDots&quot;:&nbsp;true}'&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-25.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-26.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-27.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-28.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-29.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Inner dots</h5>
+
+            <p class="text-gray-500">
+              Move page dots inside the flickity container with the <code>.flickity-page-dots-inner</code> modifier. Requires <code>pageDots</code> to be set to <code>true</code>.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="flickity-page-dots-inner" data-flickity='{"pageDots": true}'>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-25.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-26.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-27.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-28.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-29.jpg" class="img-fluid" alt="...">
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;flickity-page-dots-inner&quot;&nbsp;data-flickity='{&quot;pageDots&quot;:&nbsp;true}'&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-25.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-26.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-27.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-28.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-29.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Large buttons</h5>
+
+            <p class="text-gray-500">
+              Increase the size of the Flickity buttons with the <code>.flickity-buttons-lg</code> modifier. Requires <code>prevNextButtons</code> to be set to <code>true</code>.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="flickity-buttons-lg" data-flickity='{"prevNextButtons": true}'>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-25.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-26.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-27.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-28.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-29.jpg" class="img-fluid" alt="...">
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;flickity-buttons-lg&quot;&nbsp;data-flickity='{&quot;prevNExtButtons&quot;:&nbsp;true}'&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-25.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-26.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-27.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-28.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-29.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Offset buttons</h5>
+
+            <p class="text-gray-500">
+              Move the Flickity buttons in the bottom left corner with the <code>.flickity-buttons-bottom-start</code> modifier. Requires <code>prevNextButtons</code> to be set to <code>true</code>.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="flickity-buttons-bottom-start" data-flickity='{"prevNextButtons": true}'>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-25.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-26.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-27.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-28.jpg" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-12 col-md-3 px-1">
+                    <img src="{{webRoot}}/assets/img/products/product-29.jpg" class="img-fluid" alt="...">
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;flickity-buttons-bottom-start&quot;&nbsp;data-flickity='{&quot;prevNExtButtons&quot;:&nbsp;true}'&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-25.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-26.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-27.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-28.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;col-12&nbsp;col-md-3&nbsp;px-1&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=&quot;{{webRoot}}/assets/img/products/product-29.jpg&quot;&nbsp;class=&quot;img-fluid&quot;&nbsp;alt=&quot;...&quot;&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Changelog"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3 class="mb-6">Changelog</h3>
+
+            <p class="text-gray-500">
+              <strong class="text-body">v2.0.0</strong> - May 11th, 2022
+            </p>
+
+            <ul class="text-gray-500">
+              <li>Updated to Bootstrap v5.1.3.</li>
+              <li>Improved folder structure.</li>
+              <li>Replaced Gulp with Webpack & npm-scripts.</li>
+              <li>Replaced Gulp File Include with Handlebars Webpack Plugin.</li>
+              <li>Replaced Fancybox with BigPicture.js.</li>
+              <li>Removed jQuery dependency.</li>
+              <li>Moved all JavaScript to ES6 modules.</li>
+              <li>Other small changes.</li>
+            </ul>
+
+            <p class="text-gray-500">
+              <strong class="text-body">v1.0.4</strong> - April 23th, 2020
+            </p>
+
+            <ul class="text-gray-500">
+              <li>Added <code>account-address-edit.html, account-address.html, account-payment-choose.html, account-payment-edit.html, account-payment.html</code>.</li>
+              <li>Fixed alert close button positioning.</li>
+              <li>Updated dependencies.</li>
+              <li>Removed unused SCSS files.</li>
+            </ul>
+
+            <p class="text-gray-500">
+              New files:
+            </p>
+
+            <ul class="text-gray-500">
+              <li><code>src/account-address-edit.html</code></li>
+              <li><code>src/account-address.html</code></li>
+              <li><code>src/account-payment-choose.html</code></li>
+              <li><code>src/account-payment-edit.html</code></li>
+              <li><code>src/account-payment.html</code></li>
+              <li><code>src/partials/account-nav.html</code></li>
+            </ul>
+
+            <p class="text-gray-500">
+              Modified files:
+            </p>
+
+            <ul class="text-gray-500">
+              <li><code>package-lock.json</code></li>
+              <li><code>package.json</code></li>
+              <li><code>src/account-order.html</code></li>
+              <li><code>src/account-orders.html</code></li>
+              <li><code>src/account-personal-info.html</code></li>
+              <li><code>src/account-wishlist.html</code></li>
+              <li><code>src/assets/scss/_user-variables.scss</code></li>
+              <li><code>src/assets/scss/theme/_theme.scss</code></li>
+              <li><code>src/docs/changelog.html</code></li>
+              <li><code>src/overview.html</code></li>
+              <li><code>src/partials/dropdown-shop.html</code></li>
+              <li><code>src/partials/modal-sidebar.html</code></li>
+              <li><code>src/partials/navbar-sidenav-left.html</code></li>
+            </ul>
+
+            <p class="text-gray-500">
+              Removed files:
+            </p>
+
+            <ul class="text-gray-500">
+              <li><code>src/assets/scss/theme/_alert.scss</code></li>
+              <li><code>src/assets/scss/theme/_carousel.scss</code></li>
+              <li><code>src/assets/scss/theme/_code.scss</code></li>
+              <li><code>src/assets/scss/theme/_jumbotron.scss</code></li>
+              <li><code>src/assets/scss/theme/_media.scss</code></li>
+              <li><code>src/assets/scss/theme/_mixins.scss</code></li>
+              <li><code>src/assets/scss/theme/_popover.scss</code></li>
+              <li><code>src/assets/scss/theme/_print.scss</code></li>
+              <li><code>src/assets/scss/theme/_progress.scss</code></li>
+              <li><code>src/assets/scss/theme/_tooltip.scss</code></li>
+              <li><code>src/assets/scss/theme/_transitions.scss</code></li>
+            </ul>
+
+            <p class="text-gray-500">
+              <strong class="text-body">v1.0.3</strong> - December 31st, 2019
+            </p>
+
+            <ul class="text-gray-500">
+              <li>Updated email address in the documentation.</li>
+            </ul>
+
+            <p class="text-gray-500">
+              <strong class="text-body">v1.0.2</strong> - December 24th, 2019
+            </p>
+
+            <ul class="text-gray-500">
+              <li>Added <code>shop-topbar.html, shop-collapse.html, shop-simple.html, shop-masonry.html.</code></li>
+              <li>Added <code>product-image-grid.html, product-image-slider.html, product-images-stacked.html.</code></li>
+              <li>Changed positioning of navbar dropdowns.</li>
+              <li>Updated color checkbox.</li>
+              <li>Updated Figma files.</li>
+              <li>Updated dependencies.</li>
+              <li>Fixed small bugs.</li>
+            </ul>
+
+            <p class="text-gray-500">
+              <strong class="text-body">v1.0.1</strong> - December 11th, 2019
+            </p>
+
+            <ul class="text-gray-500">
+              <li>Added <code>overview.html.</code></li>
+              <li>Improved navbar dropdowns implementation.</li>
+              <li>Updated to Bootstrap v4.4.1.</li>
+              <li>Updated other dependencies.</li>
+            </ul>
+
+            <p class="text-gray-500">
+              <strong class="text-body">v1.0.0</strong> - November 28th, 2019
+            </p>
+
+            <ul class="text-gray-500">
+              <li>Initial release.</li>
+            </ul>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

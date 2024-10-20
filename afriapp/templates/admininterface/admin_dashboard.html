@@ -1,0 +1,78 @@
+{% extends 'admininterface/admin_base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h1 class="mb-4">Admin Dashboard</h1>
+
+  <div class="row">
+    <!-- Manage Products -->
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Manage Products</h5>
+          <p class="card-text">Add, edit, or delete products available in the store.</p>
+          <a href="{% url 'admin_manage_products' %}" class="btn btn-dark">Go to Products</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Orders -->
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">View Orders</h5>
+          <p class="card-text">View, process, and manage customer orders.</p>
+          <a href="{% url 'admin_view_orders' %}" class="btn btn-dark">Go to Orders</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manage Customers -->
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Manage Customers</h5>
+          <p class="card-text">View and manage customer information and activities.</p>
+          <a href="{% url 'admin_manage_customers' %}" class="btn btn-dark">Go to Customers</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manage Categories -->
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Manage Categories</h5>
+          <p class="card-text">Add, edit, or delete product categories.</p>
+          <a href="{% url 'admin_manage_categories' %}" class="btn btn-dark">Go to Categories</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sales Reports -->
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Sales Reports</h5>
+          <p class="card-text">View detailed sales reports and analytics.</p>
+          <a href="{% url 'admin_sales_reports' %}" class="btn btn-dark">View Reports</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Account Settings -->
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Account Settings</h5>
+          <p class="card-text">Update admin account details and password.</p>
+          <a href="{% url 'admin_account_settings' %}" class="btn btn-dark">Manage Account</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

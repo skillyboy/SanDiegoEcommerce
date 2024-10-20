@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Typogprahy"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Typography</h3>
+
+            <p class="text-gray-500">
+              Shopper makes use of the Jost webfont for both headings and body content. This font is included in the package. <br>
+              <a href="https://indestructibletype.com/Jost.html" target="_blank">Font documentation</a>
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <h1>h1. Bootstrap heading</h1>
+                <h2>h2. Bootstrap heading</h2>
+                <h3>h3. Bootstrap heading</h3>
+                <h4>h4. Bootstrap heading</h4>
+                <h5>h5. Bootstrap heading</h5>
+                <h6>h6. Bootstrap heading</h6>
+
+                <br>
+
+                <p class="lead">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias vero illo inventore fugiat iure itaque earum odit ratione quaerat sint! Rerum eos voluptate ad vero nihil commodi consequuntur, labore repudiandae?
+                </p>
+
+                <p>
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maxime vitae ullam inventore dolorum aliquam quasi sunt autem quaerat perspiciatis voluptatum placeat expedita, atque nostrum impedit non voluptatem sint. Quidem, consectetur.
+                </p>
+
+                <p class="text-muted">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit, quo alias facilis porro sunt vitae hic? Aliquam, ad consequatur reprehenderit ipsa doloremque facilis molestias non. Facilis veritatis enim nemo molestias.
+                </p>
+
+                <a href="#!">Link example</a>
+
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Tooltips"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Tooltips</h3>
+
+            <p class="text-gray-500">
+              <a href="http://getbootstrap.com/docs/5.1/components/tooltips/" target="_blank">Bootstrap documentation</a>
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">
+                  Tooltip on top
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="right" title="Tooltip on right">
+                  Tooltip on right
+                </button>
+                <button type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom">
+                  Tooltip on bottom
+                </button>
+                <button type="button" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
+                  Tooltip on left
+                </button>
+
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

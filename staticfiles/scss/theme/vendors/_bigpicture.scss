@@ -1,0 +1,15 @@
+// 
+// bigpicture.scss
+// 
+
+#bp_container {
+  background: rgba($fancybox-backdrop-bg, $fancybox-backdrop-opacity) !important;
+}
+
+#bp_container > * {
+  box-shadow: none !important;
+}
+
+.bp-x {
+  display: none;
+}

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Jarallax"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Jarallax</h3>
+
+            <p class="text-gray-500">
+              Smooth parallax scrolling effect for background images, videos and inline elements. <br>
+              <a href="https://github.com/nk-o/jarallax" target="_blank">Plugin documentation</a>
+            </p>
+
+            <div class="card">
+              <div class="card-body py-14" data-jarallax data-speed=".8" style="background-image: url({{webRoot}}/assets/img/covers/cover-13.jpg);"></div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;data-jarallax&nbsp;data-speed=&quot;.8&quot;&nbsp;style=&quot;background-image:&nbsp;url({{webRoot}}/assets/img/covers/cover-13.jpg);&quot;&gt;&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

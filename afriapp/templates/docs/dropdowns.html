@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Dropdowns"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Dropdowns</h3>
+
+            <p class="text-gray-500">
+              Toggle contextual overlays for displaying lists of links and more with the Bootstrap dropdown plugin. Dropdown menus are toggled on hover in navigation panels.<br>
+              <a href="https://getbootstrap.com/docs/5.1/components/dropdowns/" target="_blank">Bootstrap documentation</a>
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="dropdown">
+
+                  <!-- Toggle -->
+                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                    Dropdown menu
+                  </button>
+
+                  <!-- Menu -->
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#!">Action</a>
+                    <a class="dropdown-item" href="#!">Another action</a>
+                    <a class="dropdown-item" href="#!">Something else here</a>
+                  </div>
+
+                </div>
+
+
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Cards</h5>
+
+            <p class="text-gray-500">
+              You can use the <code>.card</code> and <code>.list-styled</code> components inside dropdowns to achieve a different look of your dropdown menus.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <div class="dropdown">
+
+                  <!-- Toggle -->
+                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonTwo" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dropdown card
+                  </button>
+
+                  <!-- Menu -->
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonTwo">
+                    <div class="card">
+                      <div class="card-body">
+                        <ul class="list-styled mb-0">
+                          <li class="list-styled-item">
+                            <a class="list-styled-link" href="#!">Action</a>
+                          </li>
+                          <li class="list-styled-item">
+                            <a class="list-styled-link" href="#!">Another action</a>
+                          </li>
+                          <li class="list-styled-item">
+                            <a class="list-styled-link" href="#!">Something else here</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;div&nbsp;class=&quot;dropdown&quot;&gt;<br /><br />&nbsp;&nbsp;&lt;!--&nbsp;Toggle&nbsp;--&gt;<br />&nbsp;&nbsp;&lt;button&nbsp;class=&quot;btn&nbsp;btn-secondary&nbsp;dropdown-toggle&quot;&nbsp;type=&quot;button&quot;&nbsp;id=&quot;dropdownMenuButtonTwo&quot;&nbsp;data-toggle=&quot;dropdown&quot;&nbsp;aria-haspopup=&quot;true&quot;&nbsp;aria-expanded=&quot;false&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;Dropdown&nbsp;card<br />&nbsp;&nbsp;&lt;/button&gt;<br /><br />&nbsp;&nbsp;&lt;!--&nbsp;Menu&nbsp;--&gt;<br />&nbsp;&nbsp;&lt;div&nbsp;class=&quot;dropdown-menu&quot;&nbsp;aria-labelledby=&quot;dropdownMenuButtonTwo&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class=&quot;card-body&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ul&nbsp;class=&quot;list-styled&nbsp;mb-0&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-styled-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;list-styled-link&quot;&nbsp;href=&quot;#!&quot;&gt;Action&lt;/a&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-styled-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;list-styled-link&quot;&nbsp;href=&quot;#!&quot;&gt;Another&nbsp;action&lt;/a&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&nbsp;class=&quot;list-styled-item&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;class=&quot;list-styled-link&quot;&nbsp;href=&quot;#!&quot;&gt;Something&nbsp;else&nbsp;here&lt;/a&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/li&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br />&nbsp;&nbsp;&lt;/div&gt;<br /><br />&lt;/div&gt;<br />
+                </code>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

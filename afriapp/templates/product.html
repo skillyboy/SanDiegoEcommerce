@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Product {% endblock %}
+
+{% block content %}
+
+
+<!-- BREADCRUMB -->
+<nav class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <!-- Breadcrumb -->
+        <ol class="breadcrumb mb-0 fs-xs text-brown-600">
+          <li class="breadcrumb-item">
+            <a class="text-brown-600" href="{% url 'index' %}">Home</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a class="text-brown-600" href="{% url 'shop' %}">{{ product.category }}</a>
+          </li>
+          <li class="breadcrumb-item active">
+            {{ product.name }}
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- PRODUCT -->
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <!-- Product Image Section -->
+          <div class="col-12 col-md-6">
+            <div class="card">
+              <div class="mb-4" id="productSlider">
+                <!-- Dynamic Product Image -->
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top" style="border-radius: 10px;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Details Section -->
+          <div class="col-12 col-md-6 ps-lg-10">
+            <!-- Header -->
+            <div class="row mb-1">
+              <div class="col">
+                <h3 class="mb-2">{{ product.name }}</h3>
+                <p class="mb-4 text-muted">{{ product.description }}</p>
+              </div>
+              <div class="col-auto">
+                <div class="rating fs-xs text-dark">
+                  <!-- Static rating for now, can be dynamic -->
+                  {% for i in "12345" %}
+                  <i class="fas fa-star"></i>
+                  {% endfor %}
+                  <a class="fs-sm text-reset ms-2" href="#reviews">Reviews</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Price Display -->
+            <div class="mb-4">
+              <span class="fs-lg fw-bold text-gray-350 text-decoration-line-through">${{ product.price }}</span>
+              <span class="fs-5 fw-bolder text-primary ms-2">${{ product.price }}</span>
+              <span class="fs-sm text-success ms-1">{{ product.stock_quantity }} in stock</span>
+            </div>
+
+            <!-- Add to Cart Form -->
+            <form action="{% url 'add_to_cart' product.id %}" method="post">
+              {% csrf_token %}
+
+              <!-- Quantity Selector -->
+              <div class="form-group mb-5">
+                <label for="quantity" class="form-label">Quantity:</label>
+                <div class="input-group">
+                  <button type="button" class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
+                  <input type="number" name="quantity" id="quantity" value="1" min="{{ product.min }}" max="{{ product.max }}" class="form-control text-center">
+                  <button type="button" class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
+                </div>
+              </div>
+
+              <!-- Add to Cart Button -->
+              <div class="mb-3">
+                <button type="submit" class="btn w-100 btn-dark">Add to Cart <i class="fe fe-shopping-cart ms-2"></i></button>
+              </div>
+            </form>
+
+            <!-- Share Options -->
+            <p class="mb-0">
+              <span class="me-4">Share:</span>
+              <a class="btn btn-xxs btn-circle btn-light fs-xxxs text-brown-350" href="#"><i class="fab fa-twitter"></i></a>
+              <a class="btn btn-xxs btn-circle btn-light fs-xxxs text-brown-350" href="#"><i class="fab fa-facebook-f"></i></a>
+              <a class="btn btn-xxs btn-circle btn-light fs-xxxs text-brown-350" href="#"><i class="fab fa-pinterest-p"></i></a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="pt-11">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        {% if  similar_products%}
+          
+        <!-- Heading -->
+        <h4 class="mb-10 text-center">You might also like</h4>
+        <!-- Items -->
+        <div class="row">
+          {% for product in similar_products %}
+          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+            <!-- Card -->
+            <div class="card mb-7">
+              <!-- Badge -->
+              <div class="badge bg-white text-body card-badge card-badge-start text-uppercase">
+                New
+              </div>
+              <!-- Image -->
+              <div class="card-img">
+                <a class="card-img-hover" href="{% url 'product_detail' product.id %}">
+                  <img class="card-img-top card-img-back" src="{{ product.image.url }}" alt="{{ product.name }}">
+                </a>
+                <!-- Actions -->
+                <div class="card-actions">
+                  <span class="card-action">
+                    <button class="btn btn-xs btn-circle btn-white-primary" data-bs-toggle="modal" data-bs-target="#modalProduct">
+                      <i class="fe fe-eye"></i>
+                    </button>
+                  </span>
+                  <span class="card-action">
+                    <button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button">
+                      <i class="fe fe-shopping-cart"></i>
+                    </button>
+                  </span>
+                  <span class="card-action">
+                    <button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button">
+                      <i class="fe fe-heart"></i>
+                    </button>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Body -->
+              <div class="card-body px-0">
+                <div class="fs-xs">
+                  <a class="text-muted" href="shop.html">{{ product.category }}</a>
+                </div>
+                <div class="fw-bold">
+                  <a class="text-body" href="{% url 'product_detail' product.id %}">
+                    {{ product.name }}
+                  </a>
+                </div>
+                <div class="fw-bold text-muted">
+                  ${{ product.price }}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- JavaScript for Quantity Controls -->
+<script>
+  function increaseQuantity() {
+    let qty = document.getElementById('quantity');
+    if (qty.value < {{ product.max }}) {
+      qty.value = parseInt(qty.value) + 1;
+    }
+  }
+
+  function decreaseQuantity() {
+    let qty = document.getElementById('quantity');
+    if (qty.value > {{ product.min }}) {
+      qty.value = parseInt(qty.value) - 1;
+    }
+  }
+</script>
+
+
+<!-- Script for Quantity Control -->
+<script>
+  document.getElementById('increaseQuantity').addEventListener('click', function() {
+    let quantity = parseInt(document.getElementById('quantityInput').value);
+    document.getElementById('quantityInput').value = quantity + 1;
+  });
+
+  document.getElementById('decreaseQuantity').addEventListener('click', function() {
+    let quantity = parseInt(document.getElementById('quantityInput').value);
+    if (quantity > 1) {
+      document.getElementById('quantityInput').value = quantity - 1;
+    }
+  });
+</script>
+
+
+{% endblock %}
+

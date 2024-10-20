@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Buttons"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Buttons</h3>
+
+            <p class="text-gray-500">
+              Use Bootstrap’s custom button styles for actions in forms, dialogs, and more with support for multiple sizes, states, and more. <br>
+              <a href="https://getbootstrap.com/docs/5.1/components/buttons/" target="_blank">Bootstrap documentation</a>
+            </p>
+
+            <div class="card mb-8">
+              <div class="card-body border">
+
+                <button type="button" class="btn btn-primary">Primary</button>
+                <button type="button" class="btn btn-secondary">Secondary</button>
+                <button type="button" class="btn btn-success">Success</button>
+                <button type="button" class="btn btn-danger">Danger</button>
+                <button type="button" class="btn btn-warning">Warning</button>
+                <button type="button" class="btn btn-info">Info</button>
+                <button type="button" class="btn btn-light">Light</button>
+                <button type="button" class="btn btn-dark">Dark</button>
+                <button type="button" class="btn btn-link">Link</button>
+
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Outline</h5>
+
+            <p class="text-gray-500">
+              In need of a button, but not the hefty background colors they bring? Replace the default modifier classes with the <code>.btn-outline-*</code> ones to remove all background images and colors on any button. Additionally we've added the <code>.btn-outline-border</code> modifier.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <button type="button" class="btn btn-outline-primary">Primary</button>
+                <button type="button" class="btn btn-outline-secondary">Secondary</button>
+                <button type="button" class="btn btn-outline-success">Success</button>
+                <button type="button" class="btn btn-outline-danger">Danger</button>
+                <button type="button" class="btn btn-outline-warning">Warning</button>
+                <button type="button" class="btn btn-outline-info">Info</button>
+                <button type="button" class="btn btn-outline-border">Border</button>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;button&nbsp;type=&quot;button&quot;&nbsp;class=&quot;btn&nbsp;btn-outline-primary&quot;&gt;Primary&lt;/button&gt;<br />&lt;button&nbsp;type=&quot;button&quot;&nbsp;class=&quot;btn&nbsp;btn-outline-secondary&quot;&gt;Secondary&lt;/button&gt;<br />&lt;button&nbsp;type=&quot;button&quot;&nbsp;class=&quot;btn&nbsp;btn-outline-success&quot;&gt;Success&lt;/button&gt;<br />&lt;button&nbsp;type=&quot;button&quot;&nbsp;class=&quot;btn&nbsp;btn-outline-danger&quot;&gt;Danger&lt;/button&gt;<br />&lt;button&nbsp;type=&quot;button&quot;&nbsp;class=&quot;btn&nbsp;btn-outline-warning&quot;&gt;Warning&lt;/button&gt;<br />&lt;button&nbsp;type=&quot;button&quot;&nbsp;class=&quot;btn&nbsp;btn-outline-info&quot;&gt;Info&lt;/button&gt;<br />&lt;button&nbsp;type=&quot;button&quot;&nbsp;class=&quot;btn&nbsp;btn-outline-border&quot;&gt;Border&lt;/button&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Sizes</h5>
+
+            <p class="text-gray-500">
+              Besides <code>.btn-lg</code> and <code>.btn-sm</code>, we've added <code>.btn-xs</code> and <code>.btn-xxs</code> for even smaller buttons.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <button type="button" class="btn btn-primary btn-lg">Large button</button>
+                <button type="button" class="btn btn-secondary">Basic button</button>
+                <button type="button" class="btn btn-success btn-sm">Small button</button>
+                <button type="button" class="btn btn-danger btn-xs">Extra small button</button>
+                <button type="button" class="btn btn-warning btn-xxs">XXS button</button>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;button&nbsp;type=&quot;button&quot;&nbsp;class=&quot;btn&nbsp;btn-primary&nbsp;btn-lg&quot;&gt;Large&nbsp;button&lt;/button&gt;<br />&lt;button&nbsp;type=&quot;button&quot;&nbsp;class=&quot;btn&nbsp;btn-secondary&quot;&gt;Basic&nbsp;button&lt;/button&gt;<br />&lt;button&nbsp;type=&quot;button&quot;&nbsp;class=&quot;btn&nbsp;btn-success&nbsp;btn-sm&quot;&gt;Small&nbsp;button&lt;/button&gt;<br />&lt;button&nbsp;type=&quot;button&quot;&nbsp;class=&quot;btn&nbsp;btn-danger&nbsp;btn-xs&quot;&gt;Extra&nbsp;small&nbsp;button&lt;/button&gt;<br />&lt;button&nbsp;type=&quot;button&quot;&nbsp;class=&quot;btn&nbsp;btn-warning&nbsp;btn-xxs&quot;&gt;XXS&nbsp;button&lt;/button&gt;
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Circle</h5>
+
+            <p class="text-gray-500">
+              Turn any button into a circle with a <code>.btn-rounded-cirle</code> modifier.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <button class="btn btn-primary btn-circle btn-lg mb-1">
+                  <i class="fe fe-check"></i>
+                </button>
+
+                <button class="btn btn-secondary btn-circle mb-1">
+                  <i class="fe fe-check"></i>
+                </button>
+
+                <button class="btn btn-success btn-circle btn-sm mb-1">
+                  <i class="fe fe-check"></i>
+                </button>
+
+                <button class="btn btn-danger btn-circle btn-xs mb-1">
+                  <i class="fe fe-check"></i>
+                </button>
+
+                <button class="btn btn-warning btn-circle btn-xxs mb-1">
+                  <i class="fe fe-check"></i>
+                </button>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;button&nbsp;class=&quot;btn&nbsp;btn-primary&nbsp;btn-circle&nbsp;btn-lg&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-check&quot;&gt;&lt;/i&gt;<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-secondary&nbsp;btn-circle&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-check&quot;&gt;&lt;/i&gt;<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-success&nbsp;btn-circle&nbsp;btn-sm&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-check&quot;&gt;&lt;/i&gt;<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-danger&nbsp;btn-circle&nbsp;btn-xs&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-check&quot;&gt;&lt;/i&gt;<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-warning&nbsp;btn-circle&nbsp;btn-xxs&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-check&quot;&gt;&lt;/i&gt;<br />&lt;/button&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Underline</h5>
+
+            <p class="text-gray-500">
+              Remove top, right, and left borders with a <code>.btn-underline</code> modifier.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <button class="btn btn-outline-primary btn-underline mb-1">
+                  Primary
+                </button>
+
+                <button class="btn btn-outline-secondary btn-underline mb-1">
+                  Secodary
+                </button>
+
+                <button class="btn btn-outline-success btn-underline mb-1">
+                  Success
+                </button>
+
+                <button class="btn btn-outline-danger btn-underline mb-1">
+                  Danger
+                </button>
+
+                <button class="btn btn-outline-warning btn-underline mb-1">
+                  Warning
+                </button>
+
+                <button class="btn btn-outline-dark btn-underline mb-1">
+                  Dark
+                </button>
+
+                <button class="btn btn-outline-border btn-underline mb-1">
+                  Border
+                </button>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;button&nbsp;class=&quot;btn&nbsp;btn-outline-primary&nbsp;btn-underline&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;Primary<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-outline-secondary&nbsp;btn-underline&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;Secodary<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-outline-success&nbsp;btn-underline&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;Success<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-outline-danger&nbsp;btn-underline&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;Danger<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-outline-warning&nbsp;btn-underline&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;Warning<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-outline-dark&nbsp;btn-underline&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;Dark<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-outline-border&nbsp;btn-underline&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;Border<br />&lt;/button&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Arrows</h5>
+
+            <p class="text-gray-500">
+              Simply add the Feather Icons left or right arrow icons to animate them on hover.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <button class="btn btn-dark mb-1">
+                  Next Step <i class="fe fe-arrow-right ms-2"></i>
+                </button>
+
+                <button class="btn btn-outline-border mb-1">
+                  <i class="fe fe-arrow-left me-2"></i> Previous Step
+                </button>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;button&nbsp;class=&quot;btn&nbsp;btn-dark&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;Next&nbsp;Step&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-arrow-right&nbsp;ms-2&quot;&gt;&lt;/i&gt;<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-outline-border&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-arrow-left&nbsp;me-2&quot;&gt;&lt;/i&gt;&nbsp;Previous&nbsp;Step<br />&lt;/button&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Brands</h5>
+
+            <p class="text-gray-500">
+              Popular brand colored buttons. Easily add more by extending the <code>$brand-colors</code> SCSS map in <code>variables.scss</code>.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <button class="btn btn-facebook mb-1">
+                  Facebook
+                </button>
+
+                <button class="btn btn-twitter mb-1">
+                  Twitter
+                </button>
+
+                <button class="btn btn-pinterest mb-1">
+                  Pinterest
+                </button>
+
+                <button class="btn btn-linkedin mb-1">
+                  LinkedIn
+                </button>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;button&nbsp;class=&quot;btn&nbsp;btn-facebook&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;Facebook<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-twitter&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;Twitter<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-pinterest&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;Pinterest<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-linkedin&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;LinkedIn<br />&lt;/button&gt;<br />
+                </code>
+              </div>
+            </div>
+
+            <hr class="my-7">
+
+            <h5>Hover</h5>
+
+            <p class="text-gray-500">
+              Creates a pulse effect on hover. Works perfectly with circle buttons.
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <button class="btn btn-lg btn-circle btn-hover btn-primary mb-1">
+                  <i class="fe fe-heart"></i>
+                </button>
+
+                <button class="btn btn-circle btn-hover btn-secondary mb-1">
+                  <i class="fe fe-heart"></i>
+                </button>
+
+                <button class="btn btn-sm btn-circle btn-hover btn-success mb-1">
+                  <i class="fe fe-heart"></i>
+                </button>
+
+                <button class="btn btn-xs btn-circle btn-hover btn-warning mb-1">
+                  <i class="fe fe-heart"></i>
+                </button>
+
+                <button class="btn btn-xxs btn-circle btn-hover btn-info mb-1">
+                  <i class="fe fe-heart"></i>
+                </button>
+
+              </div>
+              <div class="card-footer fs-sm bg-dark">
+                <code class="highlight html">
+                  &lt;button&nbsp;class=&quot;btn&nbsp;btn-lg&nbsp;btn-circle&nbsp;btn-hover&nbsp;btn-primary&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-heart&quot;&gt;&lt;/i&gt;<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-circle&nbsp;btn-hover&nbsp;btn-secondary&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-heart&quot;&gt;&lt;/i&gt;<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-sm&nbsp;btn-circle&nbsp;btn-hover&nbsp;btn-success&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-heart&quot;&gt;&lt;/i&gt;<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-xs&nbsp;btn-circle&nbsp;btn-hover&nbsp;btn-warning&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-heart&quot;&gt;&lt;/i&gt;<br />&lt;/button&gt;<br /><br />&lt;button&nbsp;class=&quot;btn&nbsp;btn-xxs&nbsp;btn-circle&nbsp;btn-hover&nbsp;btn-info&nbsp;mb-1&quot;&gt;<br />&nbsp;&nbsp;&lt;i&nbsp;class=&quot;fe&nbsp;fe-heart&quot;&gt;&lt;/i&gt;<br />&lt;/button&gt;<br />
+                </code>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

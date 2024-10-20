@@ -1,0 +1,33 @@
+//
+// offcanvas.scss
+//
+
+.offcanvas {
+  overflow-y: auto;
+}
+
+
+// Body
+
+.offcanvas-body {
+  flex-grow: 0;
+  overflow: visible;
+}
+
+
+// Header
+
+.offcanvas-header {
+  padding: $modal-header-padding-y $modal-header-padding-x;
+  border-bottom: $border-width solid $border-color;
+}
+
+
+// Footer
+
+.offcanvas-footer {
+  display: flex;
+  justify-content: flex-start;
+  padding: $modal-footer-padding-y $modal-footer-padding-x;
+  border-width: 0;
+}

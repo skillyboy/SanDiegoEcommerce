@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Popovers"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Popovers</h3>
+
+            <p class="text-gray-500">
+              <a href="http://getbootstrap.com/docs/5.1/components/popovers/" target="_blank">Bootstrap documentation</a>
+            </p>
+
+            <div class="card">
+              <div class="card-body border">
+
+                <button type="button" class="btn btn-primary mb-1" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-bs-original-title="" title="">
+                  Popover on top
+                </button>
+
+                <button type="button" class="btn btn-secondary mb-1" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-bs-original-title="" title="">
+                  Popover on right
+                </button>
+
+                <button type="button" class="btn btn-success mb-1" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Vivamus
+                  sagittis lacus vel augue laoreet rutrum faucibus." data-bs-original-title="" title="">
+                  Popover on bottom
+                </button>
+
+                <button type="button" class="btn btn-info mb-1" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-bs-original-title="" title="">
+                  Popover on left
+                </button>
+
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

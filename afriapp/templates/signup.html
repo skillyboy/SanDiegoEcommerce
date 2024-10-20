@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Product {% endblock %}
+
+{% block content %}
+
+  <!-- CONTENT -->
+  <section class="py-12" style="background-color: #F5F5DC;"> <!-- Added background color -->
+    <div class="container">
+      <div class="row">
+
+        <div class="col-12 col-md-12">
+
+          <!-- Card for New Customers -->
+          <div class="card card-lg">
+            <div class="card-body" style="background-color: #FFF8E1; border: 1px solid #8B4513;">
+
+              <!-- Heading -->
+              <h6 class="mb-7" style="color: #8B4513;">New Customer</h6>
+
+              <!-- Form -->
+              <form method="post" action="{% url 'signupform' %}">
+                {% csrf_token %}
+                <div class="row">
+                  <div class="col-12">
+
+                    <!-- First Name -->
+                    <div class="form-group">
+                      <label class="visually-hidden" for="registerFirstName">First Name *</label>
+                      <input class="form-control form-control-sm" id="registerFirstName" name="first_name" type="text" placeholder="First Name *" required style="border: 1px solid #4CAF50;">
+                    </div>
+
+                  </div>
+                  <div class="col-12">
+
+                    <!-- Last Name -->
+                    <div class="form-group">
+                      <label class="visually-hidden" for="registerLastName">Last Name *</label>
+                      <input class="form-control form-control-sm" id="registerLastName" name="last_name" type="text" placeholder="Last Name *" required style="border: 1px solid #4CAF50;">
+                    </div>
+
+                  </div>
+                  <div class="col-12">
+
+                    <!-- Email -->
+                    <div class="form-group">
+                      <label class="visually-hidden" for="registerEmail">Email Address *</label>
+                      <input class="form-control form-control-sm" id="registerEmail" name="email" type="email" placeholder="Email Address *" required style="border: 1px solid #4CAF50;">
+                    </div>
+
+                  </div>
+                  <div class="col-12 col-md-6">
+
+                    <!-- Password -->
+                    <div class="form-group">
+                      <label class="visually-hidden" for="registerPassword">Password *</label>
+                      <input class="form-control form-control-sm" id="registerPassword" name="password1" type="password" placeholder="Password *" required style="border: 1px solid #4CAF50;">
+                    </div>
+
+                  </div>
+                  <div class="col-12 col-md-6">
+
+                    <!-- Confirm Password -->
+                    <div class="form-group">
+                      <label class="visually-hidden" for="registerPasswordConfirm">Confirm Password *</label>
+                      <input class="form-control form-control-sm" id="registerPasswordConfirm" name="password2" type="password" placeholder="Confirm Password *" required style="border: 1px solid #4CAF50;">
+                    </div>
+
+                  </div>
+                  <div class="col-12">
+
+                    <!-- Register Button -->
+                    <button class="btn btn-sm" type="submit" style="background-color: #FFA726; color: #FFF;">Register</button>
+
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+{% endblock %}

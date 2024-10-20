@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Cart {% endblock %}
+
+{% block content %}
+<!-- BREADCRUMB -->
+<nav class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <ol class="breadcrumb mb-0 fs-xs text-gray-400">
+                    <li class="breadcrumb-item">
+                        <a class="text-gray-400" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">My Cart</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="pt-7 pb-12" style="padding-top: 70px;"> <!-- Add padding-top -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 text-center mb-7">
+                <h3 class="display-5 fw-bold">Your Shopping Cart</h3>
+                <p class="text-muted">Review your selections below before proceeding to checkout.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-8 mb-4">
+                <div class="card card-lg shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h6 class="mb-7 fw-bold">Items in Your Cart</h6>
+                        <hr class="mb-5">
+                        <ul class="list-group list-group-lg list-group-flush-y list-group-flush-x" id="cart-items">
+                            {% if cart %}
+                                {% for item in cart %}
+                                <li class="list-group-item p-4 cart-item" id="cart-item-{{ item.id }}">
+                                    <div class="row align-items-center">
+                                        <div class="col-4 col-md-3 col-xl-2">
+                                            <a href="{% url 'product' item.product.id %}">
+                                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-fluid rounded shadow-sm">
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <p class="mb-2 fs-md fw-bold">
+                                                <a class="text-body" href="{% url 'product' item.product.id %}">{{ item.product.name }}</a>
+                                            </p>
+                                            <div class="text-muted item-total-price">${{ item.calculate_total_price|floatformat:2 }}</div>
+
+                                            <div class="d-flex mt-2 align-items-center">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary decrease-quantity" data-id="{{ item.id }}">-</button>
+                                                <span class="mx-2 item-quantity">{{ item.quantity }}</span>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary increase-quantity" data-id="{{ item.id }}">+</button>
+                                            </div>
+
+                                            <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-outline-danger w-100 text-uppercase mt-2">
+                                                    <i class="fe fe-trash me-2"></i>Remove
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            {% else %}
+                                <li class="list-group-item text-center p-4">
+                                    <p class="fs-md text-muted">Your cart is empty.</p>
+                                    <a href="{% url 'shop' %}" class="btn btn-sm btn-outline-primary">Start Shopping</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="card card-lg shadow-sm border-0 sticky-top" style="top: 100px; z-index: 10;"> <!-- Increased top value -->
+                    <div class="card-body p-4">
+                        <h6 class="mb-7 fw-bold">Cart Summary</h6>
+                        <ul class="list-group list-group-sm list-group-flush-y list-group-flush-x">
+                            <li class="list-group-item d-flex justify-content-between py-3">
+                                <span class="fw-normal">Subtotal</span>
+                                <span id="subtotal" class="fw-bold">${{ subtotal|floatformat:2 }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between py-3">
+                                <span class="fw-normal">Tax (7.5%)</span>
+                                <span id="vat" class="fw-bold">${{ vat|floatformat:2 }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between py-3 fs-lg fw-bold">
+                                <span>Total</span>
+                                <span id="total">${{ total|floatformat:2 }}</span>
+                            </li>
+                        </ul>
+
+                        {% if cart and total > 0 %}
+                            <a href="{% url 'checkout' %}" class="btn btn-primary btn-block mt-4 py-3">Proceed to Checkout</a>
+                        {% else %}
+                            <a href="{% url 'shop' %}" class="btn btn-outline-secondary btn-block mt-4 py-3">Continue Shopping</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Increase quantity button handler
+        document.querySelectorAll('.increase-quantity').forEach(button => {
+            button.addEventListener('click', function () {
+                let itemId = this.getAttribute('data-id');
+                updateCartItemQuantity(itemId, 'increase');
+            });
+        });
+
+        // Decrease quantity button handler
+        document.querySelectorAll('.decrease-quantity').forEach(button => {
+            button.addEventListener('click', function () {
+                let itemId = this.getAttribute('data-id');
+                updateCartItemQuantity(itemId, 'decrease');
+            });
+        });
+    });
+
+    // Function to update cart item quantity
+    function updateCartItemQuantity(itemId, action) {
+        let url = action === 'increase' ? `/cart/increase/${itemId}/` : `/cart/decrease/${itemId}/`;
+
+        axios.post(url, {}, {
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            }
+        })
+        .then(response => {
+            const data = response.data;
+            if (data.error) {
+                alert(data.error);
+            } else {
+                document.querySelector(`#cart-item-${itemId} .item-quantity`).innerText = data.new_quantity;
+                document.querySelector(`#cart-item-${itemId} .item-total-price`).innerText = `$${data.new_total_price}`;
+                updateCartSummary(data.subtotal, data.vat, data.total);
+            }
+        })
+        .catch(error => {
+            console.error('Error updating item quantity:', error);
+            alert('There was an error updating the item quantity. Please try again.');
+        });
+    }
+
+    // Function to update cart summary
+    function updateCartSummary(subtotal, vat, total) {
+        document.getElementById('subtotal').innerText = `$${subtotal}`;
+        document.getElementById('vat').innerText = `$${vat}`;
+        document.getElementById('total').innerText = `$${total}`;
+    }
+
+    // Function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            let cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+{% endblock %}

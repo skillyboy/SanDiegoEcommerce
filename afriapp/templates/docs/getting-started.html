@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Getting Started"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Introduction</h3>
+
+            <p class="text-gray-500">
+              This guide will help you get started with Shopper! All the important stuff – compiling the source, file structure, build tools, file includes – is documented here, but should you have any questions, always feel free to reach out to <a href="mailto:plus.unvab@gmail.com">plus.unvab@gmail.com</a>.
+            </p>
+
+            <hr class="my-7">
+
+            <h5 class="mb-4">Dev setup</h5>
+
+            <p class="text-gray-500">
+              To get started, you need to do the following:
+            </p>
+
+            <ol class="text-gray-500">
+              <li>
+                Make sure you have Node installed since Shopper uses npm to manage dependencies. If you don't, installing is quite easy, just visit the <a href="https://nodejs.org/en/download/" target="_blank">Node Downloads page</a> and install it.
+              </li>
+              <li>
+                Unzip your theme and open your command line, making sure your command line prompt is at the root of the unzipped theme directory.
+              </li>
+              <li>
+                <code>npm install</code>: Open your command line to the root directory of your unzipped theme and run to install all of Shopper's dependencies.
+              </li>
+            </ol>
+
+            <p class="text-gray-500">
+              It's that simple! If you're not used to using terminal, don't worry, this is as advanced as it gets. If you want to kill the server and stop Webpack, just hit <code>Control + C</code>.
+            </p>
+
+            <hr class="my-7">
+
+            <h5>Compiling</h5>
+
+            <p class="text-gray-500">
+              Webpack is used to manage Shopper development. Open your command line to the root directory of the theme to use the following commands:
+            </p>
+
+            <ul class="text-gray-500">
+              <li>
+                <code>npm start</code>: Compile and watch the SCSS/JS/HTML, use Live Reload to update browsers instantly, start a server, and pop a tab in your default browser. Any changes made to the source files will be compiled as soon as you save the file.
+              </li>
+              <li>
+                <code>npm run build</code>: Generates a <code>/dist</code> directory with all the production files.
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>File structure</h5>
+
+            <ul class="text-gray-500">
+              <li>
+                <strong class="text-body">📁 dist</strong> - Generated production files
+              </li>
+              <li>
+                <strong class="text-body">📁 node_modules</strong> - Directory where <code>npm</code> installs dependencies
+              </li>
+              <li>
+                <strong class="text-body">📁 src</strong>
+                <ul>
+                  <li>
+                    <strong class="text-body">📁 favicon</strong> - Favicon files
+                  </li>
+                  <li>
+                    <strong class="text-body">📁 fonts</strong> - Font files
+                  </li>
+                  <li>
+                    <strong class="text-body">📁 html</strong> - HTML source
+                  </li>
+                  <li>
+                    <strong class="text-body">📁 img</strong> - Image assets
+                  </li>
+                  <li>
+                    <strong class="text-body">📁 js</strong> - Javascript source
+                  </li>
+                  <li>
+                    <strong class="text-body">📁 partials</strong> - HTML partials
+                  </li>
+                  <li>
+                    <strong class="text-body">📁 scss</strong> - SCSS source for theme
+                  </li>
+                  <li>
+                    <strong class="text-body">📁 video</strong> - Video assets
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <strong class="text-body">📄 .browserslistrc</strong> - Config to share target browsers and Node.js versions between different front-end tools
+              </li>
+              <li>
+                <strong class="text-body">📄 .gitignore</strong> - Hide all unnecessary files from Git
+              </li>
+              <li>
+                <strong class="text-body">📄 package.json</strong> - List of dependencies and npm information
+              </li>
+              <li>
+                <strong class="text-body">📄 package-lock.json</strong> - Describes the exact dependency tree that was generated
+              </li>
+              <li>
+                <strong class="text-body">📄 README.md</strong> - Theme info
+              </li>
+              <li>
+                <strong class="text-body">📄 webpack.config.js</strong> - Webpack config file
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>Handlebars Webpack Plugin</h5>
+
+            <p class="text-gray-500">
+              The <a href="https://www.npmjs.com/package/handlebars-webpack-plugin" target="_blank">handlebars-webpack-plugin</a> is used to make partials easier to use for initial development. For Shopper, we only use it for a handful of components that are found on most pages. The following partials are available:
+            </p>
+
+            <ul class="text-gray-500">
+              <li>
+                <code>dropdowns/*.html</code>
+              </li>
+              <li>
+                <code>footers/*.html</code>
+              </li>
+              <li>
+                <code>icons/*.svg</code>
+              </li>
+              <li>
+                <code>misc/*.html</code>
+              </li>
+              <li>
+                <code>modals/*.html</code>
+              </li>
+              <li>
+                <code>navbars/*.html</code>
+              </li>
+              <li>
+                <code>navs/*.html</code>
+              </li>
+              <li>
+                <code>head.html</code>
+                <ul>
+                  <li>
+                    <code>title (string)</code> - Parameter for the page title
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <code>modals.html</code>
+              </li>
+              <li>
+                <code>script.html</code>
+              </li>
+            </ul>
+
+            <p class="text-gray-500">
+              Easily create new <code>.html</code> partials inside the <code>/partials</code> folder and point to them from any file by specifying the path to the partial file inside <code>\{{> }}</code> curly brackets.
+            </p>
+
+            <p class="text-gray-500">
+              Please read the <a href="https://www.npmjs.com/package/handlebars-webpack-plugin" target="_blank">official package documentation</a> for more info.
+            </p>
+
+            <hr class="my-7">
+
+            <h5>Customizing SCSS</h5>
+
+            <p class="text-gray-500">
+              There are 2 basic ways to customize your theme...
+            </p>
+
+            <ol class="text-gray-500">
+              <li>
+                <strong class="text-body">Customizing SCSS.</strong> This is more versatile and sustainable way to customize Shopper, but requires the <code>webpack</code> compilation steps outlined above. The 2 major benefits of this strategy are using variable overrides to easily customize theme styles, plus you never have to touch Bootstrap or Shopper's source, meaning future updates will be much, much, simpler. There are 2 provided files that make this strategy simple to implement:
+                <ul>
+                  <li>
+                    <code>user-variables.scss</code>: This file can be used to override Bootstrap core and Shopper variables for customizing elements that have been tied to variables.
+                  </li>
+                  <li>
+                    <code>user.scss</code>: This file can be used for writing custom SCSS that will be compiled alongside Bootstrap and Shopper's core files.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <strong class="text-body">Compiled CSS.</strong> If you plan on using Shopper "as is", or only need limited customization, feel free to simply attach the compiled <code>theme.bundle.css</code> file in the <code>dist/assets/css</code> directory.
+              </li>
+            </ol>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

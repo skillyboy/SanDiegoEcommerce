@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Shadow"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Shadow</h3>
+
+            <p class="text-gray-500">
+              Shadow utilities. <br>
+              <a href="https://getbootstrap.com/docs/5.1/utilities/shadows/" target="_blank">Bootstrap documentation</a>
+            </p>
+
+            <hr class="my-7">
+
+            <h5>Border</h5>
+
+            <ul>
+              <li>
+                <code>.shadow-border</code> - adds a border-like box shadow. Useful if you don't want the border to affect element's positioning and sizing.
+              </li>
+              <li>
+                <code>.shadow-border-inset</code> - same as the above with the <code>inset</code> property set to true.
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>Hover</h5>
+
+            <ul>
+              <li>
+                <code>.shadow-hover</code> - adds a box shadow on hover.
+              </li>
+            </ul>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu Replica</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  
+  <style>
+    /* General Styling */
+    body {
+      background-color: #f8f9fa;
+    }
+
+    h3 {
+      color: #333;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    /* Menu item cards */
+    .menu-item {
+      border: 1px solid #ccc;
+      padding: 15px;
+      text-align: center;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .menu-item:hover {
+      background-color: #e9ecef;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .menu-item h5 {
+      margin-bottom: 8px;
+      font-size: 18px;
+      color: #007bff;
+    }
+
+    .menu-item p {
+      font-size: 16px;
+      color: #666;
+    }
+
+    .dropdown-toggle {
+      font-size: 20px;
+      color: #343a40;
+      text-decoration: none;
+      display: block;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #e2e6ea;
+      transition: background-color 0.3s ease;
+    }
+
+    .dropdown-toggle:hover {
+      background-color: #d1d6db;
+      text-decoration: none;
+    }
+
+    .dropdown-toggle::after {
+      margin-left: 8px;
+    }
+
+    .dropdown-section {
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-5">
+
+  <!-- Main Menu Section -->
+  <div class="dropdown-section">
+    <a class="dropdown-toggle" id="beveragesMenu" data-toggle="collapse" href="#beveragesCollapse" role="button" aria-expanded="false" aria-controls="beveragesCollapse">
+      Beverages
+    </a>
+    <div class="collapse" id="beveragesCollapse">
+      <h3>Refreshing Drinks</h3>
+      <div class="row">
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>Sunkist Orange</h5>
+            <p>$2.50</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>Pepsi</h5>
+            <p>$2.50</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>Coke</h5>
+            <p>$2.50</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>Bottled Water</h5>
+            <p>$1.50</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>7up</h5>
+            <p>$2.50</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>Sprite</h5>
+            <p>$2.50</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sides and Extras Section -->
+  <div class="dropdown-section">
+    <a class="dropdown-toggle" id="extrasMenu" data-toggle="collapse" href="#extrasCollapse" role="button" aria-expanded="false" aria-controls="extrasCollapse">
+      Sides & Extras
+    </a>
+    <div class="collapse" id="extrasCollapse">
+      <h3>Snacks & Extras</h3>
+      <div class="row">
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>French Fries</h5>
+            <p>$3.00</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>Onion Rings</h5>
+            <p>$3.50</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>Chicken Wings</h5>
+            <p>$5.00</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>Garlic Bread</h5>
+            <p>$2.50</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Dishes Section -->
+  <div class="dropdown-section">
+    <a class="dropdown-toggle" id="mainDishesMenu" data-toggle="collapse" href="#mainDishesCollapse" role="button" aria-expanded="false" aria-controls="mainDishesCollapse">
+      Main Dishes
+    </a>
+    <div class="collapse" id="mainDishesCollapse">
+      <h3>Hearty Meals</h3>
+      <div class="row">
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>Grilled Chicken</h5>
+            <p>$12.00</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>Beef Burger</h5>
+            <p>$10.00</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>Vegetarian Pizza</h5>
+            <p>$8.50</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="menu-item">
+            <h5>Pasta Alfredo</h5>
+            <p>$9.00</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+    <!-- Modal for Product Details -->
+    <div class="modal fade" id="modalProduct{{ product.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+          <div class="modal-content">
+              <!-- Close Button -->
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 15px; right: 15px;">
+                  <i class="fe fe-x"></i>
+              </button>
+              
+              <!-- Modal Body -->
+              <div class="container-fluid px-xl-0">
+                  <div class="row align-items-center mx-xl-0">
+                      <!-- Product Image -->
+                      <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0">
+                          <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}" style="border-radius: 10px;">
+                      </div>
+
+                      <!-- Product Details -->
+                      <div class="col-12 col-lg-6 col-xl-7 py-4 py-xl-0">
+                          <h4 class="mb-3" style="font-weight: 600; font-size: 1.5rem; color: #343a40;">{{ product.name }}</h4>
+                          <div class="mb-3">
+                              <span class="h5" style="color: #28a745;">${{ product.price }}</span>
+                          </div>
+                          <p class="mb-4" style="color: #6c757d;">{{ product.description }}</p>
+                          
+                          <div class="quantity-control d-flex align-items-center mb-3" style="gap: 10px;">
+                            <button class="btn btn-outline-secondary quantity-button" onclick="updateQuantity({{ product.id }}, -1)" style="width: 40px; height: 40px; border-radius: 8px;">-</button>
+                            
+                            <input type="number" class="form-control text-center" value="1" min="1" max="10" id="quantity-{{ product.id }}" style="width: 60px; border-radius: 8px; font-size: 1rem; padding: 5px;">
+                            
+                            <button class="btn btn-outline-secondary quantity-button" onclick="updateQuantity({{ product.id }}, 1)" style="width: 40px; height: 40px; border-radius: 8px;">+</button>
+                          </div>
+                        
+                          
+                          <button class="btn btn-sm btn-primary add-to-cart-button" onclick="add_to_cart({{ product.id }})">Add to Cart</button>
+                          
+                          <!-- More Info Button -->
+                          <a class="btn btn-link w-100 mt-3" href="{% url 'product' product.id %}" style="color: #007bff;">
+                              More Product Info <i class="fe fe-info ms-2"></i>
+                          </a>
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>

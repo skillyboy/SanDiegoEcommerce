@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{> partials/head title="Shopper"}}
+  </head>
+  <body>
+
+    <!-- MODALS -->
+    {{> partials/modals}}
+
+    <!-- NAVBAR -->
+    {{> navbars/navbar-docs-top classList="border-bottom"}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+
+          <!-- Navbar -->
+          {{> navbars/navbar-docs-left title="Sizing"}}
+
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+          <section class="px-md-10 py-10">
+
+            <h3>Sizing</h3>
+
+            <p class="text-gray-500">
+              Responsive and viewport sizing utilities. <br>
+              <a href="https://getbootstrap.com/docs/5.1/utilities/sizing/" target="_blank">Bootstrap documentation</a>
+            </p>
+
+            <hr class="my-7">
+
+            <h5>Responsive</h5>
+
+            <ul>
+              <li>
+                <code>.w-{25|50|75|100|auto}, .h-{25|50|75|100|auto}</code> - default Bootstrap sizing utilities.
+              </li>
+              <li>
+                <code>.w-{breakpoint}-{25|50|75|100|auto}, .h-{breakpoint}-{25|50|75|100|auto}</code> - responsive sizing utilites.
+              </li>
+              <li>
+                <code>.min-w-{25|50|75|100|auto}, .min-h-{25|50|75|100|auto}</code> - sets the minimum width and height to a specified value.
+              </li>
+              <li>
+                <code>.min-w-{breakpoint}-{25|50|75|100|auto}, .min-h-{breakpoint}-{25|50|75|100|auto}</code> - responsive minimum width and height sizing utilities.
+              </li>
+            </ul>
+
+            <hr class="my-7">
+
+            <h5>Viewport</h5>
+
+            <ul>
+              <li>
+                <code>.vw-50</code> - sets the width to 50% of the viewport width.
+              </li>
+            </ul>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    {{> partials/scripts}}
+
+  </body>
+</html>

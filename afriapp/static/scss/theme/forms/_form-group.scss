@@ -1,0 +1,12 @@
+//
+// forms-group.scss
+//
+
+.form-group {
+  margin-bottom: $spacer;
+}
+
+.form-group-overflow {
+  max-height: $form-group-limited-height;
+  overflow: hidden;
+}
