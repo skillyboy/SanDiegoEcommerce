@@ -653,22 +653,9 @@ class PaymentPipelineView(View):
             total_price_with_shipping = sum(item.product.price * item.quantity for item in cart_items)
             total_amount = int(float(total_price_with_shipping) * 100)  # Convert to cents for Stripe
 
-            # Create a payment record before attempting the checkout
-            payment = Payment.objects.create(
-                user=request.user,
-                amount=total_price_with_shipping,
-                basket_no=basket_no,
-                pay_code='some_unique_code',  # Generate or assign a unique code
-                first_name=request.user.first_name,
-                last_name=request.user.last_name,
-                phone=request.user.profile.phone,  # Assuming you have user profile with phone
-                address='User address here',  # Fetch or set the address
-                city='User city',
-                state='User state',
-                postal_code='User postal code',
-                country='User country',
-                payment_method='credit_card'  # Set based on the payment method
-            )
+            # Debugging log
+            print("Creating Stripe session...")
+            
 
             # Create Stripe Checkout session
             YOUR_DOMAIN = "http://127.0.0.1:8000"  # Update to your actual domain
@@ -686,25 +673,21 @@ class PaymentPipelineView(View):
                     'quantity': item.quantity,  # Use the quantity from the cart
                 })
 
+            # Using f-strings for URL formatting
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
-                line_items=line_items,  
-                metadata={"basket_no": basket_no},  
+                line_items=line_items,  # Add line items for each product in the cart
+                metadata={"basket_no": basket_no},  # You can include basket_no in metadata
                 mode='payment',
-                success_url=f'{YOUR_DOMAIN}/successpayment/',  
-                cancel_url=f'{YOUR_DOMAIN}/cancelpayment/',
+                success_url=f'{YOUR_DOMAIN}/successpayment/',  # Redirection after successful payment
+                cancel_url=f'{YOUR_DOMAIN}/cancelpayment/',  # Redirection after cancellation
             )
             
-            # Here, you may want to update the Payment instance with the session ID
-            payment.stripe_payment_intent_id = checkout_session.id
-            payment.save()  # Save the payment record with the session ID
-
+            # Return the session ID as a JSON response
             return JsonResponse({'id': checkout_session.id})
         except Exception as e:
             print("Error creating checkout session:", str(e))
             return JsonResponse({'error': str(e)}, status=500)
-
-
 
 class CompletedPaymentView(View):
     def get(self, request):
