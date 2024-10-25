@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shop Categories{% endblock %}
+
+{% block content %} 
+
+
+    <!-- BREADCRUMB -->
+    <nav class="py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+
+            <!-- Breadcrumb -->
+            <ol class="breadcrumb mb-0 fs-xs text-gray-400">
+              <li class="breadcrumb-item">
+                <a class="text-gray-400" href="index.html">Home</a>
+              </li>
+              <li class="breadcrumb-item active">
+                My Account
+              </li>
+            </ol>
+
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <section class="pt-7 pb-12">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 text-center">
+
+            <!-- Heading -->
+            <h3 class="mb-10">My Account</h3>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-md-3">
+
+            <!-- Nav -->
+            <nav class="mb-10 mb-md-0">
+              <div class="list-group list-group-sm list-group-strong list-group-flush-x">
+                <a class="list-group-item list-group-item-action dropend-toggle active" href="{% url 'order_history' %}">
+                  Orders
+                </a>
+                <a class="list-group-item list-group-item-action dropend-toggle " href="{% url 'account_personal_info' %}">
+                  Personal Info
+                </a>
+                <a class="list-group-item list-group-item-action dropend-toggle " href="{% url 'account_address' %}">
+                  Addresses
+                </a>
+
+                <a class="list-group-item list-group-item-action dropend-toggle" href="{% url 'logout' %}">
+                  Logout
+                </a>
+              </div>
+            </nav>
+
+          </div>
+          <div class="col-12 col-md-9 col-lg-8 offset-lg-1">
+
+            <div class="container my-5">
+              <div class="row">
+                  <div class="col-12">
+                      <h2 class="mb-4">Order Details</h2>
+          
+                      <!-- Order Info -->
+                      <div class="card mb-4">
+                          <div class="card-body">
+                              <h5 class="card-title">Order #{{ order.id }}</h5>
+                              <p class="card-text">
+                                  <strong>Order Date:</strong> {{ order.date_created|date:"d M, Y" }}<br>
+                                  <strong>Status:</strong> {{ order.status }}<br>
+                                  <strong>Total Amount:</strong> ${{ order.total_amount }}
+                              </p>
+                          </div>
+                      </div>
+          
+                      <!-- Shipping Information -->
+                      <div class="card mb-4">
+                          <div class="card-body">
+                              <h5 class="card-title">Shipping Information</h5>
+                              <p class="card-text">
+                                  <strong>Name:</strong> {{ order.shipping_address.full_name }}<br>
+                                  <strong>Address:</strong> {{ order.shipping_address.address }}<br>
+                                  <strong>City:</strong> {{ order.shipping_address.city }}<br>
+                                  <strong>State:</strong> {{ order.shipping_address.state }}<br>
+                                  <strong>Zip Code:</strong> {{ order.shipping_address.zip_code }}<br>
+                                  <strong>Country:</strong> {{ order.shipping_address.country }}<br>
+                                  <strong>Phone:</strong> {{ order.shipping_address.phone }}
+                              </p>
+                          </div>
+                      </div>
+          
+                      <!-- Payment Information -->
+                      <div class="card mb-4">
+                          <div class="card-body">
+                              <h5 class="card-title">Payment Information</h5>
+                              <p class="card-text">
+                                  <strong>Payment Method:</strong> {{ order.payment_method }}<br>
+                                  <strong>Payment Status:</strong> {{ order.payment_status }}<br>
+                                  <strong>Payment Date:</strong> {{ order.payment_date|date:"d M, Y" }}
+                              </p>
+                          </div>
+                      </div>
+          
+                      <!-- Ordered Items -->
+                      <div class="card mb-4">
+                          <div class="card-body">
+                              <h5 class="card-title">Items Ordered</h5>
+                              <div class="table-responsive">
+                                  <table class="table table-bordered">
+                                      <thead>
+                                          <tr>
+                                              <th>Product</th>
+                                              <th>Quantity</th>
+                                              <th>Price</th>
+                                              <th>Total</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          {% for item in order.items %}
+                                          <tr>
+                                              <td>
+                                                  <a href="{% url 'product_detail' item.product.id %}">
+                                                      {{ item.product.name }}
+                                                  </a>
+                                              </td>
+                                              <td>{{ item.quantity }}</td>
+                                              <td>${{ item.price }}</td>
+                                              <td>${{ item.total }}</td>
+                                          </tr>
+                                          {% endfor %}
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+          
+                      <!-- Total Summary -->
+                      <div class="card mb-4">
+                          <div class="card-body">
+                              <h5 class="card-title">Order Summary</h5>
+                              <div class="table-responsive">
+                                  <table class="table table-borderless">
+                                      <tr>
+                                          <td>Subtotal:</td>
+                                          <td class="text-right">${{ order.subtotal }}</td>
+                                      </tr>
+                                      <tr>
+                                          <td>Shipping Fee:</td>
+                                          <td class="text-right">${{ order.shipping_fee }}</td>
+                                      </tr>
+                                      <tr>
+                                          <td>Tax:</td>
+                                          <td class="text-right">${{ order.tax }}</td>
+                                      </tr>
+                                      <tr class="font-weight-bold">
+                                          <td>Total Amount:</td>
+                                          <td class="text-right">${{ order.total_amount }}</td>
+                                      </tr>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+          
+                      <!-- Action Buttons -->
+                      <div class="row mt-4">
+                          <div class="col-6">
+                              <a href="{% url 'order_history' %}" class="btn btn-outline-dark w-100">Back to Order History</a>
+                          </div>
+                          <div class="col-6">
+                              <a href="https://wa.me/2349077254729?text=Hello%2C%20I%20want%20to%20inquire%20about%20Order%20%23{{ order.id }}%20status" class="btn btn-outline-success w-100" target="_blank">
+                                  Contact Support
+                              </a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          
+        
+        </div>
+        
+        </div>
+      </div>
+    </section>
+
+{% endblock %}

@@ -417,9 +417,14 @@ def add_to_wishlist(request):
 # ============================================================================
 
 @login_required  # Optional: If you want to allow only logged-in users
+# This view handles adding products to the cart for both logged-in and non-logged-in users
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    session_key = request.session.session_key or request.session.create()
+    
+    # Use session key for non-authenticated users
+    session_key = request.session.session_key
+    if not session_key:
+        session_key = request.session.create()  # Create a session if not already present
     
     # Handle POST request for adding to cart
     if request.method == 'POST':
@@ -427,34 +432,33 @@ def add_to_cart(request, product_id):
 
         # Use get_or_create for efficiency
         cart, created = ShopCart.objects.get_or_create(
-            user=request.user if request.user.is_authenticated else None,
+            user=request.user if request.user.is_authenticated else None,  # Handle both logged-in and guest users
             session_key=session_key,
-            basket_no=session_key,
             product=product,
-            paid_order=False,
+            paid_order=False,  # Assuming `paid_order` means the order is not yet completed
             defaults={'quantity': quantity}
         )
 
+        # Update or add product to the cart
         if created:
             message = 'Product added to cart successfully!'
         else:
-            # If the product is already in the cart, check quantity
+            # If the product is already in the cart, update quantity if necessary
             if cart.quantity == quantity:
                 message = 'Product was already added to the cart!'
             else:
-                # Update quantity if it's different
                 cart.quantity = quantity
                 cart.save()
                 message = 'Quantity updated successfully!'
 
-        # Calculate the number of unique products in the cart
+        # Calculate the total number of unique products in the cart
         cart_count = ShopCart.objects.filter(
             user=request.user if request.user.is_authenticated else None,
             session_key=session_key,
             paid_order=False
         ).values('product').distinct().count()
 
-        # Check for AJAX request using the header
+        # If the request was an AJAX request, return a JSON response
         if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
             return JsonResponse({
                 'success': True, 
@@ -462,10 +466,10 @@ def add_to_cart(request, product_id):
                 'cart_count': cart_count
             })
 
-        # If the request was made normally (not via AJAX), redirect to the cart page
-        return redirect('cart')  # Replace 'cart' with the name of your cart URL pattern
+        # For normal form submissions, redirect to the cart page
+        return redirect('cart')  # Replace 'cart' with the URL name of your cart page
 
-    # Handle other request methods (like GET)
+    # Handle invalid request methods (e.g., if someone tried to use GET)
     return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
 
 # 12. Cart View
@@ -726,6 +730,24 @@ class OrderHistory(View):
             messages.error(request, f"An error occurred: {str(e)}")  # Using messages for error
             return render(request, 'account/account-orders.html', {"orders": []})  # Pass an empty list on error
 
+
+
+class OrderDetail(View):
+
+    def get(self, request, order_id):
+        user = request.user
+        try:
+            order = get_object_or_404(Order, id=order_id)
+
+            if not order:
+                messages.info(request, "No order  found.")  # Using messages framework for user feedback
+                return render(request, 'account/account-order-detail.html', {"order": order})  # Render even if empty
+
+            return render(request, 'account/account-order-detail.html', {"order": order})
+
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")  # Using messages for error
+            return render(request, 'account/account-order-detail.html', {"order": []})  # Pass an empty list on error
 
 
 

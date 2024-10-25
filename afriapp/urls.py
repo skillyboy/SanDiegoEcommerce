@@ -53,6 +53,10 @@ urlpatterns = [
 
     # Orders
     path('orders/history/', OrderHistory.as_view(), name='order_history'),  # Corrected URL pattern
+    path('order/<int:order_id>/', OrderDetail.as_view(), name='order_detail'),    
+    
+    
+    
     # Wishlist
     path('add_to_wishlist/', add_to_wishlist, name='add_to_wishlist'),
 

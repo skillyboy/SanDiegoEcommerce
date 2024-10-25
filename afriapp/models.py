@@ -136,6 +136,7 @@ class ShopCart(models.Model):
 #         return f"{self.product.name} (x{self.quantity})"
 # Order Model
 class Order(models.Model):
+    item = models.ForeignKey(Product,on_delete=models.CASCADE, related_name='product')
     shipping_cost = models.PositiveIntegerField(default=0)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     created_at = models.DateTimeField(auto_now_add=True)

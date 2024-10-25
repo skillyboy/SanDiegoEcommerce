@@ -198,32 +198,12 @@
 
         quantityInput.value = quantity;
     }
-
 </script>
 
 <script type="text/javascript">
-    
-
     const isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
     
     function add_to_cart(product_id) {
-      if (!isAuthenticated) {
-        Swal.fire({
-          title: 'Please log in!',
-          text: 'You need to log in to add products to the cart.',
-          icon: 'warning',
-          showConfirmButton: true,
-          confirmButtonText: 'Log In',
-          showCancelButton: true,
-          cancelButtonText: 'Cancel'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = '{% url "login" %}';
-          }
-        });
-        return;
-      }
-  
       let quantityElement = document.getElementById(`quantity-${product_id}`);
       let quantity = quantityElement ? quantityElement.value : 1;
   
@@ -264,11 +244,8 @@
         }
       });
     }
-  
-
-
-
 </script>
+
 
 </body>
 {% endblock %}

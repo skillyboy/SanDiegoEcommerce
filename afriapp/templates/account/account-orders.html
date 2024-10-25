@@ -102,10 +102,16 @@
                             <div class="col-12 col-lg-6">
                                 <div class="row gx-5">
                                     <div class="col-6">
-                                        <a class="btn btn-sm w-100 btn-outline-dark" href="{% url 'order_history' %}">Order Details</a>
+                                        <a class="btn btn-sm w-100 btn-outline-dark" href="{% url 'order_detail' order.id %}">Order Details</a>
                                     </div>
                                     <div class="col-6">
-                                        <a class="btn btn-sm w-100 btn-outline-dark" href="#!">Track Order</a>
+                                        <!-- WhatsApp message with dynamic order details -->
+                                        <a 
+                                            class="btn btn-sm w-100 btn-outline-dark" 
+                                            href="https://wa.me/2349077254729?text=Hello%20I%20would%20like%20to%20track%20my%20order%20(Order%20No:%20{{ order.basket_no }}).%20Order%20details:%0AStatus:%20{{ order.status }}%0AShipped%20Date:%20{{ order.date_created|date:'d M, Y' }}%0ATotal%20Amount:%20${{ order.total_amount }}" 
+                                            target="_blank">
+                                            Track Order
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -113,13 +119,10 @@
                     </div>
                 </div>
             {% endfor %}
-        {% else %}
-            <p>No orders found.</p>
-        {% endif %}
+            {% else %}
+                <p>No orders found.</p>
+            {% endif %}
         
-        
-
-
             <!-- Pagination -->
             <nav class="d-flex justify-content-center justify-content-md-end mt-10">
               <ul class="pagination pagination-sm text-gray-400">
@@ -153,8 +156,9 @@
                 </li>
               </ul>
             </nav>
-
-          </div>
+        
+        </div>
+        
         </div>
       </div>
     </section>
