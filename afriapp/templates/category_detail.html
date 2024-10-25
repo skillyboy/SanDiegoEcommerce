@@ -4,69 +4,93 @@
 {% block title %}Shop Categories{% endblock %}
 
 {% block content %}
-<section class="py-12">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                {% for category, data in categories_with_products.items %}
-                <div class="dropdown-section mb-5">
-                    <a class="dropdown-toggler" id="{{ category.name|slugify }}Menu" data-toggle="collapse" href="#{{ category.name|slugify }}Collapse" role="button" aria-expanded="false" aria-controls="{{ category.name|slugify }}Collapse">
-                        <h4 class="d-flex justify-content-between align-items-center">
-                            <span>{{ category.name }}</span>
-                            <span class="icon-toggle">
-                                <i class="fe fe-chevron-down"></i>
-                            </span>
-                        </h4>
-                    </a>
-                    <div class="collapse" id="{{ category.name|slugify }}Collapse">
-                        <div class="row" id="product-list">
-                            {% if data.products %}
-                            {% for product in data.products %}
-                            <div class="col-12 col-md-6 col-xl-3 product-card">
-                                <article class="card mb-7 bg-cover rounded shadow-sm product-card" style="min-height: 240px; background-image: url({{ product.image.url }}); transition: transform 0.3s;">
-                                    <div class="badge bg-danger card-badge text-uppercase">
-                                        {% if product.is_on_sale %}Sale{% endif %}
-                                    </div>
-                                    <div class="card-img-overlay card-img-overlay-hover align-items-center bg-white-90 rounded">
-                                        <div class="text-center">
-                                            <p class="fw-bold">{{ product.name }} <br><span class="text-muted">${{ product.price }}</span></p>
-                                            <p class="mb-0">
-                                                <button class="btn btn-xs btn-link btn-circle" data-bs-toggle="modal" data-bs-target="#modalProduct{{ product.id }}">
-                                                    <i class="fe fe-eye"></i>
-                                                </button>
-                                                <button class="btn btn-xs btn-link btn-circle" onclick="add_to_cart({{ product.id }})">
-                                                    <i class="fe fe-shopping-cart"></i>
-                                                </button>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </article>
-                            </div>
-                            {% include 'partials/modals/modal-product.html' %}
-                            {% endfor %}
-                            {% else %}
-                            <div class="col-12">
-                                <p>No products available in this category.</p>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-12 text-center">
-                <p class="fs-sm text-muted">Showing {{ total_products }} products</p>
-                <div class="progress mx-auto mb-7" style="max-width: 250px;">
-                    <div class="progress-bar bg-dark" role="progressbar" style="width: {{ data.percentage }}%" aria-valuenow="{{ data.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <button class="btn btn-sm btn-outline-dark" id="loadMoreBtn">Load more <i class="fe fe-arrow-right"></i></button>
-            </div>
-        </div>
-    </div>
+<!-- HEADER -->
+<header class="py-13 jarallax" data-jarallax data-speed=".8" style="background-image: url('{% if category_id == 1 %}/static/img/afrocommerce/cart.jpg{% elif category_id == 2 %}/static/img/afrocommerce/restaurant.jpg{% else %}/static/img/afrocommerce/food.jpg{% endif %}');">
+  <div class="container">
+      <div class="row">
+          <div class="col-12">
+              <!-- Heading -->
+              <h3 class="text-center text-white">{{ service.name }}</h3>
+
+              <!-- Breadcrumb -->
+              <ol class="breadcrumb justify-content-center mb-0 text-center text-white fs-xs">
+                  <li class="breadcrumb-item">
+                      <a class="text-reset" href="#">Home</a>
+                  </li>
+                  <li class="breadcrumb-item active">
+                      {{ service.name }}
+                  </li>
+              </ol>
+          </div>
+      </div>
+  </div>
+</header>
+
+<section class="py-12">
+  <div class="container">
+      <div class="row">
+          <div class="col-12">
+              {% for category, data in categories_with_products.items %}
+              <div class="dropdown-section mb-5">
+                  <a class="dropdown-toggler" id="{{ category.name|slugify }}Menu" data-toggle="collapse" href="#{{ category.name|slugify }}Collapse" role="button" aria-expanded="false" aria-controls="{{ category.name|slugify }}Collapse">
+                      <h4 class="d-flex justify-content-between align-items-center">
+                          <span>{{ category.name }}</span>
+                          <span class="icon-toggle">
+                              <i class="fe fe-chevron-down"></i>
+                          </span>
+                      </h4>
+                  </a>
+                  <div class="collapse" id="{{ category.name|slugify }}Collapse">
+                      <div class="row" id="product-list">
+                          {% if data.products %}
+                              {% for product in data.products %}
+                              <div class="col-12 col-md-6 col-xl-3 product-card">
+                                  <article class="card mb-7 bg-cover rounded shadow-sm product-card" style="min-height: 240px; background-image: url({{ product.image.url }}); transition: transform 0.3s;">
+                                      <div class="badge bg-danger card-badge text-uppercase">
+                                          {% if product.is_on_sale %}Sale{% endif %}
+                                      </div>
+                                      <div class="card-img-overlay card-img-overlay-hover align-items-center bg-white-90 rounded">
+                                          <div class="text-center">
+                                              <p class="fw-bold">{{ product.name }} <br><span class="text-muted">${{ product.price }}</span></p>
+                                              <p class="mb-0">
+                                                  <button class="btn btn-xs btn-link btn-circle" data-bs-toggle="modal" data-bs-target="#modalProduct{{ product.id }}">
+                                                      <i class="fe fe-eye"></i>
+                                                  </button>
+                                                  <button class="btn btn-xs btn-link btn-circle" onclick="add_to_cart({{ product.id }})">
+                                                      <i class="fe fe-shopping-cart"></i>
+                                                  </button>
+                                              </p>
+                                          </div>
+                                      </div>
+                                  </article>
+                              </div>
+                              {% include 'partials/modals/modal-product.html' %}
+                              {% endfor %}
+                          {% else %}
+                          <div class="col-12">
+                              <p>No products available in this category.</p>
+                          </div>
+                          {% endif %}
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
+          </div>
+      </div>
+
+      <div class="row">
+          <div class="col-12 text-center">
+              <p class="fs-sm text-muted">Showing {{ total_products }} products</p>
+              <div class="progress mx-auto mb-7" style="max-width: 250px;">
+                  <div class="progress-bar bg-dark" role="progressbar" style="width: {{ data.percentage }}%" aria-valuenow="{{ data.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <button class="btn btn-sm btn-outline-dark" id="loadMoreBtn">Load more <i class="fe fe-arrow-right"></i></button>
+          </div>
+      </div>
+  </div>
 </section>
+
 
 <style>
   body {

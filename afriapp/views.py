@@ -333,6 +333,10 @@ class ServiceDetailView(TemplateView):
         # Get the service using the provided ID
         service = get_object_or_404(Service, pk=id)
 
+        # Set the category_id based on your logic
+        # If the service ID correlates directly with category IDs, use that directly
+        category_id = service.id  # Adjust this logic if necessary
+
         # Retrieve all categories related to the service
         categories = service.services.all()  # Use 'services' since it's the related name
 
@@ -341,23 +345,25 @@ class ServiceDetailView(TemplateView):
         
         # Iterate through categories and get products
         for category in categories:
-            products = category.products.filter(available=True)  # Correctly reference products through the category
-            categories_with_products[category] = products
-            total_products += products.count()
-
-        # Now calculate the percentage for each category
-        for category, products in categories_with_products.items():
+            products = category.products.filter(available=True)
             product_count = products.count()
-            percentage = (product_count / total_products * 100) if total_products > 0 else 0
             categories_with_products[category] = {
                 'products': products,
-                'percentage': percentage,
+                'product_count': product_count
             }
+            total_products += product_count
+
+        # Calculate the percentage for each category
+        for category, data in categories_with_products.items():
+            product_count = data['product_count']
+            percentage = (product_count / total_products * 100) if total_products > 0 else 0
+            categories_with_products[category]['percentage'] = percentage
 
         return render(request, self.template_name, {
-            'service': service,  # Pass the service object
+            'service': service,
             'categories_with_products': categories_with_products,
             'total_products': total_products,
+            'category_id': category_id,  # Pass category_id to the template
         })
 
 

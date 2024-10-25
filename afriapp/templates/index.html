@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Cart {% endblock %}
+{% block title %} Welcome {% endblock %}
 
 {% block content %} 
 
@@ -79,6 +79,8 @@
       </div>
     </div>
 
+<br><br>
+
     <!-- WELCOME -->
     <section>
       <div class="container">
@@ -89,15 +91,15 @@
             <div class="card card-lg justify-content-end bg-cover" style="min-height: 490px;">
               <!-- Background -->
               <div class="card-bg">
-                <div class="card-bg-img bg-cover" style="background-image: url(/static/img/afrocommerce/food.jpg);"></div>
+                <div class="card-bg-img bg-cover" style="background-image: url(/static/img/afrocommerce/supermarket.jpeg);"></div>
               </div>
               
               <!-- Content -->
               <div class="row">
-                <div class="col-12 col-md-7 position-static">
-                  <div class="card-body m-6 bg-white">
+                <div class="col-12 col-md-7 position-static" >
+                  <div class="card-body m-6 bg-white" style="background-image: url(/static/img/afrocommerce/cart.jpg);">
                     <!-- Heading -->
-                    <h4 class="text-dark">Fresh Produce, Daily Essentials</h4>
+                    <h4 class="text-dark" >Fresh Produce, Daily Essentials</h4>
                     <!-- Button -->
                     <a class="btn btn-link stretched-link px-0 text-body" href="{% url 'shop'%}">Shop Now <i class="fe fe-arrow-right ms-2"></i></a>
                   </div>
@@ -108,9 +110,9 @@
 
           <div class="col-12 col-md-6 col-lg-4 d-flex flex-column mb-7">
             <!-- Promotional Card -->
-            <a class="card justify-content-center bg-cover" href="shop.html" style="min-height: 490px;">
+            <a class="card justify-content-center bg-cover" href="{% url 'service' 2 %}" style="min-height: 490px;">
               <div class="card-bg">
-                <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/food-discount.jpg);"></div>
+                <div class="card-bg-img bg-cover" style="background-image: url(/static/img/afrocommerce/restaurant.jpg);"></div>
               </div>
               <div class="card-body text-center text-white">
                 <p class="text-uppercase">Weekly Special</p>
@@ -118,6 +120,7 @@
                 <h4>On Selected Grocery Items</h4>
               </div>
             </a>
+            
           </div>
 
           <div class="col-12 col-md-6 col-lg-4 d-flex flex-column mb-7 mb-lg-0">
@@ -142,7 +145,7 @@
             <!-- Featured Products Card -->
             <div class="card justify-content-center bg-cover" style="min-height: 320px;">
               <div class="card-bg">
-                <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/fresh-fruits.jpg);"></div>
+                <div class="card-bg-img bg-cover" style="background-image: url(/static/img/afrocommerce/cart.jpg);"></div>
               </div>
               <div class="card-body text-center text-white">
                 <h5 class="mb-0">Fresh Fruits</h5>
@@ -155,7 +158,7 @@
             <!-- Featured Products Card -->
             <div class="card justify-content-center bg-cover" style="min-height: 320px;">
               <div class="card-bg">
-                <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/bakery.jpg);"></div>
+                <div class="card-bg-img bg-cover" style="background-image: url(/static/img/afrocommerce/supermarket.jpeg);"></div>
               </div>
               <div class="card-body text-center text-white">
                 <h5 class="mb-0">Bakery Treats</h5>
@@ -164,6 +167,116 @@
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+
+    <br><br>
+    <!-- WELCOME SECTION -->
+    <section>
+      <div class="container">
+        <div class="row">
+          
+          <!-- Main Featured Collection Card -->
+          <div class="col-lg-8 col-12 mb-7">
+            <div class="card card-lg bg-cover" style="background-image: url('/static/img/afrocommerce/food.jpg'); min-height: 490px;">
+              <div class="card-body d-flex flex-column justify-content-end bg-light bg-opacity-75 p-5">
+                <h4 class="text-dark">Fresh Produce, Daily Essentials</h4>
+                <a href="{% url 'shop' %}" class="btn btn-primary mt-3">Shop Now <i class="fe fe-arrow-right ms-2"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Promo & Newsletter Columns -->
+          <div class="col-lg-4 col-12">
+            <div class="row">
+              <!-- Promotional Card -->
+              <div class="col-12 mb-4">
+                <a href="{% url 'shop' %}" class="card bg-cover text-center text-white" style="background-image: url('assets/img/products/food-discount.jpg'); min-height: 240px;">
+                  <div class="card-body">
+                    <p class="text-uppercase">Weekly Special</p>
+                    <h2 class="display-4">30% OFF</h2>
+                    <h5>On Selected Grocery Items</h5>
+                  </div>
+                </a>
+              </div>
+
+              <!-- Newsletter Subscription Card -->
+              <div class="col-12">
+                <div class="card bg-success bg-pattern text-white text-center" style="min-height: 240px;">
+                  <div class="card-body">
+                    <h5 class="mb-3">Stay Updated with Our Offers!</h5>
+                    <p class="mb-4">Subscribe for a 10% discount on your first order.</p>
+                    <form>
+                      <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Enter Your Email *" required>
+                        <button class="btn btn-light">Subscribe</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Featured Product Cards -->
+          <div class="col-md-6 col-lg-4 col-12 mb-4">
+            <div class="card bg-cover text-white text-center" style="background-image: url('assets/img/products/fresh-fruits.jpg'); min-height: 240px;">
+              <div class="card-body">
+                <h5 class="mb-0">Fresh Fruits</h5>
+                <a href="{% url 'shop' %}" class="stretched-link text-white">Shop now <i class="fe fe-arrow-right ms-2"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4 col-12 mb-4">
+            <div class="card bg-cover text-white text-center" style="background-image: url('assets/img/products/bakery.jpg'); min-height: 240px;">
+              <div class="card-body">
+                <h5 class="mb-0">Bakery Treats</h5>
+                <a href="{% url 'shop' %}" class="stretched-link text-white">Shop now <i class="fe fe-arrow-right ms-2"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW ARRIVALS SECTION -->
+    <section class="pt-12">
+      <div class="container">
+        <div class="row text-center mb-5">
+          <h2 class="text-center">New Arrivals</h2>
+        </div>
+        
+        <div class="row">
+          {% for product in latest_products %}
+          <div class="col-6 col-md-3 mb-4">
+            <div class="card border-light h-100">
+              <a href="{% url 'product' product.id %}">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+              </a>
+              <div class="card-body text-center">
+                <h6 class="card-title fw-bold">{{ product.name }}</h6>
+                <p class="text-muted">${{ product.price }}</p>
+                <div class="rating text-warning">
+                  {% for i in "12345" %}
+                    <i class="fas fa-star {% if i|add:0 <= product.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                  {% endfor %}
+                </div>
+              </div>
+              <div class="card-footer d-flex justify-content-around">
+                <button class="btn btn-sm btn-outline-secondary" onclick="add_to_cart({{ product.id }})">
+                  <i class="fe fe-shopping-cart"></i> Add to Cart
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" onclick="add_to_wishlist({{ product.id }})">
+                  <i class="fe fe-heart"></i> Wishlist
+                </button>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        
       </div>
     </section>
 
@@ -225,67 +338,64 @@
       </div>
     </section>
 
+  <script type="text/javascript">
+    // Unified function for quantity control (increase or decrease)
+    function updateQuantity(productId, change) {
+      const quantityInput = document.getElementById('quantity-' + productId);
+      let quantity = parseInt(quantityInput.value, 10) || 1; // Default to 1 if input is invalid
 
+      // Update the quantity with the provided change (positive or negative)
+      quantity = Math.max(1, Math.min(10, quantity + change)); // Ensure quantity is between 1 and 10
 
-    <script type="text/javascript">
-
-      // Unified function for quantity control (increase or decrease)
-      function updateQuantity(productId, change) {
-        const quantityInput = document.getElementById('quantity-' + productId);
-        let quantity = parseInt(quantityInput.value, 10) || 1; // Default to 1 if input is invalid
-
-        // Update the quantity with the provided change (positive or negative)
-        quantity = Math.max(1, Math.min(10, quantity + change)); // Ensure quantity is between 1 and 10
-
-        quantityInput.value = quantity;
+      quantityInput.value = quantity;
+  }
+    function add_to_cart(product_id) {
+        // Fetch the quantity input value for the given product ID
+        let quantityElement = document.getElementById(`quantity-${product_id}`);
+        let quantity = quantityElement ? quantityElement.value : 1; // Default quantity to 1 if no element
+    
+        // AJAX request to add the product to the cart
+        $.ajax({
+            url: "{% url 'add_to_cart' 0 %}".replace('0', product_id),
+            type: "POST",
+            data: {
+                'quantity': quantity,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                console.log(response);  // Log response for debugging
+                if (response.success) {
+                    // Display a success alert with SweetAlert2
+                    Swal.fire({
+                        title: 'Success!',
+                        text: response.message,
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500 // Automatically close after 1.5 seconds
+                    });
+                    //  update the cart count dynamically
+                    $('#navbar-cart-count').text(response.cart_count); // Update navbar cart count
+                    $('#cart-button-count').text(response.cart_count); // Update cart button count
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to add product to cart. Please ensure you are logged in.',
+                        icon: 'error',
+                        confirmButtonText: 'Okay'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                Swal.fire({
+                    title: 'Oops!',
+                    text: 'Something went wrong. Please ensure you are logged in.',
+                    icon: 'error',
+                    confirmButtonText: 'Okay'
+                });
+            }
+        });
     }
-      function add_to_cart(product_id) {
-          // Fetch the quantity input value for the given product ID
-          let quantityElement = document.getElementById(`quantity-${product_id}`);
-          let quantity = quantityElement ? quantityElement.value : 1; // Default quantity to 1 if no element
-      
-          // AJAX request to add the product to the cart
-          $.ajax({
-              url: "{% url 'add_to_cart' 0 %}".replace('0', product_id),
-              type: "POST",
-              data: {
-                  'quantity': quantity,
-                  'csrfmiddlewaretoken': '{{ csrf_token }}'
-              },
-              success: function(response) {
-                  console.log(response);  // Log response for debugging
-                  if (response.success) {
-                      // Display a success alert with SweetAlert2
-                      Swal.fire({
-                          title: 'Success!',
-                          text: response.message,
-                          icon: 'success',
-                          showConfirmButton: false,
-                          timer: 1500 // Automatically close after 1.5 seconds
-                      });
-                      //  update the cart count dynamically
-                      $('#navbar-cart-count').text(response.cart_count); // Update navbar cart count
-                      $('#cart-button-count').text(response.cart_count); // Update cart button count
-                  } else {
-                      Swal.fire({
-                          title: 'Error!',
-                          text: 'Failed to add product to cart. Please ensure you are logged in.',
-                          icon: 'error',
-                          confirmButtonText: 'Okay'
-                      });
-                  }
-              },
-              error: function(xhr, status, error) {
-                  Swal.fire({
-                      title: 'Oops!',
-                      text: 'Something went wrong. Please ensure you are logged in.',
-                      icon: 'error',
-                      confirmButtonText: 'Okay'
-                  });
-              }
-          });
-      }
-      
+    
   </script>
 
 {% endblock %}

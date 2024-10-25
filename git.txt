@@ -1,5 +1,5 @@
 git add .
-git commit -m "25 october"
+git commit -m "images in category page fixed"
 git push origin main
 
 git push -f origin main

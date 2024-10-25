@@ -1,112 +1,10 @@
+{% extends 'base.html' %}
 {% load static %}
 
-{% block navbar %}
-    <!-- small greenNAVBAR -->
-    <div class="navbar navbar-topbar navbar-expand-xl">
-      <div class="container">
-  
-          <!-- Promo -->
-          <div class="me-xl-8">
-              <i class="fe fe-truck me-2"></i> <span class="heading-xxxs">Delivering to Your Doorstep Across the USA!</span>
-          </div>
-  
-          <!-- Toggler -->
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topbarCollapse" aria-controls="topbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-          </button>
-  
-          <!-- Collapse -->
-          <div class="collapse navbar-collapse" id="topbarCollapse">
-  
-              <!-- Nav -->
-              <ul class="nav nav-divided navbar-nav me-auto">
-                  <li class="nav-item dropdown">
-                      <!-- Toggle -->
-                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
-                          <img class="mb-1 me-1" src="{% static 'img/flags/usa.svg' %}" alt="USA" /> United States
-                      </a>
-  
-                      <!-- Menu -->
-                      <div class="dropdown-menu min-w-0">
-                          <a class="dropdown-item" href="#!">
-                              <img class="mb-1 me-2" src="{% static 'img/flags/usa.svg' %}" alt="USA">United States
-                          </a>
-                          <a class="dropdown-item" href="#!">
-                              <img class="mb-1 me-2" src="{% static 'img/flags/canada.svg' %}" alt="Canada">Canada
-                          </a>
-                          <a class="dropdown-item" href="#!">
-                              <img class="mb-1 me-2" src="{% static 'img/flags/germany.svg' %}" alt="Germany">Germany
-                          </a>
-                      </div>
-                  </li>
-                  <li class="nav-item dropdown">
-                      <!-- Toggle -->
-                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">USD</a>
-  
-                      <!-- Menu -->
-                      <div class="dropdown-menu min-w-0">
-                          <a class="dropdown-item" href="#!">USD</a>
-                          <a class="dropdown-item" href="#!">EUR</a>
-                      </div>
-                  </li>
-                  <li class="nav-item dropdown">
-                      <!-- Toggle -->
-                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">English</a>
-  
-                      <!-- Menu -->
-                      <div class="dropdown-menu min-w-0">
-                          <a class="dropdown-item" href="#">English</a>
-                          <a class="dropdown-item" href="#">French</a>
-                          <a class="dropdown-item" href="#">German</a>
-                      </div>
-                  </li>
-              </ul>
-  
-              <!-- Nav -->
-              <ul class="nav navbar-nav me-8">
-                  <li class="nav-item">
-                      <a class="nav-link" href="{% url 'shipping_and_returns' %}">Shipping</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="{% url 'faq' %}">FAQ</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="{% url 'contact_us' %}">Contact</a>
-                  </li>
-              </ul>
-  
-              <!-- Social Links -->
-              <ul class="nav navbar-nav flex-row">
-                  <li class="nav-item">
-                      <a class="nav-link text-white" href="#!">
-                          <i class="fab fa-facebook-f"></i>
-                      </a>
-                  </li>
-                  <li class="nav-item ms-xl-n4">
-                      <a class="nav-link text-white" href="#!">
-                          <i class="fab fa-twitter"></i>
-                      </a>
-                  </li>
-                  <li class="nav-item ms-xl-n4">
-                      <a class="nav-link text-white" href="#!">
-                          <i class="fab fa-instagram"></i>
-                      </a>
-                  </li>
-                  <li class="nav-item ms-xl-n4">
-                      <a class="nav-link text-white" href="#!">
-                          <i class="fab fa-medium"></i>
-                      </a>
-                  </li>
-              </ul>
-  
-          </div>
-      </div>
-    </div>
+{% block title %}Home{% endblock %}
 
+{% block content %} 
 
-
-    
-{% endblock %}
 
 
     <!-- NAVBAR -->
@@ -799,334 +697,98 @@
       </div>
     </section>
 
-    <!-- CATEGORIES -->
-    <section class="pt-6">
-      <div class="container-fluid px-3 px-md-6">
-        <div class="row mx-n3">
-          <div class="col-12 col-sm-4 d-flex flex-column px-3">
+<!-- CATEGORIES -->
+<section class="pt-6">
+  <div class="container-fluid px-3 px-md-6">
+    <div class="row mx-n3">
+      <!-- Category Cards Loop -->
+      {% for category in categories %}
+      <div class="col-12 col-sm-4 d-flex flex-column px-3">
 
-            <!-- Card-->
-            <div class="card card-xl mb-3 mb-sm-0" style="min-height: 280px">
+        <!-- Card-->
+        <div class="card card-xl mb-3 mb-sm-0" style="min-height: 280px;">
 
-              <!-- Background -->
-              <div class="card-bg">
-                <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/product-22.jpg);"></div>
-              </div>
-
-              <!-- Body -->
-              <div class="card-body my-auto">
-
-                <!-- Heading -->
-                <h5 class="mb-0">Summer Hats</h5>
-
-                <!-- Link -->
-                <a class="btn btn-link stretched-link px-0 text-reset" href="shop.html">
-                  Shop Now <i class="fe fe-arrow-right ms-2"></i>
-                </a>
-
-              </div>
-
-            </div>
-
+          <!-- Background -->
+          <div class="card-bg">
+            <div class="card-bg-img bg-cover" style="background-image: url({{ category.image }});"></div>
           </div>
-          <div class="col-12 col-sm-4 d-flex flex-column px-3">
 
-            <!-- Card-->
-            <div class="card card-xl mb-3 mb-sm-0" style="min-height: 280px;">
-
-              <!-- Background -->
-              <div class="card-bg">
-                <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/product-23.jpg);"></div>
-              </div>
-
-              <!-- Body -->
-              <div class="card-body my-auto">
-
-                <!-- Heading -->
-                <h5 class="mb-0">Men Hats</h5>
-
-                <!-- Link -->
-                <a class="btn btn-link stretched-link px-0 text-reset" href="shop.html">
-                  Shop Now <i class="fe fe-arrow-right ms-2"></i>
-                </a>
-
-              </div>
-
-            </div>
-
-          </div>
-          <div class="col-12 col-sm-4 d-flex flex-column px-3">
-
-            <!-- Card-->
-            <div class="card card-xl bg-cover bg-hover" style="min-height: 280px;">
-
-              <!-- Background -->
-              <div class="card-bg">
-                <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/product-24.jpg);"></div>
-              </div>
-
-              <!-- Body -->
-              <div class="card-body my-auto">
-
-                <!-- Heading -->
-                <h5 class="mb-0">Floral Dresses</h5>
-
-                <!-- Link -->
-                <a class="btn btn-link stretched-link px-0 text-reset" href="shop.html">
-                  Shop Now <i class="fe fe-arrow-right ms-2"></i>
-                </a>
-
-              </div>
-
-            </div>
-
+          <!-- Body -->
+          <div class="card-body my-auto text-center">
+            <h5 class="mb-0">{{ category.name }}</h5>
+            <a class="btn btn-link stretched-link px-0 text-reset" href="{{ category.link }}">
+              Explore Now <i class="fe fe-arrow-right ms-2"></i>
+            </a>
           </div>
         </div>
+
       </div>
-    </section>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 
-    <!-- CATEGORIES -->
-    <section class="py-12">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-
-            <!-- Heading -->
-            <h2 class="mb-4 text-center">Shop by Category</h2>
-
-            <!-- Nav -->
-            <div class="nav justify-content-center mb-10">
-              <a class="nav-link active" href="#topSellersTab" data-bs-toggle="tab">Women</a>
-              <a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">Men</a>
-              <a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">Kids</a>
-            </div>
-
-            <!-- Content -->
-            <div class="tab-content">
-
-              <!-- Pane -->
-              <div class="tab-pane fade show active" id="topSellersTab">
-
-                <!-- Slider -->
-                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}'>
-
-                  <!-- Item -->
-                  <div class="col px-4" style="max-width: 200px;">
-                    <div class="card">
-
-                      <!-- Image -->
-                      <img class="card-img-top" src="assets/img/products/product-25.jpg" alt="...">
-
-                      <!-- Body -->
-                      <div class="card-body py-4 px-0 text-center">
-
-                        <!-- Heading -->
-                        <a class="stretched-link text-body" href="shop.html">
-                          <h6>Dresses <small>(58)</small></h6>
-                        </a>
-
-                      </div>
-
-                    </div>
+<!-- SHOP BY CATEGORY -->
+<section class="py-12">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h2 class="mb-4">Shop by Category</h2>
+        <div class="nav justify-content-center mb-10">
+          {% for tab in tabs %}
+          <a class="nav-link {% if loop.first %}active{% endif %}" href="#{{ tab.id }}" data-bs-toggle="tab">{{ tab.label }}</a>
+          {% endfor %}
+        </div>
+        <div class="tab-content">
+          {% for tab in tabs %}
+          <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="{{ tab.id }}">
+            <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}'>
+              {% for item in tab.items %}
+              <div class="col px-4" style="max-width: 200px;">
+                <div class="card">
+                  <img class="card-img-top" src="{{ item.image }}" alt="{{ item.name }}">
+                  <div class="card-body py-4 px-0 text-center">
+                    <a class="stretched-link text-body" href="{{ item.link }}">
+                      <h6>{{ item.name }} <small>({{ item.count }})</small></h6>
+                    </a>
                   </div>
-
-                  <!-- Item -->
-                  <div class="col px-4" style="max-width: 200px;">
-                    <div class="card">
-
-                      <!-- Image -->
-                      <img class="card-img-top" src="assets/img/products/product-26.jpg" alt="...">
-
-                      <!-- Body -->
-                      <div class="card-body py-4 px-0 text-center">
-
-                        <!-- Heading -->
-                        <a class="stretched-link text-body" href="shop.html">
-                          <h6>Tops <small>(35)</small></h6>
-                        </a>
-
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <!-- Item -->
-                  <div class="col px-4" style="max-width: 200px;">
-                    <div class="card">
-
-                      <!-- Image -->
-                      <img class="card-img-top" src="assets/img/products/product-27.jpg" alt="...">
-
-                      <!-- Body -->
-                      <div class="card-body py-4 px-0 text-center">
-
-                        <!-- Heading -->
-                        <a class="stretched-link text-body" href="shop.html">
-                          <h6>T-shirts <small>(27)</small></h6>
-                        </a>
-
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <!-- Item -->
-                  <div class="col px-4" style="max-width: 200px;">
-                    <div class="card">
-
-                      <!-- Image -->
-                      <img class="card-img-top" src="assets/img/products/product-28.jpg" alt="...">
-
-                      <!-- Body -->
-                      <div class="card-body py-4 px-0 text-center">
-
-                        <!-- Heading -->
-                        <a class="stretched-link text-body" href="shop.html">
-                          <h6>Shoes <small>(64)</small></h6>
-                        </a>
-
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <!-- Item -->
-                  <div class="col px-4" style="max-width: 200px;">
-                    <div class="card">
-
-                      <!-- Image -->
-                      <img class="card-img-top" src="assets/img/products/product-29.jpg" alt="...">
-
-                      <!-- Body -->
-                      <div class="card-body py-4 px-0 text-center">
-
-                        <!-- Heading -->
-                        <a class="stretched-link text-body" href="shop.html">
-                          <h6>Jeans <small>(12)</small></h6>
-                        </a>
-
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <!-- Item -->
-                  <div class="col px-4" style="max-width: 200px;">
-                    <div class="card">
-
-                      <!-- Image -->
-                      <img class="card-img-top" src="assets/img/products/product-125.jpg" alt="...">
-
-                      <!-- Body -->
-                      <div class="card-body py-4 px-0 text-center">
-
-                        <!-- Heading -->
-                        <a class="stretched-link text-body" href="shop.html">
-                          <h6>Sweatshirts <small>(11)</small></h6>
-                        </a>
-
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <!-- Item -->
-                  <div class="col px-4" style="max-width: 200px;">
-                    <div class="card">
-
-                      <!-- Image -->
-                      <img class="card-img-top" src="assets/img/products/product-126.jpg" alt="...">
-
-                      <!-- Body -->
-                      <div class="card-body py-4 px-0 text-center">
-
-                        <!-- Heading -->
-                        <a class="stretched-link text-body" href="shop.html">
-                          <h6>Jackets <small>(9)</small></h6>
-                        </a>
-
-                      </div>
-
-                    </div>
-                  </div>
-
                 </div>
-
               </div>
+              {% endfor %}
             </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- FEATURED PRODUCTS -->
+<section>
+  <div class="container">
+    <div class="row">
+      {% for product in featured_products %}
+      <div class="col-12 col-md-6">
+        <div class="card card-lg">
+          <div class="card-circle card-circle-lg card-circle-end">
+            <strong class="fs-xs text-decoration-line-through opacity-80">{{ product.original_price }}</strong>
+            <span class="fs-6 fw-bold">{{ product.sale_price }}</span>
+          </div>
+          <img class="card-img-top" src="{{ product.image }}" alt="{{ product.name }}">
+          <div class="card-body position-relative mx-6 mx-lg-11 mt-n11 bg-white text-center">
+            <h4 class="mb-0">{{ product.name }}</h4>
+            <a class="btn btn-link stretched-link px-0 text-reset" href="{{ product.link }}">
+              Shop Now <i class="fe fe-arrow-right ms-2"></i>
+            </a>
           </div>
         </div>
       </div>
-    </section>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 
-    <!-- PRODUCTS -->
-    <section>
-      <div class="container">
-        <div class="row">
-          <div class="col-12 col-md-6">
-
-            <!-- Card -->
-            <div class="card card-lg">
-
-              <!-- Circle -->
-              <div class="card-circle card-circle-lg card-circle-end">
-                <strong class="fs-xs text-decoration-line-through opacity-80">$99.00</strong>
-                <span class="fs-6 fw-bold">$59.00</span>
-              </div>
-
-              <!-- Image -->
-              <img class="card-img-top" src="assets/img/products/product-30.jpg" alt="...">
-
-              <!-- Body -->
-              <div class="card-body position-relative mx-6 mx-lg-11 mt-n11 bg-white text-center">
-
-                <!-- Heading -->
-                <h4 class="mb-0">Cropped Trousers</h4>
-
-                <!-- Link -->
-                <a class="btn btn-link stretched-link px-0 text-reset" href="shop.html">
-                  Shop Now <i class="fe fe-arrow-right ms-2"></i>
-                </a>
-
-              </div>
-
-            </div>
-
-          </div>
-          <div class="col-12 col-md-6">
-
-            <!-- Card -->
-            <div class="card card-lg">
-
-              <!-- Circle -->
-              <div class="card-circle card-circle-lg card-circle-end">
-                <strong class="fs-xs text-decoration-line-through opacity-80">$99.00</strong>
-                <span class="fs-6 fw-bold">$59.00</span>
-              </div>
-
-              <!-- Image -->
-              <img class="card-img-top" src="assets/img/products/product-31.jpg" alt="...">
-
-              <!-- Body -->
-              <div class="card-body position-relative mx-6 mx-lg-11 mt-n11 bg-white text-center">
-
-                <!-- Heading -->
-                <h4 class="mb-0">Leather Sneakers</h4>
-
-                <!-- Link -->
-                <a class="btn btn-link stretched-link px-0 text-reset" href="shop.html">
-                  Shop Now <i class="fe fe-arrow-right ms-2"></i>
-                </a>
-
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- ARRIVALS -->
     <section class="py-12">
@@ -3031,6 +2693,7 @@
 
 
 </div>
+{% endblock %}
 
 {% block extra_js %}
 {% endblock %}

@@ -5,86 +5,65 @@
 
 {% block content %}
 
-  <!-- CONTENT -->
-  <section class="py-12" style="background-color: #F5F5DC;"> <!-- Added background color -->
-    <div class="container">
-      <div class="row">
+<!-- CONTENT -->
+<section class="py-12" style="background-color: #F5F5DC;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6">
 
-        <div class="col-12 col-md-12">
+        <!-- Card for New Customers -->
+        <div class="card card-lg">
+          <div class="card-body" style="background-color: #FFF8E1; border: 1px solid #8B4513;">
 
-          <!-- Card for New Customers -->
-          <div class="card card-lg">
-            <div class="card-body" style="background-color: #FFF8E1; border: 1px solid #8B4513;">
+            <!-- Heading -->
+            <h4 class="mb-6 text-center" style="color: #8B4513;">Create Your Account</h4>
+            <p class="text-center mb-7" style="color: #8B4513;">Sign up to start placing orders and enjoy member-only benefits.</p>
 
-              <!-- Heading -->
-              <h6 class="mb-7" style="color: #8B4513;">New Customer</h6>
-
-              <!-- Form -->
-              <form method="post" action="{% url 'signupform' %}">
-                {% csrf_token %}
-                <div class="row">
-                  <div class="col-12">
-
-                    <!-- First Name -->
-                    <div class="form-group">
-                      <label class="visually-hidden" for="registerFirstName">First Name *</label>
-                      <input class="form-control form-control-sm" id="registerFirstName" name="first_name" type="text" placeholder="First Name *" required style="border: 1px solid #4CAF50;">
-                    </div>
-
-                  </div>
-                  <div class="col-12">
-
-                    <!-- Last Name -->
-                    <div class="form-group">
-                      <label class="visually-hidden" for="registerLastName">Last Name *</label>
-                      <input class="form-control form-control-sm" id="registerLastName" name="last_name" type="text" placeholder="Last Name *" required style="border: 1px solid #4CAF50;">
-                    </div>
-
-                  </div>
-                  <div class="col-12">
-
-                    <!-- Email -->
-                    <div class="form-group">
-                      <label class="visually-hidden" for="registerEmail">Email Address *</label>
-                      <input class="form-control form-control-sm" id="registerEmail" name="email" type="email" placeholder="Email Address *" required style="border: 1px solid #4CAF50;">
-                    </div>
-
-                  </div>
-                  <div class="col-12 col-md-6">
-
-                    <!-- Password -->
-                    <div class="form-group">
-                      <label class="visually-hidden" for="registerPassword">Password *</label>
-                      <input class="form-control form-control-sm" id="registerPassword" name="password1" type="password" placeholder="Password *" required style="border: 1px solid #4CAF50;">
-                    </div>
-
-                  </div>
-                  <div class="col-12 col-md-6">
-
-                    <!-- Confirm Password -->
-                    <div class="form-group">
-                      <label class="visually-hidden" for="registerPasswordConfirm">Confirm Password *</label>
-                      <input class="form-control form-control-sm" id="registerPasswordConfirm" name="password2" type="password" placeholder="Confirm Password *" required style="border: 1px solid #4CAF50;">
-                    </div>
-
-                  </div>
-                  <div class="col-12">
-
-                    <!-- Register Button -->
-                    <button class="btn btn-sm" type="submit" style="background-color: #FFA726; color: #FFF;">Register</button>
-
-                  </div>
+            <!-- Form -->
+            <form method="post" action="{% url 'signupform' %}">
+              {% csrf_token %}
+              <div class="mb-4">
+                <!-- First Name -->
+                <label class="form-label" for="registerFirstName">First Name</label>
+                <input class="form-control" id="registerFirstName" name="first_name" type="text" placeholder="Enter your first name" required style="border: 1px solid #4CAF50;">
+              </div>
+              <div class="mb-4">
+                <!-- Last Name -->
+                <label class="form-label" for="registerLastName">Last Name</label>
+                <input class="form-control" id="registerLastName" name="last_name" type="text" placeholder="Enter your last name" required style="border: 1px solid #4CAF50;">
+              </div>
+              <div class="mb-4">
+                <!-- Email -->
+                <label class="form-label" for="registerEmail">Email Address</label>
+                <input class="form-control" id="registerEmail" name="email" type="email" placeholder="Enter your email" required style="border: 1px solid #4CAF50;">
+              </div>
+              <div class="row">
+                <div class="col-12 col-md-6 mb-4">
+                  <!-- Password -->
+                  <label class="form-label" for="registerPassword">Password</label>
+                  <input class="form-control" id="registerPassword" name="password1" type="password" placeholder="Create a password" required style="border: 1px solid #4CAF50;">
                 </div>
-              </form>
+                <div class="col-12 col-md-6 mb-4">
+                  <!-- Confirm Password -->
+                  <label class="form-label" for="registerPasswordConfirm">Confirm Password</label>
+                  <input class="form-control" id="registerPasswordConfirm" name="password2" type="password" placeholder="Confirm your password" required style="border: 1px solid #4CAF50;">
+                </div>
+              </div>
+              <!-- Register Button -->
+              <button class="btn w-100" type="submit" style="background-color: #FFA726; color: #FFF;">Register</button>
 
-            </div>
+              <!-- Already have an account -->
+              <p class="text-center mt-4" style="color: #8B4513;">Already have an account? 
+                <a href="{% url 'login' %}" style="color: #FFA726;">Sign in here</a>
+              </p>
+            </form>
+
           </div>
-
         </div>
+
       </div>
     </div>
-  </section>
-
-
+  </div>
+</section>
 
 {% endblock %}
