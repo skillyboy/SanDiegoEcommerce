@@ -1,4 +1,9 @@
 git add .
+git commit 
+git push origin main
+
+
+git add .
 git commit -m "images in category page fixed"
 git push origin main
 
@@ -13,7 +18,6 @@ git commit -m "Alert adjusted,"
 git branch -M main
 git remote add origin https://github.com/skillyboy/SanDiegoEcommerce.git
 git push -u origin main
-
 
 
 git remote add origin https://github.com/skillyboy/SanDiegoEcommerce.git
