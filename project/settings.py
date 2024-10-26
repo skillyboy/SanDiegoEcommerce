@@ -3,16 +3,13 @@ from pathlib import Path
 from dotenv import load_dotenv
 from os import getenv
 
-
-# from decouple import config
-
-
 # Define the base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv(os.path.join(BASE_DIR, ".env"))
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+# Load Environment Variables
+load_dotenv(BASE_DIR / ".env")
+
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = getenv("SECRET_KEY")
@@ -21,6 +18,7 @@ SECRET_KEY = getenv("SECRET_KEY")
 DEBUG = getenv("DEBUG")
 
 ALLOWED_HOSTS = []
+YOUR_DOMAIN = os.getenv("YOUR_DOMAIN", "http://127.0.0.1:8000")
 
 
 # Stripe settings

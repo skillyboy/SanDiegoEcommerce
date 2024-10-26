@@ -35,7 +35,6 @@ from django.views.decorators.http import require_POST
 import stripe
 from django.conf import settings
 from django.shortcuts import render
-from .models import Payment, ShopCart, Product  # Assuming these are your models
 from django.urls import reverse
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -52,8 +51,6 @@ from django.conf import settings
 # Views List
 # -------------------
 
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 
@@ -319,12 +316,6 @@ class IndexView(TemplateView):
 
         template = 'shop.html' if service_id else 'index.html'
         return render(request, template, context)
-
-
-# 6. Categories Viewfrom .models import Product  # Ensure you import your Product modelfrom django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView
-from django.shortcuts import render
-from .models import Service  # Ensure you have the correct import
 
 class ServiceDetailView(TemplateView):
     template_name = 'category_detail.html'
@@ -616,7 +607,6 @@ def remove_from_wishlist(request, product_id):
 
 
 class CheckoutView(TemplateView):
-    
     def get(self, request):
         # Get cart items for the user
         cart = ShopCart.objects.filter(user=request.user, paid_order=False)
@@ -688,6 +678,8 @@ class PaymentPipelineView(View):
         except Exception as e:
             print("Error creating checkout session:", str(e))
             return JsonResponse({'error': str(e)}, status=500)
+
+
 
 class CompletedPaymentView(View):
     def get(self, request):

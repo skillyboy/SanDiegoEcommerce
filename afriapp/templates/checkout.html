@@ -15,10 +15,10 @@
             <!-- Breadcrumb -->
             <ol class="breadcrumb mb-0 fs-xs text-gray-400">
               <li class="breadcrumb-item">
-                <a class="text-gray-400" href="index.html">Home</a>
+                <a class="text-gray-400" href="{% url 'index' %}">Home</a>
               </li>
               <li class="breadcrumb-item">
-                <a class="text-gray-400" href="shopping-cart.html">Shopping Cart</a>
+                <a class="text-gray-400" href="{% url 'cart' %}">Shopping Cart</a>
               </li>
               <li class="breadcrumb-item active">
                 Checkout
@@ -216,73 +216,74 @@
     <script src="https://js.stripe.com/v3/"></script>
 
     <script type="text/javascript">
-      // Initialize Stripe with your publishable key
-      var stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
-      var elements = stripe.elements();
-  
-      // Create an instance of Elements and mount the card element
-      var cardElement = elements.create('card');
+      // Initialize Stripe with the public key from Django settings
+      const stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
+      const elements = stripe.elements();
+    
+      // Create and mount the card element
+      const cardElement = elements.create('card');
       cardElement.mount('#card-element');
-  
+    
       // Handle form submission
       const form = document.getElementById('checkout-form');
       form.addEventListener('submit', async (event) => {
-          event.preventDefault();  // Prevent default form submission
-  
-          // Create Stripe Payment Method
+          event.preventDefault();  // Prevent the default form submission behavior
+    
+          // Create a payment method with the card details
           const { paymentMethod, error } = await stripe.createPaymentMethod({
               type: 'card',
               card: cardElement,
           });
-  
+    
           if (error) {
-              // Display error to user
+              // Display error message if payment method creation fails
               document.getElementById('card-errors').textContent = error.message;
           } else {
-              // No error, add payment method ID to hidden input field
+              // No error; proceed with adding the payment method to hidden input
               document.getElementById('stripe_token').value = paymentMethod.id;
-  
-              // Prepare data to send to the server
+    
+              // Data to send to the server
               const dataToSend = {
-                  'basket_no': document.querySelector('input[name="basket_no"]').value,
-                  'shipping_option': document.querySelector('input[name="shipping_option"]:checked') ? document.querySelector('input[name="shipping_option"]:checked').value : null,
-                  'total': document.querySelector('input[name="total"]').value,
-                  'stripe_token': paymentMethod.id,
+                  basket_no: document.querySelector('input[name="basket_no"]').value,
+                  shipping_option: document.querySelector('input[name="shipping_option"]:checked') ? document.querySelector('input[name="shipping_option"]:checked').value : null,
+                  total: document.querySelector('input[name="total"]').value,
+                  stripe_token: paymentMethod.id,
               };
-  
+    
               // Debugging logs
-              console.log(dataToSend);
-  
-              // Submit data to the server using fetch API
-              fetch("{% url 'payment_pipeline' %}", {
-                  method: "POST",
-                  headers: {
-                      'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                      'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify(dataToSend)  // Send data as JSON
-              })
-              .then(response => {
+              console.log("Data being sent:", dataToSend);
+    
+              // Send data to the server using Fetch API
+              try {
+                  const response = await fetch("{% url 'payment_pipeline' %}", {
+                      method: "POST",
+                      headers: {
+                          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(dataToSend),
+                  });
+    
                   if (!response.ok) {
-                      throw new Error('Network response was not ok');
+                      throw new Error(`Network response was not ok: ${response.statusText}`);
                   }
-                  return response.json();
-              })
-              .then(session => {
+    
+                  const session = await response.json();
+    
                   if (session.id) {
-                      // Redirect to Stripe Checkout page
-                      return stripe.redirectToCheckout({ sessionId: session.id });
+                      // Redirect to Stripe's Checkout page
+                      await stripe.redirectToCheckout({ sessionId: session.id });
                   } else {
-                      alert("Error: No session ID returned.");
+                      alert("Error: No session ID returned. Please try again.");
                   }
-              })
-              .catch(error => {
-                  console.error("Error:", error);
-                  alert("Payment failed. Please try again.");
-              });
+              } catch (error) {
+                  console.error("Error during fetch:", error);
+                  alert("Payment failed. Please check your details and try again.");
+              }
           }
       });
-  </script>
+    </script>
+    
   
 
 
