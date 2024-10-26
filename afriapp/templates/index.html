@@ -34,26 +34,25 @@
         </div>
         <div class="flex-grow-1 position-relative">
     
-        <form class="navbar-form">
-          <div class="input-group">
-              <input type="search" class="form-control form-control-lg" placeholder="Search for items and brands">
-              <select class="form-select form-select-lg d-none d-md-block">
-                  <option selected>All Categories</option>
-                  {% for service in services %}
-                      <option>{{ service.name }}</option>
-
-                  {% endfor %}
-                  {% if service.id %}  Ensure service.id is not None or empty
-                    <li>>Shop {{ service.name }}</a></li>
-                  {% endif %}
-              </select>
-              <div class="input-group-append">
-                  <button class="btn btn-outline-border btn-lg">
-                      <i class="fe fe-search"></i>
-                  </button>
-              </div>
-          </div>
-        </form>
+          <form class="navbar-form" method="POST" action="{% url 'search_products' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="search" name="search" class="form-control form-control-lg" placeholder="Search for items and brands" required>
+                <select class="form-select form-select-lg d-none d-md-block" name="category">
+                    <option value="" selected>All Categories</option> <!-- Set value to an empty string for all -->
+                    {% for service in services %}
+                        <option value="{{ service.id }}">{{ service.name }}</option>
+                    {% endfor %}
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-border btn-lg" type="submit">
+                        <i class="fe fe-search"></i>
+                    </button>
+                </div>
+            </div>
+          </form>
+        
+        
 
 
         <div class="dropdown-menu dropdown-collapse" id="navbarMenu">
@@ -149,7 +148,7 @@
               </div>
               <div class="card-body text-center text-white">
                 <h5 class="mb-0">Fresh Fruits</h5>
-                <a class="btn btn-link stretched-link px-0 text-white" href="shop.html">Shop now <i class="fe fe-arrow-right ms-2"></i></a>
+                <a class="btn btn-link stretched-link px-0 text-white" href="{% url 'shop' %}">Shop now <i class="fe fe-arrow-right ms-2"></i></a>
               </div>
             </div>
           </div>
@@ -162,7 +161,7 @@
               </div>
               <div class="card-body text-center text-white">
                 <h5 class="mb-0">Bakery Treats</h5>
-                <a class="btn btn-link stretched-link px-0 text-white" href="shop.html">Shop now <i class="fe fe-arrow-right ms-2"></i></a>
+                <a class="btn btn-link stretched-link px-0 text-white" href="{% url 'shop' %}">Shop now <i class="fe fe-arrow-right ms-2"></i></a>
               </div>
             </div>
           </div>
@@ -172,157 +171,7 @@
 
 
     <br><br>
-    <!-- WELCOME SECTION -->
-    <section>
-      <div class="container">
-        <div class="row">
-          
-          <!-- Main Featured Collection Card -->
-          <div class="col-lg-8 col-12 mb-7">
-            <div class="card card-lg bg-cover" style="background-image: url('/static/img/afrocommerce/food.jpg'); min-height: 490px;">
-              <div class="card-body d-flex flex-column justify-content-end bg-light bg-opacity-75 p-5">
-                <h4 class="text-dark">Fresh Produce, Daily Essentials</h4>
-                <a href="{% url 'shop' %}" class="btn btn-primary mt-3">Shop Now <i class="fe fe-arrow-right ms-2"></i></a>
-              </div>
-            </div>
-          </div>
 
-          <!-- Promo & Newsletter Columns -->
-          <div class="col-lg-4 col-12">
-            <div class="row">
-              <!-- Promotional Card -->
-              <div class="col-12 mb-4">
-                <a href="{% url 'shop' %}" class="card bg-cover text-center text-white" style="background-image: url('assets/img/products/food-discount.jpg'); min-height: 240px;">
-                  <div class="card-body">
-                    <p class="text-uppercase">Weekly Special</p>
-                    <h2 class="display-4">30% OFF</h2>
-                    <h5>On Selected Grocery Items</h5>
-                  </div>
-                </a>
-              </div>
-
-
-            </div>
-          </div>
-
-          <!-- Featured Product Cards -->
-          <div class="col-md-6 col-lg-4 col-12 mb-4">
-            <div class="card bg-cover text-white text-center" style="background-image: url('assets/img/products/fresh-fruits.jpg'); min-height: 240px;">
-              <div class="card-body">
-                <h5 class="mb-0">Fresh Fruits</h5>
-                <a href="{% url 'shop' %}" class="stretched-link text-white">Shop now <i class="fe fe-arrow-right ms-2"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-4 col-12 mb-4">
-            <div class="card bg-cover text-white text-center" style="background-image: url('assets/img/products/bakery.jpg'); min-height: 240px;">
-              <div class="card-body">
-                <h5 class="mb-0">Bakery Treats</h5>
-                <a href="{% url 'shop' %}" class="stretched-link text-white">Shop now <i class="fe fe-arrow-right ms-2"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- NEW ARRIVALS SECTION -->
-    <section class="pt-12">
-      <div class="container">
-        <div class="row text-center mb-5">
-          <h2 class="text-center">New Arrivals</h2>
-        </div>
-        
-        <div class="row">
-          {% for product in latest_products %}
-          <div class="col-6 col-md-3 mb-4">
-            <div class="card border-light h-100">
-              <a href="{% url 'product' product.id %}">
-                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-              </a>
-              <div class="card-body text-center">
-                <h6 class="card-title fw-bold">{{ product.name }}</h6>
-                <p class="text-muted">${{ product.price }}</p>
-                <div class="rating text-warning">
-                  {% for i in "12345" %}
-                    <i class="fas fa-star {% if i|add:0 <= product.rating %}text-warning{% else %}text-muted{% endif %}"></i>
-                  {% endfor %}
-                </div>
-              </div>
-              <div class="card-footer d-flex justify-content-around">
-                <button class="btn btn-sm btn-outline-secondary" onclick="add_to_cart({{ product.id }})">
-                  <i class="fe fe-shopping-cart"></i> Add to Cart
-                </button>
-                <button class="btn btn-sm btn-outline-secondary" onclick="add_to_wishlist({{ product.id }})">
-                  <i class="fe fe-heart"></i> Wishlist
-                </button>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-        
-      </div>
-    </section>
-
-    <!-- NEW ARRIVALS -->
-    <section class="pt-12">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <h2 class="mb-10 text-center">New Arrivals</h2>
-          </div>
-        </div>
-
-        <div class="row">
-          {% for product in latest_products %}
-          <div class="col-6 col-md-3 col-lg">
-            <div class="card mb-7" data-toggle="card-collapse">
-              <a href="{% url 'product' product.id %}">
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top">
-              </a>
-              <div class="card-collapse-parent">
-                <div class="card-body px-0 bg-white text-center">
-                  <div class="mb-1 fw-bold">
-                    <a class="text-body" href="{% url 'product' product.id %}">{{ product.name }}</a>
-                  </div>
-                  <div class="mb-1 fw-bold text-muted">${{ product.price }}</div>
-                  <div class="rating fs-xxs text-dark justify-content-center">
-                    {% if product.rating %}
-                      {% for i in "12345" %}
-                        <div class="rating-item">
-                          <i class="fas fa-star {% if i|add:0 <= product.rating %}text-warning{% endif %}"></i>
-                        </div>
-                      {% endfor %}
-                    {% else %}
-                      <div class="text-muted">No ratings yet</div> <!-- Default message -->
-                    {% endif %}
-                  </div>
-                </div>
-                <div class="card-collapse collapse">
-                  <div class="card-footer px-0 pt-0 bg-white text-center">
-                    <button class="btn btn-xs btn-link btn-circle" data-bs-toggle="modal" data-bs-target="#modalProduct{{ product.id }}">
-                      <i class="fe fe-eye"></i>
-                    </button>
-                    <button class="btn btn-xs btn-link btn-circle" onclick="add_to_cart({{ product.id }})">
-                      <i class="fe fe-shopping-cart"></i>
-                    </button>
-                    <button class="btn btn-xs btn-link btn-circle" onclick="add_to_wishlist({{ product.id }})">
-                      <i class="fe fe-heart"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {% if forloop.counter|divisibleby:"2" and not forloop.last %}
-            <div class="w-100 d-none d-lg-block"></div>
-          {% endif %}
-          {% endfor %}
-        </div>
-      </div>
-    </section>
 
   <script type="text/javascript">
     // Unified function for quantity control (increase or decrease)

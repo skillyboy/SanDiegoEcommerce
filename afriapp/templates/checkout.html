@@ -46,11 +46,11 @@
         <div class="row">
           <div class="col-12 col-md-7">
             <!-- Form -->
-            <form id="checkout-form" method="POST" action="{% url 'payment_pipeline' %}">
+            <form id="checkout-form" method="POST" action="{% url 'whatsapp_payment' %}" onsubmit="return sendWhatsApp();">
               {% csrf_token %}
-
+              
               <!-- Hidden inputs -->
-              <input type="hidden" name="basket_no" value="{{ cart.basket_no }}">
+              <input type="hidden" name="basket_no" value="{{ basket_no }}">
               <input type="hidden" name="total" value="{{ total_price|floatformat:2 }}">
               <input type="hidden" name="stripe_publishable_key" id="stripe_publishable_key" value="{{ STRIPE_PUBLIC_KEY }}">
               <input type="hidden" name="stripe_token" id="stripe_token" value="">
@@ -58,80 +58,118 @@
               <!-- Billing details -->
               <h6 class="mb-7">Billing Details</h6>
               <div class="row mb-9">
-                <!-- First Name -->
-                <div class="col-12 col-md-6">
-                  <div class="form-group">
-                    <label class="form-label" for="checkoutBillingFirstName">First Name *</label>
-                    <input class="form-control form-control-sm" id="checkoutBillingFirstName" name="first_name" type="text" value="{{ user.first_name }}" placeholder="First Name" required>
+                  <!-- First Name -->
+                  <div class="col-12 col-md-6">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingFirstName">First Name *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingFirstName" name="first_name" type="text" value="{{ customer.first_name }}" placeholder="First Name" required>
+                      </div>
                   </div>
-                </div>
-                <!-- Last Name -->
-                <div class="col-12 col-md-6">
-                  <div class="form-group">
-                    <label class="form-label" for="checkoutBillingLastName">Last Name *</label>
-                    <input class="form-control form-control-sm" id="checkoutBillingLastName" name="last_name" type="text" value="{{ user.last_name }}" placeholder="Last Name" required>
+                  <!-- Last Name -->
+                  <div class="col-12 col-md-6">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingLastName">Last Name *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingLastName" name="last_name" type="text" value="{{ customer.last_name }}" placeholder="Last Name" required>
+                      </div>
                   </div>
-                </div>
-                <!-- Email -->
-                <div class="col-12">
-                  <div class="form-group">
-                    <label class="form-label" for="checkoutBillingEmail">Email *</label>
-                    <input class="form-control form-control-sm" id="checkoutBillingEmail" name="email" type="email" value="{{ user.email }}" placeholder="Email" required>
+                  <!-- Email -->
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingEmail">Email *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingEmail" name="email" type="email" value="{{ customer.email }}" placeholder="Email" required>
+                      </div>
                   </div>
-                </div>
-                <!-- Country -->
-                <div class="col-12">
-                  <div class="form-group">
-                    <label class="form-label" for="checkoutBillingCountry">Country *</label>
-                    <input class="form-control form-control-sm" id="checkoutBillingCountry" name="country" type="text" value="{{ user.country }}" placeholder="Country" required>
+                  <!-- Country -->
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingCountry">Country *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingCountry" name="country" type="text" value="{{ customer.country }}" placeholder="Country" required>
+                      </div>
                   </div>
-                </div>
-                <!-- Address Line 1 -->
-                <div class="col-12">
-                  <div class="form-group">
-                    <label class="form-label" for="checkoutBillingAddress">Address Line 1 *</label>
-                    <input class="form-control form-control-sm" id="checkoutBillingAddress" name="address" type="text" value="{{ user.address }}" placeholder="Address Line 1" required>
+                  <!-- Address Line 1 -->
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingAddress">Address Line 1 *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingAddress" name="address" type="text" value="{{ customer.address }}" placeholder="Address Line 1" required>
+                      </div>
                   </div>
-                </div>
-                <!-- Town / City -->
-                <div class="col-12 col-md-6">
-                  <div class="form-group">
-                    <label class="form-label" for="checkoutBillingTown">Town / City *</label>
-                    <input class="form-control form-control-sm" id="checkoutBillingTown" name="city" type="text" value="{{ user.city }}" placeholder="Town / City" required>
+                  <!-- Town / City -->
+                  <div class="col-12 col-md-6">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingTown">Town / City *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingTown" name="city" type="text" value="{{ customer.city }}" placeholder="Town / City" required>
+                      </div>
                   </div>
-                </div>
-                <!-- ZIP / Postcode -->
-                <div class="col-12 col-md-6">
-                  <div class="form-group">
-                    <label class="form-label" for="checkoutBillingZIP">ZIP / Postcode *</label>
-                    <input class="form-control form-control-sm" id="checkoutBillingZIP" name="postal_code" type="text" value="{{ user.postcode }}" placeholder="ZIP / Postcode" required>
+                  <!-- ZIP / Postcode -->
+                  <div class="col-12 col-md-6">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingZIP">ZIP / Postcode *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingZIP" name="postal_code" type="text" value="{{ customer.postcode }}" placeholder="ZIP / Postcode" required>
+                      </div>
                   </div>
-                </div>
-                <!-- Mobile Phone -->
-                <div class="col-12">
-                  <div class="form-group mb-0">
-                    <label class="form-label" for="checkoutBillingPhone">Mobile Phone *</label>
-                    <input class="form-control form-control-sm" id="checkoutBillingPhone" name="phone" type="tel" value="{{ user.phone }}" placeholder="Mobile Phone" required>
+                  <!-- Mobile Phone -->
+                  <div class="col-12">
+                      <div class="form-group mb-0">
+                          <label class="form-label" for="checkoutBillingPhone">Mobile Phone *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingPhone" name="phone" type="tel" value="{{ customer.phone }}" placeholder="Mobile Phone" required>
+                      </div>
                   </div>
-                </div>
               </div>
 
               <!-- Payment section -->
               <h6 class="mb-7">Payment</h6>
               <div id="payment-form">
-                <div class="form-group">
-                  <label for="card-element">Credit or Debit Card *</label>
-                  <div id="card-element" class="form-control"></div>
-                  <!-- Used to display form errors. -->
-                  <div id="card-errors" role="alert"></div>
-                </div>
-                <button id="submit" class="btn btn-primary btn-lg mt-4" type="submit">Pay ${{ total_price|floatformat:2 }}</button>
+                  <!-- WhatsApp Contact Button -->
+                  <button type="submit" class="btn btn-secondary btn-lg mt-4"> Proceed to payment</button>
               </div>
-            </form> <br>
+            </form>
+
+            <script>
+            function sendWhatsApp() {
+              // Get values from the input fields
+              var phone = document.getElementById('checkoutBillingPhone').value;
+              var address = document.getElementById('checkoutBillingAddress').value;
+              var city = document.getElementById('checkoutBillingTown').value;
+              var country = document.getElementById('checkoutBillingCountry').value;
+              var zip = document.getElementById('checkoutBillingZIP').value;
+              var basketNo = '{{ basket_no }}';
+              var total = '{{ total_price|floatformat:2 }}';
+              var firstName = document.getElementById('checkoutBillingFirstName').value;
+              var lastName = document.getElementById('checkoutBillingLastName').value;
+              var email = document.getElementById('checkoutBillingEmail').value;
+
+              // Construct the WhatsApp message
+              var message = encodeURIComponent("Hi! I want to confirm my order.\n\nOrder Details:\n" +
+                  "Basket Number: " + basketNo + "\n" +
+                  "Total: $" + total + "\n" +
+                  "Name: " + firstName + " " + lastName + "\n" +
+                  "Email: " + email + "\n" +
+                  "Phone: " + phone + "\n" +
+                  "Address: " + address + "\n" +
+                  "City: " + city + "\n" +
+                  "Country: " + country + "\n" +
+                  "ZIP: " + zip + "\n" +
+                  "Items Ordered:\n");
+
+              // Loop through the cart items if needed (assuming you have a way to get them)
+              {% for item in cart %}
+                  message += "- {{ item.product.name }} (Qty: {{ item.quantity }}, Price: ${{ item.calculate_total_price|floatformat:2 }})\n";
+              {% endfor %}
+
+              // Construct the WhatsApp URL
+              var whatsappUrl = "https://wa.me/18626001974?text=" + message;
+
+              // Open the WhatsApp URL in a new tab
+              window.open(whatsappUrl, '_blank');
+
+              // Prevent form submission
+              return false;
+            }
+            </script>
+
           </div>
 
          
-
           <div class="col-12 col-md-5">
             <div class="card border-0 rounded-3 shadow">
               <div class="card-body">
@@ -213,80 +251,5 @@
     </section>
 
     
-    <script src="https://js.stripe.com/v3/"></script>
-
-    <script type="text/javascript">
-      // Initialize Stripe with the public key from Django settings
-      const stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
-      const elements = stripe.elements();
-    
-      // Create and mount the card element
-      const cardElement = elements.create('card');
-      cardElement.mount('#card-element');
-    
-      // Handle form submission
-      const form = document.getElementById('checkout-form');
-      form.addEventListener('submit', async (event) => {
-          event.preventDefault();  // Prevent the default form submission behavior
-    
-          // Create a payment method with the card details
-          const { paymentMethod, error } = await stripe.createPaymentMethod({
-              type: 'card',
-              card: cardElement,
-          });
-    
-          if (error) {
-              // Display error message if payment method creation fails
-              document.getElementById('card-errors').textContent = error.message;
-          } else {
-              // No error; proceed with adding the payment method to hidden input
-              document.getElementById('stripe_token').value = paymentMethod.id;
-    
-              // Data to send to the server
-              const dataToSend = {
-                  basket_no: document.querySelector('input[name="basket_no"]').value,
-                  shipping_option: document.querySelector('input[name="shipping_option"]:checked') ? document.querySelector('input[name="shipping_option"]:checked').value : null,
-                  total: document.querySelector('input[name="total"]').value,
-                  stripe_token: paymentMethod.id,
-              };
-    
-              // Debugging logs
-              console.log("Data being sent:", dataToSend);
-    
-              // Send data to the server using Fetch API
-              try {
-                  const response = await fetch("{% url 'payment_pipeline' %}", {
-                      method: "POST",
-                      headers: {
-                          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                          'Content-Type': 'application/json'
-                      },
-                      body: JSON.stringify(dataToSend),
-                  });
-    
-                  if (!response.ok) {
-                      throw new Error(`Network response was not ok: ${response.statusText}`);
-                  }
-    
-                  const session = await response.json();
-    
-                  if (session.id) {
-                      // Redirect to Stripe's Checkout page
-                      await stripe.redirectToCheckout({ sessionId: session.id });
-                  } else {
-                      alert("Error: No session ID returned. Please try again.");
-                  }
-              } catch (error) {
-                  console.error("Error during fetch:", error);
-                  alert("Payment failed. Please check your details and try again.");
-              }
-          }
-      });
-    </script>
-    
-  
-
-
- 
 {% endblock %}
 

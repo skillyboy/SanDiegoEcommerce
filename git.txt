@@ -1,11 +1,13 @@
 
 git add .
-git commit -m "images in category page fixed"
+git commit -m "iSearch and whatsapp"
 git push origin main
 
-git push -f origin main
+git push -f origin master
 git push origin main --force
 git push origin main --force-with-lease
+
+git checkout master  #Switch to the Master Branch
 
 
 git init

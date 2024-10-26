@@ -50,6 +50,10 @@ urlpatterns = [
     path('checkout/', CheckoutView.as_view(), name='checkout'),
     path('payment_pipeline/', PaymentPipelineView.as_view(), name='payment_pipeline'),
     path('successpayment/', CompletedPaymentView.as_view(), name='successpayment'),
+    path('whatsapp_payment/', WhatsappPaymentView.as_view(), name='whatsapp_payment'),
+
+
+
 
     # Orders
     path('orders/history/', OrderHistory.as_view(), name='order_history'),  # Corrected URL pattern

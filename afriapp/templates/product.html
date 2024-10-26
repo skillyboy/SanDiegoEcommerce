@@ -151,7 +151,7 @@
               <!-- Body -->
               <div class="card-body px-0">
                 <div class="fs-xs">
-                  <a class="text-muted" href="shop.html">{{ product.category }}</a>
+                  <a class="text-muted" href="{% url 'shop' %}">{{ product.category }}</a>
                 </div>
                 <div class="fw-bold">
                   <a class="text-body" href="{% url 'product_detail' product.id %}">

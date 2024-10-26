@@ -605,6 +605,11 @@ def remove_from_wishlist(request, product_id):
 
 # ============================================================================
 
+from django.views.generic import TemplateView
+from django.shortcuts import redirect, render
+from django.contrib import messages
+from django.conf import settings
+from .models import ShopCart, Customer
 
 class CheckoutView(TemplateView):
     def get(self, request):
@@ -612,19 +617,27 @@ class CheckoutView(TemplateView):
         cart = ShopCart.objects.filter(user=request.user, paid_order=False)
         customer = Customer.objects.filter(user=request.user).first()
         
+        # Check if there are no items in the cart
         if not cart.exists():
             messages.error(request, 'No items in the cart.')
             return redirect('cart')  # Redirect user if no cart items
+
+        # Calculate total price of items in the cart
+        total_price = sum(item.calculate_total_price() for item in cart)
         
+        # Get basket number from the first item in the cart (assuming all items share the same basket number)
+        basket_no = cart.first().basket_no if cart.exists() else None
+
+        # Prepare the context for rendering the checkout page
         context = {
             "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY,
             'cart': cart,
             'customer': customer,
-            'total_price': sum(item.calculate_total_price() for item in cart)  # Total price calculation for display
+            'total_price': total_price,  # Total price calculation for display
+            'basket_no': basket_no,  # Pass basket number to context
         }
         
         return render(request, 'checkout.html', context)
-    
 
 class PaymentPipelineView(View):
     def post(self, request, *args, **kwargs):
@@ -678,6 +691,64 @@ class PaymentPipelineView(View):
         except Exception as e:
             print("Error creating checkout session:", str(e))
             return JsonResponse({'error': str(e)}, status=500)
+
+
+
+
+
+class WhatsappPaymentView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            # Extract form data
+            basket_no = request.POST.get('basket_no')
+            shipping_option = request.POST.get('shipping_option')
+
+            # Fetch the user's cart
+            cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
+
+            if not cart_items.exists():
+                return JsonResponse({'error': 'No items in cart.'}, status=404)
+
+            # Calculate total amount
+            total_price_with_shipping = sum(item.product.price * item.quantity for item in cart_items)
+            total_amount = int(float(total_price_with_shipping) * 100)  # Convert to cents for Stripe
+
+            # Debugging log
+            print("Creating Stripe session...")
+            
+
+            # Create Stripe Checkout session
+            YOUR_DOMAIN = "http://127.0.0.1:8000"  # Update to your actual domain
+            line_items = []
+
+            for item in cart_items:
+                line_items.append({
+                    'price_data': {
+                        'currency': 'usd',
+                        'product_data': {
+                            'name': item.product.name,  # Customize product name
+                        },
+                        'unit_amount': int(item.product.price * 100),  # Price in cents
+                    },
+                    'quantity': item.quantity,  # Use the quantity from the cart
+                })
+
+            # Using f-strings for URL formatting
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=line_items,  # Add line items for each product in the cart
+                metadata={"basket_no": basket_no},  # You can include basket_no in metadata
+                mode='payment',
+                success_url=f'{YOUR_DOMAIN}/successpayment/',  # Redirection after successful payment
+                cancel_url=f'{YOUR_DOMAIN}/cancelpayment/',  # Redirection after cancellation
+            )
+            
+            # Return the session ID as a JSON response
+            return JsonResponse({'id': checkout_session.id})
+        except Exception as e:
+            print("Error creating checkout session:", str(e))
+            return JsonResponse({'error': str(e)}, status=500)
+
 
 
 
@@ -755,29 +826,34 @@ class UpdateProfile(View):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-
+from django.db.models import Q
 
 def search_products(request):
-    query = request.GET.get('search', '')
-    category = request.GET.get('category', 'All Categories')
+    if request.method == "POST":
+        items = request.POST.get("search", "")
+        category_id = request.POST.get("category", None)
 
-    # Filter products based on the search term and category
-    products = Product.objects.all()
+        # Use __icontains for case-insensitive search on product name and description
+        searched_items = Q(name__icontains=items) | Q(description__icontains=items)
 
-    if query:
-        products = products.filter(name__icontains=query)
+        # If a category is selected, filter by that category as well
+        if category_id:
+            searched_goods = Product.objects.filter(searched_items, category__id=category_id)
+        else:
+            searched_goods = Product.objects.filter(searched_items)
 
-    if category and category != 'All Categories':
-        products = products.filter(category=category)
+        # Create context dictionary properly
+        context = {
+            "items": items,
+            "searched_goods": searched_goods,
+        }
+        return render(request, "search.html", context)
+    else:
+        return render(request, "search.html")
 
-    context = {
-        'products': products,
-        'query': query,
-        'category': category,
-    }
-    return render(request, 'your_template.html', context)
+
+
+
 
 
 
