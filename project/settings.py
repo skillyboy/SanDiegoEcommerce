@@ -5,20 +5,28 @@ from os import getenv
 import dj_database_url
 
 
-# Load Environment Variables
+# Define the base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load Environment Variables
 load_dotenv(BASE_DIR / ".env")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
-
-# Define allowed hosts
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1 localhost").split(" ")
-YOUR_DOMAIN = os.getenv("YOUR_DOMAIN", "http://127.0.0.1:8000")
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = getenv("SECRET_KEY")
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = getenv("DEBUG")
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'https://sandiegoecommerce.onrender.com/',  # Add your actual domain name if you have one
+]
+
+
+YOUR_DOMAIN = os.getenv("YOUR_DOMAIN", "http://127.0.0.1:8000")
 
 
 # Stripe settings
