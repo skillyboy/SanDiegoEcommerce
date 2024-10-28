@@ -19,7 +19,7 @@ SECRET_KEY = getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = getenv("DEBUG")
 
-ALLOWED_HOSTS = ['*',]
+ALLOWED_HOSTS = ['*','localhost',]
 
 
 YOUR_DOMAIN = os.getenv("YOUR_DOMAIN", "http://127.0.0.1:8000")
