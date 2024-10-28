@@ -19,11 +19,7 @@ SECRET_KEY = getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = getenv("DEBUG")
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'https://sandiegoecommerce.onrender.com/',  # Add your actual domain name if you have one
-]
+ALLOWED_HOSTS = ['*',]
 
 
 YOUR_DOMAIN = os.getenv("YOUR_DOMAIN", "http://127.0.0.1:8000")
@@ -107,6 +103,16 @@ WSGI_APPLICATION = 'project.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('POSTGRES_DB', 'postgres'),
+#         'USER': os.getenv('POSTGRES_USER', 'postgres'),
+#         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'skilly1234'),
+#         'HOST': os.getenv('DB_HOST', 'db'), 
+#         'PORT': os.getenv('DB_PORT', '5432'),
+#     }
+# }
 
 DATABASES = {
     'default': dj_database_url.parse(
