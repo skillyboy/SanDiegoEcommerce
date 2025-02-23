@@ -385,3 +385,21 @@ class CompletedPaymentView(View):
             return JsonResponse({'error': str(e)}, status=500)
 
 <!-- No addresses found. Please <a href="{% url 'account_address_edit' %}">add an address</a>. -->
+
+# class OrderDetail(View):
+
+#     def get(self, request, order_id):
+#         user = request.user
+#         try:
+#             order = get_object_or_404(Order, id=order_id)
+
+#             if not order:
+#                 messages.info(request, "No order  found.")  # Using messages framework for user feedback
+#                 return render(request, 'account/account-order-detail.html', {"order": order})  # Render even if empty
+
+#             return render(request, 'account/account-order-detail.html', {"order": order})
+
+#         except Exception as e:
+#             messages.error(request, f"An error occurred: {str(e)}")  # Using messages for error
+#             return render(request, 'account/account-order-detail.html', {"order": []})  # Pass an empty list on error
+
