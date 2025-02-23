@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Order Completed {% endblock %}
+
+{% block content %}
+<section class="pt-7 pb-12">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 text-center mb-7">
+                <h3 class="display-5 fw-bold">Order Successful!</h3>
+                <p class="text-muted">Thank you for your purchase. Below are your order details.</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-8 mb-4">
+                <div class="card card-lg shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h6 class="mb-4 fw-bold">Order Summary</h6>
+                        <p><strong>Order ID:</strong> {{ order.order_no }}</p>
+                        <p><strong>Date:</strong> {{ order.date_created }}</p>
+                        <p><strong>Status:</strong> {{ order.status }}</p>
+                        <p><strong>Total Price:</strong> ${{ order.total_price|floatformat:2 }}</p>
+                        <hr class="mb-4">
+                        
+                        <h6 class="mb-4 fw-bold">Purchased Items</h6>
+                        <ul class="list-group list-group-lg list-group-flush-y">
+                            {% for item in order.order_items.all %}
+                                <li class="list-group-item d-flex align-item-center">
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-fluid rounded" style="width: 50px; height: 50px; margin-right: 15px;">
+                                    <div>
+                                        <p class="mb-1 fw-bold">{{ item.product.name }}</p>
+                                        <p class="text-muted">Price: ${{ item.product.price }}</p>
+                                        <p class="text-muted">Quantity: {{ item.quantity }}</p>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="card card-lg shadow-sm border-0 sticky-top">
+                    <div class="card-body p-4">
+                        <h6 class="mb-4 fw-bold">Shipping Details</h6>
+                        <!-- <p><strong>Name:</strong> {{ order.customer.user.get_full_name }}</p>
+                        <p><strong>Address:</strong> {{ order.shipping_address }}</p> -->
+                        <p><strong>Name:</strong> {{ order.payment.first_name }} {{ order.payment.last_name }}</p>
+                        <p><strong>Address:</strong> {{ order.payment.address }}</p>
+                        
+                        <a href="{% url 'shop' %}" class="btn btn-primary btn-block mt-4 py-3">Continue Shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

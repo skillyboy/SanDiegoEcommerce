@@ -71,7 +71,7 @@
                       <!-- Order Info -->
                       <div class="card mb-4">
                           <div class="card-body">
-                              <h5 class="card-title">Order #{{ order.id }}</h5>
+                              <h5 class="card-title">Order #{{ order.order_no }}</h5>
                               <p class="card-text">
                                   <strong>Order Date:</strong> {{ order.date_created|date:"d M, Y" }}<br>
                                   <strong>Status:</strong> {{ order.status }}<br>
@@ -85,13 +85,20 @@
                           <div class="card-body">
                               <h5 class="card-title">Shipping Information</h5>
                               <p class="card-text">
-                                  <strong>Name:</strong> {{ order.shipping_address.full_name }}<br>
+                                  <strong>Name:</strong> {{ order.payment.first_name }} {{ order.payment.last_name }}<br>
+                                  <strong>Address:</strong> {{ order.payment.address }}<br>
+                                  <strong>City:</strong> {{ order.payment.city }}<br>
+                                  <strong>State:</strong> {{ order.payment.state }}<br>
+                                  <strong>Zip Code:</strong> {{ order.payment.postal_code }}<br>
+                                  <strong>Country:</strong> {{ order.payment.country }}<br>
+                                  <strong>Phone:</strong> {{ order.payment.phone }}
+                                  <!-- <strong>Name:</strong> {{ order.customer.first_name }} {{ order.customer.last_name }}<br>
                                   <strong>Address:</strong> {{ order.shipping_address.address }}<br>
                                   <strong>City:</strong> {{ order.shipping_address.city }}<br>
                                   <strong>State:</strong> {{ order.shipping_address.state }}<br>
                                   <strong>Zip Code:</strong> {{ order.shipping_address.zip_code }}<br>
                                   <strong>Country:</strong> {{ order.shipping_address.country }}<br>
-                                  <strong>Phone:</strong> {{ order.shipping_address.phone }}
+                                  <strong>Phone:</strong> {{ order.shipping_address.phone }} -->
                               </p>
                           </div>
                       </div>
@@ -101,9 +108,9 @@
                           <div class="card-body">
                               <h5 class="card-title">Payment Information</h5>
                               <p class="card-text">
-                                  <strong>Payment Method:</strong> {{ order.payment_method }}<br>
-                                  <strong>Payment Status:</strong> {{ order.payment_status }}<br>
-                                  <strong>Payment Date:</strong> {{ order.payment_date|date:"d M, Y" }}
+                                  <strong>Payment Method:</strong> {{ order.payment.payment_method }}<br>
+                                  <strong>Payment Status:</strong> {{ order.status }}<br>
+                                  <strong>Payment Date:</strong> {{ order.payment.created_at|date:"d M, Y" }}
                               </p>
                           </div>
                       </div>
@@ -123,10 +130,10 @@
                                           </tr>
                                       </thead>
                                       <tbody>
-                                          {% for item in order.items %}
+                                          {% for item in order.order_items.all %}
                                           <tr>
                                               <td>
-                                                  <a href="{% url 'product_detail' item.product.id %}">
+                                                  <a href="{% url 'product' item.product.id %}">
                                                       {{ item.product.name }}
                                                   </a>
                                               </td>
@@ -151,13 +158,13 @@
                                           <td>Subtotal:</td>
                                           <td class="text-right">${{ order.subtotal }}</td>
                                       </tr>
-                                      <tr>
+                                      <!-- <tr>
                                           <td>Shipping Fee:</td>
                                           <td class="text-right">${{ order.shipping_fee }}</td>
-                                      </tr>
+                                      </tr> -->
                                       <tr>
                                           <td>Tax:</td>
-                                          <td class="text-right">${{ order.tax }}</td>
+                                          <td class="text-right">${{ order.vat }}</td>
                                       </tr>
                                       <tr class="font-weight-bold">
                                           <td>Total Amount:</td>

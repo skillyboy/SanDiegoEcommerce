@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shop Categories{% endblock %}
+
+{% block content %}
+
+
+
+    <!-- BREADCRUMB -->
+    <nav class="py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+
+            <!-- Breadcrumb -->
+            <ol class="breadcrumb mb-0 fs-xs text-gray-400">
+              <li class="breadcrumb-item">
+                <a class="text-gray-400" href="{% url 'index' %}">Home</a>
+              </li>
+              <li class="breadcrumb-item active">
+                My Account
+              </li>
+            </ol>
+
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <section class="pt-7 pb-12">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 text-center">
+
+            <!-- Heading -->
+            <h3 class="mb-10">My Account</h3>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-md-3">
+
+            <!-- Nav -->
+            <nav class="mb-10 mb-md-0">
+              <div class="list-group list-group-sm list-group-strong list-group-flush-x">
+                <a class="list-group-item list-group-item-action dropend-toggle " href="{% url 'order_history' %}">
+                  Orders
+                </a>
+                <a class="list-group-item list-group-item-action dropend-toggle " href="{% url 'account_personal_info' %}">
+                  Personal Info
+                </a>
+                <a class="list-group-item list-group-item-action dropend-toggle active" href="{% url 'account_address' %}">
+                  Addresses
+                </a>
+
+                <a class="list-group-item list-group-item-action dropend-toggle" href="{% url 'logout' %}">
+                  Logout
+                </a>
+              </div>
+            </nav>
+
+
+          </div>
+          <div class="col-12 col-md-9 col-lg-8 offset-lg-1">
+            <div class="row">
+              <div class="col-12">
+
+                <form method="POST">
+                  {% csrf_token %}
+                  
+                  <div class="row mb-9">
+                      <!-- First Name -->
+                      <div class="col-12 col-md-6">
+                          <div class="form-group">
+                              <label class="form-label" for="checkoutBillingFirstName">First Name *</label>
+                              <input class="form-control form-control-sm" id="checkoutBillingFirstName" name="first_name" type="text" value="{{ payment.first_name }}" placeholder="First Name" required>
+                          </div>
+                      </div>
+                      <!-- Last Name -->
+                      <div class="col-12 col-md-6">
+                          <div class="form-group">
+                              <label class="form-label" for="checkoutBillingLastName">Last Name *</label>
+                              <input class="form-control form-control-sm" id="checkoutBillingLastName" name="last_name" type="text" value="{{ payment.last_name }}" placeholder="Last Name" required>
+                          </div>
+                      </div>
+                      <!-- Email (optional, not in model) -->
+                      <!-- Country -->
+                      <div class="col-12 col-md-6">
+                          <div class="form-group">
+                              <label class="form-label" for="checkoutBillingCountry">Country *</label>
+                              <input class="form-control form-control-sm" id="checkoutBillingCountry" name="country" type="text" value="{{ payment.country }}" placeholder="Country" required>
+                          </div>
+                      </div>
+                      <div class="col-12 col-md-6">
+                          <div class="form-group">
+                              <label class="form-label" for="checkoutBillingState">State *</label>
+                              <input class="form-control form-control-sm" id="checkoutBillingState" name="state" type="text" value="{{ payment.state }}" placeholder="State" required>
+                          </div>
+                      </div>
+                      <!-- Address -->
+                      <div class="col-12">
+                          <div class="form-group">
+                              <label class="form-label" for="checkoutBillingAddress">Address *</label>
+                              <input class="form-control form-control-sm" id="checkoutBillingAddress" name="address" type="text" value="{{ payment.address }}" placeholder="Address" required>
+                          </div>
+                      </div>
+                      <!-- City -->
+                      <div class="col-12 col-md-6">
+                          <div class="form-group">
+                              <label class="form-label" for="checkoutBillingTown">City *</label>
+                              <input class="form-control form-control-sm" id="checkoutBillingTown" name="city" type="text" value="{{ payment.city }}" placeholder="City" required>
+                          </div>
+                      </div>
+                      <!-- ZIP / Postcode -->
+                      <div class="col-12 col-md-6">
+                          <div class="form-group">
+                              <label class="form-label" for="checkoutBillingZIP">ZIP / Postcode *</label>
+                              <input class="form-control form-control-sm" id="checkoutBillingZIP" name="postal_code" type="text" value="{{ payment.postal_code }}" placeholder="ZIP / Postcode" required>
+                          </div>
+                      </div>
+                      <!-- Phone -->
+                      <div class="col-12">
+                          <div class="form-group mb-0">
+                              <label class="form-label" for="checkoutBillingPhone">Mobile Phone *</label>
+                              <input class="form-control form-control-sm" id="checkoutBillingPhone" name="phone" type="tel" value="{{ payment.phone }}" placeholder="Mobile Phone" required>
+                          </div>
+                      </div>
+                  </div>
+              
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+              </form>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+{% endblock %}
+
+ 

@@ -121,3 +121,15 @@ class CheckoutForm(forms.Form):
         # Additional validation can be added here if necessary
         
         return cleaned_data
+
+# to update address/payment info
+class PaymentInfoForm(forms.ModelForm):
+    class Meta:
+        model = PaymentInfo
+        fields = [
+            'amount', 'first_name', 'last_name', 'phone', 'address', 'city', 
+            'state', 'postal_code', 'country', 'payment_method'
+        ]
+        widgets = {
+            'payment_method': forms.Select(choices=PaymentInfo._meta.get_field('payment_method').choices)
+        }

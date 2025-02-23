@@ -135,10 +135,13 @@ class ShopCart(models.Model):
 #     def __str__(self):
 #         return f"{self.product.name} (x{self.quantity})"
 # Order Model
+import uuid 
 class Order(models.Model):
     item = models.ForeignKey('Product', on_delete=models.CASCADE, default=1),
+    order_no = models.UUIDField(default=uuid.uuid4, null=True, blank=True)
     shipping_cost = models.PositiveIntegerField(default=0)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
+    payment = models.ForeignKey("PaymentInfo", on_delete=models.SET_NULL, null=True, blank=True, related_name="orders")  # Link to PaymentInfo
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     basket_no = models.CharField(max_length=36, null=True)
@@ -147,6 +150,8 @@ class Order(models.Model):
     is_paid = models.BooleanField(default=False)
     date_created = models.DateTimeField(default=timezone.now)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    vat = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     shipping_address = models.TextField(blank=True)
     status = models.CharField(max_length=50, choices=(
         ('Pending', 'Pending'),
@@ -156,7 +161,17 @@ class Order(models.Model):
     ), default='Pending')
 
     def __str__(self):
-        return f"Order {self.id} by {self.customer.first_name} {self.customer.last_name}"
+        return f"{self.id}: Order {self.order_no} by {self.customer.first_name} {self.customer.last_name}"
+    
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    def __str__(self):
+        return f"{self.product.name} (Qty: {self.quantity}) - Order {self.order.id}"
+    
+    
 
 
 class Payment(models.Model): 
@@ -173,7 +188,8 @@ class Payment(models.Model):
     address = models.CharField(max_length=100)
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
-    postal_code = models.CharField(max_length=20, default='00000'),  # Set default value
+    # postal= models.CharField(max_length=20, default='00000', null=True, blank=True),  # Set default value
+    new_postal= models.CharField(max_length=20, default='00000'),  # Set default value
 
     country = models.CharField(max_length=50, blank=True, null=False)  # New field for country
     payment_method = models.CharField(
@@ -197,6 +213,46 @@ class Payment(models.Model):
         managed = True
         verbose_name = 'payment'
         verbose_name_plural = 'payments'  
+   
+class PaymentInfo(models.Model): 
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    stripe_payment_intent_id = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True, null=True)  # Correct usage
+    basket_no = models.CharField(max_length=36,null=True, blank=True)
+    pay_code = models.CharField(max_length=36, null=True, blank=True)
+    paid_order = models.BooleanField(default=False)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    phone = models.CharField(max_length=50)
+    address = models.CharField(max_length=100)
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    # postal= models.CharField(max_length=20, default='00000', null=True, blank=True),  # Set default value
+    postal_code = models.CharField(max_length=20, default="")  # Set default value
+
+    country = models.CharField(max_length=50, blank=True, null=False)  # New field for country
+    payment_method = models.CharField(
+        max_length=50,
+        choices=[  
+            ('credit_card', 'Credit Card'),
+            ('debit_card', 'Debit Card'),
+            ('paypal', 'PayPal'),
+            ('bank_transfer', 'Bank Transfer'),
+            ('cash_on_delivery', 'Cash on Delivery'),
+        ],
+        default='credit_card'  # Set the default value here
+    )
+    transaction_id = models.CharField(max_length=100, unique=True, null=True, blank=True)  # New field for transaction ID
+
+    def __str__(self):
+        return f"{self.user} - {self.basket_no}"
+
+    class Meta:
+        db_table = 'paymentinfo'
+        managed = True
+        verbose_name = 'paymentinfo'
+        verbose_name_plural = 'paymentsinfo'  
    
 # Slide model (for homepage/carousel)
 class Slide(models.Model):

@@ -1,0 +1,387 @@
+//checkout.html 
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %} 
+
+
+    <!-- BREADCRUMB -->
+    <nav class="py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+
+            <!-- Breadcrumb -->
+            <ol class="breadcrumb mb-0 fs-xs text-gray-400">
+              <li class="breadcrumb-item">
+                <a class="text-gray-400" href="{% url 'index' %}">Home</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a class="text-gray-400" href="{% url 'cart' %}">Shopping Cart</a>
+              </li>
+              <li class="breadcrumb-item active">
+                Checkout
+              </li>
+            </ol>
+
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <section class="pt-7 pb-12">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 text-center">
+            <!-- Heading -->
+            <h3 class="mb-4">Checkout</h3>
+            <!-- Subheading -->
+            <p class="mb-10">
+              Already have an account? <a class="fw-bold text-reset" href="#!">Click here to login</a>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-md-7">
+            <!-- Form -->
+            <form id="checkout-form" method="POST" action="{% url 'whatsapp_payment' %}" onsubmit="return sendWhatsApp();">
+              {% csrf_token %}
+              
+              <!-- Hidden inputs -->
+              <input type="hidden" name="basket_no" value="{{ basket_no }}">
+              <input type="hidden" name="total" value="{{ total_price|floatformat:2 }}">
+              <input type="hidden" name="stripe_publishable_key" id="stripe_publishable_key" value="{{ STRIPE_PUBLIC_KEY }}">
+              <input type="hidden" name="stripe_token" id="stripe_token" value="">
+
+              <!-- Billing details -->
+              <h6 class="mb-7">Billing Details</h6>
+              <div class="row mb-9">
+                  <!-- First Name -->
+                  <div class="col-12 col-md-6">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingFirstName">First Name *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingFirstName" name="first_name" type="text" value="{{ customer.first_name }}" placeholder="First Name" required>
+                      </div>
+                  </div>
+                  <!-- Last Name -->
+                  <div class="col-12 col-md-6">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingLastName">Last Name *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingLastName" name="last_name" type="text" value="{{ customer.last_name }}" placeholder="Last Name" required>
+                      </div>
+                  </div>
+                  <!-- Email -->
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingEmail">Email *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingEmail" name="email" type="email" value="{{ customer.email }}" placeholder="Email" required>
+                      </div>
+                  </div>
+                  <!-- Country -->
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingCountry">Country *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingCountry" name="country" type="text" value="{{ customer.country }}" placeholder="Country" required>
+                      </div>
+                  </div>
+                  <!-- Address Line 1 -->
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingAddress">Address Line 1 *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingAddress" name="address" type="text" value="{{ customer.address }}" placeholder="Address Line 1" required>
+                      </div>
+                  </div>
+                  <!-- Town / City -->
+                  <div class="col-12 col-md-6">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingTown">Town / City *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingTown" name="city" type="text" value="{{ customer.city }}" placeholder="Town / City" required>
+                      </div>
+                  </div>
+                  <!-- ZIP / Postcode -->
+                  <div class="col-12 col-md-6">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingZIP">ZIP / Postcode *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingZIP" name="postal_code" type="text" value="{{ customer.postcode }}" placeholder="ZIP / Postcode" required>
+                      </div>
+                  </div>
+                  <!-- Mobile Phone -->
+                  <div class="col-12">
+                      <div class="form-group mb-0">
+                          <label class="form-label" for="checkoutBillingPhone">Mobile Phone *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingPhone" name="phone" type="tel" value="{{ customer.phone }}" placeholder="Mobile Phone" required>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Payment section -->
+              <h6 class="mb-7">Payment</h6>
+              <div id="payment-form">
+                  <!-- WhatsApp Contact Button -->
+                  <button type="submit" class="btn btn-secondary btn-lg mt-4"> Proceed to payment</button>
+              </div>
+            </form>
+
+            <script>
+            function sendWhatsApp() {
+              // Get values from the input fields
+              var phone = document.getElementById('checkoutBillingPhone').value;
+              var address = document.getElementById('checkoutBillingAddress').value;
+              var city = document.getElementById('checkoutBillingTown').value;
+              var country = document.getElementById('checkoutBillingCountry').value;
+              var zip = document.getElementById('checkoutBillingZIP').value;
+              var basketNo = '{{ basket_no }}';
+              var total = '{{ total_price|floatformat:2 }}';
+              var firstName = document.getElementById('checkoutBillingFirstName').value;
+              var lastName = document.getElementById('checkoutBillingLastName').value;
+              var email = document.getElementById('checkoutBillingEmail').value;
+
+              // Construct the WhatsApp message
+              var message = encodeURIComponent("Hi! I want to confirm my order.\n\nOrder Details:\n" +
+                  "Basket Number: " + basketNo + "\n" +
+                  "Total: $" + total + "\n" +
+                  "Name: " + firstName + " " + lastName + "\n" +
+                  "Email: " + email + "\n" +
+                  "Phone: " + phone + "\n" +
+                  "Address: " + address + "\n" +
+                  "City: " + city + "\n" +
+                  "Country: " + country + "\n" +
+                  "ZIP: " + zip + "\n" +
+                  "Items Ordered:\n");
+
+              // Loop through the cart items if needed (assuming you have a way to get them)
+              {% for item in cart %}
+                  message += "- {{ item.product.name }} (Qty: {{ item.quantity }}, Price: ${{ item.calculate_total_price|floatformat:2 }})\n";
+              {% endfor %}
+
+              // Construct the WhatsApp URL
+              var whatsappUrl = "https://wa.me/18626001974?text=" + message;
+
+              // Open the WhatsApp URL in a new tab
+              window.open(whatsappUrl, '_blank');
+
+              // Prevent form submission
+              return false;
+            }
+            </script>
+
+          </div>
+
+         
+          <div class="col-12 col-md-5">
+            <div class="card border-0 rounded-3 shadow">
+              <div class="card-body">
+                <h6 class="mb-7">Order Summary</h6>
+
+                <!-- List group -->
+                <div style="max-height: 800px; overflow-y: auto;">
+                  <ul class="list-group list-group-lg list-group-flush-y list-group-flush-x mb-7">
+                      {% for item in cart %}
+                      <li class="list-group-item">
+                          <div class="row align-items-center">
+                              <div class="col-4">
+                                  <!-- Image -->
+                                  <a href="{% url 'product' item.product.id %}">
+                                      <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-fluid">
+                                  </a>
+                              </div>
+                              <div class="col">
+                                  <!-- Title -->
+                                  <p class="mb-4 fs-sm fw-bold">
+                                      <a class="text-body" href="{% url 'product' item.product.id %}">{{ item.product.name }}</a> <br>
+                                      <span class="text-muted">${{ item.product.price|floatformat:2 }}</span>
+                                  </p>
+
+                                  <!-- Quantity -->
+                                  <div class="fs-sm text-muted">
+                                      Quantity: {{ item.quantity }} <br>
+                                      {% if item.size %}
+                                      Size: {{ item.size }} <br>
+                                      {% endif %}
+                                      {% if item.color %}
+                                      Color: {{ item.color }} <br>
+                                      {% endif %}
+                                      {% if item.product.description %}
+                                      Description: {{ item.product.description|truncatewords:15 }} <br> <!-- Truncate long descriptions -->
+                                      {% endif %}
+                                  </div>
+
+                                  <!-- Remove Item Button -->
+                                  <form method="post" action="{% url 'remove_from_cart' item.id %}" class="mt-2">
+                                      {% csrf_token %}
+                                      <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                  </form>
+                              </div>
+                          </div>
+                      </li>
+                      {% empty %}
+                      <li class="list-group-item">Your cart is empty.</li>
+                      {% endfor %}
+                  </ul>
+                </div>
+
+
+                <div class="d-flex justify-content-between mb-3">
+                  <span>Subtotal</span>
+                  <span>${{ total_price|floatformat:2 }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                  <span>Shipping</span>
+                  <span>${{ shipping_cost|floatformat:2 }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                  <span>Tax</span>
+                  <span>${{ tax_amount|floatformat:2 }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                  <span class="fw-bold">Total</span>
+                  <span class="fw-bold">${{ total_price }}</span>
+                </div>
+                <p class="mb-0 fs-sm text-muted">By completing this purchase, you agree to our <a href="#!">Terms and Conditions</a>.</p>
+              </div>
+            </div>
+
+
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+{% endblock %}
+
+//checkout done
+
+
+views::
+
+class PaymentPipelineView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            # Extract form data
+            basket_no = request.POST.get('basket_no')
+            shipping_option = request.POST.get('shipping_option')
+
+            # Fetch the user's cart
+            cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
+
+            if not cart_items.exists():
+                return JsonResponse({'error': 'No items in cart.'}, status=404)
+
+            # Calculate total amount
+            total_price_with_shipping = sum(item.product.price * item.quantity for item in cart_items)
+            total_amount = int(float(total_price_with_shipping) * 100)  # Convert to cents for Stripe
+
+            # Debugging log
+            print("Creating Stripe session...")
+            
+
+            # Create Stripe Checkout session
+            YOUR_DOMAIN = "http://127.0.0.1:8000"  # Update to your actual domain
+            line_items = []
+
+            for item in cart_items:
+                line_items.append({
+                    'price_data': {
+                        'currency': 'usd',
+                        'product_data': {
+                            'name': item.product.name,  # Customize product name
+                        },
+                        'unit_amount': int(item.product.price * 100),  # Price in cents
+                    },
+                    'quantity': item.quantity,  # Use the quantity from the cart
+                })
+
+            # Using f-strings for URL formatting
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=line_items,  # Add line items for each product in the cart
+                metadata={"basket_no": basket_no},  # You can include basket_no in metadata
+                mode='payment',
+                success_url=f'{YOUR_DOMAIN}/successpayment/',  # Redirection after successful payment
+                cancel_url=f'{YOUR_DOMAIN}/cancelpayment/',  # Redirection after cancellation
+            )
+            
+            # Return the session ID as a JSON response
+            return JsonResponse({'id': checkout_session.id})
+        except Exception as e:
+            print("Error creating checkout session:", str(e))
+            return JsonResponse({'error': str(e)}, status=500)
+
+
+complete order
+class CompletedPaymentView(View):
+    def get(self, request):
+        try:
+            # Mark cart items as paid
+            ShopCart.objects.filter(paid_order=False).update(paid_order=True)
+            messages.success(request, 'Payment Successful')
+            return render(request, 'order_completed.html')
+        
+        except Exception as e:
+            messages.error(request, f'An error occurred: {str(e)}')
+            return redirect('cart')
+
+
+            
+
+  my payment 
+  ===========
+  class PaymentPipelineView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            # Extract form data
+            basket_no = request.POST.get('basket_no')
+            shipping_option = request.POST.get('shipping_option')
+
+            # Fetch the user's cart
+            cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
+
+            if not cart_items.exists():
+                return JsonResponse({'error': 'No items in cart.'}, status=404)
+
+            # Calculate total amount
+            total_price_with_shipping = sum(item.product.price * item.quantity for item in cart_items)
+            total_amount = int(float(total_price_with_shipping) * 100)  # Convert to cents for Stripe
+
+            # Debugging log
+            print("Creating Stripe session...")
+
+            # Create Stripe Checkout session
+            YOUR_DOMAIN = "http://127.0.0.1:8000"  # Update to your actual domain
+            line_items = []
+
+            for item in cart_items:
+                line_items.append({
+                    'price_data': {
+                        'currency': 'usd',
+                        'product_data': {
+                            'name': item.product.name,  # Customize product name
+                        },
+                        'unit_amount': int(item.product.price * 100),  # Price in cents
+                    },
+                    'quantity': item.quantity,  # Use the quantity from the cart
+                })
+
+            # Using f-strings for URL formatting
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=line_items,
+                metadata={"basket_no": basket_no},
+                mode='payment',
+                success_url=f'{YOUR_DOMAIN}/successpayment/',
+                cancel_url=f'{YOUR_DOMAIN}/cancelpayment/',
+            )
+
+            # Redirect the user to Stripe Checkout
+            return redirect(checkout_session.url)
+
+        except Exception as e:
+            print("Error creating checkout session:", str(e))
+            return JsonResponse({'error': str(e)}, status=500)
+
+<!-- No addresses found. Please <a href="{% url 'account_address_edit' %}">add an address</a>. -->

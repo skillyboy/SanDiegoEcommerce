@@ -161,9 +161,63 @@ def account_update(request):
     return render(request, 'account/account_personal_info.html', context)
 # 12. Account Address View
 def account_address(request):
-    return render(request, 'account/account-address.html')
+    user = request.user
+    addresses = PaymentInfo.objects.filter(user=user)
+    return render(request, 'account/account-address.html', {"addresses":addresses})
 
+@login_required
+def delete_address(request, address_id):
+    """Delete an existing shipping address."""
+    address = get_object_or_404(PaymentInfo, id=address_id, user=request.user)
+    address.delete()
+    messages.success(request, 'Shipping address deleted successfully.')
+    return redirect('account_address')  # Redirect back to the address page
 
+@login_required
+def edit_payment_info(request, payment_id):
+    """Edit a PaymentInfo record using a custom HTML form."""
+    payment = get_object_or_404(PaymentInfo, id=payment_id, user=request.user)
+
+    if request.method == "POST":
+        # Extract data from the form submission
+        payment.first_name = request.POST.get("first_name", payment.first_name)
+        payment.last_name = request.POST.get("last_name", payment.last_name)
+        payment.phone = request.POST.get("phone", payment.phone)
+        payment.address = request.POST.get("address", payment.address)
+        payment.city = request.POST.get("city", payment.city)
+        payment.state = request.POST.get("state", payment.state)
+        payment.postal_code = request.POST.get("postal_code", payment.postal_code)
+        payment.country = request.POST.get("country", payment.country)
+        
+        # Save the updated payment info
+        payment.save()
+
+        messages.success(request, "Payment information updated successfully!")
+        return redirect("account_address")  # Redirect to the address page
+
+    return render(request, "account/account-address-edit.html", {"payment": payment})
+
+@login_required
+def add_address(request):
+    """Allow users to add a new address."""
+    if request.method == "POST":
+        # Create a new address entry
+        new_address = PaymentInfo.objects.create(
+            user=request.user,
+            first_name=request.POST.get("first_name"),
+            last_name=request.POST.get("last_name"),
+            phone=request.POST.get("phone"),
+            address=request.POST.get("address"),
+            city=request.POST.get("city"),
+            state=request.POST.get("state"),
+            postal_code=request.POST.get("postal_code"),
+            country=request.POST.get("country"),
+        )
+
+        messages.success(request, "Address added successfully!")
+        return redirect("account_address")  # Redirect to the address page
+
+    return render(request, "account/account-address-add.html")
 
 
 # 14. Account Wishlist View
@@ -638,13 +692,23 @@ class CheckoutView(TemplateView):
         }
         
         return render(request, 'checkout.html', context)
-
+# ================================================================================================================================================================================================================
+from django.utils.crypto import get_random_string
 class PaymentPipelineView(View):
     def post(self, request, *args, **kwargs):
         try:
             # Extract form data
             basket_no = request.POST.get('basket_no')
             shipping_option = request.POST.get('shipping_option')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            phone = request.POST.get('phone')
+            address = request.POST.get('address')
+            city = request.POST.get('city')
+            state = request.POST.get('state')
+            postal_code = request.POST.get('postal_code')  # Default value
+            country = request.POST.get('country')
+            payment_method = request.POST.get('payment_method', 'credit_card')
 
             # Fetch the user's cart
             cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
@@ -658,7 +722,29 @@ class PaymentPipelineView(View):
 
             # Debugging log
             print("Creating Stripe session...")
-            
+            # Generate unique pay_code and transaction_id
+            pay_code = get_random_string(12)
+            transaction_id = get_random_string(20)
+
+            payment = PaymentInfo.objects.create(
+                user=request.user,
+                amount=total_amount,
+                basket_no=basket_no,
+                pay_code=pay_code,
+                first_name=first_name,
+                last_name=last_name,
+                phone=phone,
+                address=address,
+                city=city,
+                state=state,
+                postal_code=postal_code,  # Use this instead of 'new_postal'
+                country=country,
+                payment_method=payment_method,
+                transaction_id=transaction_id,
+                created_at=timezone.now(),
+            )
+
+            print("Payment", payment)
 
             # Create Stripe Checkout session
             YOUR_DOMAIN = "http://127.0.0.1:8000"  # Update to your actual domain
@@ -679,21 +765,25 @@ class PaymentPipelineView(View):
             # Using f-strings for URL formatting
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
-                line_items=line_items,  # Add line items for each product in the cart
-                metadata={"basket_no": basket_no},  # You can include basket_no in metadata
+                line_items=line_items,
+                metadata={"basket_no": basket_no},
                 mode='payment',
-                success_url=f'{YOUR_DOMAIN}/successpayment/',  # Redirection after successful payment
-                cancel_url=f'{YOUR_DOMAIN}/cancelpayment/',  # Redirection after cancellation
+                success_url=f'{YOUR_DOMAIN}/successpayment/',
+                cancel_url=f'{YOUR_DOMAIN}/cancelpayment/',
             )
-            
-            # Return the session ID as a JSON response
-            return JsonResponse({'id': checkout_session.id})
+
+            # Update payment intent ID
+            payment.stripe_payment_intent_id = checkout_session.payment_intent
+            payment.save()
+
+            # Redirect the user to Stripe Checkout
+            return redirect(checkout_session.url)
+
         except Exception as e:
             print("Error creating checkout session:", str(e))
+            # return redirect("cart")
             return JsonResponse({'error': str(e)}, status=500)
-
-
-
+# ================================================================================================================================================================================================================
 
 
 class WhatsappPaymentView(View):
@@ -750,56 +840,122 @@ class WhatsappPaymentView(View):
             return JsonResponse({'error': str(e)}, status=500)
 
 
-
-
+# ================================================================================================================================================================================================================
+import uuid 
 class CompletedPaymentView(View):
     def get(self, request):
         try:
-            # Mark cart items as paid
-            ShopCart.objects.filter(paid_order=False).update(paid_order=True)
-            messages.success(request, 'Payment Successful')
-            return render(request, 'order_completed.html')
-        
-        except Exception as e:
-            messages.error(request, f'An error occurred: {str(e)}')
-            return redirect('cart')
+            # Get the latest payment info for the user
+            payment = PaymentInfo.objects.filter(user=request.user, paid_order=False).order_by('-created_at').first()
+            
+            if not payment:
+                messages.error(request, "No payment record found.")
+                return redirect("cart")
 
+            # Fetch paid cart items
+            cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
+            
+            if not cart_items.exists():
+                messages.error(request, "No paid items found in cart.")
+                return redirect("cart")
+
+            subtotal, vat, total = calculate_cart_summary(request.user)
+
+            # Create a new order and link it to the payment record
+            order = Order.objects.create(
+                order_no=uuid.uuid4(),
+                customer=request.user.customer_profile,
+                payment=payment,  # Associate the order with the payment
+                total_amount=total,
+                total_price=total,
+                stripe_payment_intent_id=request.GET.get("payment_intent"),
+                is_paid=True,
+                date_created=timezone.now(),
+                shipping_address=request.user.customer_profile.address,
+                status="Completed",
+                subtotal=subtotal,
+                vat=vat,
+            )
+
+            # Add cart items to the order
+            for item in cart_items:
+                OrderItem.objects.create(
+                    order=order,
+                    product=item.product,
+                    quantity=item.quantity,
+                    price=item.product.price
+                )
+
+            # Mark the payment as associated with an order
+            payment.paid_order = True
+            payment.save()
+
+            # Clear the cart after order creation
+            cart_items.delete()
+
+            messages.success(request, "Payment successful! Order has been created.")
+            return render(request, "order_completed.html", {"order": order})
+
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+            return redirect("cart")
+
+# ================================================================================================================================================================================================================
+from django.core.paginator import Paginator
 
 class OrderHistory(View):
-
     def get(self, request):
         user = request.user
         try:
-            orders = Order.objects.filter()
+            orders = Order.objects.filter(customer__user=user).order_by('-date_created')  # Filter by user and sort by latest orders
+            
+            paginator = Paginator(orders, 3)  # Show 3 orders per page
+            page_number = request.GET.get('page')  # Get the current page number from query parameters
+            page_obj = paginator.get_page(page_number)  # Get the paginated objects
 
             if not orders.exists():
-                messages.info(request, "No order history found.")  # Using messages framework for user feedback
-                return render(request, 'account/account-orders.html', {"orders": orders})  # Render even if empty
-
-            return render(request, 'account/account-orders.html', {"orders": orders})
+                messages.info(request, "No order history found.")
+            
+            return render(request, 'account/account-orders.html', {"page_obj": page_obj})
 
         except Exception as e:
-            messages.error(request, f"An error occurred: {str(e)}")  # Using messages for error
-            return render(request, 'account/account-orders.html', {"orders": []})  # Pass an empty list on error
+            messages.error(request, f"An error occurred: {str(e)}")
+            return render(request, 'account/account-orders.html', {"page_obj": None})
 
+# class OrderDetail(View):
+
+#     def get(self, request, order_id):
+#         user = request.user
+#         try:
+#             order = get_object_or_404(Order, id=order_id)
+
+#             if not order:
+#                 messages.info(request, "No order  found.")  # Using messages framework for user feedback
+#                 return render(request, 'account/account-order-detail.html', {"order": order})  # Render even if empty
+
+#             return render(request, 'account/account-order-detail.html', {"order": order})
+
+#         except Exception as e:
+#             messages.error(request, f"An error occurred: {str(e)}")  # Using messages for error
+#             return render(request, 'account/account-order-detail.html', {"order": []})  # Pass an empty list on error
 
 
 class OrderDetail(View):
-
     def get(self, request, order_id):
         user = request.user
         try:
             order = get_object_or_404(Order, id=order_id)
+            order_items = order.order_items.all()  # Fetch related OrderItems
 
             if not order:
-                messages.info(request, "No order  found.")  # Using messages framework for user feedback
-                return render(request, 'account/account-order-detail.html', {"order": order})  # Render even if empty
+                messages.info(request, "No order found.")
+                return render(request, 'account/account-order-detail.html', {"order": order, "order_items": []})
 
-            return render(request, 'account/account-order-detail.html', {"order": order})
+            return render(request, 'account/account-order-detail.html', {"order": order, "order_items": order_items})
 
         except Exception as e:
-            messages.error(request, f"An error occurred: {str(e)}")  # Using messages for error
-            return render(request, 'account/account-order-detail.html', {"order": []})  # Pass an empty list on error
+            messages.error(request, f"An error occurred: {str(e)}")
+            return render(request, 'account/account-order-detail.html', {"order": None, "order_items": []})
 
 
 

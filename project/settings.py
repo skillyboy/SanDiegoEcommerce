@@ -116,7 +116,8 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.parse(
-        'postgresql://africandb_3g6p_user:TGvIOVHFpRqR6eZUlsuHUouM6tHOmq48@dpg-csfdi5hu0jms73ffcm90-a.oregon-postgres.render.com/africandb_3g6p'
+        # 'postgresql://africandb_3g6p_user:TGvIOVHFpRqR6eZUlsuHUouM6tHOmq48@dpg-csfdi5hu0jms73ffcm90-a.oregon-postgres.render.com/africandb_3g6p'
+        "postgresql://afrigold_owner:npg_ouZ8jIFmsUB6@ep-dry-pond-a51vp14m-pooler.us-east-2.aws.neon.tech/afrigold?sslmode=require"
     )
 }
 

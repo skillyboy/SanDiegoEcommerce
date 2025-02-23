@@ -12,8 +12,10 @@ admin.site.register(Wishlist)
 admin.site.register(Review)
 
 admin.site.register(Payment)
+admin.site.register(PaymentInfo)
 admin.site.register(Customer)
 admin.site.register(Order)
+admin.site.register(OrderItem)
 # admin.site.register(OrderItem)
 admin.site.register(Category)
 

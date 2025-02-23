@@ -24,6 +24,10 @@ urlpatterns = [
     # Account Management
     path('shipping-and-returns/', views.shipping_and_returns, name='shipping_and_returns'),
     path('account-address/', views.account_address, name='account_address'),
+    path('account/address/delete/<int:address_id>/', delete_address, name='delete_address'), #added
+    path('payment/edit/<int:payment_id>/', edit_payment_info, name='edit_payment_info'), #added
+    path("address/add/", add_address, name="add_address"), #added
+
     path('account-wishlist/', views.account_wishlist, name='account_wishlist'),
     path('account-personal-info/', views.account_personal_info, name='account_personal_info'),
     path('wishlist/', views.account_wishlist, name='wishlist'),

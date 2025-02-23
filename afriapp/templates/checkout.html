@@ -46,7 +46,7 @@
         <div class="row">
           <div class="col-12 col-md-7">
             <!-- Form -->
-            <form id="checkout-form" method="POST" action="{% url 'whatsapp_payment' %}" onsubmit="return sendWhatsApp();">
+            <form id="checkout-form" method="POST" action="{% url 'payment_pipeline' %}">
               {% csrf_token %}
               
               <!-- Hidden inputs -->
@@ -80,10 +80,16 @@
                       </div>
                   </div>
                   <!-- Country -->
-                  <div class="col-12">
+                  <div class="col-12 col-md-6">
                       <div class="form-group">
                           <label class="form-label" for="checkoutBillingCountry">Country *</label>
                           <input class="form-control form-control-sm" id="checkoutBillingCountry" name="country" type="text" value="{{ customer.country }}" placeholder="Country" required>
+                      </div>
+                  </div>
+                  <div class="col-12 col-md-6">
+                      <div class="form-group">
+                          <label class="form-label" for="checkoutBillingCountry">State *</label>
+                          <input class="form-control form-control-sm" id="checkoutBillingCountry" name="state" type="text" placeholder="State" required>
                       </div>
                   </div>
                   <!-- Address Line 1 -->
@@ -104,7 +110,7 @@
                   <div class="col-12 col-md-6">
                       <div class="form-group">
                           <label class="form-label" for="checkoutBillingZIP">ZIP / Postcode *</label>
-                          <input class="form-control form-control-sm" id="checkoutBillingZIP" name="postal_code" type="text" value="{{ customer.postcode }}" placeholder="ZIP / Postcode" required>
+                          <input class="form-control form-control-sm" id="checkoutBillingZIP" name="postal_code" type="text" placeholder="ZIP / Postcode" required>
                       </div>
                   </div>
                   <!-- Mobile Phone -->
