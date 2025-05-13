@@ -1,0 +1,553 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Track Your Order | African Food San Diego{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="tracking-container">
+        <!-- Tracking Header -->
+        <div class="tracking-header">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="mb-0"><i class="fas fa-truck-moving me-2"></i> Track Your Order</h2>
+                    <p class="mb-0 text-white-50">Enter your tracking number to see the status of your order</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <img src="{% static 'img/afrocommerce/logo.jpg' %}" alt="African Food San Diego" class="img-fluid" style="max-height: 60px; border-radius: 50%;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Tracking Form -->
+        <div class="tracking-form">
+            <form action="{% url 'logistics:track_shipment' %}" method="get" class="mb-0">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-lg" name="tracking_number" placeholder="Enter your tracking number" value="{{ tracking_number }}" required>
+                    <button class="btn btn-lg" type="submit" style="background-color: var(--service-primary, #008751); color: white;">
+                        <i class="fas fa-search me-2"></i> Track
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if shipment %}
+            <!-- Shipment Details -->
+            <div class="shipment-details">
+                <h5><i class="fas fa-info-circle me-2"></i> Shipment Information</h5>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="detail-row">
+                            <span class="detail-label">Tracking Number:</span>
+                            <span class="detail-value">{{ shipment.tracking_number }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Order Number:</span>
+                            <span class="detail-value">{{ shipment.order.order_no }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value">
+                                <span class="badge
+                                    {% if shipment.status == 'delivered' %}bg-success
+                                    {% elif shipment.status == 'in_transit' %}bg-warning
+                                    {% elif shipment.status == 'pending' %}bg-primary
+                                    {% elif shipment.status == 'failed' %}bg-danger
+                                    {% else %}bg-secondary{% endif %}">
+                                    {{ shipment.get_status_display }}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="detail-row">
+                            <span class="detail-label">Shipped Date:</span>
+                            <span class="detail-value">{{ shipment.created_at|date:"F j, Y" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Estimated Delivery:</span>
+                            <span class="detail-value">{{ shipment.estimated_delivery|date:"F j, Y"|default:"Calculating..." }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Delivery Partner:</span>
+                            <span class="detail-value">{{ shipment.delivery_partner.name|default:"Not assigned" }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipment Timeline -->
+            <div class="card mb-5">
+                <div class="card-header" style="background-color: var(--service-primary, #008751); color: white;">
+                    <h5 class="mb-0"><i class="fas fa-history me-2"></i> Tracking History</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="tracking-timeline">
+                        {% for update in updates %}
+                            <div class="timeline-item">
+                                <div class="timeline-marker
+                                    {% if update.status == 'delivered' %}status-delivered
+                                    {% elif update.status == 'in_transit' %}status-in-transit
+                                    {% elif update.status == 'pending' %}status-pending
+                                    {% elif update.status == 'failed' %}status-failed
+                                    {% elif update.status == 'processing' %}status-processing
+                                    {% else %}bg-secondary{% endif %}">
+                                </div>
+                                <div class="timeline-content">
+                                    <h5 class="timeline-title">{{ update.get_status_display }}</h5>
+                                    <p class="timeline-date"><i class="far fa-clock me-1"></i> {{ update.timestamp|date:"F j, Y - g:i A" }}</p>
+                                    {% if update.location %}
+                                    <p class="timeline-location"><i class="fas fa-map-marker-alt"></i> {{ update.location }}</p>
+                                    {% endif %}
+                                    {% if update.notes %}
+                                    <p class="timeline-notes">{{ update.notes }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="text-center py-4">
+                                <i class="fas fa-exclamation-circle fa-3x mb-3" style="color: var(--service-primary, #008751);"></i>
+                                <p class="mb-0">No updates available for this shipment yet.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Map (Dynamic) -->
+            <div class="card mb-5">
+                <div class="card-header" style="background-color: var(--service-primary, #008751); color: white;">
+                    <h5 class="mb-0"><i class="fas fa-map-marked-alt me-2"></i> Delivery Map</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="ratio ratio-16x9">
+                        <div id="shipment-tracking-map" class="w-100 h-100"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Need Help Section -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5><i class="fas fa-headset me-2"></i> Need Help With Your Order?</h5>
+                            <p class="mb-md-0">Our customer service team is available to assist you with any questions about your delivery.</p>
+                        </div>
+                        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                            <a href="https://wa.me/18626001974?text=Hello,%20I%20need%20help%20with%20my%20order%20{{ shipment.tracking_number }}" class="btn btn-success" target="_blank">
+                                <i class="fab fa-whatsapp me-2"></i> Contact Support
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% elif tracking_number %}
+            <!-- No Shipment Found -->
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+                    <h4>No shipment found</h4>
+                    <p class="mb-4">We couldn't find any shipment with tracking number: <strong>{{ tracking_number }}</strong></p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i> Please check the tracking number and try again. If you continue to experience issues, please contact our customer support.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <!-- First Visit - No Tracking Number Entered Yet -->
+            <div class="card mt-4">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-truck-loading fa-3x mb-3" style="color: var(--service-primary, #008751);"></i>
+                    <h4>Track Your Delivery</h4>
+                    <p class="mb-4">Enter your tracking number above to see the current status of your order.</p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="alert alert-light border">
+                                <p class="mb-0"><i class="fas fa-info-circle me-2"></i> You can find your tracking number in your order confirmation email or in your account dashboard.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Additional custom styles for the tracking page */
+    .tracking-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* Map styles */
+    .tracking-header {
+        background-color: var(--service-primary, #008751);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .tracking-form {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        margin-bottom: 1.5rem;
+    }
+
+    .shipment-details {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        margin-bottom: 1.5rem;
+    }
+
+    .detail-row {
+        margin-bottom: 0.75rem;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        color: #6c757d;
+        margin-right: 0.5rem;
+    }
+
+    /* Timeline styles */
+    .tracking-timeline {
+        position: relative;
+        padding-left: 2rem;
+    }
+
+    .timeline-item {
+        position: relative;
+        padding-bottom: 1.5rem;
+    }
+
+    .timeline-item:last-child {
+        padding-bottom: 0;
+    }
+
+    .timeline-marker {
+        position: absolute;
+        left: -2rem;
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 50%;
+        background-color: #dee2e6;
+        z-index: 1;
+    }
+
+    .timeline-item:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: -1.4375rem;
+        top: 1.25rem;
+        bottom: 0;
+        width: 0.125rem;
+        background-color: #dee2e6;
+    }
+
+    .timeline-title {
+        margin-bottom: 0.25rem;
+        font-size: 1.1rem;
+    }
+
+    .timeline-date {
+        color: #6c757d;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .timeline-location {
+        margin-bottom: 0.5rem;
+    }
+
+    .timeline-notes {
+        background-color: #f8f9fa;
+        padding: 0.75rem;
+        border-radius: 0.25rem;
+        font-size: 0.875rem;
+    }
+
+    /* Status colors */
+    .status-delivered {
+        background-color: #28a745;
+    }
+
+    .status-in-transit {
+        background-color: #ffc107;
+    }
+
+    .status-pending {
+        background-color: #007bff;
+    }
+
+    .status-failed {
+        background-color: #dc3545;
+    }
+
+    .status-processing {
+        background-color: #17a2b8;
+    }
+
+    /* Map marker pulse animation */
+    .map-marker-pulse {
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(0, 135, 81, 0.7);
+        }
+
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 10px rgba(0, 135, 81, 0);
+        }
+
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(0, 135, 81, 0);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+{% if shipment %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&callback=initMap" async defer></script>
+<script>
+    // Initialize the map
+    function initMap() {
+        // Default to San Diego coordinates if no specific location is available
+        let mapCenter = { lat: 32.7157, lng: -117.1611 }; // San Diego
+
+        // Get the latest update with location information
+        {% if updates %}
+        const latestUpdate = {
+            status: "{{ updates.0.status }}",
+            location: "{{ updates.0.location|default:'San Diego, CA' }}",
+            timestamp: "{{ updates.0.timestamp|date:'F j, Y - g:i A' }}"
+        };
+        {% else %}
+        const latestUpdate = {
+            status: "{{ shipment.status }}",
+            location: "San Diego, CA",
+            timestamp: "{{ shipment.updated_at|date:'F j, Y - g:i A' }}"
+        };
+        {% endif %}
+
+        // Create the map
+        const map = new google.maps.Map(document.getElementById("shipment-tracking-map"), {
+            center: mapCenter,
+            zoom: 12,
+            styles: [
+                {
+                    "featureType": "administrative",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{"color": "#444444"}]
+                },
+                {
+                    "featureType": "landscape",
+                    "elementType": "all",
+                    "stylers": [{"color": "#f2f2f2"}]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "all",
+                    "stylers": [{"visibility": "off"}]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "all",
+                    "stylers": [{"saturation": -100}, {"lightness": 45}]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "all",
+                    "stylers": [{"visibility": "simplified"}]
+                },
+                {
+                    "featureType": "road.arterial",
+                    "elementType": "labels.icon",
+                    "stylers": [{"visibility": "off"}]
+                },
+                {
+                    "featureType": "transit",
+                    "elementType": "all",
+                    "stylers": [{"visibility": "off"}]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "all",
+                    "stylers": [{"color": "#c4e5f3"}, {"visibility": "on"}]
+                }
+            ]
+        });
+
+        // Geocode the location to get coordinates
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': latestUpdate.location }, function(results, status) {
+            if (status === 'OK' && results[0]) {
+                const position = results[0].geometry.location;
+
+                // Update map center
+                map.setCenter(position);
+
+                // Create marker
+                const marker = new google.maps.Marker({
+                    position: position,
+                    map: map,
+                    title: latestUpdate.location,
+                    animation: google.maps.Animation.DROP,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 10,
+                        fillColor: getStatusColor(latestUpdate.status),
+                        fillOpacity: 0.8,
+                        strokeWeight: 2,
+                        strokeColor: 'white'
+                    }
+                });
+
+                // Create info window
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div style="padding: 10px; max-width: 200px;">
+                            <h6 style="margin: 0 0 5px; font-weight: bold;">Shipment Status</h6>
+                            <p style="margin: 0 0 5px;"><strong>Status:</strong> ${getStatusName(latestUpdate.status)}</p>
+                            <p style="margin: 0 0 5px;"><strong>Location:</strong> ${latestUpdate.location}</p>
+                            <p style="margin: 0; font-size: 12px; color: #666;">${latestUpdate.timestamp}</p>
+                        </div>
+                    `
+                });
+
+                // Open info window when marker is clicked
+                marker.addListener('click', function() {
+                    infoWindow.open(map, marker);
+                });
+
+                // Open info window by default
+                infoWindow.open(map, marker);
+
+                // Add delivery route if in transit
+                if (latestUpdate.status === 'in_transit') {
+                    // Get destination address (customer's address)
+                    const destinationAddress = "{{ shipment.order.shipping_address|default:'San Diego, CA' }}";
+
+                    // Geocode destination
+                    geocoder.geocode({ 'address': destinationAddress }, function(destResults, destStatus) {
+                        if (destStatus === 'OK' && destResults[0]) {
+                            const destPosition = destResults[0].geometry.location;
+
+                            // Add destination marker
+                            const destMarker = new google.maps.Marker({
+                                position: destPosition,
+                                map: map,
+                                title: 'Destination',
+                                icon: {
+                                    url: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                                }
+                            });
+
+                            // Create route path
+                            const path = new google.maps.Polyline({
+                                path: [position, destPosition],
+                                geodesic: true,
+                                strokeColor: '#008751',
+                                strokeOpacity: 0.8,
+                                strokeWeight: 3
+                            });
+
+                            path.setMap(map);
+
+                            // Fit bounds to include both markers
+                            const bounds = new google.maps.LatLngBounds();
+                            bounds.extend(position);
+                            bounds.extend(destPosition);
+                            map.fitBounds(bounds);
+                        }
+                    });
+                }
+            } else {
+                // If geocoding fails, use default map center
+                console.log('Geocode was not successful for the following reason: ' + status);
+
+                // Create a default marker at San Diego
+                const marker = new google.maps.Marker({
+                    position: mapCenter,
+                    map: map,
+                    title: 'Shipment Location',
+                    animation: google.maps.Animation.DROP,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 10,
+                        fillColor: getStatusColor(latestUpdate.status),
+                        fillOpacity: 0.8,
+                        strokeWeight: 2,
+                        strokeColor: 'white'
+                    }
+                });
+            }
+        });
+    }
+
+    // Helper function to get color based on status
+    function getStatusColor(status) {
+        switch(status) {
+            case 'delivered':
+                return '#28a745'; // Green
+            case 'in_transit':
+                return '#ffc107'; // Yellow
+            case 'pending':
+                return '#007bff'; // Blue
+            case 'processing':
+                return '#17a2b8'; // Cyan
+            case 'failed':
+                return '#dc3545'; // Red
+            default:
+                return '#6c757d'; // Gray
+        }
+    }
+
+    // Helper function to get status display name
+    function getStatusName(status) {
+        switch(status) {
+            case 'delivered':
+                return 'Delivered';
+            case 'in_transit':
+                return 'In Transit';
+            case 'pending':
+                return 'Pending';
+            case 'processing':
+                return 'Processing';
+            case 'failed':
+                return 'Failed';
+            default:
+                return 'Unknown';
+        }
+    }
+</script>
+{% endif %}
+{% endblock %}

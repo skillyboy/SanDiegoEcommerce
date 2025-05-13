@@ -1,0 +1,173 @@
+{% if not debug %}
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XXXXXXXXXX'); // Replace with your actual Google Analytics ID
+  
+  // Enhanced ecommerce tracking
+  {% block enhanced_ecommerce %}{% endblock %}
+</script>
+
+<!-- Event tracking for user interactions -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Track product clicks
+    document.querySelectorAll('.product-link-overlay').forEach(function(link) {
+        link.addEventListener('click', function() {
+            const productCard = this.closest('[data-product-id]');
+            if (productCard) {
+                const productId = productCard.getAttribute('data-product-id');
+                const productName = productCard.querySelector('.product-title a')?.textContent || 'Unknown Product';
+                const productPrice = productCard.querySelector('.price-current')?.textContent || '0';
+                
+                gtag('event', 'select_item', {
+                    'event_category': 'ecommerce',
+                    'event_label': productName,
+                    'items': [{
+                        'id': productId,
+                        'name': productName,
+                        'price': productPrice.replace('$', ''),
+                        'quantity': 1
+                    }]
+                });
+            }
+        });
+    });
+    
+    // Track add to cart events
+    document.querySelectorAll('.btn-add-to-cart, .action-btn[title="Add to Cart"]').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const productCard = this.closest('[data-product-id]');
+            if (productCard) {
+                const productId = productCard.getAttribute('data-product-id');
+                const productName = productCard.querySelector('.product-title a')?.textContent || 'Unknown Product';
+                const productPrice = productCard.querySelector('.price-current')?.textContent || '0';
+                
+                gtag('event', 'add_to_cart', {
+                    'event_category': 'ecommerce',
+                    'event_label': productName,
+                    'items': [{
+                        'id': productId,
+                        'name': productName,
+                        'price': productPrice.replace('$', ''),
+                        'quantity': 1
+                    }]
+                });
+            }
+        });
+    });
+    
+    // Track add to wishlist events
+    document.querySelectorAll('.btn-add-to-wishlist, .action-btn[title="Add to Wishlist"]').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const productCard = this.closest('[data-product-id]');
+            if (productCard) {
+                const productId = productCard.getAttribute('data-product-id');
+                const productName = productCard.querySelector('.product-title a')?.textContent || 'Unknown Product';
+                
+                gtag('event', 'add_to_wishlist', {
+                    'event_category': 'ecommerce',
+                    'event_label': productName,
+                    'items': [{
+                        'id': productId,
+                        'name': productName
+                    }]
+                });
+            }
+        });
+    });
+    
+    // Track category clicks
+    document.querySelectorAll('.category-link').forEach(function(link) {
+        link.addEventListener('click', function() {
+            const categoryName = this.textContent.trim();
+            const categoryId = this.getAttribute('data-category-id');
+            
+            gtag('event', 'select_category', {
+                'event_category': 'navigation',
+                'event_label': categoryName,
+                'category_id': categoryId
+            });
+        });
+    });
+    
+    // Track search submissions
+    const searchForms = document.querySelectorAll('form[action*="search"]');
+    searchForms.forEach(function(form) {
+        form.addEventListener('submit', function() {
+            const searchInput = this.querySelector('input[name="search"]');
+            if (searchInput && searchInput.value) {
+                gtag('event', 'search', {
+                    'event_category': 'engagement',
+                    'event_label': searchInput.value,
+                    'search_term': searchInput.value
+                });
+            }
+        });
+    });
+    
+    // Track outbound links
+    document.querySelectorAll('a[href^="http"]:not([href*="' + window.location.hostname + '"])').forEach(function(link) {
+        link.addEventListener('click', function() {
+            gtag('event', 'outbound_link', {
+                'event_category': 'outbound',
+                'event_label': this.href,
+                'transport_type': 'beacon'
+            });
+        });
+    });
+    
+    // Track scroll depth
+    let scrollDepthTriggered = {
+        '25': false,
+        '50': false,
+        '75': false,
+        '100': false
+    };
+    
+    window.addEventListener('scroll', function() {
+        const scrollPercent = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
+        
+        if (scrollPercent >= 25 && !scrollDepthTriggered['25']) {
+            gtag('event', 'scroll_depth', {
+                'event_category': 'engagement',
+                'event_label': '25%',
+                'value': 25
+            });
+            scrollDepthTriggered['25'] = true;
+        }
+        
+        if (scrollPercent >= 50 && !scrollDepthTriggered['50']) {
+            gtag('event', 'scroll_depth', {
+                'event_category': 'engagement',
+                'event_label': '50%',
+                'value': 50
+            });
+            scrollDepthTriggered['50'] = true;
+        }
+        
+        if (scrollPercent >= 75 && !scrollDepthTriggered['75']) {
+            gtag('event', 'scroll_depth', {
+                'event_category': 'engagement',
+                'event_label': '75%',
+                'value': 75
+            });
+            scrollDepthTriggered['75'] = true;
+        }
+        
+        if (scrollPercent >= 90 && !scrollDepthTriggered['100']) {
+            gtag('event', 'scroll_depth', {
+                'event_category': 'engagement',
+                'event_label': '100%',
+                'value': 100
+            });
+            scrollDepthTriggered['100'] = true;
+        }
+    });
+});
+</script>
+{% endif %}

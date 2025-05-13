@@ -3,7 +3,153 @@
 
 {% block title %}Checkout{% endblock %}
 
-{% block content %} 
+{% block extra_css %}
+<style>
+  /* Checkout Progress Bar Styles */
+  .checkout-progress {
+    margin-bottom: 2rem;
+  }
+
+  .progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+  }
+
+  .step-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    border: 2px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    color: #6c757d;
+    transition: all 0.3s ease;
+  }
+
+  .step-icon i {
+    font-size: 1.25rem;
+  }
+
+  .step-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #6c757d;
+    transition: all 0.3s ease;
+  }
+
+  .progress-step.active .step-icon {
+    background-color: #FFF5E1;
+    border-color: #D2691E;
+    color: #D2691E;
+  }
+
+  .progress-step.active .step-label {
+    color: #D2691E;
+    font-weight: 600;
+  }
+
+  .progress-step.current .step-icon {
+    background-color: #D2691E;
+    border-color: #D2691E;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .progress-bar-container {
+    margin-top: 1.5rem;
+  }
+
+  .progress {
+    height: 8px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    background-color: #D2691E;
+    transition: width 0.5s ease;
+  }
+
+  /* Form Validation Styles */
+  .form-control.is-valid {
+    border-color: #28a745;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+  }
+
+  .form-control.is-invalid {
+    border-color: #dc3545;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+  }
+
+  .invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #dc3545;
+  }
+
+  .was-validated .form-control:invalid ~ .invalid-feedback,
+  .form-control.is-invalid ~ .invalid-feedback {
+    display: block;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 767.98px) {
+    .step-icon {
+      width: 40px;
+      height: 40px;
+    }
+
+    .step-icon i {
+      font-size: 1rem;
+    }
+
+    .step-label {
+      font-size: 0.75rem;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .step-label {
+      display: none;
+    }
+
+    .progress-step.current .step-label {
+      display: block;
+      position: absolute;
+      top: 100%;
+      margin-top: 0.5rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
 
 
     <!-- BREADCRUMB -->
@@ -38,9 +184,48 @@
             <!-- Heading -->
             <h3 class="mb-4">Checkout</h3>
             <!-- Subheading -->
-            <p class="mb-10">
+            <p class="mb-5">
               Already have an account? <a class="fw-bold text-reset" href="#!">Click here to login</a>
             </p>
+          </div>
+        </div>
+
+        <!-- Checkout Progress Bar -->
+        <div class="row mb-10">
+          <div class="col-12">
+            <div class="checkout-progress">
+              <div class="progress-steps">
+                <div class="progress-step active" data-step="cart">
+                  <div class="step-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                  </div>
+                  <div class="step-label">Cart</div>
+                </div>
+                <div class="progress-step active current" data-step="shipping">
+                  <div class="step-icon">
+                    <i class="fas fa-truck"></i>
+                  </div>
+                  <div class="step-label">Shipping</div>
+                </div>
+                <div class="progress-step" data-step="payment">
+                  <div class="step-icon">
+                    <i class="fas fa-credit-card"></i>
+                  </div>
+                  <div class="step-label">Payment</div>
+                </div>
+                <div class="progress-step" data-step="confirmation">
+                  <div class="step-icon">
+                    <i class="fas fa-check"></i>
+                  </div>
+                  <div class="step-label">Confirmation</div>
+                </div>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress">
+                  <div class="progress-bar bg-african-primary" role="progressbar" style="width: 33%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="row">
@@ -48,7 +233,7 @@
             <!-- Form -->
             <form id="checkout-form" method="POST" action="{% url 'payment_pipeline' %}">
               {% csrf_token %}
-              
+
               <!-- Hidden inputs -->
               <input type="hidden" name="basket_no" value="{{ basket_no }}">
               <input type="hidden" name="total" value="{{ total_price|floatformat:2 }}">
@@ -125,12 +310,113 @@
               <!-- Payment section -->
               <h6 class="mb-7">Payment</h6>
               <div id="payment-form">
-                  <!-- WhatsApp Contact Button -->
-                  <button type="submit" class="btn btn-secondary btn-lg mt-4"> Proceed to payment</button>
+                  <!-- Payment Method Selection -->
+                  <div class="form-group mb-4">
+                      <label class="form-label d-block">Payment Method</label>
+                      <div class="btn-group-toggle" data-toggle="buttons">
+                          <label class="btn btn-outline-primary active me-3">
+                              <input type="radio" name="payment_method" value="credit_card" checked> Credit Card
+                          </label>
+                          <label class="btn btn-outline-primary">
+                              <input type="radio" name="payment_method" value="whatsapp"> WhatsApp Payment
+                          </label>
+                      </div>
+                  </div>
+
+                  <!-- Payment Button -->
+                  <button type="button" id="proceed-payment-btn" class="btn btn-african-primary btn-lg mt-4 w-100">
+                      <i class="fas fa-lock me-2"></i> Proceed to Payment
+                  </button>
               </div>
             </form>
 
             <script>
+            // Handle payment confirmation with SweetAlert2
+            document.getElementById('proceed-payment-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Validate form
+                const form = document.getElementById('checkout-form');
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+
+                // Get selected payment method
+                const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+
+                // Get form data
+                const firstName = document.getElementById('checkoutBillingFirstName').value;
+                const lastName = document.getElementById('checkoutBillingLastName').value;
+                const email = document.getElementById('checkoutBillingEmail').value;
+                const phone = document.getElementById('checkoutBillingPhone').value;
+                const address = document.getElementById('checkoutBillingAddress').value;
+                const city = document.getElementById('checkoutBillingTown').value;
+                const country = document.getElementById('checkoutBillingCountry').value;
+                const total = '{{ total_price|floatformat:2 }}';
+
+                // Create order summary HTML
+                let orderSummaryHtml = `
+                    <div class="order-summary">
+                        <div class="order-summary-header">
+                            <h4 class="mb-3">Order Summary</h4>
+                        </div>
+                        <div class="order-summary-details">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Total Amount:</span>
+                                <span class="fw-bold">$${total}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Payment Method:</span>
+                                <span>${paymentMethod === 'credit_card' ? 'Credit Card' : 'WhatsApp Payment'}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Shipping Address:</span>
+                                <span>${address}, ${city}, ${country}</span>
+                            </div>
+                        </div>
+                        <div class="order-items mt-3">
+                            <h5 class="mb-2">Items:</h5>
+                            <ul class="list-unstyled">
+                                {% for item in cart %}
+                                <li class="d-flex justify-content-between mb-1">
+                                    <span>{{ item.product.name }} x {{ item.quantity }}</span>
+                                    <span>${{ item.calculate_total_price|floatformat:2 }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+                // Show confirmation dialog
+                Swal.fire({
+                    title: 'Confirm Your Order',
+                    html: orderSummaryHtml,
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonText: 'Confirm Order',
+                    cancelButtonText: 'Cancel',
+                    reverseButtons: true,
+                    customClass: {
+                        confirmButton: 'btn btn-african-primary mx-2',
+                        cancelButton: 'btn btn-african-secondary mx-2',
+                        title: 'font-serif',
+                        popup: 'african-swal-popup'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        if (paymentMethod === 'whatsapp') {
+                            // Handle WhatsApp payment
+                            sendWhatsApp();
+                        } else {
+                            // Submit the form for credit card payment
+                            form.submit();
+                        }
+                    }
+                });
+            });
+
             function sendWhatsApp() {
               // Get values from the input fields
               var phone = document.getElementById('checkoutBillingPhone').value;
@@ -168,14 +454,74 @@
               // Open the WhatsApp URL in a new tab
               window.open(whatsappUrl, '_blank');
 
+              // Show success message
+              Swal.fire({
+                  title: 'Order Sent!',
+                  text: 'Your order details have been sent via WhatsApp. Please complete the payment process there.',
+                  icon: 'success',
+                  confirmButtonText: 'OK'
+              });
+
               // Prevent form submission
               return false;
             }
             </script>
 
+            <style>
+                /* Payment method styling */
+                .btn-group-toggle .btn {
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 8px;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                }
+
+                .btn-group-toggle .btn.active {
+                    background-color: #D2691E;
+                    border-color: #D2691E;
+                    color: white;
+                }
+
+                /* Order summary styling for SweetAlert */
+                .order-summary {
+                    text-align: left;
+                    padding: 1rem;
+                    background-color: rgba(210, 105, 30, 0.05);
+                    border-radius: 8px;
+                    margin-bottom: 1rem;
+                }
+
+                .order-summary-header {
+                    border-bottom: 1px solid rgba(210, 105, 30, 0.2);
+                    margin-bottom: 1rem;
+                    padding-bottom: 0.5rem;
+                }
+
+                .order-items {
+                    border-top: 1px solid rgba(210, 105, 30, 0.2);
+                    padding-top: 0.5rem;
+                }
+            </style>
+
+            <!-- Form Navigation Buttons -->
+            <div class="form-navigation mt-5">
+              <div class="row">
+                <div class="col-6">
+                  <a href="{% url 'cart' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Cart
+                  </a>
+                </div>
+                <div class="col-6 text-end">
+                  <button type="button" id="next-step-btn" class="btn btn-african-primary">
+                    Continue to Payment<i class="fas fa-arrow-right ms-2"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
           </div>
 
-         
+
           <div class="col-12 col-md-5">
             <div class="card border-0 rounded-3 shadow">
               <div class="card-body">
@@ -256,6 +602,171 @@
       </div>
     </section>
 
-    
+
+<!-- JavaScript for Form Validation and Progress Bar -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize form validation
+    initFormValidation();
+
+    // Initialize progress bar navigation
+    initProgressNavigation();
+  });
+
+  // Form Validation
+  function initFormValidation() {
+    const form = document.getElementById('checkout-form');
+    const inputs = form.querySelectorAll('input[required]');
+    const nextStepBtn = document.getElementById('next-step-btn');
+
+    // Add validation on input change
+    inputs.forEach(input => {
+      input.addEventListener('input', function() {
+        validateInput(this);
+      });
+
+      input.addEventListener('blur', function() {
+        validateInput(this);
+      });
+    });
+
+    // Next step button click handler
+    if (nextStepBtn) {
+      nextStepBtn.addEventListener('click', function() {
+        let isValid = true;
+
+        // Validate all required inputs
+        inputs.forEach(input => {
+          if (!validateInput(input)) {
+            isValid = false;
+          }
+        });
+
+        if (isValid) {
+          // Move to payment step
+          updateProgressBar('payment');
+
+          // Scroll to payment section
+          document.getElementById('payment-form').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        } else {
+          // Show error message
+          Swal.fire({
+            title: 'Form Validation Error',
+            text: 'Please fill in all required fields correctly.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            customClass: {
+              confirmButton: 'btn btn-african-primary'
+            }
+          });
+        }
+      });
+    }
+
+    // Input validation function
+    function validateInput(input) {
+      const value = input.value.trim();
+      const isValid = input.checkValidity() && value !== '';
+
+      if (isValid) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+      } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+
+        // Create or update invalid feedback message
+        let feedback = input.nextElementSibling;
+        if (!feedback || !feedback.classList.contains('invalid-feedback')) {
+          feedback = document.createElement('div');
+          feedback.className = 'invalid-feedback';
+          input.parentNode.insertBefore(feedback, input.nextSibling);
+        }
+
+        // Set appropriate error message
+        if (value === '') {
+          feedback.textContent = 'This field is required.';
+        } else if (input.type === 'email' && !isValid) {
+          feedback.textContent = 'Please enter a valid email address.';
+        } else if (input.type === 'tel' && !isValid) {
+          feedback.textContent = 'Please enter a valid phone number.';
+        } else {
+          feedback.textContent = 'Please enter valid information.';
+        }
+      }
+
+      return isValid;
+    }
+  }
+
+  // Progress Bar Navigation
+  function initProgressNavigation() {
+    const progressSteps = document.querySelectorAll('.progress-step');
+
+    // Add click event to steps
+    progressSteps.forEach(step => {
+      step.addEventListener('click', function() {
+        const stepName = this.getAttribute('data-step');
+
+        // Only allow clicking on completed steps or the next available step
+        if (this.classList.contains('active') ||
+            (this.previousElementSibling && this.previousElementSibling.classList.contains('active'))) {
+          updateProgressBar(stepName);
+        }
+      });
+    });
+  }
+
+  // Update progress bar state
+  function updateProgressBar(currentStep) {
+    const progressSteps = document.querySelectorAll('.progress-step');
+    const progressBar = document.querySelector('.progress-bar');
+    let stepIndex = 0;
+
+    // Find the index of the current step
+    progressSteps.forEach((step, index) => {
+      if (step.getAttribute('data-step') === currentStep) {
+        stepIndex = index;
+      }
+    });
+
+    // Calculate progress percentage
+    const progressPercentage = (stepIndex / (progressSteps.length - 1)) * 100;
+
+    // Update progress bar width
+    progressBar.style.width = `${progressPercentage}%`;
+    progressBar.setAttribute('aria-valuenow', progressPercentage);
+
+    // Update step states
+    progressSteps.forEach((step, index) => {
+      // Reset all steps
+      step.classList.remove('current');
+
+      // Mark steps as active or inactive
+      if (index <= stepIndex) {
+        step.classList.add('active');
+      } else {
+        step.classList.remove('active');
+      }
+
+      // Mark current step
+      if (index === stepIndex) {
+        step.classList.add('current');
+      }
+    });
+
+    // Show/hide appropriate form sections based on current step
+    if (currentStep === 'payment') {
+      document.getElementById('payment-form').style.display = 'block';
+      document.getElementById('proceed-payment-btn').scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }
+</script>
 {% endblock %}
 

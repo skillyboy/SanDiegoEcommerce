@@ -1,0 +1,472 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Welcome {% endblock %}
+
+{% block content %}
+
+    <!-- HERO SECTION WITH NIGERIAN THEME -->
+    <section class="hero-nigerian py-0">
+        <div class="hero-slider" data-flickity='{"pageDots": true, "prevNextButtons": true, "wrapAround": true, "autoPlay": 5000}'>
+            <!-- Hero Slide 1: Nigerian Products Showcase -->
+            <div class="hero-slide w-100">
+                <div class="container">
+                    <div class="row align-items-center min-vh-70">
+                        <div class="col-12 col-md-6 col-lg-5">
+                            <span class="badge bg-warning text-dark mb-3">Direct from Nigeria</span>
+                            <h1 class="display-3 font-serif mb-4">Authentic Nigerian Treasures</h1>
+                            <p class="lead mb-5">Experience the vibrant culture of Nigeria through our carefully curated collection of authentic products. From traditional fabrics to artisanal crafts and delicious foods.</p>
+                            <div class="d-flex gap-3">
+                                <a href="{% url 'shop' %}" class="btn btn-nigerian-primary btn-lg">Explore Collection</a>
+                                <a href="{% url 'about' %}" class="btn btn-nigerian-secondary btn-lg">Our Story</a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-7 d-none d-md-block">
+                            <div class="position-relative">
+                                <img src="{% static 'img/afrocommerce/hero-image.jpg' %}" alt="Nigerian Products" class="img-fluid rounded-3 hero-image">
+                                <div class="position-absolute top-0 end-0 mt-3 me-3">
+                                    <div class="nigeria-badge">
+                                        <span class="nigeria-flag-colors"></span>
+                                        <span>Made in Nigeria</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Slide 2: Nigerian Fashion -->
+            <div class="hero-slide w-100">
+                <div class="container">
+                    <div class="row align-items-center min-vh-70">
+                        <div class="col-12 col-md-6 col-lg-7 order-md-2">
+                            <span class="badge bg-success text-white mb-3">Traditional & Modern</span>
+                            <h1 class="display-3 font-serif mb-4">Nigerian Fashion & Textiles</h1>
+                            <p class="lead mb-5">Discover the beauty of Nigerian fabrics and fashion. From vibrant Ankara prints to luxurious Aso-Oke and Adire textiles, each piece tells a story of heritage and craftsmanship.</p>
+                            <div class="d-flex gap-3">
+                                <a href="{% url 'service' 2 %}" class="btn btn-nigerian-primary btn-lg">Shop Fashion</a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-5 order-md-1 d-none d-md-block">
+                            <div class="position-relative">
+                                <img src="{% static 'img/afrocommerce/restaurant.jpg' %}" alt="Nigerian Fashion" class="img-fluid rounded-3 hero-image">
+                                <div class="position-absolute top-0 start-0 mt-3 ms-3">
+                                    <div class="fabric-badge">
+                                        <span>Authentic Fabrics</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Slide 3: Nigerian Cuisine -->
+            <div class="hero-slide w-100">
+                <div class="container">
+                    <div class="row align-items-center min-vh-70">
+                        <div class="col-12 text-center">
+                            <span class="badge bg-success text-white mb-3">Authentic Experience</span>
+                            <h1 class="display-3 font-serif mb-4">🌍 Authentic African Flavors Delivered to Your Door 🚚</h1>
+                            <p class="lead mb-5 mx-auto" style="max-width: 700px;">Bring the flavors of Nigeria to your kitchen with our selection of authentic ingredients, spices, and ready-to-cook meal kits. Experience the rich culinary heritage of Nigeria's diverse regions.</p>
+                            <div class="d-flex justify-content-center gap-3">
+                                <a href="{% url 'shop' %}" class="btn btn-nigerian-primary btn-lg">Shop Nigerian Foods</a>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-6 col-md-3">
+                                    <div class="food-card">
+                                        <img src="{% static 'img/afrocommerce/produce-1.jpg' %}" alt="Jollof Rice" class="img-fluid rounded-3 mb-2">
+                                        <h6 class="food-title">Jollof Rice</h6>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="food-card">
+                                        <img src="{% static 'img/afrocommerce/produce-2.jpg' %}" alt="Egusi Soup" class="img-fluid rounded-3 mb-2">
+                                        <h6 class="food-title">Egusi Soup</h6>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="food-card">
+                                        <img src="{% static 'img/afrocommerce/produce-3.jpg' %}" alt="Pounded Yam" class="img-fluid rounded-3 mb-2">
+                                        <h6 class="food-title">Pounded Yam</h6>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="food-card">
+                                        <img src="{% static 'img/afrocommerce/produce-4.jpg' %}" alt="Suya Spice" class="img-fluid rounded-3 mb-2">
+                                        <h6 class="food-title">Suya Spice</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED SLIDER FROM HOME PAGE -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-12 text-center">
+                    <h2 class="section-title font-serif">Summer Collection</h2>
+                    <div class="animated-divider mx-auto"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="featured-slider" data-flickity='{"prevNextButtons": true, "pageDots": true, "wrapAround": true, "autoPlay": 4000}'>
+                        <!-- Item 1 -->
+                        <div class="featured-slide">
+                            <div class="card featured-card">
+                                <div class="row g-0">
+                                    <div class="col-md-6">
+                                        <img src="{% static 'img/afrocommerce/featured-1.jpg' %}" class="img-fluid rounded-start featured-image" alt="Featured Product">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card-body featured-content">
+                                            <div class="featured-badge">New Arrival</div>
+                                            <h3 class="featured-title">Authentic Nigerian Spices</h3>
+                                            <p class="featured-description">Experience the rich flavors of Nigerian cuisine with our premium spice collection. Perfect for creating authentic dishes at home.</p>
+                                            <div class="featured-price">
+                                                <span class="price-current">From $12.99</span>
+                                            </div>
+                                            <a href="{% url 'shop' %}" class="btn btn-nigerian-primary">Shop Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="featured-slide">
+                            <div class="card featured-card">
+                                <div class="row g-0">
+                                    <div class="col-md-6">
+                                        <img src="{% static 'img/afrocommerce/featured-2.jpg' %}" class="img-fluid rounded-start featured-image" alt="Featured Product">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card-body featured-content">
+                                            <div class="featured-badge featured-badge-sale">Sale</div>
+                                            <h3 class="featured-title">Traditional Ankara Fabrics</h3>
+                                            <p class="featured-description">Vibrant, colorful Ankara fabrics direct from Nigeria. Perfect for fashion, home decor, and creative projects.</p>
+                                            <div class="featured-price">
+                                                <span class="price-old">$45.00</span>
+                                                <span class="price-current">$29.99</span>
+                                            </div>
+                                            <a href="{% url 'shop' %}" class="btn btn-nigerian-primary">Shop Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item 3 -->
+                        <div class="featured-slide">
+                            <div class="card featured-card">
+                                <div class="row g-0">
+                                    <div class="col-md-6">
+                                        <img src="{% static 'img/afrocommerce/featured-3.jpg' %}" class="img-fluid rounded-start featured-image" alt="Featured Product">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card-body featured-content">
+                                            <div class="featured-badge featured-badge-limited">Limited</div>
+                                            <h3 class="featured-title">Handcrafted Nigerian Art</h3>
+                                            <p class="featured-description">Authentic handcrafted art pieces from talented Nigerian artisans. Each piece tells a unique cultural story.</p>
+                                            <div class="featured-price">
+                                                <span class="price-current">From $39.99</span>
+                                            </div>
+                                            <a href="{% url 'shop' %}" class="btn btn-nigerian-primary">Shop Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NIGERIAN-THEMED SEARCH BAR SECTION -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8">
+                    <div class="nigerian-search-card">
+                        <div class="search-header">
+                            <h4 class="search-title">Find Nigerian Products</h4>
+                            <p class="search-subtitle">Discover authentic treasures from Nigeria</p>
+                        </div>
+                        <form class="navbar-form" method="POST" action="{% url 'search_products' %}">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="fas fa-search search-icon"></i>
+                                    </span>
+                                </div>
+                                <input type="search" name="search" class="form-control form-control-lg border-0" placeholder="Search for Nigerian products..." required>
+                                <select class="form-select form-select-lg border-0 d-none d-md-block" name="category">
+                                    <option value="" selected>All Categories</option>
+                                    {% for service in services %}
+                                        <option value="{{ service.id }}">{{ service.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="input-group-append">
+                                    <button class="btn btn-nigerian-primary search-button" type="submit">
+                                        <span class="d-none d-md-inline">Search</span>
+                                        <i class="fas fa-search d-inline d-md-none"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="popular-searches">
+                                <span class="popular-label">Popular:</span>
+                                <a href="{% url 'search_products' %}?search=ankara" class="popular-tag">Ankara</a>
+                                <a href="{% url 'search_products' %}?search=jollof" class="popular-tag">Jollof Rice</a>
+                                <a href="{% url 'search_products' %}?search=adire" class="popular-tag">Adire</a>
+                                <a href="{% url 'search_products' %}?search=suya" class="popular-tag">Suya Spice</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED CATEGORIES WITH MODERN NIGERIAN THEME -->
+    <section class="categories-section py-7">
+        <div class="container">
+            <!-- Section Header with Animation -->
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <div class="section-header-animated">
+                        <span class="accent-text mb-2 d-block">Discover Nigeria</span>
+                        <h2 class="section-title font-serif mb-3">Shop Nigerian Categories</h2>
+                        <div class="animated-divider mx-auto"></div>
+                        <p class="section-subtitle mt-4">Explore our curated collection of authentic Nigerian products</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Grid with Modern Cards -->
+            <div class="row categories-grid">
+                {% for service in services %}
+                <div class="col-6 col-md-4 col-lg-3 mb-4 category-item">
+                    <a href="{% url 'service' service.id %}" class="category-card">
+                        <div class="category-icon-wrapper">
+                            <div class="category-icon">
+                                {% if service.name == "Groceries" %}
+                                <i class="fas fa-utensils"></i>
+                                {% elif service.name == "Fashion" %}
+                                <i class="fas fa-tshirt"></i>
+                                {% elif service.name == "Crafts" %}
+                                <i class="fas fa-paint-brush"></i>
+                                {% elif service.name == "Beauty" %}
+                                <i class="fas fa-spa"></i>
+                                {% elif service.name == "Restaurant" %}
+                                <i class="fas fa-hamburger"></i>
+                                {% else %}
+                                <i class="fas fa-shopping-basket"></i>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="category-content">
+                            <h3 class="category-title">{{ service.name }}</h3>
+                            <p class="category-description">
+                                {% if service.name == "Groceries" %}
+                                Authentic Nigerian ingredients and spices
+                                {% elif service.name == "Fashion" %}
+                                Traditional and modern Nigerian textiles
+                                {% elif service.name == "Crafts" %}
+                                Handcrafted Nigerian art and home decor
+                                {% elif service.name == "Beauty" %}
+                                Natural Nigerian beauty products
+                                {% elif service.name == "Restaurant" %}
+                                Delicious Nigerian cuisine and dishes
+                                {% else %}
+                                Explore authentic Nigerian products
+                                {% endif %}
+                            </p>
+                            <div class="category-link">
+                                <span>Explore</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                        <div class="category-pattern"></div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED NIGERIAN PRODUCTS - MODERN DESIGN -->
+    <section class="featured-products-section py-7">
+        <div class="container">
+            <!-- Section Header with Animation -->
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <div class="section-header-animated">
+                        <span class="accent-text mb-2 d-block">Premium Selection</span>
+                        <h2 class="section-title font-serif mb-3">Featured Nigerian Products</h2>
+                        <div class="animated-divider mx-auto"></div>
+                        <p class="section-subtitle mt-4">Handpicked selection of our finest authentic Nigerian treasures</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Grid with Masonry Layout -->
+            <div class="row products-grid">
+                {% for product in featured %}
+                <div class="col-12 col-sm-6 col-lg-3 mb-4 product-item">
+                    {% with product=product %}
+                    {% include 'partials/nigerian-product-card.html' %}
+                    {% endwith %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- View All Button with Animation -->
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <a href="{% url 'shop' %}" class="btn-view-all">
+                        <span>Explore All Nigerian Products</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES SECTION FROM HOME PAGE -->
+    <section class="py-7 bg-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-3 mb-5 mb-lg-0">
+                    <!-- Feature Item -->
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h5 class="feature-title">Free Shipping</h5>
+                            <p class="feature-text">On all orders over $75</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-3 mb-5 mb-lg-0">
+                    <!-- Feature Item -->
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-undo"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h5 class="feature-title">Easy Returns</h5>
+                            <p class="feature-text">30-day return policy</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-3 mb-5 mb-md-0">
+                    <!-- Feature Item -->
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h5 class="feature-title">Secure Payments</h5>
+                            <p class="feature-text">Protected by encryption</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-3">
+                    <!-- Feature Item -->
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h5 class="feature-title">24/7 Support</h5>
+                            <p class="feature-text">Customer service excellence</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODERN NIGERIAN-THEMED NEWSLETTER SECTION -->
+    <section class="newsletter-section py-7">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10">
+                    <div class="newsletter-card">
+                        <div class="row g-0">
+                            <!-- Newsletter Image -->
+                            <div class="col-md-5 d-none d-md-block">
+                                <div class="newsletter-image-container">
+                                    <div class="newsletter-image"></div>
+                                    <div class="newsletter-pattern-overlay"></div>
+                                </div>
+                            </div>
+
+                            <!-- Newsletter Content -->
+                            <div class="col-md-7">
+                                <div class="newsletter-content">
+                                    <div class="section-header-animated text-center">
+                                        <span class="accent-text mb-2 d-block">Stay Connected</span>
+                                        <h2 class="section-title font-serif mb-3">Join Our Nigerian Community</h2>
+                                        <div class="animated-divider mx-auto"></div>
+                                    </div>
+
+                                    <p class="newsletter-description">Subscribe to receive updates on new Nigerian products, cultural events, cooking tips, and exclusive deals.</p>
+
+                                    <form class="newsletter-form">
+                                        <div class="form-floating mb-3">
+                                            <input type="email" class="form-control" id="newsletterEmail" placeholder="name@example.com" required>
+                                            <label for="newsletterEmail">Your Email Address</label>
+                                        </div>
+
+                                        <button type="submit" class="btn-subscribe">
+                                            <span>Subscribe</span>
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+
+                                        <div class="newsletter-benefits">
+                                            <div class="benefit-item">
+                                                <div class="benefit-icon">
+                                                    <i class="fas fa-gift"></i>
+                                                </div>
+                                                <span>Exclusive Offers</span>
+                                            </div>
+
+                                            <div class="benefit-item">
+                                                <div class="benefit-icon">
+                                                    <i class="fas fa-newspaper"></i>
+                                                </div>
+                                                <span>Nigerian News</span>
+                                            </div>
+
+                                            <div class="benefit-item">
+                                                <div class="benefit-icon">
+                                                    <i class="fas fa-utensils"></i>
+                                                </div>
+                                                <span>Recipe Ideas</span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}

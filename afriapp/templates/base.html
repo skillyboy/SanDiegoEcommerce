@@ -3,16 +3,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Enhanced SEO Meta Tags -->
+    {% include 'partials/seo-meta.html' %}
+
     <title>{% block title %}African Food San Diego{% endblock %}</title>
+
+    <!-- Google Analytics -->
+    {% include 'partials/analytics.html' %}
+
     {% include 'partials/head.html' %}
 
-    <!-- Include SweetAlert2 CSS and JS -->
+    <!-- Custom African Theme CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom-african-theme.css' %}">
+
+    <!-- Nigerian Theme CSS -->
+    <link rel="stylesheet" href="{% static 'css/nigerian-theme.css' %}">
+
+    <!-- Custom Toast Notifications CSS -->
+    <link rel="stylesheet" href="{% static 'css/toast-notifications.css' %}">
+
+    <!-- Include SweetAlert2 CSS and JS (for important confirmations) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Flickity Slider CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
+    <!-- AOS (Animate On Scroll) Library -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <!-- Navbar -->
@@ -22,31 +47,190 @@
     <div class="messages">
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} message bg-white" role="alert">
-                 <h4>{{ message }}</h4>   
+                <div class="alert alert-{{ message.tags }} message bg-white shadow-sm" role="alert">
+                    <h4>{{ message }}</h4>
                 </div>
             {% endfor %}
         {% endif %}
     </div>
 
     <!-- Main Content -->
-    <main role="main page-wrapper" class="container-fluid mb-7" style="background-color: hwb(40 83% 7%); border: 2px solid #8B4513; padding: 20px; border-radius: 8px;">
-
+    <main role="main" class="page-wrapper">
         {% block content %}
         {% endblock content %}
 
-
-    {% include 'partials/footer.html' %}
-
+        <!-- Footer -->
+        {% include 'partials/footer.html' %}
     </main>
 
     <!-- Partials -->
     {% include 'partials/modals.html' %}
-    
+
     <!-- Scripts -->
     {% include 'partials/scripts.html' %}
 
-    {% block extra_js %}
-    {% endblock %}
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!-- Custom Toast Notifications JS -->
+    <script src="{% static 'js/toast-notifications.js' %}"></script>
+
+    <!-- Initialize SweetAlert2 with African-inspired theme -->
+    <script>
+        // Custom SweetAlert2 theme for important confirmations
+        Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-african-primary mx-2',
+                cancelButton: 'btn btn-african-secondary mx-2',
+                title: 'font-serif',
+                popup: 'african-swal-popup'
+            },
+            buttonsStyling: false,
+            background: '#FFF8E7',
+            iconColor: '#D2691E',
+            confirmButtonText: 'Confirm',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        });
+
+        // Initialize AOS (Animate On Scroll)
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true,
+                mirror: false
+            });
+        });
+    </script>
+
+    <style>
+        /* Service-specific theme colors (default to groceries theme) */
+        :root {
+            --service-primary: #008751;
+            --service-secondary: #e87e04;
+            --service-accent: #f5c34b;
+            --service-bg: #f9f5e8;
+        }
+
+        /* Service-specific theme classes */
+        .service-groceries-theme {
+            --service-primary: #008751; /* Nigerian green */
+            --service-secondary: #e87e04; /* Orange accent */
+            --service-accent: #f5c34b; /* Yellow accent */
+            --service-bg: #f9f5e8; /* Light cream background */
+        }
+
+        .service-restaurant-theme {
+            --service-primary: #8B4513; /* Saddle brown */
+            --service-secondary: #D2691E; /* Chocolate */
+            --service-accent: #CD5C5C; /* Indian red */
+            --service-bg: #FFF8E7; /* Warm cream background */
+        }
+
+        /* Service-specific button styles */
+        .btn-service-primary {
+            background-color: var(--service-primary);
+            border-color: var(--service-primary);
+            color: white;
+        }
+
+        .btn-service-primary:hover {
+            background-color: var(--service-primary);
+            filter: brightness(90%);
+            border-color: var(--service-primary);
+            color: white;
+        }
+
+        .btn-service-secondary {
+            background-color: var(--service-secondary);
+            border-color: var(--service-secondary);
+            color: white;
+        }
+
+        .btn-service-secondary:hover {
+            background-color: var(--service-secondary);
+            filter: brightness(90%);
+            border-color: var(--service-secondary);
+            color: white;
+        }
+
+        .btn-outline-service-primary {
+            color: var(--service-primary);
+            border-color: var(--service-primary);
+        }
+
+        .btn-outline-service-primary:hover {
+            background-color: var(--service-primary);
+            border-color: var(--service-primary);
+            color: white;
+        }
+
+        .text-service-primary {
+            color: var(--service-primary) !important;
+        }
+
+        .text-service-secondary {
+            color: var(--service-secondary) !important;
+        }
+
+        .bg-service-primary {
+            background-color: var(--service-primary) !important;
+        }
+
+        .bg-service-secondary {
+            background-color: var(--service-secondary) !important;
+        }
+
+        .bg-service-light {
+            background-color: var(--service-bg) !important;
+        }
+
+        .border-service-primary {
+            border-color: var(--service-primary) !important;
+        }
+
+        .border-service-secondary {
+            border-color: var(--service-secondary) !important;
+        }
+
+        /* African-inspired SweetAlert2 styling */
+        .african-swal-popup {
+            border-radius: 10px;
+            border-top: 4px solid #D2691E;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            font-family: 'Poppins', sans-serif;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .african-swal-popup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D2691E' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+        .font-serif {
+            font-family: 'Playfair Display', serif !important;
+            color: #5D4037 !important;
+        }
+
+        .swal2-html-container {
+            color: #3B2F2F !important;
+        }
+    </style>
+
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

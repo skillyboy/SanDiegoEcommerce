@@ -1,0 +1,353 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Help & Documentation - African Food San Diego{% endblock %}
+
+{% block meta_description %}Learn how to use our website, place orders, and get the most out of your African Food San Diego shopping experience.{% endblock %}
+
+{% block content %}
+<!-- BREADCRUMB -->
+<nav class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <!-- Breadcrumb -->
+        <ol class="breadcrumb mb-0 fs-xs text-gray-400">
+          <li class="breadcrumb-item">
+            <a href="{% url 'index' %}">Home</a>
+          </li>
+          <li class="breadcrumb-item active">
+            Help & Documentation
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- CONTENT -->
+<section class="pt-7 pb-12">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <!-- Heading -->
+        <h3 class="mb-10 text-center">Help & Documentation</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-3">
+        <!-- Nav -->
+        <nav class="mb-10 mb-md-0">
+          <div class="list-group list-group-sm list-group-strong list-group-flush-x">
+            <a class="list-group-item list-group-item-action active" data-toggle="tab" href="#getting-started">
+              Getting Started
+            </a>
+            <a class="list-group-item list-group-item-action" data-toggle="tab" href="#browsing-products">
+              Browsing Products
+            </a>
+            <a class="list-group-item list-group-item-action" data-toggle="tab" href="#ordering">
+              Ordering Process
+            </a>
+            <a class="list-group-item list-group-item-action" data-toggle="tab" href="#account">
+              Your Account
+            </a>
+            <a class="list-group-item list-group-item-action" data-toggle="tab" href="#shipping">
+              Shipping & Delivery
+            </a>
+            <a class="list-group-item list-group-item-action" data-toggle="tab" href="#restaurant">
+              Restaurant Services
+            </a>
+            <a class="list-group-item list-group-item-action" data-toggle="tab" href="#faq">
+              Frequently Asked Questions
+            </a>
+          </div>
+        </nav>
+      </div>
+      <div class="col-12 col-md-9">
+        <!-- Content -->
+        <div class="tab-content">
+          <!-- Getting Started -->
+          <div class="tab-pane fade show active" id="getting-started">
+            <div class="card card-lg">
+              <div class="card-body">
+                <h6 class="mb-4">Welcome to African Food San Diego</h6>
+                <p class="text-gray-500">
+                  Welcome to African Food San Diego, your premier source for authentic African groceries and cuisine in San Diego. This guide will help you navigate our website and make the most of your shopping experience.
+                </p>
+                <h6 class="mt-5 mb-4">Creating an Account</h6>
+                <p class="text-gray-500">
+                  While you can shop as a guest, creating an account offers several benefits:
+                </p>
+                <ul class="text-gray-500">
+                  <li>Save your shipping addresses</li>
+                  <li>View your order history</li>
+                  <li>Create and manage wishlists</li>
+                  <li>Receive exclusive offers and promotions</li>
+                </ul>
+                <p class="text-gray-500">
+                  To create an account:
+                </p>
+                <ol class="text-gray-500">
+                  <li>Click on the "Account" icon in the top right corner</li>
+                  <li>Select "Register"</li>
+                  <li>Fill in your details and create a password</li>
+                  <li>Click "Create Account"</li>
+                </ol>
+                <h6 class="mt-5 mb-4">Navigating the Website</h6>
+                <p class="text-gray-500">
+                  Our website is organized into several main sections:
+                </p>
+                <ul class="text-gray-500">
+                  <li><strong>Home:</strong> Featured products and promotions</li>
+                  <li><strong>Shop:</strong> Browse all our products</li>
+                  <li><strong>Categories:</strong> Browse products by category</li>
+                  <li><strong>Restaurant:</strong> Information about our restaurant services</li>
+                  <li><strong>About Us:</strong> Learn about our story and mission</li>
+                  <li><strong>Contact:</strong> Get in touch with us</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Browsing Products -->
+          <div class="tab-pane fade" id="browsing-products">
+            <div class="card card-lg">
+              <div class="card-body">
+                <h6 class="mb-4">Browsing Our Products</h6>
+                <p class="text-gray-500">
+                  We offer a wide range of authentic African groceries and products. Here's how to find what you're looking for:
+                </p>
+                <h6 class="mt-5 mb-4">Using the Search Function</h6>
+                <p class="text-gray-500">
+                  The search bar at the top of every page allows you to quickly find products by name or keyword.
+                </p>
+                <h6 class="mt-5 mb-4">Browsing Categories</h6>
+                <p class="text-gray-500">
+                  Our products are organized into categories to make shopping easier:
+                </p>
+                <ul class="text-gray-500">
+                  <li><strong>Groceries:</strong> Staple foods, spices, and ingredients</li>
+                  <li><strong>Fresh Foods:</strong> Perishable items like vegetables and meats</li>
+                  <li><strong>Prepared Foods:</strong> Ready-to-eat meals and snacks</li>
+                  <li><strong>Household Items:</strong> Non-food products for your home</li>
+                </ul>
+                <h6 class="mt-5 mb-4">Filtering and Sorting</h6>
+                <p class="text-gray-500">
+                  When browsing products, you can:
+                </p>
+                <ul class="text-gray-500">
+                  <li>Sort by price (low to high or high to low)</li>
+                  <li>Sort by popularity</li>
+                  <li>Sort by newest arrivals</li>
+                  <li>Filter by price range</li>
+                  <li>Filter by country of origin</li>
+                </ul>
+                <h6 class="mt-5 mb-4">Product Details</h6>
+                <p class="text-gray-500">
+                  Click on any product to view:
+                </p>
+                <ul class="text-gray-500">
+                  <li>Detailed description</li>
+                  <li>Ingredients and nutritional information</li>
+                  <li>Country of origin</li>
+                  <li>Cultural significance</li>
+                  <li>Preparation suggestions</li>
+                  <li>Related products</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Ordering Process -->
+          <div class="tab-pane fade" id="ordering">
+            <!-- Content for ordering process -->
+            <div class="card card-lg">
+              <div class="card-body">
+                <h6 class="mb-4">How to Place an Order</h6>
+                <p class="text-gray-500">
+                  Placing an order on our website is simple and secure. Follow these steps:
+                </p>
+                <ol class="text-gray-500">
+                  <li><strong>Add Products to Cart:</strong> Click the "Add to Cart" button on any product you wish to purchase.</li>
+                  <li><strong>Review Your Cart:</strong> Click the cart icon in the top right to review your items.</li>
+                  <li><strong>Proceed to Checkout:</strong> Click "Checkout" to begin the payment process.</li>
+                  <li><strong>Enter Shipping Information:</strong> Provide your shipping address and contact details.</li>
+                  <li><strong>Choose Shipping Method:</strong> Select your preferred shipping option.</li>
+                  <li><strong>Enter Payment Information:</strong> Provide your payment details securely.</li>
+                  <li><strong>Review and Confirm:</strong> Double-check your order details before confirming.</li>
+                </ol>
+                <h6 class="mt-5 mb-4">Payment Options</h6>
+                <p class="text-gray-500">
+                  We accept the following payment methods:
+                </p>
+                <ul class="text-gray-500">
+                  <li>Credit/Debit Cards (Visa, Mastercard, American Express)</li>
+                  <li>PayPal</li>
+                  <li>WhatsApp Payment (for local pickup)</li>
+                </ul>
+                <h6 class="mt-5 mb-4">Order Confirmation</h6>
+                <p class="text-gray-500">
+                  After placing your order, you will receive:
+                </p>
+                <ul class="text-gray-500">
+                  <li>An immediate order confirmation on the website</li>
+                  <li>A confirmation email with your order details</li>
+                  <li>A shipping confirmation email once your order is dispatched</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Your Account -->
+          <div class="tab-pane fade" id="account">
+            <!-- Content for account management -->
+            <div class="card card-lg">
+              <div class="card-body">
+                <h6 class="mb-4">Managing Your Account</h6>
+                <p class="text-gray-500">
+                  Your account dashboard gives you access to:
+                </p>
+                <ul class="text-gray-500">
+                  <li><strong>Order History:</strong> View all your past orders and their status.</li>
+                  <li><strong>Saved Addresses:</strong> Manage your shipping addresses for faster checkout.</li>
+                  <li><strong>Wishlist:</strong> Save products for future purchase.</li>
+                  <li><strong>Account Settings:</strong> Update your personal information and password.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Shipping & Delivery -->
+          <div class="tab-pane fade" id="shipping">
+            <!-- Content for shipping information -->
+            <div class="card card-lg">
+              <div class="card-body">
+                <h6 class="mb-4">Shipping & Delivery Information</h6>
+                <p class="text-gray-500">
+                  We offer several shipping options to meet your needs:
+                </p>
+                <ul class="text-gray-500">
+                  <li><strong>Standard Shipping:</strong> 3-5 business days</li>
+                  <li><strong>Express Shipping:</strong> 1-2 business days</li>
+                  <li><strong>Local Pickup:</strong> Available at our San Diego location</li>
+                </ul>
+                <h6 class="mt-5 mb-4">Shipping Rates</h6>
+                <p class="text-gray-500">
+                  Shipping rates are calculated based on:
+                </p>
+                <ul class="text-gray-500">
+                  <li>Order weight and dimensions</li>
+                  <li>Shipping destination</li>
+                  <li>Selected shipping method</li>
+                </ul>
+                <p class="text-gray-500">
+                  Free shipping is available for orders over $75 within San Diego County.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Restaurant Services -->
+          <div class="tab-pane fade" id="restaurant">
+            <!-- Content for restaurant services -->
+            <div class="card card-lg">
+              <div class="card-body">
+                <h6 class="mb-4">Our Restaurant Services</h6>
+                <p class="text-gray-500">
+                  In addition to our grocery store, we offer authentic Nigerian cuisine at our restaurant:
+                </p>
+                <ul class="text-gray-500">
+                  <li><strong>Dine-In:</strong> Experience our authentic dishes in our welcoming restaurant.</li>
+                  <li><strong>Takeout:</strong> Order ahead and pick up your favorite dishes.</li>
+                  <li><strong>Catering:</strong> We offer catering services for events of all sizes.</li>
+                </ul>
+                <h6 class="mt-5 mb-4">Our Menu</h6>
+                <p class="text-gray-500">
+                  Our menu features traditional Nigerian dishes prepared with authentic ingredients:
+                </p>
+                <ul class="text-gray-500">
+                  <li>Jollof Rice</li>
+                  <li>Egusi Soup with Pounded Yam</li>
+                  <li>Suya (Spiced Grilled Meat)</li>
+                  <li>Moin Moin (Steamed Bean Pudding)</li>
+                  <li>Pepper Soup</li>
+                  <li>And many more!</li>
+                </ul>
+                <h6 class="mt-5 mb-4">Reservations</h6>
+                <p class="text-gray-500">
+                  To make a reservation:
+                </p>
+                <ul class="text-gray-500">
+                  <li>Call us at (619) 555-1234</li>
+                  <li>Use our online reservation system</li>
+                  <li>Email us at reservations@africanfoodsd.com</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- FAQ -->
+          <div class="tab-pane fade" id="faq">
+            <!-- Content for FAQ -->
+            <div class="card card-lg">
+              <div class="card-body">
+                <h6 class="mb-4">Frequently Asked Questions</h6>
+                
+                <div class="accordion" id="helpAccordion">
+                  <!-- Question 1 -->
+                  <div class="card">
+                    <div class="card-header" id="headingOne">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          Do you ship internationally?
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#helpAccordion">
+                      <div class="card-body text-gray-500">
+                        Currently, we only ship within the United States. We hope to expand our shipping options in the future.
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Question 2 -->
+                  <div class="card">
+                    <div class="card-header" id="headingTwo">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          How do I track my order?
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#helpAccordion">
+                      <div class="card-body text-gray-500">
+                        Once your order ships, you will receive a tracking number via email. You can also view your order status in your account dashboard.
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Question 3 -->
+                  <div class="card">
+                    <div class="card-header" id="headingThree">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                          What is your return policy?
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#helpAccordion">
+                      <div class="card-body text-gray-500">
+                        We accept returns within 30 days of purchase for most items. Food items cannot be returned once opened. Please see our Returns & Refunds page for more details.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,333 @@
+{% load static %}
+
+<!-- Enhanced Modern African-inspired Product Card Template -->
+<div class="product-card-african" data-product-id="{{ product.id }}" data-category-id="{{ product.category.id }}">
+    <!-- Product Image Container with Enhanced Hover Effects -->
+    <div class="product-img-container">
+        <!-- Product Badges with Animation -->
+        <div class="product-badges">
+            {% if product.is_on_sale %}
+            <div class="product-badge-african sale-badge">SALE</div>
+            {% endif %}
+
+            {% if product.is_new %}
+            <div class="product-badge-african new-badge">NEW</div>
+            {% endif %}
+        </div>
+
+        <!-- Product Image with Lazy Loading and Enhanced Animation -->
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-img" onerror="this.src='{% static 'img/placeholder.png' %}'" loading="lazy">
+
+        <!-- Enhanced Quick Actions Overlay -->
+        <div class="product-actions-overlay">
+            <div class="action-buttons">
+                <!-- Quick View Button -->
+                <button class="action-btn quick-view" data-bs-toggle="modal" data-bs-target="#modalProduct{{ product.id }}" title="Quick View">
+                    <i class="fe fe-eye"></i>
+                </button>
+
+                <!-- Add to Cart Button -->
+                <button class="action-btn add-cart" onclick="addToCartWithEmail({{ product.id }})" title="Add to Cart">
+                    <i class="fe fe-shopping-cart"></i>
+                </button>
+
+                <!-- Wishlist Button -->
+                <button class="action-btn wishlist" onclick="addToWishlistWithEmail({{ product.id }})" title="Add to Wishlist">
+                    <i class="fe fe-heart"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Product Link Overlay - Makes entire card clickable -->
+        <a href="{% url 'product' product.id %}" class="product-link-overlay" aria-label="View {{ product.name }} details"></a>
+    </div>
+
+    <!-- Product Info with Enhanced Typography and Spacing -->
+    <div class="product-info">
+        <!-- Category Badge with Hover Effect -->
+        {% if product.category %}
+        <div class="mb-2">
+            <a href="{% url 'shop_with_category' product.category.id %}" class="category-badge-african">{{ product.category.name }}</a>
+        </div>
+        {% endif %}
+
+        <!-- Product Title with Enhanced Typography -->
+        <h3 class="product-title">
+            <a href="{% url 'product' product.id %}">{{ product.name }}</a>
+        </h3>
+
+        <!-- Cultural Significance with Better Styling -->
+        {% if product.description %}
+        <div class="cultural-significance-short">
+            {% if product.description|length > 60 %}
+                {{ product.description|slice:":60" }}...
+            {% else %}
+                {{ product.description }}
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Product Price with Enhanced Visual Hierarchy -->
+        <div class="product-price">
+            {% if product.is_on_sale %}
+            <div class="price-wrapper">
+                <span class="price-old">${{ product.regular_price }}</span>
+                <span class="price-current">${{ product.price }}</span>
+                <span class="discount-badge">-{{ product.discount_percentage|floatformat:0 }}%</span>
+            </div>
+            {% else %}
+            <span class="price-current">${{ product.price }}</span>
+            {% endif %}
+        </div>
+
+        <!-- Add to Cart Button with Enhanced Animation -->
+        <button class="btn-add-to-cart-african" onclick="addToCartWithEmail({{ product.id }})" data-product-id="{{ product.id }}">
+            <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+        </button>
+    </div>
+</div>
+
+<!-- Enhanced African Product Card Styling -->
+<style>
+    /* Enhanced African-Inspired Product Card */
+    .product-card-african {
+        background-color: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        border: 1px solid rgba(210, 105, 30, 0.08);
+        will-change: transform, box-shadow;
+    }
+
+    /* Gradient top border that appears on hover */
+    .product-card-african::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(to right, #D2691E, #8B4513);
+        z-index: 5;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .product-card-african:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(139, 69, 19, 0.15);
+    }
+
+    .product-card-african:hover::before {
+        opacity: 1;
+    }
+
+    /* Product Image Container */
+    .product-img-container {
+        position: relative;
+        overflow: hidden;
+        padding-top: 100%; /* 1:1 Aspect Ratio */
+    }
+
+    .product-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .product-card-african:hover .product-img {
+        transform: scale(1.1);
+    }
+
+    /* Product Badges */
+    .product-badge-african {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        padding: 6px 12px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        z-index: 10;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        background: #D2691E;
+        color: white;
+    }
+
+    .new-badge {
+        background: #8B4513;
+        left: auto;
+        right: 15px;
+    }
+
+    /* Quick Actions Overlay */
+    .product-actions-overlay {
+        position: absolute;
+        bottom: -60px;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+        transition: bottom 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        z-index: 10;
+    }
+
+    .product-card-african:hover .product-actions-overlay {
+        bottom: 0;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+    }
+
+    .action-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .action-btn:hover {
+        background: #D2691E;
+        color: white;
+        transform: translateY(-3px);
+    }
+
+    /* Product Info Section */
+    .product-info {
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .category-badge-african {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        background: rgba(210, 105, 30, 0.1);
+        color: #8B4513;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .category-badge-african:hover {
+        background: rgba(210, 105, 30, 0.2);
+        color: #D2691E;
+    }
+
+    .product-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 10px 0;
+        line-height: 1.4;
+    }
+
+    .product-title a {
+        color: #333;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .product-title a:hover {
+        color: #D2691E;
+    }
+
+    .cultural-significance-short {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+
+    .product-price {
+        margin-bottom: 15px;
+    }
+
+    .price-current {
+        font-size: 20px;
+        font-weight: 700;
+        color: #D2691E;
+    }
+
+    .price-old {
+        font-size: 16px;
+        color: #999;
+        text-decoration: line-through;
+        margin-right: 10px;
+    }
+
+    .discount-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        background: rgba(210, 105, 30, 0.1);
+        color: #D2691E;
+        margin-left: 10px;
+    }
+
+    .btn-add-to-cart-african {
+        margin-top: auto;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        background: #D2691E;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-add-to-cart-african:hover {
+        background: #8B4513;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(210, 105, 30, 0.3);
+    }
+
+    .btn-add-to-cart-african.in-cart {
+        background: #28a745;
+    }
+
+    /* Product Link Overlay - Makes entire card clickable */
+    .product-link-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 5;
+    }
+
+    /* Ensure buttons are above the overlay */
+    .product-actions-overlay,
+    .product-badges {
+        z-index: 10;
+    }
+</style>

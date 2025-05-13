@@ -3,35 +3,105 @@
 
 {% block title %}Home{% endblock %}
 
-{% block content %} 
+{% block content %}
 
+<!-- HERO SECTION WITH ANIMATION -->
+<section class="hero-section">
+    <div class="hero-slider" data-flickity='{"pageDots": true, "prevNextButtons": true, "wrapAround": true, "autoPlay": 5000, "fade": true}'>
+        <!-- Hero Slide 1 -->
+        <div class="hero-slide w-100">
+            <div class="container">
+                <div class="row align-items-center min-vh-70">
+                    <div class="col-12 col-md-6 col-lg-5 slide-content">
+                        <div class="slide-content-inner" data-aos="fade-right" data-aos-delay="200">
+                            <span class="badge bg-accent text-white mb-3 animate-badge">Authentic African Experience</span>
+                            <h1 class="display-3 fw-bold mb-4 text-gradient">Taste of Nigeria</h1>
+                            <p class="lead mb-5">Experience the vibrant culture of Nigeria through our carefully curated collection of authentic products. From traditional foods to artisanal crafts.</p>
+                            <div class="d-flex gap-3">
+                                <a href="{% url 'shop' %}" class="btn btn-primary btn-lg btn-animated">
+                                    <span>Shop Now</span>
+                                    <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                                <a href="{% url 'about' %}" class="btn btn-outline-dark btn-lg btn-animated-alt">
+                                    <span>Learn More</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-7 d-none d-md-block">
+                        <div class="hero-image-container" data-aos="fade-left" data-aos-delay="400">
+                            <img src="{% static 'img/afrocommerce/hero-image.jpg' %}" alt="Nigerian Products" class="img-fluid rounded-3 hero-image">
+                            <div class="floating-badge">
+                                <div class="badge-inner">
+                                    <span class="nigeria-flag-colors"></span>
+                                    <span>Made in Nigeria</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero Slide 2 -->
+        <div class="hero-slide w-100">
+            <div class="container">
+                <div class="row align-items-center min-vh-70">
+                    <div class="col-12 col-md-6 col-lg-7 order-md-2">
+                        <div class="slide-content-inner" data-aos="fade-left" data-aos-delay="200">
+                            <span class="badge bg-success text-white mb-3 animate-badge">Traditional & Modern</span>
+                            <h1 class="display-3 fw-bold mb-4 text-gradient-alt">African Cuisine</h1>
+                            <p class="lead mb-5">Discover the rich flavors of Nigerian cuisine with our premium spice collection. Perfect for creating authentic dishes at home.</p>
+                            <div class="d-flex gap-3">
+                                <a href="{% url 'restaurant' %}" class="btn btn-primary btn-lg btn-animated">
+                                    <span>Explore Foods</span>
+                                    <i class="fas fa-utensils ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-5 order-md-1 d-none d-md-block">
+                        <div class="hero-image-container" data-aos="fade-right" data-aos-delay="400">
+                            <img src="{% static 'img/afrocommerce/restaurant.jpg' %}" alt="Nigerian Food" class="img-fluid rounded-3 hero-image">
+                            <div class="floating-badge left">
+                                <div class="badge-inner">
+                                    <span>Authentic Flavors</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-xl navbar-light " style="background-color: #FFE5B4; border-bottom: 4px solid #8B4513; box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);">
       <div class="container">
-    
+
         <!-- Brand -->
         <a class="navbar-brand d-xl-none" href="./overview.html">
           African Food
           <span><small>san diego</small></span>
         </a>
-    
+
         <!-- Toggler -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarClassicCollapse" aria-controls="navbarClassicCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-    
+
         <!-- Collapse -->
         <div class="collapse navbar-collapse" id="navbarClassicCollapse">
-    
+
           <!-- Nav -->
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
-    
+
               <!-- Toggle -->
               <a class="nav-link" data-bs-toggle="dropdown" href="#">Home</a>
-    
+
               <!-- Menu -->
               <div class="dropdown-menu">
                 <div class="card card-lg">
@@ -65,13 +135,13 @@
                   </div>
                 </div>
               </div>
-    
+
             </li>
             <li class="nav-item dropdown position-static">
-    
+
               <!-- Toggle -->
               <a class="nav-link" data-bs-toggle="dropdown" href="#">Catalog</a>
-    
+
               <!-- Menu -->
               <div class="dropdown-menu w-100">
                 <div class="card card-lg">
@@ -79,10 +149,10 @@
                     <div class="container">
                       <div class="row">
                         <div class="col-4 col-md">
-              
+
                           <!-- Heading -->
                           <div class="mb-5 fw-bold">Women</div>
-              
+
                           <!-- Links -->
                           <ul class="list-styled mb-0 fs-sm">
                             <li class="list-styled-item">
@@ -113,13 +183,13 @@
                               <a class="list-styled-link" href="#">Jewelry</a>
                             </li>
                           </ul>
-              
+
                         </div>
                         <div class="col-4 col-md">
-              
+
                           <!-- Heading -->
                           <div class="mb-5 fw-bold">Men</div>
-              
+
                           <!-- Links -->
                           <ul class="list-styled mb-0 fs-sm">
                             <li class="list-styled-item">
@@ -150,13 +220,13 @@
                               <a class="list-styled-link" href="#">Watches</a>
                             </li>
                           </ul>
-              
+
                         </div>
                         <div class="col-4 col-md">
-              
+
                           <!-- Heading -->
                           <div class="mb-5 fw-bold">Kids</div>
-              
+
                           <!-- Links -->
                           <ul class="list-styled mb-0 fs-sm">
                             <li class="list-styled-item">
@@ -178,55 +248,55 @@
                               <a class="list-styled-link" href="#">Boots</a>
                             </li>
                           </ul>
-              
+
                         </div>
                         <div class="d-none d-md-flex flex-column col-md-3">
-              
+
                           <!-- Card -->
                           <div class="card mb-7 bg-cover" style="min-height: 150px;">
-              
+
                             <!-- Background -->
                             <div class="card-bg">
                               <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/product-2.jpg);"></div>
                             </div>
-              
+
                             <!-- Body -->
                             <div class="card-body my-auto px-7">
                               <a class="stretched-link fw-bold text-body" href="#">
                                 Men's Shirts
                               </a>
                             </div>
-              
+
                           </div>
-              
+
                           <!-- Card -->
                           <div class="card bg-cover" style="min-height: 150px;">
-              
+
                             <!-- Background -->
                             <div class="card-bg">
                               <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/product-3.jpg);"></div>
                             </div>
-              
+
                             <!-- Body -->
                             <div class="card-body my-auto px-7">
                               <a class="stretched-link fw-bold text-body" href="#">
                                 Floral Dresses
                               </a>
                             </div>
-              
+
                           </div>
-              
+
                         </div>
                         <div class="d-none d-md-flex flex-column col-md-3">
-              
+
                           <!-- Card -->
                           <div class="card bg-cover" style="min-height: 330px;">
-              
+
                             <!-- Background -->
                             <div class="card-bg">
                               <div class="card-bg-img bg-cover" style="background-image: url(assets/img/products/product-111.jpg);"></div>
                             </div>
-              
+
                             <!-- Body -->
                             <div class="card-body my-auto text-center">
                               <a class="stretched-link text-white" href="#">
@@ -234,32 +304,32 @@
                                 <h6>Women’s Watches</h6>
                               </a>
                             </div>
-              
+
                           </div>
-              
+
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-    
+
             </li>
             <li class="nav-item dropdown">
-    
+
               <!-- Toggle -->
               <a class="nav-link" data-bs-toggle="dropdown" href="#">Shop</a>
-    
+
               <!-- Menu -->
               <div class="dropdown-menu" style="min-width: 650px;">
                 <div class="card card-lg">
                   <div class="card-body">
                     <div class="row">
                       <div class="col">
-              
+
                         <!-- Heading -->
                         <div class="mb-5 fw-bold">Shop</div>
-              
+
                         <!-- Links -->
                         <ul class="list-styled mb-7 fs-sm">
                           <li class="list-styled-item">
@@ -278,10 +348,10 @@
                             <a class="list-styled-link" href="./shop-masonry.html">Masonry</a>
                           </li>
                         </ul>
-              
+
                         <!-- Heading -->
                         <div class="mb-5 fw-bold">Product</div>
-              
+
                         <!-- Links -->
                         <ul class="list-styled fs-sm">
                           <li class="list-styled-item">
@@ -300,13 +370,13 @@
                             <a class="list-styled-link" href="./product-images-stacked.html">Images Stacked</a>
                           </li>
                         </ul>
-              
+
                       </div>
                       <div class="col">
-              
+
                         <!-- Heading -->
                         <div class="mb-5 fw-bold">Support</div>
-              
+
                         <!-- Links -->
                         <ul class="list-styled mb-7 fs-sm">
                           <li class="list-styled-item">
@@ -322,10 +392,10 @@
                             <a class="list-styled-link" href="./shipping-and-returns.html">Shipping & Returns</a>
                           </li>
                         </ul>
-              
+
                         <!-- Heading -->
                         <div class="mb-5 fw-bold">Account</div>
-              
+
                         <!-- Links -->
                         <ul class="list-styled fs-sm">
                           <li class="list-styled-item">
@@ -347,10 +417,10 @@
                             <a class="list-styled-link" href="./account-address-edit.html">Addresses: New</a>
                           </li>
                         </ul>
-              
+
                       </div>
                       <div class="col">
-              
+
                         <!-- Links -->
                         <ul class="list-styled mb-7 fs-sm">
                           <li class="list-styled-item">
@@ -366,10 +436,10 @@
                             <a class="list-styled-link" href="./auth.html">Auth</a>
                           </li>
                         </ul>
-              
+
                         <!-- Heading -->
                         <div class="mb-5 fw-bold">Modals</div>
-              
+
                         <!-- Links -->
                         <ul class="list-styled fs-sm">
                           <li class="list-styled-item">
@@ -408,19 +478,19 @@
                             </a>
                           </li>
                         </ul>
-              
+
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-    
+
             </li>
             <li class="nav-item dropdown">
-    
+
               <!-- Toggle -->
               <a class="nav-link" data-bs-toggle="dropdown" href="#">Pages</a>
-    
+
               <!-- Menu -->
               <div class="dropdown-menu">
                 <div class="card card-lg">
@@ -448,13 +518,13 @@
                   </div>
                 </div>
               </div>
-    
+
             </li>
             <li class="nav-item dropdown">
-    
+
               <!-- Toggle -->
               <a class="nav-link" data-bs-toggle="dropdown" href="#">Blog</a>
-    
+
               <!-- Menu -->
               <div class="dropdown-menu">
                 <div class="card card-lg">
@@ -470,25 +540,25 @@
                   </div>
                 </div>
               </div>
-    
+
             </li>
             <li class="nav-item">
               <a class="nav-link" href="./docs/getting-started.html">Docs</a>
             </li>
           </ul>
-    
+
           <!-- Brand -->
           <a class="navbar-brand mx-auto d-none d-xl-block" href="./overview.html">
             African Food
           </a>
-    
+
           <!-- Nav -->
           <ul class="navbar-nav nav-divided">
             <li class="nav-item dropdown">
-    
+
               <!-- Toggle -->
               <a class="nav-link text-body dropdown-toggle" data-bs-toggle="dropdown" href="#">United States</a>
-    
+
               <!-- Menu -->
               <div class="dropdown-menu">
                 <div class="card card-lg">
@@ -507,13 +577,13 @@
                   </div>
                 </div>
               </div>
-    
+
             </li>
             <li class="nav-item dropdown">
-    
+
               <!-- Toggle -->
               <a class="nav-link text-body dropdown-toggle" data-bs-toggle="dropdown" href="#">USD</a>
-    
+
               <!-- Menu -->
               <div class="dropdown-menu">
                 <div class="card card-lg">
@@ -529,13 +599,13 @@
                   </div>
                 </div>
               </div>
-    
+
             </li>
             <li class="nav-item dropdown">
-    
+
               <!-- Toggle -->
               <a class="nav-link text-body dropdown-toggle" data-bs-toggle="dropdown" href="#">EN</a>
-    
+
               <!-- Menu -->
               <div class="dropdown-menu">
                 <div class="card card-lg">
@@ -554,10 +624,10 @@
                   </div>
                 </div>
               </div>
-    
+
             </li>
           </ul>
-    
+
           <!-- Nav -->
           <ul class="navbar-nav flex-row">
             <li class="nav-item">
@@ -583,9 +653,9 @@
               </a>
             </li>
           </ul>
-    
+
         </div>
-    
+
       </div>
     </nav>
 
@@ -596,14 +666,14 @@
       <div class="container">
         <div class="row">
           <div class="col-12">
-    
+
             <!-- Text -->
             <div class="text-center text-white">
               <span class="heading-xxs letter-spacing-xl">
                 ⚡️ Happy Holiday Deals on Everything ⚡️
               </span>
             </div>
-    
+
           </div>
         </div>
       </div>
@@ -697,94 +767,207 @@
       </div>
     </section>
 
-<!-- CATEGORIES -->
-<section class="pt-6">
-  <div class="container-fluid px-3 px-md-6">
-    <div class="row mx-n3">
-      <!-- Category Cards Loop -->
-      {% for category in categories %}
-      <div class="col-12 col-sm-4 d-flex flex-column px-3">
+<!-- DYNAMIC CATEGORIES SHOWCASE -->
+<section class="pt-6 categories-section">
+  <div class="container">
+    <div class="row justify-content-center mb-7">
+      <div class="col-12 col-md-8 text-center">
+        <h6 class="heading-xxs text-muted mb-3 animate-heading" data-aos="fade-up">EXPLORE OUR SERVICES</h6>
+        <h2 class="mb-4" data-aos="fade-up" data-aos-delay="100">Nigerian Treasures</h2>
+        <p class="text-muted mb-0" data-aos="fade-up" data-aos-delay="200">Discover our authentic Nigerian products and services</p>
+      </div>
+    </div>
 
-        <!-- Card-->
-        <div class="card card-xl mb-3 mb-sm-0" style="min-height: 280px;">
-
-          <!-- Background -->
-          <div class="card-bg">
-            <div class="card-bg-img bg-cover" style="background-image: url({{ category.image }});"></div>
+    <div class="row">
+      <!-- Service 1: Groceries -->
+      <div class="col-12 col-md-6 mb-5" data-aos="fade-right" data-aos-delay="300">
+        <div class="category-card-animated">
+          <div class="category-image">
+            <img src="{% static 'img/afrocommerce/groceries.jpg' %}" alt="Nigerian Groceries" class="img-fluid rounded-3" onerror="this.src='/static/img/placeholder.png'">
+            <div class="category-overlay"></div>
           </div>
-
-          <!-- Body -->
-          <div class="card-body my-auto text-center">
-            <h5 class="mb-0">{{ category.name }}</h5>
-            <a class="btn btn-link stretched-link px-0 text-reset" href="{{ category.link }}">
-              Explore Now <i class="fe fe-arrow-right ms-2"></i>
+          <div class="category-content">
+            <div class="category-icon">
+              <i class="fas fa-utensils"></i>
+            </div>
+            <h3 class="category-title">African Groceries</h3>
+            <p class="category-description">
+              Authentic Nigerian ingredients, spices, and food products imported directly from West Africa.
+            </p>
+            <a href="{% url 'service' 1 %}" class="btn btn-outline-light btn-animated service-groceries">
+              <span>Explore Groceries</span>
+              <i class="fas fa-arrow-right ms-2"></i>
             </a>
           </div>
         </div>
-
       </div>
-      {% endfor %}
+
+      <!-- Service 2: Restaurant -->
+      <div class="col-12 col-md-6 mb-5" data-aos="fade-left" data-aos-delay="400">
+        <div class="category-card-animated">
+          <div class="category-image">
+            <img src="{% static 'img/afrocommerce/restaurant.jpg' %}" alt="Nigerian Restaurant" class="img-fluid rounded-3" onerror="this.src='/static/img/placeholder.png'">
+            <div class="category-overlay"></div>
+          </div>
+          <div class="category-content">
+            <div class="category-icon">
+              <i class="fas fa-hamburger"></i>
+            </div>
+            <h3 class="category-title">Nigerian Restaurant</h3>
+            <p class="category-description">
+              Delicious Nigerian cuisine prepared with authentic recipes and fresh ingredients.
+            </p>
+            <a href="{% url 'service' 2 %}" class="btn btn-outline-light btn-animated service-restaurant">
+              <span>Explore Restaurant</span>
+              <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- SHOP BY CATEGORY -->
-<section class="py-12">
+<!-- FEATURED PRODUCTS WITH ANIMATIONS -->
+<section class="py-12 bg-light">
   <div class="container">
+    <div class="row justify-content-center mb-7">
+      <div class="col-12 col-md-8 text-center">
+        <h6 class="heading-xxs text-muted mb-3 animate-heading" data-aos="fade-up">HANDPICKED FOR YOU</h6>
+        <h2 class="mb-4" data-aos="fade-up" data-aos-delay="100">Featured Products</h2>
+        <p class="text-muted mb-0" data-aos="fade-up" data-aos-delay="200">Our most popular Nigerian products that customers love</p>
+      </div>
+    </div>
+
     <div class="row">
-      <div class="col-12 text-center">
-        <h2 class="mb-4">Shop by Category</h2>
-        <div class="nav justify-content-center mb-10">
-          {% for tab in tabs %}
-          <a class="nav-link {% if loop.first %}active{% endif %}" href="#{{ tab.id }}" data-bs-toggle="tab">{{ tab.label }}</a>
-          {% endfor %}
-        </div>
-        <div class="tab-content">
-          {% for tab in tabs %}
-          <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="{{ tab.id }}">
-            <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}'>
-              {% for item in tab.items %}
-              <div class="col px-4" style="max-width: 200px;">
-                <div class="card">
-                  <img class="card-img-top" src="{{ item.image }}" alt="{{ item.name }}">
-                  <div class="card-body py-4 px-0 text-center">
-                    <a class="stretched-link text-body" href="{{ item.link }}">
-                      <h6>{{ item.name }} <small>({{ item.count }})</small></h6>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              {% endfor %}
+      <!-- Featured Product 1 -->
+      <div class="col-12 col-md-6 col-lg-3 mb-5" data-aos="fade-up" data-aos-delay="300">
+        <div class="product-card-animated">
+          <div class="product-badge">POPULAR</div>
+          <div class="product-image">
+            <img src="{% static 'img/afrocommerce/jollof-rice.jpg' %}" alt="Jollof Rice" class="img-fluid" onerror="this.src='/static/img/placeholder.png'">
+            <div class="product-actions">
+              <button class="action-button" onclick="addToCartWithEmail(1)">
+                <i class="fe fe-shopping-cart"></i>
+              </button>
+              <button class="action-button" data-bs-toggle="modal" data-bs-target="#modalProduct">
+                <i class="fe fe-eye"></i>
+              </button>
             </div>
           </div>
-          {% endfor %}
+          <div class="product-content">
+            <h4 class="product-title">Jollof Rice</h4>
+            <p class="product-price">$12.99</p>
+            <div class="product-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+              <span>(24)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Product 2 -->
+      <div class="col-12 col-md-6 col-lg-3 mb-5" data-aos="fade-up" data-aos-delay="400">
+        <div class="product-card-animated">
+          <div class="product-badge bg-danger">HOT</div>
+          <div class="product-image">
+            <img src="{% static 'img/afrocommerce/egusi-soup.jpg' %}" alt="Egusi Soup" class="img-fluid" onerror="this.src='/static/img/placeholder.png'">
+            <div class="product-actions">
+              <button class="action-button" onclick="add_to_cart(2)">
+                <i class="fe fe-shopping-cart"></i>
+              </button>
+              <button class="action-button" data-bs-toggle="modal" data-bs-target="#modalProduct">
+                <i class="fe fe-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="product-content">
+            <h4 class="product-title">Egusi Soup</h4>
+            <p class="product-price">$14.99</p>
+            <div class="product-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <span>(36)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Product 3 -->
+      <div class="col-12 col-md-6 col-lg-3 mb-5" data-aos="fade-up" data-aos-delay="500">
+        <div class="product-card-animated">
+          <div class="product-badge bg-success">NEW</div>
+          <div class="product-image">
+            <img src="{% static 'img/afrocommerce/pounded-yam.jpg' %}" alt="Pounded Yam" class="img-fluid" onerror="this.src='/static/img/placeholder.png'">
+            <div class="product-actions">
+              <button class="action-button" onclick="add_to_cart(3)">
+                <i class="fe fe-shopping-cart"></i>
+              </button>
+              <button class="action-button" data-bs-toggle="modal" data-bs-target="#modalProduct">
+                <i class="fe fe-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="product-content">
+            <h4 class="product-title">Pounded Yam</h4>
+            <p class="product-price">$10.99</p>
+            <div class="product-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+              <span>(18)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Product 4 -->
+      <div class="col-12 col-md-6 col-lg-3 mb-5" data-aos="fade-up" data-aos-delay="600">
+        <div class="product-card-animated">
+          <div class="product-badge bg-warning text-dark">SALE</div>
+          <div class="product-image">
+            <img src="{% static 'img/afrocommerce/suya.jpg' %}" alt="Suya" class="img-fluid" onerror="this.src='/static/img/placeholder.png'">
+            <div class="product-actions">
+              <button class="action-button" onclick="add_to_cart(4)">
+                <i class="fe fe-shopping-cart"></i>
+              </button>
+              <button class="action-button" data-bs-toggle="modal" data-bs-target="#modalProduct">
+                <i class="fe fe-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="product-content">
+            <h4 class="product-title">Suya (Spiced Meat)</h4>
+            <p class="product-price"><span class="old-price">$15.99</span> $11.99</p>
+            <div class="product-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+              <span>(29)</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- FEATURED PRODUCTS -->
-<section>
-  <div class="container">
     <div class="row">
-      {% for product in featured_products %}
-      <div class="col-12 col-md-6">
-        <div class="card card-lg">
-          <div class="card-circle card-circle-lg card-circle-end">
-            <strong class="fs-xs text-decoration-line-through opacity-80">{{ product.original_price }}</strong>
-            <span class="fs-6 fw-bold">{{ product.sale_price }}</span>
-          </div>
-          <img class="card-img-top" src="{{ product.image }}" alt="{{ product.name }}">
-          <div class="card-body position-relative mx-6 mx-lg-11 mt-n11 bg-white text-center">
-            <h4 class="mb-0">{{ product.name }}</h4>
-            <a class="btn btn-link stretched-link px-0 text-reset" href="{{ product.link }}">
-              Shop Now <i class="fe fe-arrow-right ms-2"></i>
-            </a>
-          </div>
-        </div>
+      <div class="col-12 text-center" data-aos="fade-up" data-aos-delay="700">
+        <a href="{% url 'shop' %}" class="btn btn-service-primary btn-lg btn-animated">
+          <span>View All Products</span>
+          <i class="fas fa-arrow-right ms-2"></i>
+        </a>
       </div>
-      {% endfor %}
     </div>
   </div>
 </section>
@@ -1178,234 +1361,157 @@
       </div>
     </section>
 
-    <!-- BLOG -->
-    <section class="py-12 bg-light">
+    <!-- TESTIMONIALS SECTION WITH ANIMATIONS -->
+    <section class="py-12 bg-light testimonials-section">
       <div class="container">
-        <div class="row">
-          <div class="col-12">
-
-            <!-- Preheading -->
-            <h6 class="heading-xxs mb-3 text-center text-gray-400">
-              Our blog
-            </h6>
-
-            <!-- Heading -->
-            <h2 class="mb-10 text-center">Latest in Blog</h2>
-
+        <div class="row justify-content-center mb-7">
+          <div class="col-12 col-md-8 text-center">
+            <h6 class="heading-xxs text-muted mb-3 animate-heading" data-aos="fade-up">CUSTOMER STORIES</h6>
+            <h2 class="mb-4" data-aos="fade-up" data-aos-delay="100">What Our Customers Say</h2>
+            <p class="text-muted mb-0" data-aos="fade-up" data-aos-delay="200">Hear from our community of Nigerian product enthusiasts</p>
           </div>
         </div>
-        <div class="row">
-          <div class="col-12 col-md-4">
 
-            <!-- Card -->
-            <div class="card mb-7 shadow shadow-hover lift">
-
-              <!-- Image -->
-              <a href="blog-post.html">
-                <img src="assets/img/blog/blog-1.jpg" alt="..." class="card-img-top">
-              </a>
-
-              <!-- Body -->
-              <div class="card-body px-8 py-7">
-
-                <!-- Time -->
-                <p class="mb-3 fs-xs">
-                  <a class="text-muted" href="blog.html">Fashion / Jun 20, 2019</a>
-                </p>
-
-                <!-- Heading -->
-                <h6 class="mb-0">
-                  <a class="text-body" href="blog-post.html">
-                    Us yielding Fish sea night night the said him two
-                  </a>
-                </h6>
-
-              </div>
-
-            </div>
-
-          </div>
-          <div class="col-12 col-md-4">
-
-            <!-- Card -->
-            <div class="card mb-7 shadow shadow-hover lift">
-
-              <!-- Image -->
-              <a href="blog-post.html">
-                <img src="assets/img/blog/blog-2.jpg" alt="..." class="card-img-top">
-              </a>
-
-              <!-- Body -->
-              <div class="card-body px-8 py-7">
-
-                <!-- Time -->
-                <p class="mb-3 fs-xs">
-                  <a class="text-muted" href="blog.html">Travel / Jun 13, 2019</a>
-                </p>
-
-                <!-- Heading -->
-                <h6 class="mb-0">
-                  <a class="text-body" href="blog-post.html">
-                    Tree earth fowl given moveth deep lesser After
-                  </a>
-                </h6>
-
-              </div>
-
-            </div>
-
-          </div>
-          <div class="col-12 col-md-4">
-
-            <!-- Card -->
-            <div class="card mb-7 shadow shadow-hover lift">
-
-              <!-- Image -->
-              <a href="blog-post.html">
-                <img src="assets/img/blog/blog-3.jpg" alt="..." class="card-img-top">
-              </a>
-
-              <!-- Body -->
-              <div class="card-body px-8 py-7">
-
-                <!-- Time -->
-                <p class="mb-3 fs-xs">
-                  <a class="text-muted" href="blog.html">Lifestyle / Jun 08, 2019</a>
-                </p>
-
-                <!-- Heading -->
-                <h6 class="mb-0">
-                  <a class="text-body" href="blog-post.html">
-                    Given Set was without from god divide rule Hath
-                  </a>
-                </h6>
-
-              </div>
-
-            </div>
-
-          </div>
-        </div>
         <div class="row">
           <div class="col-12">
+            <div class="testimonial-slider" data-flickity='{"pageDots": true, "prevNextButtons": true, "wrapAround": true, "autoPlay": 4000, "cellAlign": "center"}'>
+              <!-- Testimonial 1 -->
+              <div class="testimonial-slide px-3" data-aos="fade-up" data-aos-delay="300">
+                <div class="testimonial-card">
+                  <div class="testimonial-header">
+                    <div class="testimonial-avatar">
+                      <img src="{% static 'img/avatars/avatar-1.jpg' %}" alt="Customer" class="img-fluid rounded-circle" onerror="this.src='/static/img/placeholder.png'">
+                    </div>
+                    <div class="testimonial-meta">
+                      <h5 class="testimonial-name">Sarah Johnson</h5>
+                      <p class="testimonial-location">San Diego, CA</p>
+                      <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="testimonial-body">
+                    <p>"The jollof rice was absolutely delicious! Perfectly spiced and authentic. I'll definitely be ordering again soon. The service was excellent and delivery was prompt."</p>
+                  </div>
+                  <div class="testimonial-pattern"></div>
+                </div>
+              </div>
 
-            <!-- Link -->
-            <div class="mt-7 text-center">
-              <a class="link-underline" href="blog.html">Discover more</a>
+              <!-- Testimonial 2 -->
+              <div class="testimonial-slide px-3" data-aos="fade-up" data-aos-delay="400">
+                <div class="testimonial-card">
+                  <div class="testimonial-header">
+                    <div class="testimonial-avatar">
+                      <img src="{% static 'img/avatars/avatar-2.jpg' %}" alt="Customer" class="img-fluid rounded-circle" onerror="this.src='/static/img/placeholder.png'">
+                    </div>
+                    <div class="testimonial-meta">
+                      <h5 class="testimonial-name">Michael Thompson</h5>
+                      <p class="testimonial-location">La Jolla, CA</p>
+                      <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="testimonial-body">
+                    <p>"First time trying Nigerian food and I'm hooked! The egusi soup was amazing and the service was excellent. I appreciate the authentic flavors and the care put into each dish."</p>
+                  </div>
+                  <div class="testimonial-pattern"></div>
+                </div>
+              </div>
+
+              <!-- Testimonial 3 -->
+              <div class="testimonial-slide px-3" data-aos="fade-up" data-aos-delay="500">
+                <div class="testimonial-card">
+                  <div class="testimonial-header">
+                    <div class="testimonial-avatar">
+                      <img src="{% static 'img/avatars/avatar-3.jpg' %}" alt="Customer" class="img-fluid rounded-circle" onerror="this.src='/static/img/placeholder.png'">
+                    </div>
+                    <div class="testimonial-meta">
+                      <h5 class="testimonial-name">Chioma Okafor</h5>
+                      <p class="testimonial-location">Chula Vista, CA</p>
+                      <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="testimonial-body">
+                    <p>"The pounded yam and vegetable soup combo was perfect. Authentic flavors that reminded me of home. The quality of ingredients is exceptional and the portions are generous."</p>
+                  </div>
+                  <div class="testimonial-pattern"></div>
+                </div>
+              </div>
             </div>
-
           </div>
         </div>
       </div>
     </section>
 
-    <!-- FEATURES -->
-    <section class="py-9">
+    <!-- WHY CHOOSE US SECTION WITH ANIMATED ICONS -->
+    <section class="py-12 why-choose-us-section">
       <div class="container">
+        <div class="row justify-content-center mb-7">
+          <div class="col-12 col-md-8 text-center">
+            <h6 class="heading-xxs text-muted mb-3 animate-heading" data-aos="fade-up">OUR PROMISE</h6>
+            <h2 class="mb-4" data-aos="fade-up" data-aos-delay="100">Why Choose Us</h2>
+            <p class="text-muted mb-0" data-aos="fade-up" data-aos-delay="200">We're committed to providing the best Nigerian food experience in San Diego</p>
+          </div>
+        </div>
+
         <div class="row">
-          <div class="col-12 col-md-6 col-lg-3">
-
-            <!-- Item -->
-            <div class="d-flex mb-6 mb-lg-0">
-
-              <!-- Icon -->
-              <i class="fe fe-truck fs-lg text-primary"></i>
-
-              <!-- Body -->
-              <div class="ms-6">
-
-                <!-- Heading -->
-                <h6 class="heading-xxs mb-1">
-                  Free shipping
-                </h6>
-
-                <!-- Text -->
-                <p class="mb-0 fs-sm text-muted">
-                  From all orders over $100
-                </p>
-
+          <!-- Feature 1 -->
+          <div class="col-12 col-md-6 col-lg-3 mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="300">
+            <div class="feature-card text-center">
+              <div class="feature-icon">
+                <i class="fas fa-utensils animated-icon"></i>
               </div>
-
+              <h4 class="feature-title">Authentic Recipes</h4>
+              <p class="feature-description">Our dishes are prepared using traditional Nigerian recipes passed down through generations.</p>
             </div>
-
           </div>
-          <div class="col-12 col-md-6 col-lg-3">
 
-            <!-- Item -->
-            <div class="d-flex mb-6 mb-lg-0">
-
-              <!-- Icon -->
-              <i class="fe fe-repeat fs-lg text-primary"></i>
-
-              <!-- Body -->
-              <div class="ms-6">
-
-                <!-- Heading -->
-                <h6 class="mb-1 heading-xxs">
-                  Free returns
-                </h6>
-
-                <!-- Text -->
-                <p class="mb-0 fs-sm text-muted">
-                  Return money within 30 days
-                </p>
-
+          <!-- Feature 2 -->
+          <div class="col-12 col-md-6 col-lg-3 mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="400">
+            <div class="feature-card text-center">
+              <div class="feature-icon">
+                <i class="fas fa-shipping-fast animated-icon"></i>
               </div>
-
+              <h4 class="feature-title">Fast Delivery</h4>
+              <p class="feature-description">We deliver your favorite Nigerian dishes right to your doorstep, hot and fresh.</p>
             </div>
-
           </div>
-          <div class="col-12 col-md-6 col-lg-3">
 
-            <!-- Item -->
-            <div class="d-flex mb-6 mb-md-0">
-
-              <!-- Icon -->
-              <i class="fe fe-lock fs-lg text-primary"></i>
-
-              <!-- Body -->
-              <div class="ms-6">
-
-                <!-- Heading -->
-                <h6 class="mb-1 heading-xxs">
-                  Secure shopping
-                </h6>
-
-                <!-- Text -->
-                <p class="mb-0 fs-sm text-muted">
-                  You're in safe hands
-                </p>
-
+          <!-- Feature 3 -->
+          <div class="col-12 col-md-6 col-lg-3 mb-5 mb-md-0" data-aos="fade-up" data-aos-delay="500">
+            <div class="feature-card text-center">
+              <div class="feature-icon">
+                <i class="fas fa-leaf animated-icon"></i>
               </div>
-
+              <h4 class="feature-title">Fresh Ingredients</h4>
+              <p class="feature-description">We use only the freshest ingredients, sourced locally when possible, for the best flavor.</p>
             </div>
-
           </div>
-          <div class="col-12 col-md-6 col-lg-3">
 
-            <!-- Item -->
-            <div class="d-flex">
-
-              <!-- Icon -->
-              <i class="fe fe-tag fs-lg text-primary"></i>
-
-              <!-- Body -->
-              <div class="ms-6">
-
-                <!-- Heading -->
-                <h6 class="mb-1 heading-xxs">
-                  Over 10,000 Styles
-                </h6>
-
-                <!-- Text -->
-                <p class="mb-0 fs-sm text-muted">
-                  We have everything you need
-                </p>
-
+          <!-- Feature 4 -->
+          <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="600">
+            <div class="feature-card text-center">
+              <div class="feature-icon">
+                <i class="fas fa-heart animated-icon"></i>
               </div>
-
+              <h4 class="feature-title">Made with Love</h4>
+              <p class="feature-description">Every dish is prepared with care and passion, just like it would be in a Nigerian home.</p>
             </div>
-
           </div>
         </div>
       </div>
@@ -2685,6 +2791,48 @@
 
 
 
+    <!-- NEWSLETTER SIGNUP WITH ANIMATION -->
+    <section class="py-12 bg-light newsletter-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-10 col-lg-8">
+            <div class="newsletter-card" data-aos="fade-up">
+              <div class="newsletter-pattern"></div>
+              <div class="row align-items-center">
+                <div class="col-12 col-md-6 mb-5 mb-md-0">
+                  <h3 class="newsletter-title">Subscribe to Our Newsletter</h3>
+                  <p class="newsletter-text">Stay updated with our latest Nigerian dishes, special offers, and cultural events.</p>
+                  <div class="newsletter-icon">
+                    <i class="fas fa-envelope-open-text"></i>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <form class="newsletter-form">
+                    <div class="form-group mb-3">
+                      <input type="text" class="form-control" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group mb-3">
+                      <input type="email" class="form-control" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-check mb-3">
+                      <input class="form-check-input" type="checkbox" id="newsletterCheck" required>
+                      <label class="form-check-label" for="newsletterCheck">
+                        I agree to receive emails about Nigerian cuisine and offers
+                      </label>
+                    </div>
+                    <button type="submit" class="btn btn-service-primary btn-lg w-100 btn-animated">
+                      <span>Subscribe Now</span>
+                      <i class="fas fa-paper-plane ms-2"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Partials -->
     {% include 'partials/footer.html' %}
     {% include 'partials/head.html' %}
@@ -2696,4 +2844,788 @@
 {% endblock %}
 
 {% block extra_js %}
+<script>
+  // Initialize AOS animations
+  AOS.init({
+    duration: 800,
+    easing: 'ease-in-out',
+    once: true
+  });
+
+  // Service conditional display and styling
+  function checkServiceContent() {
+    // Get the current URL path
+    const path = window.location.pathname;
+
+    // Check if we're on a service page
+    if (path.includes('/service/')) {
+      // Extract the service ID from the URL
+      const serviceId = path.split('/').filter(Boolean).pop();
+
+      // Add service-specific class to body for styling
+      const body = document.body;
+
+      // Remove any existing service classes
+      body.classList.remove('service-groceries-theme', 'service-restaurant-theme');
+
+      // Show/hide content and apply theme based on service ID
+      if (serviceId === '1') {
+        // Show Groceries content and apply groceries theme
+        document.querySelectorAll('.service-groceries').forEach(el => el.style.display = 'block');
+        document.querySelectorAll('.service-restaurant').forEach(el => el.style.display = 'none');
+        body.classList.add('service-groceries-theme');
+
+        // Update color variables for groceries theme
+        document.documentElement.style.setProperty('--service-primary', '#008751'); // Nigerian green
+        document.documentElement.style.setProperty('--service-secondary', '#e87e04'); // Orange accent
+        document.documentElement.style.setProperty('--service-accent', '#f5c34b'); // Yellow accent
+        document.documentElement.style.setProperty('--service-bg', '#f9f5e8'); // Light cream background
+
+      } else if (serviceId === '2') {
+        // Show Restaurant content and apply restaurant theme
+        document.querySelectorAll('.service-groceries').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.service-restaurant').forEach(el => el.style.display = 'block');
+        body.classList.add('service-restaurant-theme');
+
+        // Update color variables for restaurant theme
+        document.documentElement.style.setProperty('--service-primary', '#8B4513'); // Saddle brown
+        document.documentElement.style.setProperty('--service-secondary', '#D2691E'); // Chocolate
+        document.documentElement.style.setProperty('--service-accent', '#CD5C5C'); // Indian red
+        document.documentElement.style.setProperty('--service-bg', '#FFF8E7'); // Warm cream background
+      }
+
+      // Update all themed elements with new colors
+      updateThemeElements();
+    }
+  }
+
+  // Function to update theme elements with new colors
+  function updateThemeElements() {
+    // Update buttons
+    document.querySelectorAll('.btn-service-primary').forEach(el => {
+      el.style.backgroundColor = 'var(--service-primary)';
+      el.style.borderColor = 'var(--service-primary)';
+    });
+
+    document.querySelectorAll('.btn-service-secondary').forEach(el => {
+      el.style.backgroundColor = 'var(--service-secondary)';
+      el.style.borderColor = 'var(--service-secondary)';
+    });
+
+    // Update text colors
+    document.querySelectorAll('.text-service-primary').forEach(el => {
+      el.style.color = 'var(--service-primary)';
+    });
+
+    document.querySelectorAll('.text-service-secondary').forEach(el => {
+      el.style.color = 'var(--service-secondary)';
+    });
+
+    // Update backgrounds
+    document.querySelectorAll('.bg-service-primary').forEach(el => {
+      el.style.backgroundColor = 'var(--service-primary)';
+    });
+
+    document.querySelectorAll('.bg-service-secondary').forEach(el => {
+      el.style.backgroundColor = 'var(--service-secondary)';
+    });
+
+    // Update borders
+    document.querySelectorAll('.border-service-primary').forEach(el => {
+      el.style.borderColor = 'var(--service-primary)';
+    });
+
+    document.querySelectorAll('.border-service-secondary').forEach(el => {
+      el.style.borderColor = 'var(--service-secondary)';
+    });
+  }
+
+  // Run on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    checkServiceContent();
+  });
+</script>
 {% endblock %}
+
+<!-- CUSTOM CSS FOR ANIMATIONS AND STYLING -->
+<style>
+  /* Nigerian Color Variables */
+  :root {
+    --nigerian-green: #008751;
+    --nigerian-white: #ffffff;
+    --nigerian-accent: #e87e04;
+    --nigerian-dark: #333333;
+
+    /* Service-specific theme colors (default to groceries theme) */
+    --service-primary: #008751;
+    --service-secondary: #e87e04;
+    --service-accent: #f5c34b;
+    --service-bg: #f9f5e8;
+  }
+
+  /* Service-specific theme classes */
+  .service-groceries-theme {
+    --service-primary: #008751; /* Nigerian green */
+    --service-secondary: #e87e04; /* Orange accent */
+    --service-accent: #f5c34b; /* Yellow accent */
+    --service-bg: #f9f5e8; /* Light cream background */
+  }
+
+  .service-restaurant-theme {
+    --service-primary: #8B4513; /* Saddle brown */
+    --service-secondary: #D2691E; /* Chocolate */
+    --service-accent: #CD5C5C; /* Indian red */
+    --service-bg: #FFF8E7; /* Warm cream background */
+  }
+
+  /* General Animation Classes */
+  .animate-heading {
+    animation: fadeInUp 1s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .btn-animated {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .btn-animated:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-animated:hover i {
+    animation: moveRight 0.5s ease-in-out;
+  }
+
+  @keyframes moveRight {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+  }
+
+  /* Category Cards Animation */
+  .category-card-animated {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    height: 400px;
+  }
+
+  .category-card-animated:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .category-image {
+    height: 100%;
+    width: 100%;
+    position: relative;
+  }
+
+  .category-image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .category-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+    transition: all 0.3s ease;
+  }
+
+  .category-card-animated:hover .category-overlay {
+    background: linear-gradient(to bottom, rgba(0,135,81,0.6) 0%, rgba(0,135,81,0.9) 100%);
+  }
+
+  .category-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px;
+    color: white;
+    z-index: 1;
+    transform: translateY(30px);
+    transition: all 0.3s ease;
+  }
+
+  .category-card-animated:hover .category-content {
+    transform: translateY(0);
+  }
+
+  .category-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--nigerian-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+  }
+
+  .category-card-animated:hover .category-icon {
+    background-color: white;
+    color: var(--nigerian-green);
+    transform: scale(1.1);
+  }
+
+  .category-icon i {
+    font-size: 24px;
+    color: white;
+    transition: all 0.3s ease;
+  }
+
+  .category-card-animated:hover .category-icon i {
+    color: var(--nigerian-green);
+  }
+
+  .category-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .category-description {
+    opacity: 0.8;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+  }
+
+  /* Product Cards Animation */
+  .product-card-animated {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    background-color: white;
+    height: 100%;
+  }
+
+  .product-card-animated:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .product-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: var(--nigerian-green);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 2;
+  }
+
+  .product-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.5s ease;
+  }
+
+  .product-card-animated:hover .product-image img {
+    transform: scale(1.1);
+  }
+
+  .product-actions {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.3s ease;
+    z-index: 2;
+  }
+
+  .product-card-animated:hover .product-actions {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .action-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--nigerian-green);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .action-button:hover {
+    background-color: var(--nigerian-green);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .product-content {
+    padding: 20px;
+  }
+
+  .product-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--nigerian-dark);
+  }
+
+  .product-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--nigerian-green);
+    margin-bottom: 10px;
+  }
+
+  .old-price {
+    text-decoration: line-through;
+    color: #999;
+    font-weight: 400;
+    margin-right: 5px;
+    font-size: 16px;
+  }
+
+  .product-rating {
+    color: #ffc107;
+    font-size: 14px;
+  }
+
+  .product-rating span {
+    color: #999;
+    margin-left: 5px;
+  }
+
+  /* Testimonial Cards Animation */
+  .testimonial-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    margin-bottom: 20px;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .testimonial-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .testimonial-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+    border: 3px solid var(--nigerian-green);
+  }
+
+  .testimonial-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .testimonial-meta {
+    flex: 1;
+  }
+
+  .testimonial-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--nigerian-dark);
+  }
+
+  .testimonial-location {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 5px;
+  }
+
+  .testimonial-rating {
+    color: #ffc107;
+    font-size: 14px;
+  }
+
+  .testimonial-body {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  .testimonial-pattern {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23008751' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    transition: all 0.3s ease;
+  }
+
+  .testimonial-card:hover .testimonial-pattern {
+    opacity: 0.8;
+    transform: scale(1.2);
+  }
+
+  /* Feature Cards Animation */
+  .feature-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    height: 100%;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .feature-icon {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(0, 135, 81, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    transition: all 0.3s ease;
+  }
+
+  .feature-card:hover .feature-icon {
+    background-color: var(--nigerian-green);
+  }
+
+  .animated-icon {
+    font-size: 32px;
+    color: var(--nigerian-green);
+    transition: all 0.3s ease;
+  }
+
+  .feature-card:hover .animated-icon {
+    color: white;
+    animation: bounce 0.8s ease infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .feature-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--nigerian-dark);
+  }
+
+  .feature-description {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  /* Newsletter Section Animation */
+  .newsletter-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .newsletter-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .newsletter-pattern {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23008751' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    transition: all 0.3s ease;
+  }
+
+  .newsletter-card:hover .newsletter-pattern {
+    opacity: 0.8;
+    transform: scale(1.2) rotate(10deg);
+  }
+
+  .newsletter-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--nigerian-dark);
+  }
+
+  .newsletter-text {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .newsletter-icon {
+    font-size: 48px;
+    color: var(--nigerian-green);
+    margin-top: 20px;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .newsletter-form .form-control {
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+  }
+
+  .newsletter-form .form-control:focus {
+    border-color: var(--nigerian-green);
+    box-shadow: 0 0 0 0.25rem rgba(0, 135, 81, 0.25);
+  }
+
+  /* Service-specific styling */
+  .service-groceries, .service-restaurant {
+    display: block; /* Will be controlled by JavaScript */
+  }
+
+  /* Service-specific themed elements */
+  .btn-service-primary {
+    background-color: var(--service-primary);
+    border-color: var(--service-primary);
+    color: white;
+  }
+
+  .btn-service-primary:hover {
+    background-color: var(--service-primary);
+    filter: brightness(90%);
+    border-color: var(--service-primary);
+    color: white;
+  }
+
+  .btn-service-secondary {
+    background-color: var(--service-secondary);
+    border-color: var(--service-secondary);
+    color: white;
+  }
+
+  .btn-service-secondary:hover {
+    background-color: var(--service-secondary);
+    filter: brightness(90%);
+    border-color: var(--service-secondary);
+    color: white;
+  }
+
+  .btn-outline-service-primary {
+    color: var(--service-primary);
+    border-color: var(--service-primary);
+  }
+
+  .btn-outline-service-primary:hover {
+    background-color: var(--service-primary);
+    border-color: var(--service-primary);
+    color: white;
+  }
+
+  .text-service-primary {
+    color: var(--service-primary) !important;
+  }
+
+  .text-service-secondary {
+    color: var(--service-secondary) !important;
+  }
+
+  .bg-service-primary {
+    background-color: var(--service-primary) !important;
+  }
+
+  .bg-service-secondary {
+    background-color: var(--service-secondary) !important;
+  }
+
+  .bg-service-light {
+    background-color: var(--service-bg) !important;
+  }
+
+  .border-service-primary {
+    border-color: var(--service-primary) !important;
+  }
+
+  .border-service-secondary {
+    border-color: var(--service-secondary) !important;
+  }
+
+  /* Service-specific card styling */
+  .service-groceries-theme .category-card-animated:hover .category-overlay {
+    background: linear-gradient(to bottom, rgba(0,135,81,0.6) 0%, rgba(0,135,81,0.9) 100%);
+  }
+
+  .service-restaurant-theme .category-card-animated:hover .category-overlay {
+    background: linear-gradient(to bottom, rgba(139,69,19,0.6) 0%, rgba(139,69,19,0.9) 100%);
+  }
+
+  .service-groceries-theme .category-icon {
+    background-color: var(--service-primary);
+  }
+
+  .service-restaurant-theme .category-icon {
+    background-color: var(--service-primary);
+  }
+
+  .service-groceries-theme .product-badge {
+    background-color: var(--service-primary);
+  }
+
+  .service-restaurant-theme .product-badge {
+    background-color: var(--service-primary);
+  }
+
+  .service-groceries-theme .action-button {
+    color: var(--service-primary);
+  }
+
+  .service-restaurant-theme .action-button {
+    color: var(--service-primary);
+  }
+
+  .service-groceries-theme .action-button:hover {
+    background-color: var(--service-primary);
+  }
+
+  .service-restaurant-theme .action-button:hover {
+    background-color: var(--service-primary);
+  }
+
+  .service-groceries-theme .product-price {
+    color: var(--service-primary);
+  }
+
+  .service-restaurant-theme .product-price {
+    color: var(--service-primary);
+  }
+
+  .service-groceries-theme .testimonial-avatar {
+    border-color: var(--service-primary);
+  }
+
+  .service-restaurant-theme .testimonial-avatar {
+    border-color: var(--service-primary);
+  }
+
+  .service-groceries-theme .feature-icon {
+    background-color: rgba(0, 135, 81, 0.1);
+  }
+
+  .service-restaurant-theme .feature-icon {
+    background-color: rgba(139, 69, 19, 0.1);
+  }
+
+  .service-groceries-theme .animated-icon {
+    color: var(--service-primary);
+  }
+
+  .service-restaurant-theme .animated-icon {
+    color: var(--service-primary);
+  }
+
+  .service-groceries-theme .newsletter-icon {
+    color: var(--service-primary);
+  }
+
+  .service-restaurant-theme .newsletter-icon {
+    color: var(--service-primary);
+  }
+
+  /* Service-specific background patterns */
+  .service-groceries-theme .testimonial-pattern,
+  .service-groceries-theme .newsletter-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23008751' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  .service-restaurant-theme .testimonial-pattern,
+  .service-restaurant-theme .newsletter-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%238B4513' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 767px) {
+    .category-card-animated {
+      height: 300px;
+    }
+
+    .newsletter-card {
+      padding: 25px;
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+    }
+
+    .animated-icon {
+      font-size: 24px;
+    }
+  }
+</style>

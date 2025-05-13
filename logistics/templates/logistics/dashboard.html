@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Logistics Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Logistics Dashboard</h1>
+    
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Shipments</h5>
+                    <h2 class="display-4">{{ pending_shipments }}</h2>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="{% url 'logistics:shipment_list' %}?status=pending">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">In Transit</h5>
+                    <h2 class="display-4">{{ in_transit_shipments }}</h2>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="{% url 'logistics:shipment_list' %}?status=in_transit">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Delivered</h5>
+                    <h2 class="display-4">{{ delivered_shipments }}</h2>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="{% url 'logistics:shipment_list' %}?status=delivered">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card bg-info text-white mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Total Shipments</h5>
+                    <h2 class="display-4">{{ total_shipments }}</h2>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="{% url 'logistics:shipment_list' %}">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-1"></i>
+                    Quick Actions
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="{% url 'logistics:create_shipment' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-plus-circle me-2"></i> Create New Shipment
+                        </a>
+                        <a href="{% url 'logistics:shipment_list' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-list me-2"></i> View All Shipments
+                        </a>
+                        <a href="{% url 'logistics:delivery_zone_list' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-map-marker-alt me-2"></i> Manage Delivery Zones
+                        </a>
+                        <a href="{% url 'logistics:delivery_partner_list' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-truck me-2"></i> Manage Delivery Partners
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-search me-1"></i>
+                    Track Shipment
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'logistics:track_shipment' %}" method="get">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="tracking_number" placeholder="Enter tracking number" required>
+                            <button class="btn btn-primary" type="submit">Track</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

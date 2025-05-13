@@ -1,0 +1,542 @@
+{% load static %}
+
+<!-- Enhanced Modern Nigerian-inspired Product Card Template -->
+<div class="product-card-nigerian" data-product-id="{{ product.id }}">
+    <!-- Product Image Container with Enhanced Hover Effects -->
+    <div class="product-img-container">
+        <!-- Product Badges with Animation -->
+        <div class="product-badges">
+            {% if product.is_on_sale %}
+            <div class="product-badge-nigerian sale-badge">SALE</div>
+            {% endif %}
+
+            {% if product.is_new %}
+            <div class="product-badge-nigerian new-badge">NEW</div>
+            {% endif %}
+        </div>
+
+        <!-- Product Origin Badge with Enhanced Design -->
+        <div class="product-origin-badge">
+            <img src="{% static 'img/flags/nigeria-flag.png' %}" alt="Nigerian Product" class="origin-flag" onerror="this.src='{% static 'img/placeholder.png' %}'">
+            <span>Nigerian</span>
+        </div>
+
+        <!-- Product Image with Lazy Loading and Enhanced Animation -->
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-img" onerror="this.src='{% static 'img/placeholder.png' %}'" loading="lazy">
+
+        <!-- Enhanced Quick Actions Overlay -->
+        <div class="product-actions-overlay">
+            <div class="action-buttons">
+                <!-- Quick View Button -->
+                <button class="action-btn quick-view" data-bs-toggle="modal" data-bs-target="#modalProduct{{ product.id }}" title="Quick View">
+                    <i class="fe fe-eye"></i>
+                </button>
+
+                <!-- Add to Cart Button -->
+                <button class="action-btn add-cart" onclick="addToCartWithAnimation({{ product.id }})" title="Add to Cart">
+                    <i class="fe fe-shopping-cart"></i>
+                </button>
+
+                <!-- Wishlist Button -->
+                <button class="action-btn wishlist" onclick="addToWishlist({{ product.id }})" title="Add to Wishlist">
+                    <i class="fe fe-heart"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Product Link Overlay - Makes entire card clickable -->
+        <a href="{% url 'product' product.id %}" class="product-link-overlay" aria-label="View {{ product.name }} details"></a>
+    </div>
+
+    <!-- Product Info with Enhanced Typography and Spacing -->
+    <div class="product-info">
+        <!-- Category Badge with Hover Effect -->
+        {% if product.category %}
+        <div class="mb-2">
+            <a href="{% url 'shop_with_category' product.category.id %}" class="category-badge-nigerian">{{ product.category.name }}</a>
+        </div>
+        {% endif %}
+
+        <!-- Product Title with Enhanced Typography -->
+        <h3 class="product-title">
+            <a href="{% url 'product' product.id %}">{{ product.name }}</a>
+        </h3>
+
+        <!-- Cultural Significance with Better Styling -->
+        {% if product.description %}
+        <div class="cultural-significance-short">
+            {% if product.description|length > 60 %}
+                {{ product.description|slice:":60" }}...
+            {% else %}
+                {{ product.description }}
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Product Price with Enhanced Visual Hierarchy -->
+        <div class="product-price">
+            {% if product.is_on_sale %}
+            <div class="price-wrapper">
+                <span class="price-old">${{ product.regular_price }}</span>
+                <span class="price-current">${{ product.price }}</span>
+                <span class="discount-badge">-{{ product.discount_percentage|floatformat:0 }}%</span>
+            </div>
+            {% else %}
+            <span class="price-current">${{ product.price }}</span>
+            {% endif %}
+        </div>
+
+        <!-- Add to Cart Button with Enhanced Animation -->
+        <button class="btn-add-to-cart-nigerian" onclick="addToCartWithAnimation({{ product.id }})">
+            <span class="btn-text">Add to Cart</span>
+            <i class="fe fe-shopping-cart ms-2"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Enhanced Modern Nigerian Product Card Styling -->
+<style>
+    /* Enhanced Nigerian-Inspired Product Card */
+    .product-card-nigerian {
+        background-color: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        border: 1px solid rgba(0, 135, 81, 0.08);
+        will-change: transform, box-shadow;
+    }
+
+    /* Gradient top border that appears on hover */
+    .product-card-nigerian::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(to right, #008751, #F7C600);
+        z-index: 5;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    /* Card hover effects */
+    .product-card-nigerian:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 20px 30px rgba(0, 135, 81, 0.15);
+    }
+
+    .product-card-nigerian:hover::before {
+        opacity: 1;
+    }
+
+    /* Product Image Container */
+    .product-img-container {
+        position: relative;
+        overflow: hidden;
+        padding-top: 100%; /* 1:1 Aspect Ratio */
+        border-bottom: 2px solid rgba(0, 135, 81, 0.05);
+    }
+
+    /* Product Image with enhanced transitions */
+    .product-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        z-index: 1;
+    }
+
+    .product-card-nigerian:hover .product-img {
+        transform: scale(1.1);
+    }
+
+    /* Product Badges Container */
+    .product-badges {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    /* Product Badge Styling */
+    .product-badge-nigerian {
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        animation: badgePulse 2s infinite;
+    }
+
+    /* Sale badge with gradient */
+    .sale-badge {
+        background: linear-gradient(45deg, #008751, #20c997);
+        color: white;
+    }
+
+    /* New badge with gradient */
+    .new-badge {
+        background: linear-gradient(45deg, #F7C600, #FFB700);
+        color: #2E3A23;
+    }
+
+    /* Badge pulse animation */
+    @keyframes badgePulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    /* Product Origin Badge */
+    .product-origin-badge {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        background: linear-gradient(to right, #008751, #008751 33%, #FFFFFF 33%, #FFFFFF 67%, #008751 67%, #008751 100%);
+        border-radius: 30px;
+        padding: 5px 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #2E3A23;
+        z-index: 4;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        border: 1px solid #008751;
+    }
+
+    .product-card-nigerian:hover .product-origin-badge {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .origin-flag {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #008751;
+        box-shadow: 0 0 0 1px #fff, 0 0 0 3px rgba(0, 135, 81, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .product-card-nigerian:hover .origin-flag {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 1px #fff, 0 0 0 4px rgba(0, 135, 81, 0.5);
+    }
+
+    /* Product Actions Overlay */
+    .product-actions-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent 70%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 25px;
+        z-index: 3;
+    }
+
+    .product-card-nigerian:hover .product-actions-overlay {
+        opacity: 1;
+    }
+
+    /* Action Buttons Container */
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+    }
+
+    /* Individual Action Button */
+    .action-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background-color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        transform: translateY(30px);
+        opacity: 0;
+        color: #333;
+        font-size: 1rem;
+    }
+
+    /* Staggered animation for action buttons */
+    .product-card-nigerian:hover .action-btn {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .action-btn.quick-view {
+        transition-delay: 0.1s;
+    }
+
+    .action-btn.add-cart {
+        transition-delay: 0.2s;
+    }
+
+    .action-btn.wishlist {
+        transition-delay: 0.3s;
+    }
+
+    /* Button hover effects */
+    .action-btn:hover {
+        transform: translateY(-5px) scale(1.1);
+    }
+
+    .action-btn.quick-view:hover {
+        background-color: #F7C600;
+        color: #2E3A23;
+    }
+
+    .action-btn.add-cart:hover {
+        background-color: #008751;
+        color: white;
+    }
+
+    .action-btn.wishlist:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    /* Product Link Overlay - Makes entire card clickable */
+    .product-link-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        cursor: pointer;
+    }
+
+    /* Product Info Section */
+    .product-info {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        background-color: white;
+        position: relative;
+        z-index: 4;
+    }
+
+    /* Category Badge */
+    .category-badge-nigerian {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        background-color: rgba(0, 135, 81, 0.1);
+        color: #008751;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px dashed rgba(0, 135, 81, 0.3);
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .category-badge-nigerian:hover {
+        background-color: rgba(0, 135, 81, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 135, 81, 0.1);
+        text-decoration: none;
+    }
+
+    /* Cultural Significance Short */
+    .cultural-significance-short {
+        font-size: 0.85rem;
+        color: #666;
+        font-style: italic;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+
+    /* Product Title */
+    .product-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+    }
+
+    .product-title a {
+        color: #2E3A23;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+        position: relative;
+    }
+
+    .product-title a::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: #008751;
+        transition: width 0.4s ease;
+    }
+
+    .product-title a:hover {
+        color: #008751;
+    }
+
+    .product-title a:hover::after {
+        width: 100%;
+    }
+
+    /* Product Price */
+    .product-price {
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* Price wrapper for sale items */
+    .price-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .price-current {
+        font-weight: 700;
+        font-size: 1.3rem;
+        color: #008751;
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background-color: rgba(0, 135, 81, 0.1);
+        border-radius: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .product-card-nigerian:hover .price-current {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 135, 81, 0.1);
+    }
+
+    .price-old {
+        font-size: 0.9rem;
+        color: #909090;
+        text-decoration: line-through;
+    }
+
+    /* Discount badge */
+    .discount-badge {
+        display: inline-block;
+        padding: 0.2rem 0.5rem;
+        background-color: #F7C600;
+        color: #2E3A23;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    /* Add to Cart Button */
+    .btn-add-to-cart-nigerian {
+        margin-top: auto;
+        background-color: transparent;
+        color: #008751;
+        border: 2px solid #008751;
+        border-radius: 30px;
+        padding: 0.7rem 1.2rem;
+        font-weight: 600;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-add-to-cart-nigerian::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 0;
+        background-color: #008751;
+        transition: all 0.3s ease;
+        z-index: -1;
+    }
+
+    .btn-add-to-cart-nigerian:hover {
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 135, 81, 0.2);
+    }
+
+    .btn-add-to-cart-nigerian:hover::after {
+        height: 100%;
+    }
+
+    .btn-text {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 767px) {
+        .product-actions-overlay {
+            display: none;
+        }
+
+        .product-card-nigerian:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+        }
+
+        .price-current {
+            font-size: 1.1rem;
+        }
+
+        .btn-add-to-cart-nigerian {
+            padding: 0.6rem 1rem;
+        }
+    }
+</style>

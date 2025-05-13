@@ -1,0 +1,164 @@
+{% load static %}
+
+<!-- Basic SEO Meta Tags -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<!-- Primary Meta Tags -->
+<meta name="title" content="{% block meta_title %}African Food San Diego - Authentic Nigerian Cuisine & Groceries{% endblock %}">
+<meta name="description" content="{% block meta_description %}Experience authentic Nigerian and African cuisine in San Diego. Shop for traditional African groceries, spices, and ingredients. Enjoy our restaurant's authentic dishes.{% endblock %}">
+<meta name="keywords" content="{% block meta_keywords %}African food, Nigerian cuisine, San Diego, African groceries, Nigerian restaurant, African spices, Jollof rice, Egusi soup, Pounded yam{% endblock %}">
+<meta name="author" content="African Food San Diego">
+<meta name="robots" content="index, follow">
+<meta name="language" content="English">
+<meta name="revisit-after" content="7 days">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:title" content="{% block og_title %}African Food San Diego - Authentic Nigerian Cuisine & Groceries{% endblock %}">
+<meta property="og:description" content="{% block og_description %}Experience authentic Nigerian and African cuisine in San Diego. Shop for traditional African groceries, spices, and ingredients. Enjoy our restaurant's authentic dishes.{% endblock %}">
+<meta property="og:image" content="{% block og_image %}{% static 'img/afrocommerce/african-groceries-hero.jpg' %}{% endblock %}">
+<meta property="og:image:alt" content="African Food San Diego">
+<meta property="og:site_name" content="African Food San Diego">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="{{ request.build_absolute_uri }}">
+<meta property="twitter:title" content="{% block twitter_title %}African Food San Diego - Authentic Nigerian Cuisine & Groceries{% endblock %}">
+<meta property="twitter:description" content="{% block twitter_description %}Experience authentic Nigerian and African cuisine in San Diego. Shop for traditional African groceries, spices, and ingredients. Enjoy our restaurant's authentic dishes.{% endblock %}">
+<meta property="twitter:image" content="{% block twitter_image %}{% static 'img/afrocommerce/african-groceries-hero.jpg' %}{% endblock %}">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon.png' %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon.png' %}">
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicon.png' %}">
+
+<!-- Structured Data for Local Business -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "name": "African Food San Diego",
+  "image": "{% static 'img/afrocommerce/african-groceries-hero.jpg' %}",
+  "url": "{{ request.build_absolute_uri }}",
+  "telephone": "+1-619-555-1234",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "123 Main Street",
+    "addressLocality": "San Diego",
+    "addressRegion": "CA",
+    "postalCode": "92101",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 32.7157,
+    "longitude": -117.1611
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Saturday"
+      ],
+      "opens": "10:00",
+      "closes": "17:00"
+    }
+  ],
+  "priceRange": "$$",
+  "servesCuisine": "Nigerian",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "African Groceries",
+    "itemListElement": [
+      {
+        "@type": "OfferCatalog",
+        "name": "Nigerian Foods",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "Jollof Rice Spice Mix"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "Egusi Seeds"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+</script>
+
+<!-- Structured Data for Restaurant -->
+{% block restaurant_schema %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "African Food San Diego Restaurant",
+  "image": "{% static 'img/afrocommerce/restaurant.jpg' %}",
+  "url": "{{ request.build_absolute_uri }}",
+  "telephone": "+1-619-555-1234",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "123 Main Street",
+    "addressLocality": "San Diego",
+    "addressRegion": "CA",
+    "postalCode": "92101",
+    "addressCountry": "US"
+  },
+  "servesCuisine": "Nigerian",
+  "priceRange": "$$",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "11:00",
+      "closes": "22:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Saturday",
+        "Sunday"
+      ],
+      "opens": "12:00",
+      "closes": "23:00"
+    }
+  ],
+  "menu": "{{ request.build_absolute_uri }}menu/",
+  "acceptsReservations": "True"
+}
+</script>
+{% endblock %}

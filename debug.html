@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Console</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .instructions {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #D2691E;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .button:hover {
+            background-color: #8B4513;
+        }
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Debug Console</h1>
+    
+    <div class="instructions">
+        <p>This page helps debug JavaScript issues. Open your browser's developer console (F12 or right-click > Inspect > Console) to see any errors.</p>
+        <p>Click the buttons below to test different functions:</p>
+    </div>
+    
+    <button class="button" onclick="testEmailModal()">Test Email Modal</button>
+    <button class="button" onclick="testAddToCart()">Test Add to Cart</button>
+    <button class="button" onclick="testAddToWishlist()">Test Add to Wishlist</button>
+    
+    <div class="code-block" id="output">Output will appear here...</div>
+    
+    <script>
+        // Function to log to both console and the page
+        function log(message) {
+            console.log(message);
+            const output = document.getElementById('output');
+            output.textContent += message + '\n';
+        }
+        
+        // Test if the email collection modal exists
+        function testEmailModal() {
+            log('Testing Email Modal...');
+            
+            // Check if Bootstrap is loaded
+            if (typeof bootstrap === 'undefined') {
+                log('ERROR: Bootstrap is not loaded!');
+            } else {
+                log('Bootstrap is loaded.');
+            }
+            
+            // Check if the email modal exists
+            const emailModal = document.getElementById('emailCollectionModal');
+            if (!emailModal) {
+                log('ERROR: Email collection modal not found in the DOM!');
+            } else {
+                log('Email collection modal found in the DOM.');
+                
+                // Try to show the modal
+                try {
+                    const modal = new bootstrap.Modal(emailModal);
+                    modal.show();
+                    log('Modal should be visible now.');
+                } catch (error) {
+                    log('ERROR: Failed to show modal: ' + error.message);
+                }
+            }
+        }
+        
+        // Test add to cart functionality
+        function testAddToCart() {
+            log('Testing Add to Cart...');
+            
+            // Check if the function exists
+            if (typeof addToCartWithEmail === 'undefined') {
+                log('ERROR: addToCartWithEmail function not found!');
+            } else {
+                log('addToCartWithEmail function exists.');
+                
+                // Try to call the function
+                try {
+                    log('Calling addToCartWithEmail(1)...');
+                    addToCartWithEmail(1);
+                    log('Function called without errors.');
+                } catch (error) {
+                    log('ERROR: Failed to call addToCartWithEmail: ' + error.message);
+                }
+            }
+        }
+        
+        // Test add to wishlist functionality
+        function testAddToWishlist() {
+            log('Testing Add to Wishlist...');
+            
+            // Check if the function exists
+            if (typeof addToWishlistWithEmail === 'undefined') {
+                log('ERROR: addToWishlistWithEmail function not found!');
+            } else {
+                log('addToWishlistWithEmail function exists.');
+                
+                // Try to call the function
+                try {
+                    log('Calling addToWishlistWithEmail(1)...');
+                    addToWishlistWithEmail(1);
+                    log('Function called without errors.');
+                } catch (error) {
+                    log('ERROR: Failed to call addToWishlistWithEmail: ' + error.message);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

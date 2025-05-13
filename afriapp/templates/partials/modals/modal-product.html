@@ -1,47 +1,370 @@
-    <!-- Modal for Product Details -->
+    <!-- Enhanced Modal for Product Details -->
     <div class="modal fade" id="modalProduct{{ product.id }}" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-          <div class="modal-content">
+          <div class="modal-content product-modal-content">
               <!-- Close Button -->
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 15px; right: 15px;">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 15px; right: 15px; z-index: 10;">
                   <i class="fe fe-x"></i>
               </button>
-              
+
+              <!-- Modal Header with Green Accent -->
+              <div class="product-modal-header">
+                  <div class="green-accent-bar"></div>
+              </div>
+
               <!-- Modal Body -->
               <div class="container-fluid px-xl-0">
                   <div class="row align-items-center mx-xl-0">
-                      <!-- Product Image -->
+                      <!-- Product Image with Zoom Effect -->
                       <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0">
-                          <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}" style="border-radius: 10px;">
+                          <div class="product-modal-image-container">
+                              <img src="{{ product.image.url }}" class="img-fluid rounded product-modal-image" alt="{{ product.name }}">
+                              <div class="product-modal-image-overlay">
+                                  <a href="{% url 'product' product.id %}" class="image-zoom-btn">
+                                      <i class="fas fa-search-plus"></i>
+                                  </a>
+                              </div>
+                          </div>
                       </div>
 
-                      <!-- Product Details -->
+                      <!-- Product Details with Enhanced Styling -->
                       <div class="col-12 col-lg-6 col-xl-7 py-4 py-xl-0">
-                          <h4 class="mb-3" style="font-weight: 600; font-size: 1.5rem; color: #343a40;">{{ product.name }}</h4>
-                          <div class="mb-3">
-                              <span class="h5" style="color: #28a745;">${{ product.price }}</span>
-                          </div>
-                          <p class="mb-4" style="color: #6c757d;">{{ product.description }}</p>
-                          
-                          <div class="quantity-control d-flex align-items-center mb-3" style="gap: 10px;">
-                            <button class="btn btn-outline-secondary quantity-button" onclick="updateQuantity({{ product.id }}, -1)" style="width: 40px; height: 40px; border-radius: 8px;">-</button>
-                            
-                            <input type="number" class="form-control text-center" value="1" min="1" max="10" id="quantity-{{ product.id }}" style="width: 60px; border-radius: 8px; font-size: 1rem; padding: 5px;">
-                            
-                            <button class="btn btn-outline-secondary quantity-button" onclick="updateQuantity({{ product.id }}, 1)" style="width: 40px; height: 40px; border-radius: 8px;">+</button>
-                          </div>
-                        
-                          
-                          <button class="btn btn-sm btn-primary add-to-cart-button" onclick="add_to_cart({{ product.id }})">Add to Cart</button>
-                          
-                          <!-- More Info Button -->
-                          <a class="btn btn-link w-100 mt-3" href="{% url 'product' product.id %}" style="color: #007bff;">
-                              More Product Info <i class="fe fe-info ms-2"></i>
-                          </a>
+                          <div class="product-modal-details">
+                              <!-- Product Category Badge -->
+                              {% if product.category %}
+                              <div class="product-category mb-2">
+                                  <span class="category-badge-nigerian">{{ product.category.name }}</span>
+                              </div>
+                              {% endif %}
 
+                              <!-- Product Title -->
+                              <h3 class="product-modal-title">{{ product.name }}</h3>
+
+                              <!-- Price with Currency Symbol -->
+                              <div class="product-modal-price mb-3">
+                                  <span class="price-amount">${{ product.price }}</span>
+                                  {% if product.stock_quantity > 0 %}
+                                  <span class="stock-status in-stock">In Stock</span>
+                                  {% else %}
+                                  <span class="stock-status out-of-stock">Out of Stock</span>
+                                  {% endif %}
+                              </div>
+
+                              <!-- Product Description -->
+                              <div class="product-modal-description">
+                                  <p>{{ product.description }}</p>
+                              </div>
+
+                              <!-- Quantity Control with Enhanced Styling -->
+                              <div class="quantity-control-wrapper mb-4">
+                                  <label for="quantity-{{ product.id }}" class="quantity-label">Quantity:</label>
+                                  <div class="quantity-control d-flex align-items-center" style="gap: 10px;">
+                                      <button class="btn quantity-button" onclick="updateQuantity({{ product.id }}, -1)">
+                                          <i class="fas fa-minus"></i>
+                                      </button>
+
+                                      <input type="number" class="form-control text-center" value="1" min="1" max="10" id="quantity-{{ product.id }}">
+
+                                      <button class="btn quantity-button" onclick="updateQuantity({{ product.id }}, 1)">
+                                          <i class="fas fa-plus"></i>
+                                      </button>
+                                  </div>
+                              </div>
+
+                              <!-- Action Buttons -->
+                              <div class="product-modal-actions">
+                                  <button class="btn btn-add-to-cart" onclick="addToCartWithEmail({{ product.id }})">
+                                      <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+                                  </button>
+
+                                  <button class="btn btn-add-to-wishlist" onclick="addToWishlistWithEmail({{ product.id }})">
+                                      <i class="fas fa-heart me-2"></i> Wishlist
+                                  </button>
+                              </div>
+
+                              <!-- View Details Button -->
+                              <a href="{% url 'product' product.id %}" class="btn btn-view-details mt-3">
+                                  View Full Details <i class="fas fa-arrow-right ms-2"></i>
+                              </a>
+
+                              <!-- Product Features -->
+                              <div class="product-features mt-4">
+                                  <div class="feature-item">
+                                      <i class="fas fa-shipping-fast"></i>
+                                      <span>Fast Shipping</span>
+                                  </div>
+                                  <div class="feature-item">
+                                      <i class="fas fa-undo"></i>
+                                      <span>Easy Returns</span>
+                                  </div>
+                                  <div class="feature-item">
+                                      <i class="fas fa-shield-alt"></i>
+                                      <span>Secure Checkout</span>
+                                  </div>
+                              </div>
+                          </div>
                       </div>
                   </div>
               </div>
           </div>
       </div>
   </div>
+
+  <!-- Add CSS for the enhanced product modal -->
+  <style>
+    .product-modal-content {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .green-accent-bar {
+        height: 5px;
+        background: linear-gradient(to right, #28a745, #20c997);
+        width: 100%;
+    }
+
+    .product-modal-header {
+        position: relative;
+    }
+
+    .product-modal-image-container {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-modal-image {
+        transition: transform 0.5s ease;
+        width: 100%;
+    }
+
+    .product-modal-image-container:hover .product-modal-image {
+        transform: scale(1.05);
+    }
+
+    .product-modal-image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .product-modal-image-container:hover .product-modal-image-overlay {
+        opacity: 1;
+    }
+
+    .image-zoom-btn {
+        width: 40px;
+        height: 40px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #28a745;
+        transition: all 0.3s ease;
+    }
+
+    .image-zoom-btn:hover {
+        background: #28a745;
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .product-modal-details {
+        padding: 0 15px;
+    }
+
+    .category-badge-nigerian {
+        display: inline-block;
+        padding: 4px 10px;
+        background-color: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        border: 1px solid rgba(40, 167, 69, 0.2);
+    }
+
+    .product-modal-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 1.8rem;
+        color: #343a40;
+        margin-bottom: 10px;
+    }
+
+    .product-modal-price {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .price-amount {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #28a745;
+    }
+
+    .stock-status {
+        font-size: 0.8rem;
+        font-weight: 500;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+
+    .in-stock {
+        background-color: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+    }
+
+    .out-of-stock {
+        background-color: rgba(220, 53, 69, 0.1);
+        color: #dc3545;
+    }
+
+    .product-modal-description {
+        color: #6c757d;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+    .quantity-control-wrapper {
+        margin-top: 20px;
+    }
+
+    .quantity-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #343a40;
+    }
+
+    .quantity-control {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .quantity-button {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+        border: none;
+        color: #343a40;
+        transition: all 0.2s ease;
+    }
+
+    .quantity-button:hover {
+        background-color: #e9ecef;
+    }
+
+    .quantity-control input {
+        width: 60px;
+        height: 40px;
+        text-align: center;
+        border: none;
+        font-weight: 500;
+    }
+
+    .product-modal-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .btn-add-to-cart {
+        flex: 1;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-add-to-cart:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-add-to-wishlist {
+        background-color: transparent;
+        border: 1px solid #dc3545;
+        color: #dc3545;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-add-to-wishlist:hover {
+        background-color: #dc3545;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-view-details {
+        display: block;
+        width: 100%;
+        text-align: center;
+        background-color: transparent;
+        border: 1px solid #6c757d;
+        color: #6c757d;
+        padding: 10px;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-view-details:hover {
+        background-color: #6c757d;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-features {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .feature-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .feature-item i {
+        font-size: 1.2rem;
+        color: #28a745;
+    }
+
+    .feature-item span {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+  </style>

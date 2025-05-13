@@ -1,6 +1,50 @@
   {% load static %}
-  
+
   <!-- Link to JS files -->
     <script src="{% static 'js/vendor.bundle.js' %}"></script>
     <script src="{% static 'js/theme.bundle.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- jQuery (if not already included in vendor bundle) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Toast notifications -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <!-- Email collection and cart functionality -->
+    <script src="{% static 'js/email-collection.js' %}"></script>
+    <script src="{% static 'js/enhanced-cart-animation.js' %}"></script>
+    <script src="{% static 'js/product-card-updater.js' %}"></script>
+
+    <!-- Custom CSS for enhanced UI -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+      /* Enhanced Toast Styling */
+      .toastify {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 12px 20px;
+        font-family: inherit;
+      }
+
+      /* Enhanced Animation Classes */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translate3d(0, 40px, 0);
+        }
+        to {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+      }
+
+      .fade-in-up {
+        animation: fadeInUp 0.5s ease forwards;
+      }
+
+      /* Smooth transitions for all elements */
+      * {
+        transition: all 0.3s ease;
+      }
+    </style>

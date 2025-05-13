@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Empty Cart</title>
+    <g id="Empty-Cart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="Background" fill="#F5F5F5" cx="100" cy="100" r="100"></circle>
+        <g id="Cart" transform="translate(35.000000, 40.000000)">
+            <path d="M110,90 L20,90 C17.2385763,90 15,87.7614237 15,85 L15,25 C15,22.2385763 17.2385763,20 20,20 L110,20 C112.761424,20 115,22.2385763 115,25 L115,85 C115,87.7614237 112.761424,90 110,90 Z" id="Cart-Body" stroke="#008751" stroke-width="4" fill="#FFFFFF"></path>
+            <path d="M35,20 L35,10 C35,4.4771525 39.4771525,0 45,0 L85,0 C90.5228475,0 95,4.4771525 95,10 L95,20" id="Handle" stroke="#008751" stroke-width="4"></path>
+            <line x1="15" y1="40" x2="115" y2="40" id="Line" stroke="#008751" stroke-width="4" stroke-linecap="round"></line>
+            <line x1="35" y1="60" x2="95" y2="60" id="Line-2" stroke="#008751" stroke-width="4" stroke-linecap="round" stroke-dasharray="5,5"></line>
+            <line x1="45" y1="75" x2="85" y2="75" id="Line-3" stroke="#008751" stroke-width="4" stroke-linecap="round" stroke-dasharray="2,4"></line>
+            <circle id="Wheel-1" fill="#008751" cx="40" cy="110" r="10"></circle>
+            <circle id="Wheel-2" fill="#008751" cx="90" cy="110" r="10"></circle>
+        </g>
+    </g>
+</svg>

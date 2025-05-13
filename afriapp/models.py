@@ -9,7 +9,7 @@ from django.utils.text import slugify
 
 # Customer Model
 class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer_profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer_profile', null=True, blank=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
@@ -20,6 +20,7 @@ class Customer(models.Model):
     postal_code = models.CharField(max_length=10, blank=True)
     country = models.CharField(max_length=100, blank=True)
     date_joined = models.DateTimeField(default=timezone.now)
+    is_guest = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -43,8 +44,8 @@ class Service(models.Model):
         managed = True
         verbose_name = 'service'
         verbose_name_plural = 'services'
-        
-        
+
+
 class Category(models.Model):
     service = models.ForeignKey(Service, related_name='services', on_delete=models.CASCADE, default=None)
     name = models.CharField(max_length=255, blank=True)
@@ -64,14 +65,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    
-    # product :
-{
-    "sizes": ["S", "M", "L", "XL"],
-    "colors": ["Red", "Blue", "Green"],
-    "types": ["Cotton", "Polyester"]
-}
-   
+
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=50)
@@ -85,7 +79,7 @@ class Product(models.Model):
     max = models.IntegerField(default=20)
     stock_quantity = models.PositiveIntegerField(default=0)
     options = models.JSONField(blank=True, null=True)  # Using JSONField for storing varying keys
-    date_created = models.DateTimeField(default=timezone.now) 
+    date_created = models.DateTimeField(default=timezone.now)
     rating = models.CharField(max_length=50,default=0)
 
     def __str__(self):
@@ -99,22 +93,27 @@ class Product(models.Model):
 
 
 
-
-
 class ShopCart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     basket_no = models.CharField(max_length=36, null=True)
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(default=1)
     paid_order = models.BooleanField(default=False)
-    total = models.FloatField(null=True)
+    total = models.FloatField(null=True, blank=True)
     session_key = models.CharField(max_length=40, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user}'s cart - {self.product.name} (Qty: {self.quantity})"
+        user_str = f"{self.user}'s" if self.user else "Guest"
+        return f"{user_str} cart - {self.product.name} (Qty: {self.quantity})"
 
     def calculate_total_price(self):
-        return self.quantity * self.product.price  # Assuming product has a price field
+        return self.quantity * self.product.price
+
+    def save(self, *args, **kwargs):
+        # Ensure either user or session_key is provided
+        if not self.user and not self.session_key:
+            raise ValueError("Either user or session_key must be provided")
+        super().save(*args, **kwargs)
 
     class Meta:
         db_table = 'shopcart'
@@ -122,20 +121,22 @@ class ShopCart(models.Model):
         verbose_name = 'shopcart'
         verbose_name_plural = 'shopcarts'
 
+class CartItem(models.Model):
+    shop_cart = models.ForeignKey(ShopCart, related_name='cart_items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
 
-# class CartItem(models.Model):
-#     shop_cart = models.ForeignKey(ShopCart, related_name='cart_items', on_delete=models.CASCADE)
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     quantity = models.PositiveIntegerField(default=1)
+    @property
+    def total_price(self):
+        return self.quantity * self.product.price
 
-#     @property
-#     def total_price(self):
-#         return self.quantity * self.product.price
+    def __str__(self):
+        return f"{self.product.name} (x{self.quantity})"
 
-#     def __str__(self):
-#         return f"{self.product.name} (x{self.quantity})"
+
+
 # Order Model
-import uuid 
+import uuid
 class Order(models.Model):
     item = models.ForeignKey('Product', on_delete=models.CASCADE, default=1),
     order_no = models.UUIDField(default=uuid.uuid4, null=True, blank=True)
@@ -162,7 +163,7 @@ class Order(models.Model):
 
     def __str__(self):
         return f"{self.id}: Order {self.order_no} by {self.customer.first_name} {self.customer.last_name}"
-    
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -170,11 +171,11 @@ class OrderItem(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     def __str__(self):
         return f"{self.product.name} (Qty: {self.quantity}) - Order {self.order.id}"
-    
-    
 
 
-class Payment(models.Model): 
+
+
+class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     stripe_payment_intent_id = models.CharField(max_length=100, null=True, blank=True)
@@ -194,7 +195,7 @@ class Payment(models.Model):
     country = models.CharField(max_length=50, blank=True, null=False)  # New field for country
     payment_method = models.CharField(
         max_length=50,
-        choices=[  
+        choices=[
             ('credit_card', 'Credit Card'),
             ('debit_card', 'Debit Card'),
             ('paypal', 'PayPal'),
@@ -212,10 +213,10 @@ class Payment(models.Model):
         db_table = 'payment'
         managed = True
         verbose_name = 'payment'
-        verbose_name_plural = 'payments'  
-   
-class PaymentInfo(models.Model): 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+        verbose_name_plural = 'payments'
+
+class PaymentInfo(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     stripe_payment_intent_id = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now, blank=True, null=True)  # Correct usage
@@ -224,6 +225,7 @@ class PaymentInfo(models.Model):
     paid_order = models.BooleanField(default=False)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    email = models.EmailField(null=True, blank=True)  # Added email field for guest users
     phone = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
     city = models.CharField(max_length=50)
@@ -234,7 +236,7 @@ class PaymentInfo(models.Model):
     country = models.CharField(max_length=50, blank=True, null=False)  # New field for country
     payment_method = models.CharField(
         max_length=50,
-        choices=[  
+        choices=[
             ('credit_card', 'Credit Card'),
             ('debit_card', 'Debit Card'),
             ('paypal', 'PayPal'),
@@ -246,14 +248,17 @@ class PaymentInfo(models.Model):
     transaction_id = models.CharField(max_length=100, unique=True, null=True, blank=True)  # New field for transaction ID
 
     def __str__(self):
-        return f"{self.user} - {self.basket_no}"
+        if self.user:
+            return f"{self.user} - {self.basket_no}"
+        else:
+            return f"Guest ({self.email}) - {self.basket_no}"
 
     class Meta:
         db_table = 'paymentinfo'
         managed = True
         verbose_name = 'paymentinfo'
-        verbose_name_plural = 'paymentsinfo'  
-   
+        verbose_name_plural = 'paymentsinfo'
+
 # Slide model (for homepage/carousel)
 class Slide(models.Model):
     image = models.ImageField(upload_to='slidepix', default='slide.jpg')
@@ -271,12 +276,27 @@ class Slide(models.Model):
 
 # Wishlist model
 class Wishlist(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     added_at = models.DateTimeField(auto_now_add=True)
+    guest_email = models.EmailField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.product.name}"
+        if self.user:
+            return f"{self.user.username} - {self.product.name}"
+        else:
+            return f"Guest ({self.guest_email}) - {self.product.name}"
+
+    def add_product(self, product):
+        """Add a product to this wishlist"""
+        # Check if product is already in wishlist
+        if not Wishlist.objects.filter(user=self.user, product=product).exists():
+            # Create a new wishlist item
+            Wishlist.objects.create(user=self.user, product=product)
+
+    def remove_product(self, product):
+        """Remove a product from this wishlist"""
+        Wishlist.objects.filter(user=self.user, product=product).delete()
 
     class Meta:
         db_table = 'wishlist'
@@ -316,6 +336,6 @@ class Message(models.Model):
     value = models.TextField()
     sent = models.DateTimeField(auto_now_add=True)
 
-    
+
     def __str__(self):
         return self.forum.name

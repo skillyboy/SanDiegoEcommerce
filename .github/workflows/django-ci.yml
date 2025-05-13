@@ -1,0 +1,60 @@
+name: Django CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Run Tests
+      env:
+        DEBUG: 'True'
+        SECRET_KEY: 'test-secret-key'
+        DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/test_db'
+        STRIPE_PUBLIC_KEY: 'pk_test_sample'
+        STRIPE_SECRET_KEY: 'sk_test_sample'
+        STRIPE_WEBHOOK_SECRET: 'whsec_sample'
+      run: |
+        python run_tests.py
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Deploy to Heroku
+      uses: akhileshns/heroku-deploy@v3.12.14
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+        heroku_email: ${{ secrets.HEROKU_EMAIL }}
+        procfile: "web: gunicorn project.wsgi:application"

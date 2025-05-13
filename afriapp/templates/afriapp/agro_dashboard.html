@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Agricultural Services | African Food San Diego{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4 mb-3">Agricultural Services</h1>
+            <p class="lead">Connect with farmers, access market prices, and manage agricultural services.</p>
+            
+            {% if error_message %}
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i> {{ error_message }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Quick Links -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="icon-circle bg-success mb-3">
+                        <i class="fas fa-seedling text-white"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Farm Management</h3>
+                    <p class="text-muted mb-4">Track your farm activities, manage crops, and monitor growth.</p>
+                    <a href="{% url 'market_prices' %}" class="btn btn-outline-success">Explore</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="icon-circle bg-primary mb-3">
+                        <i class="fas fa-chart-line text-white"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Market Prices</h3>
+                    <p class="text-muted mb-4">Get real-time market prices for various agricultural products.</p>
+                    <a href="{% url 'market_prices' %}" class="btn btn-outline-primary">View Prices</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="icon-circle bg-warning mb-3">
+                        <i class="fas fa-users text-white"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Thrift Groups</h3>
+                    <p class="text-muted mb-4">Join or create thrift groups to save and access financial services.</p>
+                    <a href="#" class="btn btn-outline-warning">Join Groups</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Market Data -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light py-3">
+                    <h2 class="h4 mb-0">Market Summary</h2>
+                </div>
+                <div class="card-body">
+                    {% if market_data %}
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-muted mb-1">Active Listings</h5>
+                                        <h3 class="mb-0">{{ market_data.active_listings|default:"0" }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-muted mb-1">Average Price</h5>
+                                        <h3 class="mb-0">${{ market_data.average_price|default:"0.00" }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-muted mb-1">Recent Transactions</h5>
+                                        <h3 class="mb-0">{{ market_data.recent_transactions|default:"0" }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <p class="mb-0">No market data available at this time.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Farm Data (if available) -->
+    {% if farm_data %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light py-3">
+                    <h2 class="h4 mb-0">Your Farm</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Farm Details</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>Farm Size:</span>
+                                    <span class="badge bg-primary rounded-pill">{{ farm_data.size|default:"N/A" }} hectares</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>Location:</span>
+                                    <span>{{ farm_data.location|default:"N/A" }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>Active Crops:</span>
+                                    <span class="badge bg-success rounded-pill">{{ farm_data.active_crops|default:"0" }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Recent Activities</h5>
+                            {% if farm_data.activities %}
+                                <ul class="list-group list-group-flush">
+                                    {% for activity in farm_data.activities %}
+                                    <li class="list-group-item">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">{{ activity.name }}</h6>
+                                            <small>{{ activity.date }}</small>
+                                        </div>
+                                        <p class="mb-1">{{ activity.description }}</p>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p class="text-muted">No recent activities recorded.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .icon-circle {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+    
+    .icon-circle i {
+        font-size: 28px;
+    }
+</style>
+{% endblock %}

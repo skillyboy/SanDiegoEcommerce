@@ -47,7 +47,7 @@
         <div class="container">
             <ol class="breadcrumb mb-0 fs-xs text-gray-400">
                 <li class="breadcrumb-item">
-                    <a class="text-gray-400" href="{% url 'home' %}">Home</a>
+                    <a class="text-gray-400" href="{% url 'index' %}">Home</a>
                 </li>
                 <li class="breadcrumb-item active">Shop</li>
             </ol>
@@ -71,14 +71,14 @@
                         </li>
                         {% for category in categories %}
                             <li class="nav-item">
-                                <a class="nav-link dropdown-toggle" 
-                                   data-bs-toggle="collapse" 
-                                   href="#category-{{ category.id }}" 
-                                   data-category-id="{{ category.id }}" 
+                                <a class="nav-link dropdown-toggle"
+                                   data-bs-toggle="collapse"
+                                   href="#category-{{ category.id }}"
+                                   data-category-id="{{ category.id }}"
                                    class="category-link">
                                    {{ category.name }}
                                 </a>
-                                
+
                                 <div class="collapse" id="category-{{ category.id }}" data-bs-parent="#sidenavParent">
                                     <div class="row">
                                         <div class="col-12 py-3">
@@ -128,32 +128,61 @@
 
             <!-- PRODUCT CARDS DISPLAY -->
             <section class="pb-12">
-                <div class="row" id="product-list">
-                    {% for product in products %}
-                        <div class="col-12 col-md-6 col-xl-3 product-card" data-category-id="{{ product.category.id }}">
-                            <div class="card mb-7 bg-cover rounded shadow-sm" style="min-height: 240px; background-image: url({{ product.image.url }}); transition: transform 0.3s;">
-                                <div class="badge bg-danger card-badge text-uppercase">
-                                    {% if product.is_on_sale %}Sale{% endif %}
-                                </div>
-                                <div class="card-img-overlay card-img-overlay-hover align-items-center bg-white-90 rounded">
-                                    <div class="text-center">
-                                        <p class="fw-bold">{{ product.name }} <br><span class="text-muted">${{ product.price }}</span></p>
-                                        <p class="mb-0">
-                                            <button class="btn btn-xs btn-link btn-circle" data-bs-toggle="modal" data-bs-target="#modalProduct{{ product.id }}">
-                                                <i class="fe fe-eye"></i>
-                                            </button>
-                                            <button class="btn btn-xs btn-link btn-circle" onclick="add_to_cart({{ product.id }})">
-                                                <i class="fe fe-shopping-cart"></i>
-                                            </button>
-                                        </p>
-                                    </div>
-                                </div>
+                <!-- Shop Header with Title and Description -->
+                <div class="shop-header mb-5">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-8">
+                            <h1 class="display-6 mb-2">African Groceries</h1>
+                            <p class="lead text-muted">Discover authentic Nigerian and African products</p>
+                        </div>
+                        <div class="col-12 col-md-4 text-md-end">
+                            <div class="d-flex justify-content-md-end align-items-center">
+                                <label for="sort-products" class="me-2 text-muted">Sort by:</label>
+                                <select id="sort-products" class="form-select form-select-sm" style="width: auto;">
+                                    <option value="newest">Newest</option>
+                                    <option value="price-low">Price: Low to High</option>
+                                    <option value="price-high">Price: High to Low</option>
+                                    <option value="popular">Most Popular</option>
+                                </select>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        {% include 'partials/modals/modal-product.html' %}
-
+                <!-- Products Grid -->
+                <div class="row" id="product-list">
+                    {% for product in products %}
+                        <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-4">
+                            {% include 'partials/nigerian-product-card.html' %}
+                            {% include 'partials/modals/modal-product.html' %}
+                        </div>
                     {% endfor %}
+                </div>
+
+                <!-- Empty State (when no products are found) -->
+                {% if not products %}
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <img src="{% static 'img/empty-cart.svg' %}" alt="No products found" style="max-width: 150px;">
+                    </div>
+                    <h3>No products found</h3>
+                    <p class="text-muted">Try adjusting your search or filter to find what you're looking for.</p>
+                    <a href="{% url 'shop' %}" class="btn btn-primary mt-3">View All Products</a>
+                </div>
+                {% endif %}
+
+                <!-- Loading Indicator -->
+                <div id="loading-indicator" class="text-center py-4 d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Load More Button -->
+                <div class="text-center mt-4 mb-5">
+                    <button id="load-more-btn" class="btn btn-nigerian-secondary">
+                        <i class="fas fa-sync-alt me-2"></i> Discover More Nigerian Products
+                    </button>
                 </div>
             </section>
         </div>
@@ -202,48 +231,380 @@
 
 <script type="text/javascript">
     const isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
-    
+
+    // Variables for dynamic product loading
+    let currentPage = 1;
+    let isLoading = false;
+    let hasMoreProducts = true;
+    let currentCategoryId = '';
+
+    // Function to add product to cart with email collection
     function add_to_cart(product_id) {
-      let quantityElement = document.getElementById(`quantity-${product_id}`);
-      let quantity = quantityElement ? quantityElement.value : 1;
-  
-      $.ajax({
-        url: "{% url 'add_to_cart' 0 %}".replace('0', product_id),
-        type: "POST",
-        data: {
-          'quantity': quantity,
-          'csrfmiddlewaretoken': '{{ csrf_token }}'
-        },
-        success: function(response) {
-          if (response.success) {
-            Swal.fire({
-              title: 'Success!',
-              text: response.message,
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1500
-            });
-            $('#navbar-cart-count').text(response.cart_count);
-            $('#cart-button-count').text(response.cart_count);
-          } else {
-            Swal.fire({
-              title: 'Error!',
-              text: response.message,
-              icon: 'error',
-              confirmButtonText: 'Okay'
-            });
-          }
-        },
-        error: function() {
-          Swal.fire({
-            title: 'Oops!',
-            text: 'Something went wrong. Please try again.',
-            icon: 'error',
-            confirmButtonText: 'Okay'
-          });
-        }
-      });
+      // Use our new email collection function
+      addToCartWithEmail(product_id);
     }
+
+
+    // Function to highlight the cart icon
+    function highlightCartIcon() {
+      const cartIcon = document.querySelector('.navbar .fa-shopping-cart');
+      if (!cartIcon) return;
+
+      // Add highlight class
+      cartIcon.classList.add('cart-highlight');
+
+      // Remove highlight class after animation completes
+      setTimeout(() => {
+        cartIcon.classList.remove('cart-highlight');
+      }, 1500);
+    }
+
+    // Function to add flying animation to cart
+    function addToCartAnimation(product_id) {
+        const productCard = document.querySelector(`[data-product-id="${product_id}"]`);
+        if (!productCard) return;
+
+        const cartIcon = document.querySelector('.navbar .fa-shopping-cart');
+        if (!cartIcon) return;
+
+        // Get product image position
+        const imgElement = productCard.querySelector('.product-img');
+        if (!imgElement) return;
+
+        const imgRect = imgElement.getBoundingClientRect();
+        const cartRect = cartIcon.getBoundingClientRect();
+
+        // Create flying element
+        const flyingImg = document.createElement('div');
+        flyingImg.className = 'flying-cart-item';
+        flyingImg.style.backgroundImage = `url(${imgElement.src})`;
+        flyingImg.style.width = '50px';
+        flyingImg.style.height = '50px';
+        flyingImg.style.position = 'fixed';
+        flyingImg.style.top = `${imgRect.top}px`;
+        flyingImg.style.left = `${imgRect.left}px`;
+        flyingImg.style.borderRadius = '50%';
+        flyingImg.style.backgroundSize = 'cover';
+        flyingImg.style.backgroundPosition = 'center';
+        flyingImg.style.zIndex = '9999';
+        flyingImg.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+        flyingImg.style.transition = 'all 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28)';
+
+        // Add to body
+        document.body.appendChild(flyingImg);
+
+        // Animate
+        setTimeout(() => {
+            flyingImg.style.top = `${cartRect.top}px`;
+            flyingImg.style.left = `${cartRect.left}px`;
+            flyingImg.style.width = '20px';
+            flyingImg.style.height = '20px';
+            flyingImg.style.opacity = '0';
+
+            // Shake cart icon
+            cartIcon.style.animation = 'shake 0.5s ease-in-out';
+
+            // Remove flying element after animation
+            setTimeout(() => {
+                document.body.removeChild(flyingImg);
+                cartIcon.style.animation = '';
+            }, 800);
+        }, 10);
+    }
+
+    // Function to load more products
+    function loadMoreProducts() {
+        if (isLoading || !hasMoreProducts) return;
+
+        isLoading = true;
+        $('#loading-indicator').removeClass('d-none');
+        $('#load-more-btn').prop('disabled', true);
+
+        $.ajax({
+            url: "{% url 'load_more_products' %}",
+            type: "GET",
+            data: {
+                'page': currentPage + 1,
+                'per_page': 12,
+                'category_id': currentCategoryId
+            },
+            success: function(response) {
+                // Increment page number
+                currentPage = response.current_page;
+
+                // Check if there are more products
+                hasMoreProducts = response.has_more;
+
+                // Append products to the list
+                if (response.products.length > 0) {
+                    appendProductsToDOM(response.products);
+                }
+
+                // Update UI
+                if (!hasMoreProducts) {
+                    $('#load-more-btn').text('No More Products').addClass('disabled');
+                }
+
+                isLoading = false;
+                $('#loading-indicator').addClass('d-none');
+                $('#load-more-btn').prop('disabled', false);
+            },
+            error: function() {
+                console.error('Error loading more products');
+                isLoading = false;
+                $('#loading-indicator').addClass('d-none');
+                $('#load-more-btn').prop('disabled', false);
+            }
+        });
+    }
+
+    // Function to append products to DOM
+    function appendProductsToDOM(products) {
+        const productList = document.getElementById('product-list');
+
+        products.forEach(product => {
+            // Create product card
+            const productCard = document.createElement('div');
+            productCard.className = 'col-12 col-md-6 col-lg-4 col-xl-3 mb-4';
+            productCard.setAttribute('data-product-id', product.id);
+            productCard.setAttribute('data-category-id', product.category_id);
+
+            // Set product card HTML
+            productCard.innerHTML = `
+                <div class="product-card-nigerian">
+                    <div class="product-img-container">
+                        ${product.is_on_sale ? '<div class="product-badge-nigerian">Sale</div>' : ''}
+                        ${product.is_new ? '<div class="product-badge-nigerian product-badge-new-nigerian">New</div>' : ''}
+
+                        <!-- Product Origin Badge -->
+                        <div class="product-origin-badge">
+                            <span class="nigeria-flag-colors-small"></span>
+                            <span>Nigerian</span>
+                        </div>
+
+                        <img src="${product.image_url}" alt="${product.name}" class="product-img lazyload">
+                        <div class="product-actions">
+                            <button class="action-btn" data-bs-toggle="modal" data-bs-target="#modalProduct${product.id}" title="Quick View">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn" onclick="add_to_cart(${product.id})" title="Add to Cart">
+                                <i class="fas fa-shopping-cart"></i>
+                            </button>
+                            <button class="action-btn" title="Add to Wishlist">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">
+                            <span class="category-badge-nigerian">${product.category}</span>
+                        </div>
+                        <h3 class="product-title">
+                            <a href="${product.url}">${product.name}</a>
+                        </h3>
+
+                        <!-- Cultural Significance (Short) -->
+                        <div class="cultural-significance-short">
+                            Authentic Nigerian product
+                        </div>
+
+                        <div class="product-price">
+                            ${product.is_on_sale && product.regular_price ?
+                                `<span class="price-old">$${product.regular_price}</span>
+                                <span class="price-current">$${product.price}</span>` :
+                                `<span class="price-current">$${product.price}</span>`
+                            }
+                        </div>
+                        <button class="btn-add-to-cart-nigerian" onclick="add_to_cart(${product.id})">
+                            <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <style>
+                    .nigeria-flag-colors-small {
+                        width: 16px;
+                        height: 10px;
+                        background: linear-gradient(to right, #008751 33.3%, white 33.3%, white 66.6%, #008751 66.6%);
+                        border-radius: 2px;
+                        display: inline-block;
+                    }
+                </style>
+            `;
+
+            // Append to product list
+            productList.appendChild(productCard);
+
+            // Create modal for product
+            createProductModal(product);
+        });
+
+        // Initialize lazy loading for new images
+        initLazyLoading();
+    }
+
+    // Function to create product modal
+    function createProductModal(product) {
+        // Create modal element
+        const modalElement = document.createElement('div');
+        modalElement.className = 'modal fade';
+        modalElement.id = `modalProduct${product.id}`;
+        modalElement.tabIndex = '-1';
+        modalElement.role = 'dialog';
+        modalElement.setAttribute('aria-hidden', 'true');
+
+        // Set modal HTML
+        modalElement.innerHTML = `
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 15px; right: 15px;">
+                        <i class="fe fe-x"></i>
+                    </button>
+                    <div class="container-fluid px-xl-0">
+                        <div class="row align-items-center mx-xl-0">
+                            <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0">
+                                <img src="${product.image_url}" class="img-fluid rounded" alt="${product.name}" style="border-radius: 10px;">
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-7 py-4 py-xl-0">
+                                <h4 class="mb-3" style="font-weight: 600; font-size: 1.5rem; color: #343a40;">${product.name}</h4>
+                                <div class="mb-3">
+                                    <span class="h5" style="color: #28a745;">$${product.price}</span>
+                                </div>
+                                <p class="mb-4" style="color: #6c757d;">${product.description || 'No description available'}</p>
+                                <div class="quantity-control d-flex align-items-center mb-3" style="gap: 10px;">
+                                    <button class="btn btn-outline-secondary quantity-button" onclick="updateQuantity(${product.id}, -1)" style="width: 40px; height: 40px; border-radius: 8px;">-</button>
+                                    <input type="number" class="form-control text-center" value="1" min="1" max="10" id="quantity-${product.id}" style="width: 60px; border-radius: 8px; font-size: 1rem; padding: 5px;">
+                                    <button class="btn btn-outline-secondary quantity-button" onclick="updateQuantity(${product.id}, 1)" style="width: 40px; height: 40px; border-radius: 8px;">+</button>
+                                </div>
+                                <button class="btn btn-sm btn-primary add-to-cart-button" onclick="add_to_cart(${product.id})">Add to Cart</button>
+                                <a class="btn btn-link w-100 mt-3" href="${product.url}" style="color: #007bff;">
+                                    More Product Info <i class="fe fe-info ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Append to body
+        document.body.appendChild(modalElement);
+    }
+
+    // Initialize lazy loading for images
+    function initLazyLoading() {
+        const lazyImages = document.querySelectorAll('img.lazyload');
+
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazyload');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            lazyImages.forEach(img => {
+                imageObserver.observe(img);
+            });
+        } else {
+            // Fallback for browsers that don't support IntersectionObserver
+            lazyImages.forEach(img => {
+                img.src = img.dataset.src;
+                img.classList.remove('lazyload');
+            });
+        }
+    }
+
+    // Add shake animation keyframes
+    const shakeStyle = document.createElement('style');
+    shakeStyle.textContent = `
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
+        }
+    `;
+    document.head.appendChild(shakeStyle);
+
+    // Document ready
+    $(document).ready(function() {
+        // Initialize lazy loading
+        initLazyLoading();
+
+        // Load more button click event
+        $('#load-more-btn').on('click', function() {
+            loadMoreProducts();
+        });
+
+        // Category filter click event
+        $('.category-link, #all-products').on('click', function(e) {
+            e.preventDefault();
+
+            // Get category ID
+            const categoryId = $(this).data('category-id') || '';
+
+            // Reset pagination
+            currentPage = 1;
+            hasMoreProducts = true;
+            currentCategoryId = categoryId;
+
+            // Show loading indicator
+            $('#loading-indicator').removeClass('d-none');
+
+            // Clear product list
+            $('#product-list').empty();
+
+            // Reset load more button
+            $('#load-more-btn').text('Load More Products').removeClass('disabled').prop('disabled', false);
+
+            // Load products for selected category
+            $.ajax({
+                url: "{% url 'load_more_products' %}",
+                type: "GET",
+                data: {
+                    'page': 1,
+                    'per_page': 12,
+                    'category_id': categoryId
+                },
+                success: function(response) {
+                    // Append products to the list
+                    if (response.products.length > 0) {
+                        appendProductsToDOM(response.products);
+                    } else {
+                        $('#product-list').html('<div class="col-12 text-center py-5"><h3>No products found</h3></div>');
+                    }
+
+                    // Check if there are more products
+                    hasMoreProducts = response.has_more;
+
+                    // Update UI
+                    if (!hasMoreProducts) {
+                        $('#load-more-btn').text('No More Products').addClass('disabled');
+                    }
+
+                    // Hide loading indicator
+                    $('#loading-indicator').addClass('d-none');
+                },
+                error: function() {
+                    console.error('Error loading products');
+                    $('#loading-indicator').addClass('d-none');
+                }
+            });
+        });
+
+        // Infinite scroll
+        $(window).on('scroll', function() {
+            if ($(window).scrollTop() + $(window).height() > $(document).height() - 200) {
+                loadMoreProducts();
+            }
+        });
+    });
 </script>
 
 

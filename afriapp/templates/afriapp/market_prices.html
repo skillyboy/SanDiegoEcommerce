@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load price_filters %}
+
+{% block title %}Market Prices | African Food San Diego{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4 mb-3">Market Prices</h1>
+            <p class="lead">Get real-time market prices for various agricultural products.</p>
+
+            {% if error_message %}
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i> {{ error_message }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Search Form -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form action="{% url 'market_prices' %}" method="get" class="row g-3">
+                        <div class="col-md-8">
+                            <label for="crop_type" class="form-label">Select Crop Type</label>
+                            <select class="form-select" id="crop_type" name="crop_type">
+                                <option value="all" {% if crop_type == 'all' %}selected{% endif %}>All Crops</option>
+                                <option value="maize" {% if crop_type == 'maize' %}selected{% endif %}>Maize</option>
+                                <option value="rice" {% if crop_type == 'rice' %}selected{% endif %}>Rice</option>
+                                <option value="beans" {% if crop_type == 'beans' %}selected{% endif %}>Beans</option>
+                                <option value="cassava" {% if crop_type == 'cassava' %}selected{% endif %}>Cassava</option>
+                                <option value="yam" {% if crop_type == 'yam' %}selected{% endif %}>Yam</option>
+                                <option value="tomato" {% if crop_type == 'tomato' %}selected{% endif %}>Tomato</option>
+                                <option value="pepper" {% if crop_type == 'pepper' %}selected{% endif %}>Pepper</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">Get Prices</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Price Data -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light py-3 d-flex justify-content-between align-items-center">
+                    <h2 class="h4 mb-0">
+                        {% if crop_type == 'all' %}
+                            All Crop Prices
+                        {% else %}
+                            {{ crop_type|title }} Prices
+                        {% endif %}
+                    </h2>
+                    <span class="badge bg-primary">Last Updated: {{ price_data.updated_at|default:price_data.date|default:"Today" }}</span>
+                </div>
+                <div class="card-body">
+                    {% if price_data %}
+                        {% if crop_type == 'all' %}
+                            <!-- Table for all crops -->
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Crop</th>
+                                            <th>Current Price</th>
+                                            <th>Previous Price</th>
+                                            <th>Change</th>
+                                            <th>Market</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in price_data %}
+                                        <tr>
+                                            <td>{{ item.crop_type|title }}</td>
+                                            <td>${{ item.price|floatformat:2 }}</td>
+                                            <td>${{ item.previous_price|floatformat:2 }}</td>
+                                            <td>
+                                                {% if item.price > item.previous_price %}
+                                                    <span class="text-success">
+                                                        <i class="fas fa-arrow-up me-1"></i>
+                                                        {{ item.price|sub:item.previous_price|floatformat:2 }}
+                                                    </span>
+                                                {% elif item.price < item.previous_price %}
+                                                    <span class="text-danger">
+                                                        <i class="fas fa-arrow-down me-1"></i>
+                                                        {{ item.previous_price|sub:item.price|floatformat:2 }}
+                                                    </span>
+                                                {% else %}
+                                                    <span class="text-muted">0.00</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ item.market }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <!-- Detailed view for single crop -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card mb-4">
+                                        <div class="card-body text-center">
+                                            <h5 class="text-muted mb-1">Current Price</h5>
+                                            <h2 class="display-4 mb-0">${{ price_data.price|floatformat:2 }}</h2>
+                                            <p class="text-muted mt-2">per {{ price_data.unit|default:"kg" }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="mb-3">Price Details</h5>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <span>Previous Price:</span>
+                                                    <span>${{ price_data.previous_price|floatformat:2 }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <span>Change:</span>
+                                                    {% if price_data.price > price_data.previous_price %}
+                                                        <span class="text-success">
+                                                            <i class="fas fa-arrow-up me-1"></i>
+                                                            ${{ price_data.price|sub:price_data.previous_price|floatformat:2 }}
+                                                        </span>
+                                                    {% elif price_data.price < price_data.previous_price %}
+                                                        <span class="text-danger">
+                                                            <i class="fas fa-arrow-down me-1"></i>
+                                                            ${{ price_data.previous_price|sub:price_data.price|floatformat:2 }}
+                                                        </span>
+                                                    {% else %}
+                                                        <span class="text-muted">$0.00</span>
+                                                    {% endif %}
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <span>Market:</span>
+                                                    <span>{{ price_data.market|default:"National Average" }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <span>Last Updated:</span>
+                                                    <span>{{ price_data.updated_at|default:price_data.date|default:"Today" }}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="mb-3">Price Trend</h5>
+                                            <div class="price-chart-container">
+                                                <canvas id="priceChart" width="400" height="300"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <p class="mb-0">No price data available for the selected crop.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if price_data and crop_type != 'all' %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sample data for the chart (replace with actual data from backend)
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: '{{ crop_type|title }} Price ($)',
+                    data: [
+                        {{ price_data.previous_price|floatformat:2 }},
+                        {{ price_data.previous_price|add:10|floatformat:2 }},
+                        {{ price_data.previous_price|add:5|floatformat:2 }},
+                        {{ price_data.previous_price|add:-5|floatformat:2 }},
+                        {{ price_data.previous_price|add:15|floatformat:2 }},
+                        {{ price_data.price|floatformat:2 }}
+                    ],
+                    borderColor: '#008751',
+                    backgroundColor: 'rgba(0, 135, 81, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .price-chart-container {
+        height: 300px;
+    }
+</style>
+{% endblock %}

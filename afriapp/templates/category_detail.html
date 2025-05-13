@@ -1,184 +1,1460 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Shop Categories{% endblock %}
+{% block title %}{{ service.name }} - Nigerian Cuisine{% endblock %}
+
+{% block extra_css %}
+<!-- Ensure SweetAlert2 is loaded -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+{% endblock %}
+
+{% block extra_js %}
+<!-- Ensure SweetAlert2 is loaded -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
 
 {% block content %}
 
-<!-- HEADER -->
-<header class="py-13 jarallax" data-jarallax data-speed=".8" style="background-image: url('{% if category_id == 1 %}/static/img/afrocommerce/cart.jpg{% elif category_id == 2 %}/static/img/afrocommerce/restaurant.jpg{% else %}/static/img/afrocommerce/food.jpg{% endif %}');">
-  <div class="container">
-      <div class="row">
-          <div class="col-12">
-              <!-- Heading -->
-              <h3 class="text-center text-white">{{ service.name }}</h3>
+<!-- HEADER WITH ANIMATED OVERLAY -->
+<header class="py-13 jarallax service-header" data-jarallax data-speed=".8" style="background-image: url('{% if category_id == 1 %}/static/img/afrocommerce/cart.jpg{% elif category_id == 2 %}/static/img/afrocommerce/restaurant.jpg{% else %}/static/img/afrocommerce/food.jpg{% endif %}');">
+  <div class="container position-relative">
+    <div class="row">
+      <div class="col-12 text-center">
+        <!-- Animated Badge -->
+        <div class="service-badge" data-aos="fade-down" data-aos-delay="200">
+          {% if category_id == 1 %}
+            <span>African Groceries</span>
+          {% elif category_id == 2 %}
+            <span>Nigerian Restaurant</span>
+          {% else %}
+            <span>{{ service.name }}</span>
+          {% endif %}
+        </div>
 
-          </div>
+        <!-- Heading with Animation -->
+        <h1 class="display-4 text-white fw-bold mb-3 service-title" data-aos="fade-up" data-aos-delay="300">
+          {% if category_id == 1 %}
+            Authentic Nigerian Groceries
+          {% elif category_id == 2 %}
+            Taste of Nigeria
+          {% else %}
+            {{ service.name }}
+          {% endif %}
+        </h1>
+
+        <!-- Subheading with Animation -->
+        <p class="lead text-white mb-5" data-aos="fade-up" data-aos-delay="400">
+          {% if category_id == 1 %}
+            Premium African ingredients and food products imported directly from West Africa
+          {% elif category_id == 2 %}
+            Experience authentic Nigerian cuisine with our delicious dishes
+          {% else %}
+            Discover the rich flavors and traditions of Nigeria
+          {% endif %}
+        </p>
+
+        <!-- CTA Button with Animation -->
+        <div data-aos="fade-up" data-aos-delay="500">
+          <a href="#featured-dishes" class="btn btn-lg btn-service-primary btn-animated">
+            <span>
+              {% if category_id == 1 %}
+                Explore Our Products
+              {% elif category_id == 2 %}
+                View Our Menu
+              {% else %}
+                Discover More
+              {% endif %}
+            </span>
+            <i class="fas fa-arrow-down ms-2"></i>
+          </a>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Decorative Wave -->
+  <div class="wave-container">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
+      <path fill="#ffffff" fill-opacity="1" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,208C1248,192,1344,192,1392,192L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+    </svg>
   </div>
 </header>
 
-<section class="py-12">
+<!-- RESTAURANT INTRO SECTION -->
+<section class="py-7 bg-white service-intro" id="featured-section">
   <div class="container">
-      <div class="row">
-          <div class="col-12">
-              {% for category, data in categories_with_products.items %}
-              <div class="dropdown-section mb-5">
-                  <a class="dropdown-toggler" id="{{ category.name|slugify }}Menu" data-toggle="collapse" href="#{{ category.name|slugify }}Collapse" role="button" aria-expanded="false" aria-controls="{{ category.name|slugify }}Collapse">
-                      <h4 class="d-flex justify-content-between align-items-center">
-                          <span>{{ category.name }}</span>
-                          <span class="icon-toggle">
-                              <i class="fe fe-chevron-down"></i>
-                          </span>
-                      </h4>
-                  </a>
-                  <div class="collapse" id="{{ category.name|slugify }}Collapse">
-                      <div class="row" id="product-list">
-                          {% if data.products %}
-                              {% for product in data.products %}
-                              <div class="col-12 col-md-6 col-xl-3 product-card">
-                                  <article class="card mb-7 bg-cover rounded shadow-sm product-card" style="min-height: 240px; background-image: url({{ product.image.url }}); transition: transform 0.3s;">
-                                      <div class="badge bg-danger card-badge text-uppercase">
-                                          {% if product.is_on_sale %}Sale{% endif %}
-                                      </div>
-                                      <div class="card-img-overlay card-img-overlay-hover align-items-center bg-white-90 rounded">
-                                          <div class="text-center">
-                                              <p class="fw-bold">{{ product.name }} <br><span class="text-muted">${{ product.price }}</span></p>
-                                              <p class="mb-0">
-                                                  <button class="btn btn-xs btn-link btn-circle" data-bs-toggle="modal" data-bs-target="#modalProduct{{ product.id }}">
-                                                      <i class="fe fe-eye"></i>
-                                                  </button>
-                                                  <button class="btn btn-xs btn-link btn-circle" onclick="add_to_cart({{ product.id }})">
-                                                      <i class="fe fe-shopping-cart"></i>
-                                                  </button>
-                                              </p>
-                                          </div>
-                                      </div>
-                                  </article>
-                              </div>
-                              {% include 'partials/modals/modal-product.html' %}
-                              {% endfor %}
-                          {% else %}
-                          <div class="col-12">
-                              <p>No products available in this category.</p>
-                          </div>
-                          {% endif %}
-                      </div>
-                  </div>
+    <!-- GROCERIES INTRO (Service ID 1) -->
+    <div class="service-groceries">
+      <div class="row align-items-center">
+        <div class="col-12 col-md-6">
+          <div class="service-section-badge" data-aos="fade-right">Premium Selection</div>
+          <h2 class="mb-4 text-service-primary" data-aos="fade-right" data-aos-delay="100">African Grocery Marketplace</h2>
+          <p class="lead mb-4" data-aos="fade-right" data-aos-delay="200">Discover authentic Nigerian ingredients and food products imported directly from West Africa.</p>
+          <p class="mb-5" data-aos="fade-right" data-aos-delay="300">Our grocery selection features premium quality ingredients essential for preparing traditional Nigerian dishes. From spices and seasonings to grains and snacks, we offer everything you need to bring the taste of Nigeria to your kitchen.</p>
+
+          <div class="service-features">
+            <div class="service-feature" data-aos="fade-up" data-aos-delay="400">
+              <div class="feature-icon">
+                <i class="fas fa-leaf"></i>
               </div>
-              {% endfor %}
+              <div class="feature-content">
+                <h6 class="mb-1">Premium Quality</h6>
+                <p class="text-muted mb-0">Carefully selected ingredients</p>
+              </div>
+            </div>
+
+            <div class="service-feature" data-aos="fade-up" data-aos-delay="500">
+              <div class="feature-icon">
+                <i class="fas fa-globe-africa"></i>
+              </div>
+              <div class="feature-content">
+                <h6 class="mb-1">Authentic Products</h6>
+                <p class="text-muted mb-0">Imported from Nigeria</p>
+              </div>
+            </div>
+
+            <div class="service-feature" data-aos="fade-up" data-aos-delay="600">
+              <div class="feature-icon">
+                <i class="fas fa-truck"></i>
+              </div>
+              <div class="feature-content">
+                <h6 class="mb-1">Fast Delivery</h6>
+                <p class="text-muted mb-0">Throughout San Diego</p>
+              </div>
+            </div>
           </div>
+        </div>
+
+        <div class="col-12 col-md-6 mt-5 mt-md-0" data-aos="fade-left" data-aos-delay="400">
+          <div class="service-image-container">
+            <img src="/static/img/afrocommerce/african-groceries.jpg" alt="African Groceries" class="img-fluid rounded-3 shadow-lg" onerror="this.src='/static/img/placeholder.png'">
+            <div class="service-image-badge">
+              <span>100% Authentic</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="row">
-          <div class="col-12 text-center">
-              <p class="fs-sm text-muted">Showing {{ total_products }} products</p>
-              <div class="progress mx-auto mb-7" style="max-width: 250px;">
-                  <div class="progress-bar bg-dark" role="progressbar" style="width: {{ data.percentage }}%" aria-valuenow="{{ data.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <button class="btn btn-sm btn-outline-dark" id="loadMoreBtn">Load more <i class="fe fe-arrow-right"></i></button>
+      <!-- Shopping Categories -->
+      <div class="row mt-7">
+        <div class="col-12 text-center">
+          <h3 class="mb-5" data-aos="fade-up">Shop By Category</h3>
+        </div>
+
+        <div class="col-6 col-md-3 mb-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="category-box">
+            <div class="category-icon">
+              <i class="fas fa-pepper-hot"></i>
+            </div>
+            <h5>Spices</h5>
+            <p>Traditional Nigerian spices and seasonings</p>
           </div>
+        </div>
+
+        <div class="col-6 col-md-3 mb-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="category-box">
+            <div class="category-icon">
+              <i class="fas fa-seedling"></i>
+            </div>
+            <h5>Grains & Flours</h5>
+            <p>Essential ingredients for Nigerian dishes</p>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3 mb-4" data-aos="fade-up" data-aos-delay="300">
+          <div class="category-box">
+            <div class="category-icon">
+              <i class="fas fa-cookie"></i>
+            </div>
+            <h5>Snacks</h5>
+            <p>Authentic Nigerian snacks and treats</p>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3 mb-4" data-aos="fade-up" data-aos-delay="400">
+          <div class="category-box">
+            <div class="category-icon">
+              <i class="fas fa-wine-bottle"></i>
+            </div>
+            <h5>Beverages</h5>
+            <p>Traditional drinks and beverage mixes</p>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <!-- RESTAURANT INTRO (Service ID 2) -->
+    <div class="service-restaurant">
+      <div class="row align-items-center">
+        <div class="col-12 col-md-6">
+          <div class="service-section-badge" data-aos="fade-right">Authentic Cuisine</div>
+          <h2 class="mb-4 text-service-primary" data-aos="fade-right" data-aos-delay="100">Nigerian Restaurant Experience</h2>
+          <p class="lead mb-4" data-aos="fade-right" data-aos-delay="200">Discover the rich flavors of Nigerian cuisine prepared with authentic recipes and fresh ingredients.</p>
+          <p class="mb-5" data-aos="fade-right" data-aos-delay="300">Our restaurant offers a diverse menu featuring traditional Nigerian dishes, from spicy jollof rice to savory egusi soup. Each dish is carefully prepared to bring you the authentic taste of Nigeria.</p>
+
+          <div class="service-features">
+            <div class="service-feature" data-aos="fade-up" data-aos-delay="400">
+              <div class="feature-icon">
+                <i class="fas fa-utensils"></i>
+              </div>
+              <div class="feature-content">
+                <h6 class="mb-1">Authentic Recipes</h6>
+                <p class="text-muted mb-0">Traditional cooking methods</p>
+              </div>
+            </div>
+
+            <div class="service-feature" data-aos="fade-up" data-aos-delay="500">
+              <div class="feature-icon">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <div class="feature-content">
+                <h6 class="mb-1">Fresh Ingredients</h6>
+                <p class="text-muted mb-0">Locally sourced when possible</p>
+              </div>
+            </div>
+
+            <div class="service-feature" data-aos="fade-up" data-aos-delay="600">
+              <div class="feature-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="feature-content">
+                <h6 class="mb-1">Fast Service</h6>
+                <p class="text-muted mb-0">Quality food, minimal wait</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 mt-5 mt-md-0" data-aos="fade-left" data-aos-delay="400">
+          <div class="card border-0 shadow-lg restaurant-hours-card">
+            <div class="card-pattern"></div>
+            <div class="card-body p-5">
+              <h3 class="mb-4">Hours of Operation</h3>
+              <div class="d-flex justify-content-between mb-3">
+                <span class="text-muted">Monday - Friday</span>
+                <span class="fw-bold">11:00 AM - 10:00 PM</span>
+              </div>
+              <div class="d-flex justify-content-between mb-3">
+                <span class="text-muted">Saturday</span>
+                <span class="fw-bold">10:00 AM - 11:00 PM</span>
+              </div>
+              <div class="d-flex justify-content-between mb-4">
+                <span class="text-muted">Sunday</span>
+                <span class="fw-bold">10:00 AM - 9:00 PM</span>
+              </div>
+              <div class="d-grid">
+                <a href="https://wa.me/18626001974?text=Hello,%20I%20would%20like%20to%20make%20a%20reservation." class="btn btn-service-primary btn-animated" target="_blank">
+                  <span><i class="fab fa-whatsapp me-2"></i> Make a Reservation</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED ITEMS SECTION - CONDITIONAL BASED ON SERVICE ID -->
+<section class="py-7 bg-light featured-section">
+  <div class="container">
+    <!-- Decorative Elements -->
+    <div class="decorative-dots"></div>
+    <div class="decorative-circle"></div>
+
+    <!-- Section Header -->
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8 text-center">
+        <div class="section-badge" data-aos="fade-up">Featured Selection</div>
+        <h2 class="mb-4" data-aos="fade-up" data-aos-delay="100">
+          {% if category_id == 1 %}
+            Popular Grocery Items
+          {% elif category_id == 2 %}
+            Featured Dishes
+          {% else %}
+            Featured Products
+          {% endif %}
+        </h2>
+        <p class="mb-7 text-muted" data-aos="fade-up" data-aos-delay="200">
+          {% if category_id == 1 %}
+            Our most popular Nigerian grocery items that customers love
+          {% elif category_id == 2 %}
+            Our most popular Nigerian dishes prepared with authentic recipes
+          {% else %}
+            Our most popular Nigerian products that customers love
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    <!-- Featured Items Grid -->
+    <div class="row">
+      <!-- Featured Item 1 -->
+      <div class="col-12 col-md-4 mb-5" data-aos="fade-up" data-aos-delay="300">
+        <div class="featured-card">
+          <div class="featured-card-image">
+            {% if category_id == 1 %}
+              <img src="/static/img/afrocommerce/palm-oil.jpg" alt="Palm Oil" onerror="this.src='/static/img/placeholder.png'">
+              <div class="featured-badge">BESTSELLER</div>
+            {% elif category_id == 2 %}
+              <img src="/static/img/afrocommerce/jollof-rice.jpg" alt="Jollof Rice" onerror="this.src='/static/img/placeholder.png'">
+              <div class="featured-badge">POPULAR</div>
+            {% else %}
+              <img src="/static/img/afrocommerce/jollof-rice.jpg" alt="Featured Product" onerror="this.src='/static/img/placeholder.png'">
+              <div class="featured-badge">FEATURED</div>
+            {% endif %}
+
+            <div class="featured-card-actions">
+              <button class="action-button" onclick="add_to_cart(1)">
+                <i class="fe fe-shopping-cart"></i>
+              </button>
+              <button class="action-button" data-bs-toggle="modal" data-bs-target="#modalProduct">
+                <i class="fe fe-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="featured-card-content">
+            {% if category_id == 1 %}
+              <h4>Palm Oil</h4>
+              <p>Premium quality Nigerian red palm oil, perfect for traditional soups and stews</p>
+              <div class="featured-card-price">$9.99</div>
+            {% elif category_id == 2 %}
+              <h4>Jollof Rice</h4>
+              <p>Spicy tomato rice with mixed vegetables and your choice of protein</p>
+              <div class="featured-card-price">$12.99</div>
+            {% else %}
+              <h4>Featured Product</h4>
+              <p>Premium quality Nigerian product</p>
+              <div class="featured-card-price">$12.99</div>
+            {% endif %}
+
+            <button class="btn btn-outline-service-primary w-100 btn-animated" onclick="add_to_cart(1)">
+              <span>Add to Cart</span>
+              <i class="fe fe-shopping-cart ms-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Item 2 -->
+      <div class="col-12 col-md-4 mb-5" data-aos="fade-up" data-aos-delay="400">
+        <div class="featured-card">
+          <div class="featured-card-image">
+            {% if category_id == 1 %}
+              <img src="/static/img/afrocommerce/egusi-seeds.jpg" alt="Egusi Seeds" onerror="this.src='/static/img/placeholder.png'">
+              <div class="featured-badge bg-success">NEW</div>
+            {% elif category_id == 2 %}
+              <img src="/static/img/afrocommerce/egusi-soup.jpg" alt="Egusi Soup" onerror="this.src='/static/img/placeholder.png'">
+              <div class="featured-badge bg-success">CHEF'S CHOICE</div>
+            {% else %}
+              <img src="/static/img/afrocommerce/egusi-soup.jpg" alt="Featured Product" onerror="this.src='/static/img/placeholder.png'">
+              <div class="featured-badge bg-success">POPULAR</div>
+            {% endif %}
+
+            <div class="featured-card-actions">
+              <button class="action-button" onclick="add_to_cart(2)">
+                <i class="fe fe-shopping-cart"></i>
+              </button>
+              <button class="action-button" data-bs-toggle="modal" data-bs-target="#modalProduct">
+                <i class="fe fe-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="featured-card-content">
+            {% if category_id == 1 %}
+              <h4>Egusi Seeds</h4>
+              <p>Ground melon seeds essential for making traditional Nigerian egusi soup</p>
+              <div class="featured-card-price">$7.99</div>
+            {% elif category_id == 2 %}
+              <h4>Egusi Soup</h4>
+              <p>Traditional Nigerian soup made with ground melon seeds and vegetables</p>
+              <div class="featured-card-price">$14.99</div>
+            {% else %}
+              <h4>Featured Product</h4>
+              <p>Premium quality Nigerian product</p>
+              <div class="featured-card-price">$14.99</div>
+            {% endif %}
+
+            <button class="btn btn-outline-service-primary w-100 btn-animated" onclick="add_to_cart(2)">
+              <span>Add to Cart</span>
+              <i class="fe fe-shopping-cart ms-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Item 3 -->
+      <div class="col-12 col-md-4 mb-5" data-aos="fade-up" data-aos-delay="500">
+        <div class="featured-card">
+          <div class="featured-card-image">
+            {% if category_id == 1 %}
+              <img src="/static/img/afrocommerce/pounded-yam-flour.jpg" alt="Pounded Yam Flour" onerror="this.src='/static/img/placeholder.png'">
+              <div class="featured-badge bg-danger">HOT</div>
+            {% elif category_id == 2 %}
+              <img src="/static/img/afrocommerce/pounded-yam.jpg" alt="Pounded Yam" onerror="this.src='/static/img/placeholder.png'">
+              <div class="featured-badge bg-danger">SPECIAL</div>
+            {% else %}
+              <img src="/static/img/afrocommerce/pounded-yam.jpg" alt="Featured Product" onerror="this.src='/static/img/placeholder.png'">
+              <div class="featured-badge bg-danger">HOT</div>
+            {% endif %}
+
+            <div class="featured-card-actions">
+              <button class="action-button" onclick="add_to_cart(3)">
+                <i class="fe fe-shopping-cart"></i>
+              </button>
+              <button class="action-button" data-bs-toggle="modal" data-bs-target="#modalProduct">
+                <i class="fe fe-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="featured-card-content">
+            {% if category_id == 1 %}
+              <h4>Pounded Yam Flour</h4>
+              <p>Premium quality yam flour for making smooth, delicious pounded yam</p>
+              <div class="featured-card-price">$8.99</div>
+            {% elif category_id == 2 %}
+              <h4>Pounded Yam</h4>
+              <p>Smooth, dough-like side dish perfect for dipping in Nigerian soups</p>
+              <div class="featured-card-price">$10.99</div>
+            {% else %}
+              <h4>Featured Product</h4>
+              <p>Premium quality Nigerian product</p>
+              <div class="featured-card-price">$10.99</div>
+            {% endif %}
+
+            <button class="btn btn-outline-service-primary w-100 btn-animated" onclick="add_to_cart(3)">
+              <span>Add to Cart</span>
+              <i class="fe fe-shopping-cart ms-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View All Button -->
+    <div class="row">
+      <div class="col-12 text-center" data-aos="fade-up" data-aos-delay="600">
+        <a href="#menu-categories" class="btn btn-service-primary btn-lg btn-animated">
+          <span>
+            {% if category_id == 1 %}
+              View All Products
+            {% elif category_id == 2 %}
+              View Full Menu
+            {% else %}
+              View All Items
+            {% endif %}
+          </span>
+          <i class="fas fa-arrow-down ms-2"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT CATEGORIES SECTION - CONDITIONAL BASED ON SERVICE ID -->
+<section class="py-7 bg-white product-categories-section" id="menu-categories">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="row justify-content-center mb-7">
+      <div class="col-12 col-md-10 col-lg-8 text-center">
+        <div class="section-badge" data-aos="fade-up">Complete Selection</div>
+        <h2 class="mb-4" data-aos="fade-up" data-aos-delay="100">
+          {% if category_id == 1 %}
+            Our Product Categories
+          {% elif category_id == 2 %}
+            Our Complete Menu
+          {% else %}
+            Our Categories
+          {% endif %}
+        </h2>
+        <p class="mb-5 text-muted" data-aos="fade-up" data-aos-delay="200">
+          {% if category_id == 1 %}
+            Explore our full selection of authentic Nigerian grocery products
+          {% elif category_id == 2 %}
+            Explore our full selection of authentic Nigerian dishes
+          {% else %}
+            Explore our full selection of authentic Nigerian products
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    <!-- Category Accordion -->
+    <div class="row">
+      <div class="col-12">
+        <div class="category-accordion" data-aos="fade-up" data-aos-delay="300">
+          {% for category, data in categories_with_products.items %}
+          <div class="category-item mb-4">
+            <div class="category-header" id="{{ category.name|slugify }}Menu" data-toggle="collapse" href="#{{ category.name|slugify }}Collapse" role="button" aria-expanded="false" aria-controls="{{ category.name|slugify }}Collapse">
+              <div class="category-title">
+                <div class="category-icon">
+                  {% if 'Spice' in category.name %}
+                    <i class="fas fa-pepper-hot"></i>
+                  {% elif 'Grain' in category.name or 'Flour' in category.name %}
+                    <i class="fas fa-seedling"></i>
+                  {% elif 'Snack' in category.name %}
+                    <i class="fas fa-cookie"></i>
+                  {% elif 'Beverage' in category.name %}
+                    <i class="fas fa-wine-bottle"></i>
+                  {% elif 'Main' in category.name or 'Dish' in category.name %}
+                    <i class="fas fa-utensils"></i>
+                  {% elif 'Soup' in category.name %}
+                    <i class="fas fa-soup"></i>
+                  {% elif 'Side' in category.name %}
+                    <i class="fas fa-drumstick-bite"></i>
+                  {% elif 'Dessert' in category.name %}
+                    <i class="fas fa-ice-cream"></i>
+                  {% else %}
+                    <i class="fas fa-shopping-basket"></i>
+                  {% endif %}
+                </div>
+                <h4>{{ category.name }}</h4>
+              </div>
+              <div class="category-toggle">
+                <span class="toggle-icon">
+                  <i class="fe fe-chevron-down"></i>
+                </span>
+              </div>
+            </div>
+
+            <div class="collapse category-content" id="{{ category.name|slugify }}Collapse">
+              <div class="row product-grid">
+                {% if data.products %}
+                  {% for product in data.products %}
+                  <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-4">
+                    <div class="product-item" data-product-id="{{ product.id }}">
+                      <div class="product-image">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" onerror="this.src='/static/img/placeholder.png'">
+                        {% if product.is_on_sale %}
+                        <div class="product-badge bg-service-primary">
+                          Special
+                        </div>
+                        {% endif %}
+                        <div class="product-actions">
+                          <button class="product-action-btn" data-bs-toggle="modal" data-bs-target="#modalProduct{{ product.id }}">
+                            <i class="fe fe-eye"></i>
+                          </button>
+                          <button class="product-action-btn" onclick="add_to_cart({{ product.id }})">
+                            <i class="fe fe-shopping-cart"></i>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="product-details">
+                        <h5 class="product-title">{{ product.name }}</h5>
+                        <p class="product-description">{{ product.description|truncatechars:60 }}</p>
+                        <div class="product-price">${{ product.price }}</div>
+                        <button class="btn btn-outline-service-primary w-100 btn-sm btn-animated" onclick="addToCartWithEmail({{ product.id }})">
+                          <span>Add to Cart</span>
+                          <i class="fe fe-shopping-cart ms-2"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  {% include 'partials/modals/modal-product.html' %}
+                  {% endfor %}
+                {% else %}
+                <div class="col-12">
+                  <div class="alert alert-info">
+                    <i class="fe fe-info me-2"></i> No products available in this category.
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress and Load More -->
+    <div class="row mt-5">
+      <div class="col-12 text-center" data-aos="fade-up" data-aos-delay="400">
+        <p class="text-muted mb-3">Showing {{ total_products }} products</p>
+        <div class="progress-container">
+          <div class="progress">
+            <div class="progress-bar bg-service-primary" role="progressbar" style="width: {{ data.percentage }}%" aria-valuenow="{{ data.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <div class="progress-text">{{ data.percentage|floatformat:0 }}% loaded</div>
+        </div>
+        <button class="btn btn-service-primary btn-lg mt-4 btn-animated" id="loadMoreBtn">
+          <span>Load More Products</span>
+          <i class="fe fe-arrow-right ms-2"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS SECTION WITH ANIMATIONS -->
+<section class="py-7 bg-light testimonials-section">
+  <div class="container">
+    <!-- Decorative Elements -->
+    <div class="testimonial-pattern-left"></div>
+    <div class="testimonial-pattern-right"></div>
+
+    <!-- Section Header -->
+    <div class="row justify-content-center mb-7">
+      <div class="col-12 col-md-10 col-lg-8 text-center">
+        <div class="section-badge" data-aos="fade-up">Customer Stories</div>
+        <h2 class="mb-4" data-aos="fade-up" data-aos-delay="100">What Our Customers Say</h2>
+        <p class="mb-5 text-muted" data-aos="fade-up" data-aos-delay="200">
+          {% if category_id == 1 %}
+            Hear from our community of Nigerian grocery enthusiasts
+          {% elif category_id == 2 %}
+            Hear from our satisfied restaurant customers
+          {% else %}
+            Read reviews from our satisfied customers
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    <!-- Testimonials Slider -->
+    <div class="testimonial-slider" data-flickity='{"pageDots": true, "prevNextButtons": true, "wrapAround": true, "autoPlay": 5000, "cellAlign": "center"}'>
+      <!-- Testimonial 1 -->
+      <div class="testimonial-slide px-3" data-aos="fade-up" data-aos-delay="300">
+        <div class="testimonial-card">
+          <div class="testimonial-quote">
+            <i class="fas fa-quote-left"></i>
+          </div>
+          <div class="testimonial-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="testimonial-text">
+            {% if category_id == 1 %}
+              <p>"The quality of the palm oil and egusi seeds I purchased was exceptional! Authentic Nigerian ingredients that are hard to find elsewhere. The packaging was secure and delivery was prompt."</p>
+            {% elif category_id == 2 %}
+              <p>"The jollof rice was absolutely delicious! Perfectly spiced and authentic. The service was excellent and delivery was prompt. I'll definitely be ordering again soon."</p>
+            {% else %}
+              <p>"The products were exceptional quality! Authentic Nigerian items that are hard to find elsewhere. I'll definitely be shopping here again soon."</p>
+            {% endif %}
+          </div>
+          <div class="testimonial-author">
+            <div class="author-image">
+              <img src="/static/img/avatars/avatar-1.jpg" alt="Customer" onerror="this.src='/static/img/placeholder.png'">
+            </div>
+            <div class="author-info">
+              <h5>Sarah Johnson</h5>
+              <p>San Diego, CA</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="testimonial-slide px-3" data-aos="fade-up" data-aos-delay="400">
+        <div class="testimonial-card">
+          <div class="testimonial-quote">
+            <i class="fas fa-quote-left"></i>
+          </div>
+          <div class="testimonial-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="testimonial-text">
+            {% if category_id == 1 %}
+              <p>"First time trying to cook Nigerian food at home and these ingredients made it possible! The yam flour made perfect pounded yam, and the spices were so fresh and aromatic."</p>
+            {% elif category_id == 2 %}
+              <p>"First time trying Nigerian food and I'm hooked! The egusi soup was amazing and the service was excellent. I appreciate the authentic flavors and the care put into each dish."</p>
+            {% else %}
+              <p>"First time trying these products and I'm impressed! The quality is excellent and the service was outstanding. Will definitely be a repeat customer."</p>
+            {% endif %}
+          </div>
+          <div class="testimonial-author">
+            <div class="author-image">
+              <img src="/static/img/avatars/avatar-2.jpg" alt="Customer" onerror="this.src='/static/img/placeholder.png'">
+            </div>
+            <div class="author-info">
+              <h5>Michael Thompson</h5>
+              <p>La Jolla, CA</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="testimonial-slide px-3" data-aos="fade-up" data-aos-delay="500">
+        <div class="testimonial-card">
+          <div class="testimonial-quote">
+            <i class="fas fa-quote-left"></i>
+          </div>
+          <div class="testimonial-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+          <div class="testimonial-text">
+            {% if category_id == 1 %}
+              <p>"As a Nigerian living in San Diego, finding authentic ingredients has been a challenge until now! Everything I've purchased reminds me of home. The customer service is also excellent."</p>
+            {% elif category_id == 2 %}
+              <p>"The pounded yam and vegetable soup combo was perfect. Authentic flavors that reminded me of home. The quality of ingredients is exceptional and the portions are generous."</p>
+            {% else %}
+              <p>"The quality and authenticity of these products reminds me of home. Everything I've purchased has been exceptional. The customer service is also outstanding."</p>
+            {% endif %}
+          </div>
+          <div class="testimonial-author">
+            <div class="author-image">
+              <img src="/static/img/avatars/avatar-3.jpg" alt="Customer" onerror="this.src='/static/img/placeholder.png'">
+            </div>
+            <div class="author-info">
+              <h5>Chioma Okafor</h5>
+              <p>Chula Vista, CA</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 4 -->
+      <div class="testimonial-slide px-3" data-aos="fade-up" data-aos-delay="600">
+        <div class="testimonial-card">
+          <div class="testimonial-quote">
+            <i class="fas fa-quote-left"></i>
+          </div>
+          <div class="testimonial-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="testimonial-text">
+            {% if category_id == 1 %}
+              <p>"The variety of Nigerian snacks available here is amazing! My kids love the chin-chin and plantain chips. Fast shipping and everything arrived in perfect condition."</p>
+            {% elif category_id == 2 %}
+              <p>"The suya was perfectly seasoned and the jollof rice had that authentic smoky flavor. Portion sizes are generous and the prices are reasonable. Highly recommend!"</p>
+            {% else %}
+              <p>"Exceptional quality and service! Everything I've ordered has exceeded my expectations. The prices are reasonable and the shipping is fast and reliable."</p>
+            {% endif %}
+          </div>
+          <div class="testimonial-author">
+            <div class="author-image">
+              <img src="/static/img/avatars/avatar-4.jpg" alt="Customer" onerror="this.src='/static/img/placeholder.png'">
+            </div>
+            <div class="author-info">
+              <h5>David Williams</h5>
+              <p>Oceanside, CA</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="row mt-7">
+      <div class="col-12 text-center" data-aos="fade-up" data-aos-delay="700">
+        <div class="cta-box">
+          <h3 class="mb-4">
+            {% if category_id == 1 %}
+              Ready to Experience Authentic Nigerian Ingredients?
+            {% elif category_id == 2 %}
+              Ready to Experience Authentic Nigerian Cuisine?
+            {% else %}
+              Ready to Experience Authentic Nigerian Products?
+            {% endif %}
+          </h3>
+          <p class="mb-4">
+            {% if category_id == 1 %}
+              Browse our selection of premium Nigerian grocery items and start cooking authentic dishes at home.
+            {% elif category_id == 2 %}
+              Browse our menu of delicious Nigerian dishes and place your order today.
+            {% else %}
+              Browse our selection of premium Nigerian products and place your order today.
+            {% endif %}
+          </p>
+          <a href="#menu-categories" class="btn btn-lg btn-service-primary btn-animated">
+            <span>
+              {% if category_id == 1 %}
+                Shop Now
+              {% elif category_id == 2 %}
+                View Menu
+              {% else %}
+                Shop Now
+              {% endif %}
+            </span>
+            <i class="fas fa-arrow-right ms-2"></i>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 
 <style>
+  /* General Styling */
+  :root {
+    --service-primary-rgb: 0, 135, 81; /* Default to groceries green */
+  }
+
+  .service-groceries-theme {
+    --service-primary-rgb: 0, 135, 81; /* Nigerian green */
+  }
+
+  .service-restaurant-theme {
+    --service-primary-rgb: 139, 69, 19; /* Saddle brown */
+  }
+
   body {
     background-color: #f8f9fa;
+    font-family: 'Montserrat', sans-serif;
   }
-  h3 {
-    color: #333;
-    font-weight: bold;
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+
+  .text-primary {
+    color: var(--service-primary) !important;
+  }
+
+  .bg-primary {
+    background-color: var(--service-primary) !important;
+  }
+
+  .btn-primary {
+    background-color: var(--service-primary);
+    border-color: var(--service-primary);
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--service-primary);
+    filter: brightness(90%);
+    border-color: var(--service-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-outline-primary {
+    color: var(--service-primary);
+    border-color: var(--service-primary);
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: var(--service-primary);
+    border-color: var(--service-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Animated Button */
+  .btn-animated {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .btn-animated:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-animated:hover i {
+    animation: moveRight 0.5s ease-in-out;
+  }
+
+  @keyframes moveRight {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+  }
+
+  /* Header Styling */
+  header.jarallax {
+    position: relative;
+  }
+
+  header.jarallax::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.7) 100%);
+    z-index: 1;
+    transition: all 0.5s ease;
+  }
+
+  .service-groceries-theme header.jarallax::before {
+    background: linear-gradient(to bottom, rgba(0,135,81,0.5) 0%, rgba(0,0,0,0.7) 100%);
+  }
+
+  .service-restaurant-theme header.jarallax::before {
+    background: linear-gradient(to bottom, rgba(139,69,19,0.5) 0%, rgba(0,0,0,0.7) 100%);
+  }
+
+  header.jarallax .container {
+    position: relative;
+    z-index: 2;
+  }
+
+  .service-title {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    animation: fadeInUp 1s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .service-badge {
+    display: inline-block;
+    background-color: var(--service-primary);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
-  .menu-item {
-    border: 1px solid #ccc;
-    padding: 15px;
-    text-align: center;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+  /* Wave Container */
+  .wave-container {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
   }
-  .menu-item:hover {
-    background-color: #e9ecef;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  .wave-container svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 80px;
   }
+
+  .service-groceries-theme .wave-container svg path {
+    fill: #ffffff;
+  }
+
+  .service-restaurant-theme .wave-container svg path {
+    fill: #ffffff;
+  }
+
+  /* Menu Category Styling */
   .dropdown-toggler {
-    font-size: 20px;
-    color: #075806;
+    font-size: 18px;
+    color: #fff;
     text-decoration: none;
     display: block;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #d1d6db;
-    transition: background-color 0.3s ease;
+    padding: 15px 20px;
+    border-radius: 8px;
+    background-color: var(--service-primary);
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
   }
+
+  .dropdown-toggler::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .dropdown-toggler:hover::after {
+    transform: translateX(100%);
+  }
+
   .dropdown-toggler:hover {
-    background-color: #075806;
+    background-color: var(--service-primary);
+    filter: brightness(90%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     text-decoration: none;
+    color: #fff;
   }
+
+  .dropdown-toggler h4 {
+    margin-bottom: 0;
+    color: #fff;
+  }
+
   .dropdown-section {
-    margin-top: 40px;
+    margin-top: 30px;
   }
+
+  .icon-toggle {
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown-toggler[aria-expanded="true"] .icon-toggle {
+    transform: rotate(180deg);
+  }
+
+  /* Product Card Styling - FIXED SHAKING ISSUE */
   .product-card {
-    position: relative; /* Allow positioning for badges */
+    transition: all 0.3s ease;
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .food-card {
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border-radius: 12px !important;
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  .food-card:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .food-card .card-img {
+    overflow: hidden;
+    position: relative;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+  }
+
+  .food-card .card-img img {
+    transition: transform 0.5s ease;
+    width: 100%;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .food-card:hover .card-img img {
+    transform: scale(1.05);
+  }
+
   .card-badge {
     position: absolute;
     top: 10px;
     left: 10px;
     z-index: 10;
+    padding: 6px 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    background-color: var(--service-primary);
   }
-  .card-img-overlay {
-    transition: background-color 0.3s;
+
+  .card-actions {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 10;
+    transform: translateX(10px);
   }
-  .card-img-overlay-hover:hover {
-    background-color: rgba(255, 255, 255, 0.8);
+
+  .food-card:hover .card-actions {
+    opacity: 1;
+    transform: translateX(0);
   }
+
+  .btn-white-primary {
+    background-color: white;
+    color: var(--service-primary);
+    border: none;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .btn-white-primary:hover {
+    background-color: var(--service-primary);
+    color: white;
+    transform: scale(1.05);
+  }
+
+  .product-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #333;
+    transition: color 0.3s ease;
+  }
+
+  .food-card:hover .product-title {
+    color: var(--service-primary);
+  }
+
+  .product-desc {
+    min-height: 40px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Testimonial Styling */
+  .avatar-img {
+    border: 3px solid var(--service-primary);
+    transition: all 0.3s ease;
+  }
+
+  .card:hover .avatar-img {
+    transform: scale(1.05);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  }
+
+  /* Button Styling */
   .btn-circle {
     border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .btn-circle:hover {
+    transform: scale(1.1);
+  }
+
+  /* Progress Bar */
+  .progress {
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: rgba(0,0,0,0.05);
+  }
+
+  .progress-bar {
+    background-color: var(--service-primary);
+    transition: width 1s ease;
+  }
+
+  /* Service Features */
+  .service-feature {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    padding: 10px 15px;
+    border-radius: 8px;
+  }
+
+  .service-feature:hover {
+    transform: translateX(5px);
+    background-color: rgba(var(--service-primary-rgb), 0.05);
+  }
+
+  .service-feature i {
+    color: var(--service-primary);
+    font-size: 24px;
+    margin-right: 15px;
+    transition: all 0.3s ease;
+  }
+
+  .service-feature:hover i {
+    transform: scale(1.2);
+  }
+
+  /* Service Section Badge */
+  .service-section-badge {
+    display: inline-block;
+    background-color: var(--service-primary);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+  }
+
+  /* Service Image Container */
+  .service-image-container {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .service-image-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .service-image-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: var(--service-primary);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Category Box */
+  .category-box {
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px 20px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    height: 100%;
+  }
+
+  .category-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .category-icon {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(var(--service-primary-rgb), 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    transition: all 0.3s ease;
+  }
+
+  .category-box:hover .category-icon {
+    background-color: var(--service-primary);
+  }
+
+  .category-icon i {
+    font-size: 24px;
+    color: var(--service-primary);
+    transition: all 0.3s ease;
+  }
+
+  .category-box:hover .category-icon i {
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .category-box h5 {
+    margin-bottom: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .category-box:hover h5 {
+    color: var(--service-primary);
+  }
+
+  .category-box p {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 0;
+  }
+
+  /* Restaurant Hours Card */
+  .restaurant-hours-card {
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .restaurant-hours-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .card-pattern {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23008751' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    transition: all 0.3s ease;
+  }
+
+  .service-groceries-theme .card-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23008751' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  .service-restaurant-theme .card-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%238B4513' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  .restaurant-hours-card:hover .card-pattern {
+    opacity: 0.8;
+    transform: scale(1.2) rotate(10deg);
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 767.98px) {
+    .py-13 {
+      padding-top: 5rem !important;
+      padding-bottom: 5rem !important;
+    }
+
+    h1.display-4 {
+      font-size: 2.5rem;
+    }
+
+    .service-badge {
+      font-size: 12px;
+      padding: 6px 12px;
+    }
+  }
+
+  /* Cart Modal Animation */
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideOutRight {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate__animated {
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+  }
+
+  .animate__fadeInRight {
+    animation-name: slideInRight;
+  }
+
+  .animate__fadeOutRight {
+    animation-name: slideOutRight;
+  }
+
+  .animate__faster {
+    animation-duration: 0.3s;
+  }
+
+  /* Cart Added Modal Styling */
+  .cart-added-modal {
     padding: 10px;
+  }
+
+  .product-added-info {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+  }
+
+  .product-image img {
+    border: 1px solid #eee;
+    transition: transform 0.3s ease;
+  }
+
+  .product-image img:hover {
+    transform: scale(1.05);
+  }
+
+  .cart-summary {
+    font-size: 0.9rem;
   }
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/sweetalert2.all.min.js' %}"></script>
 <script>
-  // Unified function for quantity control (increase or decrease)
-  function updateQuantity(productId, change) {
-    const quantityInput = document.getElementById('quantity-' + productId);
-    let quantity = parseInt(quantityInput.value, 10) || 1; // Default to 1 if input is invalid
+  $(document).ready(function() {
+    // Initialize collapse functionality for menu categories
+    $('.dropdown-toggler').on('click', function() {
+      const isExpanded = $(this).attr('aria-expanded') === 'true';
+      $(this).attr('aria-expanded', !isExpanded);
 
-    // Update the quantity with the provided change (positive or negative)
-    quantity = Math.max(1, Math.min(10, quantity + change)); // Ensure quantity is between 1 and 10
-
-    quantityInput.value = quantity;
-  }
-
-    const isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
-    
-    function add_to_cart(product_id) {
-      if (!isAuthenticated) {
-        Swal.fire({
-          title: 'Please log in!',
-          text: 'You need to log in to add products to the cart.',
-          icon: 'warning',
-          showConfirmButton: true,
-          confirmButtonText: 'Log In',
-          showCancelButton: true,
-          cancelButtonText: 'Cancel'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = '{% url "login" %}';
-          }
-        });
-        return;
+      // Smooth scroll to the category when opened
+      if (!isExpanded) {
+        const targetId = $(this).attr('href');
+        setTimeout(function() {
+          $('html, body').animate({
+            scrollTop: $(targetId).offset().top - 100
+          }, 500);
+        }, 300);
       }
-  
+    });
+
+    // Quantity control function
+    window.updateQuantity = function(productId, change) {
+      const quantityInput = document.getElementById('quantity-' + productId);
+      let quantity = parseInt(quantityInput.value, 10) || 1; // Default to 1 if input is invalid
+
+      // Update the quantity with the provided change (positive or negative)
+      quantity = Math.max(1, Math.min(10, quantity + change)); // Ensure quantity is between 1 and 10
+
+      quantityInput.value = quantity;
+    };
+
+    // Add to cart function
+    window.add_to_cart = function(product_id) {
       let quantityElement = document.getElementById(`quantity-${product_id}`);
       let quantity = quantityElement ? quantityElement.value : 1;
-  
+
+      // Show loading indicator
+      const loadingToast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer);
+          toast.addEventListener('mouseleave', Swal.resumeTimer);
+        }
+      });
+
+      loadingToast.fire({
+        icon: 'info',
+        title: 'Adding to cart...'
+      });
+
       $.ajax({
         url: "{% url 'add_to_cart' 0 %}".replace('0', product_id),
         type: "POST",
@@ -188,21 +1464,77 @@
         },
         success: function(response) {
           if (response.success) {
-            Swal.fire({
-              title: 'Success!',
-              text: response.message,
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1500
-            });
+            // Update cart count in navbar
             $('#navbar-cart-count').text(response.cart_count);
             $('#cart-button-count').text(response.cart_count);
+
+            // Show cart modal on the right side
+            // Get product information from the response or DOM
+            let productName = '';
+            let productImage = '';
+            let productPrice = '';
+
+            // Try to find product info from the DOM
+            const productCard = document.querySelector(`[data-product-id="${product_id}"]`);
+            if (productCard) {
+                productName = productCard.querySelector('.product-title')?.textContent || 'Product';
+                productImage = productCard.querySelector('img')?.src || '/static/img/placeholder.png';
+                productPrice = productCard.querySelector('.product-price')?.textContent || '';
+            }
+
+            // Create and show the cart modal
+            Swal.fire({
+                title: 'Added to Cart!',
+                html: `
+                    <div class="cart-added-modal">
+                        <div class="product-added-info d-flex align-items-center mb-4">
+                            <div class="product-image me-3">
+                                <img src="${productImage}" alt="${productName}" class="img-fluid rounded" style="width: 80px; height: 80px; object-fit: cover;">
+                            </div>
+                            <div class="product-details">
+                                <h5 class="mb-1">${productName}</h5>
+                                <p class="mb-1">${productPrice}</p>
+                                <p class="text-success mb-0">Quantity: ${quantity}</p>
+                            </div>
+                        </div>
+                        <div class="cart-summary mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Items in cart:</span>
+                                <span>${response.cart_count}</span>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonText: 'View Cart',
+                cancelButtonText: 'Continue Shopping',
+                confirmButtonColor: 'var(--service-primary)',
+                cancelButtonColor: '#6c757d',
+                position: 'top-end',
+                width: '24em',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInRight animate__faster'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutRight animate__faster'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to cart page
+                    window.location.href = "{% url 'cart' %}";
+                }
+            });
+
+            // Also trigger the shopping cart modal to open
+            $('#modalShoppingCart').offcanvas('show');
           } else {
             Swal.fire({
               title: 'Error!',
               text: response.message,
               icon: 'error',
-              confirmButtonText: 'Okay'
+              confirmButtonText: 'Okay',
+              confirmButtonColor: '#008751'
             });
           }
         },
@@ -211,16 +1543,115 @@
             title: 'Oops!',
             text: 'Something went wrong. Please try again.',
             icon: 'error',
-            confirmButtonText: 'Okay'
+            confirmButtonText: 'Okay',
+            confirmButtonColor: '#008751'
           });
         }
       });
-    }
-  
-  // Load more products function (stub example)
-  $('#loadMoreBtn').click(function() {
-    // You would typically fetch more products via AJAX here
-    console.log('Load more products');
+    };
+
+    // Load more products function
+    $('#loadMoreBtn').click(function() {
+      const $button = $(this);
+      $button.html('<i class="fas fa-spinner fa-spin me-2"></i> Loading...');
+
+      // Simulate loading delay
+      setTimeout(function() {
+        // This would typically be an AJAX call to load more products
+        // For now, we'll just show a message
+        $button.html('Load more <i class="fe fe-arrow-right ms-2"></i>');
+
+        Swal.fire({
+          title: 'Coming Soon!',
+          text: 'More delicious Nigerian dishes will be added soon.',
+          icon: 'info',
+          confirmButtonText: 'Okay',
+          confirmButtonColor: '#008751'
+        });
+      }, 1500);
+    });
+
+    // Open first category by default
+    setTimeout(function() {
+      $('.dropdown-toggler:first').click();
+    }, 500);
   });
+
+  // Initialize AOS animations
+  AOS.init({
+    duration: 800,
+    easing: 'ease-in-out',
+    once: true,
+    mirror: false
+  });
+
+  // Apply service-specific theme based on service ID
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get the service ID from the URL
+    const path = window.location.pathname;
+    const serviceId = path.split('/').filter(Boolean).pop();
+
+    // Add service-specific class to body for styling
+    const body = document.body;
+
+    // Remove any existing service classes
+    body.classList.remove('service-groceries-theme', 'service-restaurant-theme');
+
+    // Apply theme based on service ID
+    if (serviceId === '1') {
+      // Apply groceries theme
+      body.classList.add('service-groceries-theme');
+
+      // Update color variables for groceries theme
+      document.documentElement.style.setProperty('--service-primary', '#008751'); // Nigerian green
+      document.documentElement.style.setProperty('--service-secondary', '#e87e04'); // Orange accent
+      document.documentElement.style.setProperty('--service-accent', '#f5c34b'); // Yellow accent
+      document.documentElement.style.setProperty('--service-bg', '#f9f5e8'); // Light cream background
+
+    } else if (serviceId === '2') {
+      // Apply restaurant theme
+      body.classList.add('service-restaurant-theme');
+
+      // Update color variables for restaurant theme
+      document.documentElement.style.setProperty('--service-primary', '#8B4513'); // Saddle brown
+      document.documentElement.style.setProperty('--service-secondary', '#D2691E'); // Chocolate
+      document.documentElement.style.setProperty('--service-accent', '#CD5C5C'); // Indian red
+      document.documentElement.style.setProperty('--service-bg', '#FFF8E7'); // Warm cream background
+    }
+
+    // Update themed elements
+    updateThemeElements();
+  });
+
+  // Function to update theme elements with new colors
+  function updateThemeElements() {
+    // Update buttons
+    document.querySelectorAll('.btn-primary').forEach(el => {
+      el.classList.add('btn-service-primary');
+      el.classList.remove('btn-primary');
+    });
+
+    document.querySelectorAll('.btn-outline-primary').forEach(el => {
+      el.classList.add('btn-outline-service-primary');
+      el.classList.remove('btn-outline-primary');
+    });
+
+    // Update text colors
+    document.querySelectorAll('.text-primary').forEach(el => {
+      el.classList.add('text-service-primary');
+      el.classList.remove('text-primary');
+    });
+
+    // Update backgrounds
+    document.querySelectorAll('.bg-primary').forEach(el => {
+      el.classList.add('bg-service-primary');
+      el.classList.remove('bg-primary');
+    });
+
+    // Update progress bars
+    document.querySelectorAll('.progress-bar').forEach(el => {
+      el.classList.add('bg-service-primary');
+    });
+  }
 </script>
 {% endblock %}

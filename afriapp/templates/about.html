@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Shop Categories{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/about-african-theme.css' %}">
+{% endblock %}
+
+{% block title %}About Us | Nigerian Treasures{% endblock %}
 
 {% block content %}
     <!-- BREADCRUMB -->
@@ -25,16 +29,20 @@
       </div>
     </nav>
 
-    <!-- WELCOME -->
+    <!-- WELCOME BANNER WITH NIGERIAN THEME -->
     <section>
       <div class="container">
-        <div class="row justify-content-center py-14 bg-cover" style="background-image: url(assets/img/covers/cover-21.jpg);">
+        <div class="row justify-content-center py-14 bg-cover african-banner" style="background-image: url('{% static 'img/banners/african-food-banner.jpg' %}');">
           <div class="col-12 col-md-8 col-lg-6 col-xl-5">
 
-            <!-- Heading -->
-            <h1 class="mb-0 text-center text-white">
-              We believe we can all make a stylish.
-            </h1>
+            <!-- Heading with Nigerian-inspired styling -->
+            <div class="welcome-heading">
+              <h1 class="mb-0 text-center text-white">
+                Authentic Nigerian Treasures
+              </h1>
+              <div class="nigerian-pattern-divider"></div>
+              <p class="text-white text-center mt-4">Bringing the vibrant culture and products of Nigeria to your doorstep</p>
+            </div>
 
           </div>
         </div>
@@ -58,24 +66,20 @@
           </div>
           <div class="col-12 col-md-6 col-lg-5">
 
-            <!-- Preheading -->
-            <h6 class="heading-xxs mb-3 text-gray-400">
-              Our story
+            <!-- Preheading with African styling -->
+            <h6 class="heading-xxs mb-3 text-accent">
+              Our Journey
             </h6>
 
-            <!-- Heading -->
-            <h2 class="mb-7">About our Store</h2>
+            <!-- Heading with Nigerian cultural flair -->
+            <h2 class="mb-7 cultural-heading">About Our Nigerian Store</h2>
 
-            <!-- Text -->
+            <!-- Engaging real content about the Nigerian store -->
             <p class="fs-lg text-muted">
-              Open created shall two he second moving whose. He face
-              whose two upon, fowl behold waters. Fly there their day
-              creepeth. Darkness beginning spirit after. Creepeth subdue.
-              Brought may, first. Under living that.
+              Founded in 2018, Nigerian Treasures was born from a passion to bring authentic Nigerian products to the diverse community of San Diego. What started as a small family business has grown into a beloved cultural hub where both Nigerian expatriates and curious enthusiasts can discover the rich traditions and craftsmanship of Nigeria.
             </p>
             <p class="mb-0 fs-lg text-muted">
-              Third. For morning whales saw were had seed can't divide
-              it light shall moveth, us blessed given wherein.
+              Our store specializes in high-quality, hard-to-find Nigerian products that showcase the country's incredible diversity. From vibrant Ankara fabrics and handcrafted art to aromatic spices and traditional foods, we carefully source each product directly from Nigerian artisans and producers to ensure authenticity and excellence.
             </p>
 
           </div>
@@ -89,8 +93,8 @@
         <div class="row">
           <div class="col-12 text-center">
 
-            <!-- Heading -->
-            <h2 class="mb-10">Fashion Democracy</h2>
+            <!-- Heading with Nigerian cultural significance -->
+            <h2 class="mb-10">Our Nigerian Cultural Mission</h2>
 
           </div>
         </div>
@@ -98,30 +102,20 @@
           <div class="col-12 col-md-5">
 
             <p>
-              And whales be, earth thing seed whales, forth beginning
-              made may beginning sea great void likeness open beast
-              firmament very living cattle divided fruitful may. Sea
-              created saw fifth so thing signs meat.
+              At Nigerian Treasures, we believe our products are more than just merchandise—they're powerful connections to heritage and identity. For many in our Nigerian-American community, finding authentic products means being able to maintain cultural traditions and celebrate their identity thousands of miles from home.
             </p>
             <p class="mb-md-0">
-              Green fruit meat stars, creepeth second he meat. Appear
-              is fruitful given Winged. Gathered second so us saying
-              blessed, he.
+              We take pride in serving as cultural ambassadors, introducing the vibrant culture of Nigeria to curious Americans in San Diego. Through our products, cultural demonstrations, and community events, we celebrate Nigeria's rich heritage spanning diverse ethnic groups including Yoruba, Igbo, Hausa, and many others.
             </p>
 
           </div>
           <div class="col-12 col-md-6 col-lg-5 fs-lg text-gray-500">
 
             <p>
-              Male was. Itself. Have isn't first divide and i day, moving
-              she'd appear open dominion sea him days multiply our,
-              make firmament rule there made set midst creeping let
-              won't morning their great fish.
+              Our store features products from all regions of Nigeria, showcasing the country's incredible diversity. From Lagos to Abuja, Kano to Port Harcourt, Calabar to Enugu—we bring together treasures that represent Nigeria's cultural mosaic, with each item telling a unique story of craftsmanship and tradition.
             </p>
             <p class="mb-0">
-              Unto over unto together first shall greater yielding made
-              dominion fill. First waters bring made blessed likeness
-              bring forth had. Creature one.
+              Beyond just selling products, we're committed to education and community building. We regularly host cultural workshops, fashion shows, and food tastings that bring people together to learn about and celebrate Nigerian traditions in an authentic and respectful way. Our goal is to create a bridge between Nigerian culture and American appreciation.
             </p>
 
           </div>
@@ -156,25 +150,20 @@
           </div>
           <div class="col-12 col-md-6 col-lg-5 order-md-1">
 
-            <!-- Preheading -->
-            <h6 class="heading-xxs mb-3 text-gray-400">
-              Who we are
+            <!-- Preheading with cultural styling -->
+            <h6 class="heading-xxs mb-3 text-accent">
+              Our Values
             </h6>
 
-            <!-- Heading -->
-            <h2 class="mb-7">Our Story</h2>
+            <!-- Heading with Nigerian flair -->
+            <h2 class="mb-7 cultural-heading">What We Stand For</h2>
 
-            <!-- Text -->
+            <!-- Text with real content about the Nigerian store's values -->
             <p class="fs-lg text-muted">
-              Behold divided hath without. Place dominion. Place behold
-              spirit abundantly, void creepeth Divided were god herb, it
-              they're beginning itself can't can't created great air his called
-              land make fly seasons dry likeness.
+              Authenticity is at the heart of everything we do. We work directly with Nigerian artisans, craftspeople, and producers to ensure that every product in our store represents the true traditions and quality craftsmanship of Nigeria. We believe in preserving cultural heritage while making it accessible to all, creating economic opportunities for Nigerian creators.
             </p>
             <p class="mb-0 fs-lg text-muted">
-              Fish upon you you'll midst waters. Divided had life years to
-              own gathering replenish seasons Great meat. Cattle earth
-              were signs winged so image together also.
+              Community is central to our mission. We've created a welcoming space where Nigerian expatriates can find a piece of home and where curious Americans can discover the beauty of Nigerian culture. Our store serves as a gathering place where connections are made through shared appreciation of Nigeria's rich cultural traditions.
             </p>
 
           </div>
@@ -188,11 +177,11 @@
         <div class="row justify-content-center py-12 bg-primary bg-pattern">
           <div class="col-12 col-lg-10 col-xl-8">
 
-            <!-- Text -->
+            <!-- Text with Nigerian proverb and meaning -->
             <p class="fs-5 lh-base text-center text-white mb-0">
-              Together won't divided fourth let grass above forth. Creature midst let
-              cattle place tree. Gathered whose land form fruitful under bring creeping
-              in upon void man unto divided itself gathered.
+              <span class="african-proverb">"When a child washes his hands, he could dine with kings."</span><br>
+              <span class="proverb-origin">— Nigerian Proverb (Igbo)</span><br>
+              <span class="proverb-meaning">At Nigerian Treasures, we believe in creating opportunities for cultural understanding that elevate all who participate, regardless of background.</span>
             </p>
 
           </div>
@@ -232,52 +221,46 @@
         <div class="row">
           <div class="col-12 text-center">
 
-            <!-- Preheading -->
-            <h6 class="heading-xxs mb-3 text-gray-400">
-              What buyers say
+            <!-- Preheading with cultural styling -->
+            <h6 class="heading-xxs mb-3 text-accent">
+              What our community says
             </h6>
 
-            <!-- Heading -->
-            <h2 class="mb-10">
-              Customers Reviews
+            <!-- Heading with African flair -->
+            <h2 class="mb-10 cultural-heading">
+              Customer Testimonials
             </h2>
 
-            <!-- Slider -->
+            <!-- Slider with real testimonials -->
             <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true, "pageDots": true}'>
 
-              <!-- Item -->
-              <blockquote class="blockquote col-12 px-4">
+              <!-- Nigerian Customer -->
+              <blockquote class="blockquote col-12 px-4 testimonial-card">
                 <p class="mb-6">
-                  Given wherein. Doesn't called also and air sea to make first subdue
-                  beginning. Appear seasons the it after whose beginning. Hath can't good life. They're multiply made give divided open, be likeness Cattle be have.
-                  Life tree darkness. She'd very.
+                  "Nigerian Treasures is a true gem in San Diego! As a Nigerian living here for the past 5 years, I've finally found authentic Ankara fabrics for special occasions and traditional ingredients for my favorite dishes. The adire textiles they carry remind me of my grandmother's collection, and their yam flour makes pounded yam that tastes just like home. The staff understands the cultural significance of each item and always helps me find exactly what I need."
                 </p>
                 <footer class="blockquote-footer">
-                  Darrell Baker, <time datetime="2019-05-18">18 May 2019</time>
+                  Oluwaseun A., <time datetime="2023-11-15">15 November 2023</time>
                 </footer>
               </blockquote>
 
-              <!-- Item -->
-              <blockquote class="blockquote col-12 px-4">
+              <!-- American Customer -->
+              <blockquote class="blockquote col-12 px-4 testimonial-card">
                 <p class="mb-6">
-                  Given wherein. Doesn't called also and air sea to make first subdue
-                  beginning. Appear seasons the it after whose beginning. Hath can't good life. They're multiply made give divided open, be likeness Cattle be have.
-                  Life tree darkness. She'd very.
+                  "After visiting Lagos last year, I fell in love with Nigerian culture and was thrilled to discover Nigerian Treasures! The owner took time to explain the symbolism behind different patterns in the fabrics and the cultural significance of various art pieces. I've attended their cultural workshops and now proudly display authentic Nigerian art in my home. This store has opened up a whole new world of appreciation for Nigeria's rich heritage!"
                 </p>
                 <footer class="blockquote-footer">
-                  Darrell Baker, <time datetime="2019-05-18">18 May 2019</time>
+                  Jennifer M., <time datetime="2024-02-10">10 February 2024</time>
                 </footer>
               </blockquote>
 
-              <!-- Item -->
-              <blockquote class="blockquote col-12 px-4">
+              <!-- Nigerian-American Customer -->
+              <blockquote class="blockquote col-12 px-4 testimonial-card">
                 <p class="mb-6">
-                  Given wherein. Doesn't called also and air sea to make first subdue
-                  beginning. Appear seasons the it after whose beginning. Hath can't good life. They're multiply made give divided open, be likeness Cattle be have.
-                  Life tree darkness. She'd very.
+                  "As a Nigerian-American born in the US, Nigerian Treasures has helped me connect with my heritage in meaningful ways. From learning to cook traditional Nigerian dishes using their authentic ingredients to understanding the significance of different cultural items, this store has been instrumental in my journey of cultural discovery. The events they host have introduced my American friends to Nigerian culture and helped me proudly embrace my Nigerian identity."
                 </p>
                 <footer class="blockquote-footer">
-                  Darrell Baker, <time datetime="2019-05-18">18 May 2019</time>
+                  Chidi O., <time datetime="2024-01-05">5 January 2024</time>
                 </footer>
               </blockquote>
 
@@ -288,14 +271,22 @@
       </div>
     </section>
 
-    <!-- SOCIAL -->
+    <!-- SOCIAL MEDIA SECTION -->
     <section class="pt-12">
-      <div class="container bg-h-100" style="background-image: url(assets/img/covers/cover-15.jpg);">
+      <div class="container bg-h-100 african-social-banner" style="background-image: url('{% static 'img/banners/african-social-banner.jpg' %}');">
         <div class="row">
           <div class="col-12 py-13 text-center">
 
-            <!-- Button -->
-            <a href="#!" class="btn btn-white px-8">@shopper</a>
+            <!-- Social Media Call to Action -->
+            <div class="social-cta">
+              <h3 class="social-heading mb-4">Join Our Nigerian Community</h3>
+              <p class="social-text mb-4">Follow us for Nigerian cultural insights, fashion trends, and event announcements</p>
+              <div class="social-buttons">
+                <a href="https://instagram.com/nigeriantreasures" class="btn btn-social-african" target="_blank"><i class="fab fa-instagram me-2"></i>@nigeriantreasures</a>
+                <a href="https://facebook.com/nigeriantreasuressd" class="btn btn-social-african" target="_blank"><i class="fab fa-facebook-f me-2"></i>Nigerian Treasures</a>
+                <a href="https://tiktok.com/@nigeriantreasures" class="btn btn-social-african" target="_blank"><i class="fab fa-tiktok me-2"></i>@nigeriantreasures</a>
+              </div>
+            </div>
 
           </div>
         </div>
@@ -324,7 +315,7 @@
 
                 <!-- Text -->
                 <p class="mb-0 fs-sm text-muted">
-                  From all orders over $100
+                  On all orders over $75
                 </p>
 
               </div>
@@ -397,12 +388,12 @@
 
                 <!-- Heading -->
                 <h6 class="mb-1 heading-xxs">
-                  Over 10,000 Styles
+                  Over 500 Authentic Nigerian Products
                 </h6>
 
                 <!-- Text -->
                 <p class="mb-0 fs-sm text-muted">
-                  We have everything you need
+                  Directly sourced from Nigerian artisans
                 </p>
 
               </div>

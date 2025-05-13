@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Product {% endblock %}
+{% block title %}{{ product.name }} | Nigerian Treasures{% endblock %}
 
 {% block content %}
 
@@ -34,69 +34,274 @@
     <div class="row">
       <div class="col-12">
         <div class="row">
-          <!-- Product Image Section -->
+          <!-- Product Image Section with Gallery and Zoom -->
           <div class="col-12 col-md-6">
-            <div class="card">
-              <div class="mb-4" id="productSlider">
-                <!-- Dynamic Product Image -->
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top" style="border-radius: 10px;">
+            <div class="card border-0">
+              <!-- Main Product Image with Zoom -->
+              <div class="product-gallery mb-4">
+                <div class="product-gallery-main">
+                  <div class="zoom-container">
+                    <img id="main-product-image" src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded product-zoom-image">
+                    <div class="zoom-lens"></div>
+                    <div class="zoom-result"></div>
+                  </div>
+                </div>
+
+                <!-- Thumbnail Gallery -->
+                <div class="product-gallery-thumbs mt-3">
+                  <div class="row g-2">
+                    <!-- Main product image thumbnail -->
+                    <div class="col-3">
+                      <div class="thumbnail-item active" data-image="{{ product.image.url }}">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
+                      </div>
+                    </div>
+
+                    <!-- Additional thumbnails (if available) -->
+                    {% if product.additional_images %}
+                      {% for image in product.additional_images %}
+                      <div class="col-3">
+                        <div class="thumbnail-item" data-image="{{ image.url }}">
+                          <img src="{{ image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
+                        </div>
+                      </div>
+                      {% endfor %}
+                    {% else %}
+                      <!-- Placeholder thumbnails for demo -->
+                      <div class="col-3">
+                        <div class="thumbnail-item" data-image="{{ product.image.url }}">
+                          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="thumbnail-item" data-image="{{ product.image.url }}">
+                          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="thumbnail-item" data-image="{{ product.image.url }}">
+                          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Product Details Section -->
+          <!-- Enhanced Product Details Section -->
           <div class="col-12 col-md-6 ps-lg-10">
+            <!-- African Pattern Decorative Element -->
+            <div class="african-decorative-pattern mb-4"></div>
+
             <!-- Header -->
-            <div class="row mb-1">
+            <div class="row mb-3">
               <div class="col">
-                <h3 class="mb-2">{{ product.name }}</h3>
-                <p class="mb-4 text-muted">{{ product.description }}</p>
+                <h2 class="product-title-large mb-2">{{ product.name }}</h2>
+                <div class="product-origin mb-3">
+                  <span class="origin-badge-nigerian">
+                    <span class="nigeria-flag-colors-small me-2"></span> Authentic Nigerian Product
+                  </span>
+                </div>
+                <div class="product-description mb-4">
+                  {% if product.description %}
+                    <p>{{ product.description }}</p>
+                  {% else %}
+                    <p>Experience the authentic taste of Africa with our premium {{ product.name }}. This high-quality product brings the rich flavors and traditions of African cuisine directly to your kitchen.</p>
+                  {% endif %}
+                </div>
               </div>
               <div class="col-auto">
                 <div class="rating fs-xs text-dark">
-                  <!-- Static rating for now, can be dynamic -->
-                  {% for i in "12345" %}
-                  <i class="fas fa-star"></i>
-                  {% endfor %}
-                  <a class="fs-sm text-reset ms-2" href="#reviews">Reviews</a>
+                  <!-- Star rating with gold color -->
+                  <div class="star-rating">
+                    {% for i in "12345" %}
+                    <i class="fas fa-star"></i>
+                    {% endfor %}
+                  </div>
+                  <a class="fs-sm text-reset ms-2 review-link" href="#reviews">
+                    <span class="review-count">24 Reviews</span>
+                  </a>
                 </div>
               </div>
             </div>
 
-            <!-- Price Display -->
-            <div class="mb-4">
-              <span class="fs-lg fw-bold text-gray-350 text-decoration-line-through">${{ product.price }}</span>
-              <span class="fs-5 fw-bolder text-primary ms-2">${{ product.price }}</span>
-              <span class="fs-sm text-success ms-1">{{ product.stock_quantity }} in stock</span>
+            <!-- Nigerian Cultural Significance -->
+            <div class="nigerian-cultural-significance mb-4">
+              <div class="cultural-header">
+                <h5 class="cultural-title">
+                  <i class="fas fa-info-circle me-2"></i>Nigerian Cultural Significance
+                </h5>
+                <div class="nigerian-pattern-mini"></div>
+              </div>
+
+              <div class="cultural-content">
+                <p class="cultural-text">
+                  {% if product.category.name == "Grains and Flour" %}
+                    This staple ingredient is central to many traditional Nigerian dishes like Jollof Rice and Pounded Yam. In Nigerian culture, these grains symbolize abundance and prosperity, often featured prominently in celebrations and family gatherings.
+                  {% elif product.category.name == "Spices" %}
+                    These authentic Nigerian spices are carefully sourced from local markets across Nigeria to bring you the true essence of Nigerian cuisine. Used in signature dishes like Suya and Egusi Soup, these spices connect you to centuries of culinary tradition.
+                  {% elif product.category.name == "Beverages" %}
+                    This traditional Nigerian beverage holds special significance in social gatherings and celebrations throughout Nigeria. From Zobo (Hibiscus) drink to Palm Wine, beverages play a central role in Nigerian hospitality and community bonding.
+                  {% else %}
+                    This authentic Nigerian product represents an important element of Nigeria's rich cultural heritage. Crafted with traditional methods passed down through generations, it connects you to the vibrant traditions and cultural practices of Nigeria's diverse ethnic groups.
+                  {% endif %}
+                </p>
+
+                <div class="cultural-regions mt-3">
+                  <span class="region-label">Popular in:</span>
+                  {% if product.category.name == "Grains and Flour" %}
+                    <span class="region-tag">Yoruba</span>
+                    <span class="region-tag">Igbo</span>
+                    <span class="region-tag">Hausa</span>
+                  {% elif product.category.name == "Spices" %}
+                    <span class="region-tag">Northern Nigeria</span>
+                    <span class="region-tag">Lagos</span>
+                    <span class="region-tag">Delta Region</span>
+                  {% elif product.category.name == "Beverages" %}
+                    <span class="region-tag">Calabar</span>
+                    <span class="region-tag">Enugu</span>
+                    <span class="region-tag">Abuja</span>
+                  {% else %}
+                    <span class="region-tag">Lagos</span>
+                    <span class="region-tag">Port Harcourt</span>
+                    <span class="region-tag">Kano</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <!-- Traditional Uses Section -->
+            <div class="traditional-uses mb-4">
+              <h5 class="uses-title">
+                <i class="fas fa-mortar-pestle me-2"></i>Traditional Uses
+              </h5>
+              <ul class="uses-list">
+                {% if product.category.name == "Grains and Flour" %}
+                  <li>Main ingredient in Jollof Rice, Nigeria's most famous dish</li>
+                  <li>Used to prepare Tuwo, a popular Northern Nigerian staple</li>
+                  <li>Essential component in ceremonial meals for weddings and naming ceremonies</li>
+                {% elif product.category.name == "Spices" %}
+                  <li>Key flavoring in Suya, Nigeria's popular street food</li>
+                  <li>Essential ingredient in traditional Pepper Soup</li>
+                  <li>Used in medicinal preparations by traditional healers</li>
+                {% elif product.category.name == "Beverages" %}
+                  <li>Served during traditional ceremonies and celebrations</li>
+                  <li>Offered to guests as a sign of hospitality</li>
+                  <li>Used in cultural rituals and traditional medicine</li>
+                {% else %}
+                  <li>Featured in traditional Nigerian celebrations and festivals</li>
+                  <li>Used in everyday Nigerian households</li>
+                  <li>Plays a role in cultural expression and identity</li>
+                {% endif %}
+              </ul>
+            </div>
+
+            <!-- Price Display with African-inspired styling -->
+            <div class="product-pricing mb-4">
+              {% if product.is_on_sale %}
+                <span class="price-original">${{ product.regular_price }}</span>
+                <span class="price-current">${{ product.price }}</span>
+                <span class="price-discount">Save {{ product.discount_percentage }}%</span>
+              {% else %}
+                <span class="price-current">${{ product.price }}</span>
+              {% endif %}
+
+              <!-- Stock indicator with custom styling -->
+              <div class="stock-indicator mt-2">
+                {% if product.stock_quantity > 10 %}
+                  <span class="in-stock"><i class="fas fa-check-circle me-1"></i>In Stock ({{ product.stock_quantity }} available)</span>
+                {% elif product.stock_quantity > 0 %}
+                  <span class="low-stock"><i class="fas fa-exclamation-circle me-1"></i>Low Stock (Only {{ product.stock_quantity }} left)</span>
+                {% else %}
+                  <span class="out-of-stock"><i class="fas fa-times-circle me-1"></i>Out of Stock</span>
+                {% endif %}
+              </div>
             </div>
 
             <!-- Add to Cart Form -->
-            <form action="{% url 'add_to_cart' product.id %}" method="post">
+            <form id="add-to-cart-form" action="{% url 'add_to_cart' product.id %}" method="post">
               {% csrf_token %}
 
               <!-- Quantity Selector -->
-              <div class="form-group mb-5">
-                <label for="quantity" class="form-label">Quantity:</label>
-                <div class="input-group">
-                  <button type="button" class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
-                  <input type="number" name="quantity" id="quantity" value="1" min="{{ product.min }}" max="{{ product.max }}" class="form-control text-center">
-                  <button type="button" class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
+              <div class="form-group mb-4">
+                <label for="quantity" class="form-label fw-bold">Quantity:</label>
+                <div class="quantity-selector">
+                  <button type="button" class="quantity-btn" id="decreaseQuantity" aria-label="Decrease quantity">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock_quantity }}" class="quantity-input" readonly>
+                  <button type="button" class="quantity-btn" id="increaseQuantity" aria-label="Increase quantity">
+                    <i class="fas fa-plus"></i>
+                  </button>
                 </div>
               </div>
 
-              <!-- Add to Cart Button -->
-              <div class="mb-3">
-                <button type="submit" class="btn w-100 btn-dark">Add to Cart <i class="fe fe-shopping-cart ms-2"></i></button>
+              <!-- Product Availability -->
+              <div class="mb-4">
+                <div class="d-flex align-items-center">
+                  <span class="me-2">Availability:</span>
+                  {% if product.stock_quantity > 10 %}
+                    <span class="badge bg-success-soft">In Stock</span>
+                  {% elif product.stock_quantity > 0 %}
+                    <span class="badge bg-warning-soft">Low Stock ({{ product.stock_quantity }} left)</span>
+                  {% else %}
+                    <span class="badge bg-danger-soft">Out of Stock</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Enhanced Add to Cart Button with Nigerian Styling -->
+              <div class="mb-4">
+                <button type="button" id="add-to-cart-btn" class="btn w-100 btn-add-to-cart-nigerian-large" data-product-id="{{ product.id }}" {% if product.stock_quantity <= 0 %}disabled{% endif %}>
+                  <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                </button>
+              </div>
+
+              <!-- Quick Buy Button with Nigerian pattern -->
+              <div class="mb-4">
+                <button type="button" class="btn w-100 btn-buy-now-nigerian" {% if product.stock_quantity <= 0 %}disabled{% endif %}>
+                  <i class="fas fa-bolt me-2"></i>Buy Now
+                </button>
               </div>
             </form>
 
-            <!-- Share Options -->
-            <p class="mb-0">
-              <span class="me-4">Share:</span>
-              <a class="btn btn-xxs btn-circle btn-light fs-xxxs text-brown-350" href="#"><i class="fab fa-twitter"></i></a>
-              <a class="btn btn-xxs btn-circle btn-light fs-xxxs text-brown-350" href="#"><i class="fab fa-facebook-f"></i></a>
-              <a class="btn btn-xxs btn-circle btn-light fs-xxxs text-brown-350" href="#"><i class="fab fa-pinterest-p"></i></a>
-            </p>
+            <!-- Delivery Information -->
+            <div class="delivery-info mb-4">
+              <div class="delivery-item">
+                <i class="fas fa-truck"></i>
+                <div class="delivery-text">
+                  <h6>Fast Delivery</h6>
+                  <p>2-4 business days</p>
+                </div>
+              </div>
+              <div class="delivery-item">
+                <i class="fas fa-undo"></i>
+                <div class="delivery-text">
+                  <h6>Easy Returns</h6>
+                  <p>30 days return policy</p>
+                </div>
+              </div>
+              <div class="delivery-item">
+                <i class="fas fa-shield-alt"></i>
+                <div class="delivery-text">
+                  <h6>Secure Checkout</h6>
+                  <p>SSL Encrypted</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Share Options with African styling -->
+            <div class="share-container mb-0">
+              <span class="share-label">Share this product:</span>
+              <div class="share-buttons">
+                <a class="share-btn" href="#"><i class="fab fa-twitter"></i></a>
+                <a class="share-btn" href="#"><i class="fab fa-facebook-f"></i></a>
+                <a class="share-btn" href="#"><i class="fab fa-pinterest-p"></i></a>
+                <a class="share-btn" href="#"><i class="fab fa-whatsapp"></i></a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -110,7 +315,7 @@
     <div class="row">
       <div class="col-12">
         {% if  similar_products%}
-          
+
         <!-- Heading -->
         <h4 class="mb-10 text-center">You might also like</h4>
         <!-- Items -->
@@ -175,37 +380,738 @@
 
 
 
-<!-- JavaScript for Quantity Controls -->
+<!-- Enhanced African-Inspired Product Styles -->
+<style>
+  /* Product Gallery Styles with African-inspired elements */
+  .product-gallery-main {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(139, 69, 19, 0.1);
+    border: 1px solid rgba(139, 69, 19, 0.1);
+  }
+
+  .product-gallery-main::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(to right, #D2691E, #8B4513);
+    z-index: 2;
+  }
+
+  .product-gallery-thumbs {
+    margin-top: 15px;
+  }
+
+  .thumbnail-item {
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .thumbnail-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%238B4513' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M0 20L20 0L40 20L20 40z'/%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .thumbnail-item:hover {
+    border-color: #D2691E;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(139, 69, 19, 0.1);
+  }
+
+  .thumbnail-item:hover::after {
+    opacity: 1;
+  }
+
+  .thumbnail-item.active {
+    border-color: #D2691E;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(139, 69, 19, 0.1);
+  }
+
+  /* African Decorative Pattern */
+  .african-decorative-pattern {
+    height: 10px;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='10' viewBox='0 0 60 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 5 Q 15 0, 30 5 T 60 5' stroke='%23D2691E' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 60px 10px;
+    margin-bottom: 20px;
+  }
+
+  /* Zoom Functionality */
+  .zoom-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-zoom-image {
+    width: 100%;
+    cursor: zoom-in;
+  }
+
+  .zoom-lens {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.4);
+    cursor: crosshair;
+    display: none;
+  }
+
+  .zoom-result {
+    position: absolute;
+    top: 0;
+    right: -350px;
+    width: 300px;
+    height: 300px;
+    border: 1px solid #d4d4d4;
+    background-repeat: no-repeat;
+    background-color: white;
+    display: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+  }
+
+  /* Enhanced Product Title */
+  .product-title-large {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #5D4037;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+
+  .product-title-large::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(to right, #D2691E, #8B4513);
+  }
+
+  /* Origin Badge */
+  .origin-badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    background-color: rgba(139, 69, 19, 0.1);
+    color: #8B4513;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px dashed rgba(139, 69, 19, 0.3);
+  }
+
+  /* Nigerian Cultural Significance Section */
+  .nigerian-cultural-significance {
+    background-color: rgba(0, 135, 81, 0.05);
+    border-left: 4px solid #008751;
+    padding: 1.5rem;
+    border-radius: 0 8px 8px 0;
+    position: relative;
+  }
+
+  .cultural-header {
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .cultural-title {
+    font-family: 'Playfair Display', serif;
+    color: #2E3A23;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  .nigerian-pattern-mini {
+    height: 5px;
+    width: 80px;
+    background: linear-gradient(to right, #008751, #F7C600);
+    border-radius: 3px;
+  }
+
+  .cultural-content {
+    position: relative;
+  }
+
+  .cultural-text {
+    color: #444;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  .cultural-regions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .region-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #666;
+  }
+
+  .region-tag {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    background-color: rgba(0, 135, 81, 0.1);
+    color: #008751;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  /* Traditional Uses Section */
+  .traditional-uses {
+    background-color: #FFFAF0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border-top: 3px solid #F7C600;
+  }
+
+  .uses-title {
+    font-family: 'Playfair Display', serif;
+    color: #2E3A23;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .uses-list {
+    padding-left: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  .uses-list li {
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-left: 0.5rem;
+    color: #444;
+  }
+
+  .uses-list li::before {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    top: 0.5rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #F7C600;
+  }
+
+  /* Nigerian Origin Badge */
+  .origin-badge-nigerian {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 1rem;
+    background-color: rgba(0, 135, 81, 0.1);
+    color: #008751;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px dashed rgba(0, 135, 81, 0.3);
+  }
+
+  .nigeria-flag-colors-small {
+    width: 16px;
+    height: 10px;
+    background: linear-gradient(to right, #008751 33.3%, white 33.3%, white 66.6%, #008751 66.6%);
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  /* Enhanced Star Rating */
+  .star-rating {
+    display: inline-block;
+  }
+
+  .star-rating .fa-star {
+    color: #FFD700;
+    margin-right: 2px;
+  }
+
+  .review-link {
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .review-link:hover {
+    color: #D2691E !important;
+  }
+
+  .review-count {
+    font-weight: 600;
+  }
+
+  /* Enhanced Product Pricing */
+  .product-pricing {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .price-original {
+    font-size: 1.1rem;
+    color: #909090;
+    text-decoration: line-through;
+  }
+
+  .price-current {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #008751;
+  }
+
+  .price-discount {
+    background-color: #008751;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  /* Stock Indicator */
+  .stock-indicator {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .in-stock {
+    color: #28a745;
+  }
+
+  .low-stock {
+    color: #ffc107;
+  }
+
+  .out-of-stock {
+    color: #dc3545;
+  }
+
+  /* Enhanced Quantity Selector */
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 2px solid #008751;
+    border-radius: 30px;
+    overflow: hidden;
+    width: 140px;
+    box-shadow: 0 4px 10px rgba(0, 135, 81, 0.1);
+  }
+
+  .quantity-btn {
+    background-color: transparent;
+    border: none;
+    color: #008751;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .quantity-btn:hover {
+    background-color: rgba(0, 135, 81, 0.1);
+  }
+
+  .quantity-input {
+    width: 60px;
+    border: none;
+    text-align: center;
+    font-weight: bold;
+    background-color: white;
+    font-size: 1.1rem;
+  }
+
+  .quantity-input:focus {
+    outline: none;
+  }
+
+  /* Nigerian Add to Cart Button */
+  .btn-add-to-cart-nigerian-large {
+    background-color: #008751;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 135, 81, 0.3);
+  }
+
+  .btn-add-to-cart-nigerian-large::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #006B3C, #008751);
+    transition: all 0.5s ease;
+    z-index: -1;
+  }
+
+  .btn-add-to-cart-nigerian-large:hover {
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 7px 15px rgba(0, 135, 81, 0.4);
+  }
+
+  .btn-add-to-cart-nigerian-large:hover::before {
+    width: 120%;
+  }
+
+  .btn-add-to-cart-nigerian-large:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Nigerian Buy Now Button */
+  .btn-buy-now-nigerian {
+    background-color: transparent;
+    color: #008751;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    border: 2px solid #008751;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .btn-buy-now-nigerian::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: #008751;
+    transition: all 0.3s ease;
+    z-index: -1;
+  }
+
+  .btn-buy-now-nigerian:hover {
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 7px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-buy-now-nigerian:hover::after {
+    height: 100%;
+  }
+
+  .btn-buy-now-nigerian:disabled {
+    border-color: #ccc;
+    color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Delivery Information */
+  .delivery-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: rgba(0, 135, 81, 0.05);
+    border-radius: 10px;
+  }
+
+  .delivery-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 150px;
+  }
+
+  .delivery-item i {
+    font-size: 1.5rem;
+    color: #008751;
+    background-color: rgba(0, 135, 81, 0.1);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .delivery-text h6 {
+    margin: 0;
+    font-weight: 600;
+    color: #2E3A23;
+    font-size: 0.9rem;
+  }
+
+  .delivery-text p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #008751;
+  }
+
+  /* Share Buttons */
+  .share-container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .share-label {
+    font-weight: 600;
+    color: #5D4037;
+    margin-right: 15px;
+  }
+
+  .share-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .share-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(0, 135, 81, 0.1);
+    color: #008751;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+
+  .share-btn:hover {
+    background-color: #008751;
+    color: white;
+    transform: translateY(-3px);
+  }
+</style>
+
+<!-- JavaScript for Product Gallery, Zoom, and Quantity Controls -->
 <script>
-  function increaseQuantity() {
-    let qty = document.getElementById('quantity');
-    if (qty.value < {{ product.max }}) {
-      qty.value = parseInt(qty.value) + 1;
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Product Gallery
+    initProductGallery();
+
+    // Initialize Image Zoom
+    initImageZoom();
+
+    // Initialize Quantity Controls
+    initQuantityControls();
+
+    // Initialize Add to Cart Button
+    initAddToCartButton();
+  });
+
+  // Product Gallery Functionality
+  function initProductGallery() {
+    const thumbnails = document.querySelectorAll('.thumbnail-item');
+    const mainImage = document.getElementById('main-product-image');
+
+    thumbnails.forEach(thumbnail => {
+      thumbnail.addEventListener('click', function() {
+        // Update main image
+        const imageUrl = this.getAttribute('data-image');
+        mainImage.src = imageUrl;
+
+        // Update active state
+        thumbnails.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  }
+
+  // Image Zoom Functionality
+  function initImageZoom() {
+    const container = document.querySelector('.zoom-container');
+    const img = document.querySelector('.product-zoom-image');
+    const lens = document.querySelector('.zoom-lens');
+    const result = document.querySelector('.zoom-result');
+
+    // Exit if elements don't exist
+    if (!container || !img || !lens || !result) return;
+
+    // Set up event listeners
+    container.addEventListener('mouseenter', startZoom);
+    container.addEventListener('mouseleave', endZoom);
+    container.addEventListener('mousemove', moveZoom);
+
+    // Touch support
+    container.addEventListener('touchstart', startZoom);
+    container.addEventListener('touchend', endZoom);
+    container.addEventListener('touchmove', moveZoom);
+
+    function startZoom(e) {
+      e.preventDefault();
+      lens.style.display = 'block';
+      result.style.display = 'block';
+      moveZoom(e);
+    }
+
+    function endZoom() {
+      lens.style.display = 'none';
+      result.style.display = 'none';
+    }
+
+    function moveZoom(e) {
+      let pos, x, y;
+      pos = getCursorPos(e);
+      x = pos.x - (lens.offsetWidth / 2);
+      y = pos.y - (lens.offsetHeight / 2);
+
+      // Prevent lens from going outside the image
+      if (x > img.width - lens.offsetWidth) { x = img.width - lens.offsetWidth; }
+      if (x < 0) { x = 0; }
+      if (y > img.height - lens.offsetHeight) { y = img.height - lens.offsetHeight; }
+      if (y < 0) { y = 0; }
+
+      // Set lens position
+      lens.style.left = x + 'px';
+      lens.style.top = y + 'px';
+
+      // Calculate and set background position for result
+      const cx = result.offsetWidth / lens.offsetWidth;
+      const cy = result.offsetHeight / lens.offsetHeight;
+      result.style.backgroundImage = `url('${img.src}')`;
+      result.style.backgroundSize = (img.width * cx) + 'px ' + (img.height * cy) + 'px';
+      result.style.backgroundPosition = '-' + (x * cx) + 'px -' + (y * cy) + 'px';
+    }
+
+    function getCursorPos(e) {
+      let a, x = 0, y = 0;
+      e = e || window.event;
+      a = img.getBoundingClientRect();
+
+      // For touch events
+      if (e.type === 'touchmove' || e.type === 'touchstart') {
+        x = e.touches[0].clientX - a.left;
+        y = e.touches[0].clientY - a.top;
+      } else {
+        // For mouse events
+        x = e.clientX - a.left;
+        y = e.clientY - a.top;
+      }
+
+      return { x: x, y: y };
     }
   }
 
-  function decreaseQuantity() {
-    let qty = document.getElementById('quantity');
-    if (qty.value > {{ product.min }}) {
-      qty.value = parseInt(qty.value) - 1;
+  // Quantity Controls
+  function initQuantityControls() {
+    const decreaseBtn = document.getElementById('decreaseQuantity');
+    const increaseBtn = document.getElementById('increaseQuantity');
+    const quantityInput = document.getElementById('quantity');
+    const maxQuantity = parseInt(quantityInput.getAttribute('max')) || 10;
+
+    if (decreaseBtn && increaseBtn && quantityInput) {
+      decreaseBtn.addEventListener('click', function() {
+        let currentValue = parseInt(quantityInput.value);
+        if (currentValue > 1) {
+          quantityInput.value = currentValue - 1;
+        }
+      });
+
+      increaseBtn.addEventListener('click', function() {
+        let currentValue = parseInt(quantityInput.value);
+        if (currentValue < maxQuantity) {
+          quantityInput.value = currentValue + 1;
+        }
+      });
     }
   }
-</script>
 
+  // Add to Cart Button
+  function initAddToCartButton() {
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    const form = document.getElementById('add-to-cart-form');
 
-<!-- Script for Quantity Control -->
-<script>
-  document.getElementById('increaseQuantity').addEventListener('click', function() {
-    let quantity = parseInt(document.getElementById('quantityInput').value);
-    document.getElementById('quantityInput').value = quantity + 1;
-  });
+    if (addToCartBtn && form) {
+      addToCartBtn.addEventListener('click', function(e) {
+        e.preventDefault();
 
-  document.getElementById('decreaseQuantity').addEventListener('click', function() {
-    let quantity = parseInt(document.getElementById('quantityInput').value);
-    if (quantity > 1) {
-      document.getElementById('quantityInput').value = quantity - 1;
+        // Get product ID and quantity
+        const productId = {{ product.id }};
+        const quantity = parseInt(document.getElementById('quantity').value);
+
+        // Call the email collection function first, which will then call add to cart
+        addToCartWithEmail(productId, quantity);
+      });
     }
+  }
+
+  // Initialize all components when the document is ready
+  document.addEventListener('DOMContentLoaded', function() {
+    initProductGallery();
+    initQuantityControls();
+    initAddToCartButton();
+
+    // Check if product is already in cart
+    checkIfProductInCart();
   });
+
+  // Check if product is already in cart
+  function checkIfProductInCart() {
+    const productId = {{ product.id }};
+
+    // Make AJAX request to get cart items
+    fetch('/get-cart-items/')
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Check if this product is in the cart
+          const inCart = data.cart_items.some(item => item.product_id === productId);
+          if (inCart) {
+            // Update button state
+            updateAddToCartButtonState(productId, true);
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Error checking cart status:', error);
+      });
+  }
 </script>
 
 

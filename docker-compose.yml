@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: gunicorn project.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/uploads
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - redis
+    environment:
+      - MICROSERVICE_BASE_URL=http://microservice:8001
+      - REDIS_URL=redis://redis:6379/0
+
+  microservice:
+    build:
+      context: .
+      dockerfile: microservice/Dockerfile
+    command: uvicorn microservice.main:app --host 0.0.0.0 --port 8001
+    volumes:
+      - .:/app
+    ports:
+      - "8001:8001"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - REDIS_URL=redis://redis:6379/0
+
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  nginx:
+    image: nginx:1.21
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/home/app/staticfiles
+      - media_volume:/home/app/uploads
+    depends_on:
+      - web
+      - microservice
+
+volumes:
+  postgres_data:
+  redis_data:
+  static_volume:
+  media_volume:

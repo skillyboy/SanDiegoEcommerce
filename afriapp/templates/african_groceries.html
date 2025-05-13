@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}African Groceries - Authentic Nigerian Products{% endblock %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<section class="pt-7 pb-12 bg-cover" style="background-image: url('{% static 'img/afrocommerce/african-groceries-hero.jpg' %}');">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8 col-xl-6 text-center">
+        <!-- Preheading -->
+        <h6 class="text-white">
+          <span class="badge bg-success">Authentic</span>
+        </h6>
+        <!-- Heading -->
+        <h1 class="display-4 text-white">African Groceries</h1>
+        <!-- Subheading -->
+        <p class="lead text-white">
+          Discover authentic Nigerian and African ingredients for your kitchen
+        </p>
+        <!-- Button -->
+        <a class="btn btn-success" href="{% url 'shop' %}">
+          Shop Now <i class="fe fe-arrow-right ms-2"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES SECTION -->
+<section class="py-12 bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+        <!-- Heading -->
+        <h2 class="mb-4 text-center">Shop by Category</h2>
+        <!-- Subheading -->
+        <p class="mb-10 text-center text-gray-500">
+          Explore our wide selection of authentic African food products
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <!-- Category 1 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="card mb-7">
+          <!-- Image -->
+          <img class="card-img-top" src="{% static 'img/afrocommerce/category-spices.jpg' %}" alt="Spices & Seasonings" onerror="this.src='{% static 'img/placeholder.png' %}'">
+          <!-- Overlay -->
+          <div class="card-img-overlay card-img-overlay-hover">
+            <div class="card-body bg-white bg-opacity-80">
+              <div class="text-center">
+                <h3 class="card-title mb-0 fs-5">Spices & Seasonings</h3>
+                <a class="btn btn-link stretched-link px-0 text-reset" href="{% url 'shop' %}">
+                  Shop Now <i class="fe fe-arrow-right ms-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Category 2 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="card mb-7">
+          <!-- Image -->
+          <img class="card-img-top" src="{% static 'img/afrocommerce/category-grains.jpg' %}" alt="Grains & Flours" onerror="this.src='{% static 'img/placeholder.png' %}'">
+          <!-- Overlay -->
+          <div class="card-img-overlay card-img-overlay-hover">
+            <div class="card-body bg-white bg-opacity-80">
+              <div class="text-center">
+                <h3 class="card-title mb-0 fs-5">Grains & Flours</h3>
+                <a class="btn btn-link stretched-link px-0 text-reset" href="{% url 'shop' %}">
+                  Shop Now <i class="fe fe-arrow-right ms-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Category 3 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="card mb-7">
+          <!-- Image -->
+          <img class="card-img-top" src="{% static 'img/afrocommerce/category-snacks.jpg' %}" alt="Snacks & Sweets" onerror="this.src='{% static 'img/placeholder.png' %}'">
+          <!-- Overlay -->
+          <div class="card-img-overlay card-img-overlay-hover">
+            <div class="card-body bg-white bg-opacity-80">
+              <div class="text-center">
+                <h3 class="card-title mb-0 fs-5">Snacks & Sweets</h3>
+                <a class="btn btn-link stretched-link px-0 text-reset" href="{% url 'shop' %}">
+                  Shop Now <i class="fe fe-arrow-right ms-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Category 4 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="card mb-7">
+          <!-- Image -->
+          <img class="card-img-top" src="{% static 'img/afrocommerce/category-beverages.jpg' %}" alt="Beverages" onerror="this.src='{% static 'img/placeholder.png' %}'">
+          <!-- Overlay -->
+          <div class="card-img-overlay card-img-overlay-hover">
+            <div class="card-body bg-white bg-opacity-80">
+              <div class="text-center">
+                <h3 class="card-title mb-0 fs-5">Beverages</h3>
+                <a class="btn btn-link stretched-link px-0 text-reset" href="{% url 'shop' %}">
+                  Shop Now <i class="fe fe-arrow-right ms-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="py-12">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+        <!-- Heading -->
+        <h2 class="mb-4 text-center">Popular Products</h2>
+        <!-- Subheading -->
+        <p class="mb-10 text-center text-gray-500">
+          Our most loved African grocery items
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      {% for product in featured_products %}
+      <div class="col-6 col-md-4 col-lg-3">
+        {% include 'partials/nigerian-product-card.html' %}
+      </div>
+      {% empty %}
+      <!-- Placeholder products if no featured products are available -->
+      <div class="col-12 text-center">
+        <p>No featured products available at the moment. Check back soon!</p>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="mt-7 text-center">
+          <a class="btn btn-dark" href="{% url 'shop' %}">
+            View All Products
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT AFRICAN GROCERIES -->
+<section class="py-12 bg-light">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-12 col-md-6">
+        <!-- Image -->
+        <img class="img-fluid mb-7 mb-md-0" src="{% static 'img/afrocommerce/about-african-groceries.jpg' %}" alt="About African Groceries" onerror="this.src='{% static 'img/placeholder.png' %}'">
+      </div>
+      <div class="col-12 col-md-6">
+        <!-- Heading -->
+        <h2 class="mb-4">Authentic African Ingredients</h2>
+        <!-- Text -->
+        <p class="mb-7 text-gray-500">
+          Our African grocery store brings you authentic ingredients directly from Nigeria and other African countries. We carefully select each product to ensure quality and authenticity, allowing you to create traditional dishes that taste just like home.
+        </p>
+        <!-- List -->
+        <ul class="list-check text-gray-500 mb-8">
+          <li>Imported directly from Africa</li>
+          <li>Fresh and high-quality ingredients</li>
+          <li>Wide selection of hard-to-find items</li>
+          <li>Carefully packaged for freshness</li>
+          <li>Fast shipping across the USA</li>
+        </ul>
+        <!-- Button -->
+        <a class="btn btn-success" href="{% url 'shop' %}">
+          Shop Now <i class="fe fe-arrow-right ms-2"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="py-12">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8 col-xl-6 text-center">
+        <!-- Heading -->
+        <h2 class="mb-4">What Our Customers Say</h2>
+        <!-- Subheading -->
+        <p class="mb-9 text-gray-500">
+          Hear from customers who love our African grocery products
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <!-- Slider -->
+        <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true, "pageDots": true}'>
+          <!-- Item -->
+          <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+            <div class="card-lg card border">
+              <div class="card-body">
+                <!-- Header -->
+                <div class="row align-items-center mb-6">
+                  <div class="col-4">
+                    <!-- Image -->
+                    <img src="{% static 'img/avatars/avatar-1.jpg' %}" alt="Customer" class="img-fluid rounded-circle" onerror="this.src='{% static 'img/placeholder.png' %}'">
+                  </div>
+                  <div class="col-8 ms-n2">
+                    <!-- Name -->
+                    <p class="mb-0 fw-bold">Chioma O.</p>
+                    <!-- Location -->
+                    <p class="small text-muted">San Diego, CA</p>
+                  </div>
+                </div>
+                <!-- Rating -->
+                <div class="mb-6">
+                  <div class="rating text-warning">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </div>
+                </div>
+                <!-- Text -->
+                <p class="text-gray-500">
+                  "I'm so happy to find authentic Nigerian ingredients in San Diego! The quality is excellent and reminds me of home. Fast shipping too!"
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Item -->
+          <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+            <div class="card-lg card border">
+              <div class="card-body">
+                <!-- Header -->
+                <div class="row align-items-center mb-6">
+                  <div class="col-4">
+                    <!-- Image -->
+                    <img src="{% static 'img/avatars/avatar-2.jpg' %}" alt="Customer" class="img-fluid rounded-circle" onerror="this.src='{% static 'img/placeholder.png' %}'">
+                  </div>
+                  <div class="col-8 ms-n2">
+                    <!-- Name -->
+                    <p class="mb-0 fw-bold">Michael T.</p>
+                    <!-- Location -->
+                    <p class="small text-muted">La Jolla, CA</p>
+                  </div>
+                </div>
+                <!-- Rating -->
+                <div class="mb-6">
+                  <div class="rating text-warning">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                  </div>
+                </div>
+                <!-- Text -->
+                <p class="text-gray-500">
+                  "First time trying African groceries and I'm impressed! The spices are amazing and the customer service is excellent. Will definitely order again."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

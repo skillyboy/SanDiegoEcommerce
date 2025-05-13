@@ -1,0 +1,713 @@
+/*
+ * Enhanced African-inspired Theme for San Diego Ecommerce
+ * This file contains custom styles to create an authentic African aesthetic
+ */
+
+/* Import Google Fonts - Montserrat for main text, Playfair Display for headings, and Kaushan Script for accents */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Kaushan+Script&display=swap');
+
+/* General Body Styling */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #FFF8E7;
+    color: #3B2F2F;
+    position: relative;
+}
+
+/* African Pattern Background Overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../img/patterns/african-pattern-light.png');
+    background-size: 300px;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Wider Container */
+.container {
+    max-width: 1400px;
+    width: 95%;
+    margin: 0 auto;
+}
+
+@media (min-width: 1600px) {
+    .container {
+        max-width: 1600px;
+    }
+}
+
+/* Cart Icon Highlight Animation */
+@keyframes cartPulse {
+    0% { transform: scale(1); color: #D2691E; }
+    50% { transform: scale(1.5); color: #FF8C00; }
+    100% { transform: scale(1); color: #D2691E; }
+}
+
+.cart-highlight {
+    animation: cartPulse 0.5s ease-in-out 3;
+}
+
+/* Heart Icon Pulse Animation */
+@keyframes heartPulse {
+    0% { transform: scale(1); color: #dc3545; }
+    50% { transform: scale(1.5); color: #ff0033; }
+    100% { transform: scale(1); color: #dc3545; }
+}
+
+.heart-pulse {
+    animation: heartPulse 0.8s ease-in-out infinite;
+}
+
+/* Cart Button Styles */
+.btn-add-to-cart {
+    background-color: #D2691E;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+}
+
+.btn-add-to-cart:hover {
+    background-color: #A0522D;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-add-to-cart:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* African-inspired buttons with cultural patterns */
+.btn-african-primary {
+    background-color: #D2691E;
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 30px;
+    padding: 12px 28px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3);
+}
+
+.btn-african-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #8B4513, #A0522D);
+    transition: all 0.5s ease;
+    z-index: -1;
+}
+
+.btn-african-primary:hover {
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 7px 15px rgba(139, 69, 19, 0.4);
+}
+
+.btn-african-primary:hover::before {
+    width: 120%;
+}
+
+.btn-african-secondary {
+    background-color: transparent;
+    border: 2px solid #8B4513;
+    color: #8B4513;
+    font-weight: 600;
+    border-radius: 30px;
+    padding: 10px 26px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-african-secondary::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: #8B4513;
+    transition: all 0.3s ease;
+    z-index: -1;
+}
+
+.btn-african-secondary:hover {
+    color: white;
+    transform: translateY(-3px);
+}
+
+.btn-african-secondary:hover::after {
+    height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    color: #5D4037;
+}
+
+/* Custom Container with African Pattern Border */
+.container-african {
+    background-color: #FFFAF0;
+    border: 1px solid rgba(139, 69, 19, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.container-african::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: repeating-linear-gradient(
+        45deg,
+        #D2691E,
+        #D2691E 10px,
+        #CD853F 10px,
+        #CD853F 20px
+    );
+}
+
+/* Enhanced Navbar with Subtle Accent */
+.navbar-african {
+    background-color: #FFF5E1;
+    border-bottom: 3px solid #8B4513;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    padding: 0.5rem 1rem; /* Reduced vertical padding for better height */
+    position: relative;
+}
+
+.navbar-accent-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(to right, #8B4513, #D2691E);
+    z-index: 1030;
+}
+
+.navbar-african .navbar-brand {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: #5D4037;
+    display: flex;
+    align-items: center;
+}
+
+.brand-logo {
+    height: 50px;
+    width: 50px;
+    border: 3px solid #8B4513;
+    border-radius: 50%;
+    padding: 2px;
+    background-color: white;
+    margin-right: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover .brand-logo {
+    transform: scale(1.05);
+}
+
+.brand-text {
+    color: #5D4037;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.2;
+}
+
+.navbar-african .nav-link {
+    color: #8B4513;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar-african .nav-link:hover {
+    color: #D2691E;
+    transform: translateY(-2px);
+}
+
+/* Active link indicator */
+.navbar-african .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 1rem;
+    right: 1rem;
+    height: 3px;
+    background-color: #D2691E;
+    border-radius: 3px 3px 0 0;
+}
+
+/* Mobile menu styling */
+@media (max-width: 768px) {
+    .navbar-collapse {
+        background-color: #FFF5E1;
+        border-radius: 0 0 1rem 1rem;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        max-height: 85vh;
+        overflow-y: auto;
+        transition: all 0.3s ease-in-out;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1030;
+    }
+
+    .navbar-toggler {
+        border: 2px solid #8B4513;
+        padding: 0.25rem 0.5rem;
+        transition: all 0.2s ease;
+    }
+
+    .navbar-toggler:hover {
+        background-color: rgba(139, 69, 19, 0.1);
+    }
+
+    .navbar-toggler:focus {
+        box-shadow: 0 0 0 0.25rem rgba(139, 69, 19, 0.25);
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(139, 69, 19, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    /* Animate mobile menu */
+    .navbar-collapse.collapsing {
+        height: 0;
+        overflow: hidden;
+        transition: height 0.3s ease;
+    }
+
+    .navbar-collapse.show {
+        animation: slideDown 0.3s forwards;
+    }
+
+    /* Mobile navigation items */
+    .navbar-nav .nav-item {
+        margin-bottom: 0.5rem;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease;
+    }
+
+    .navbar-nav .nav-link:hover {
+        background-color: rgba(139, 69, 19, 0.1);
+    }
+
+    /* Mobile dropdown menus */
+    .navbar-nav .dropdown-menu {
+        border: none;
+        background-color: rgba(255, 245, 225, 0.5);
+        padding: 0.5rem;
+        margin-top: 0.25rem;
+        box-shadow: inset 0 0 10px rgba(139, 69, 19, 0.1);
+        border-radius: 0.5rem;
+    }
+
+    @keyframes slideDown {
+        0% {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Hamburger menu animation */
+    .navbar-toggler.collapsed .navbar-toggler-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .navbar-toggler:not(.collapsed) .navbar-toggler-icon {
+        transform: rotate(90deg);
+    }
+}
+
+/* Custom Buttons */
+.btn-african-primary {
+    background-color: #D2691E;
+    border-color: #D2691E;
+    color: white;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    padding: 0.75rem 1.5rem;
+}
+
+.btn-african-primary:hover {
+    background-color: #A0522D;
+    border-color: #A0522D;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-african-secondary {
+    background-color: transparent;
+    border: 2px solid #8B4513;
+    color: #8B4513;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    padding: 0.75rem 1.5rem;
+}
+
+.btn-african-secondary:hover {
+    background-color: rgba(139, 69, 19, 0.1);
+    color: #A0522D;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Hero Section Styling */
+.hero-african {
+    position: relative;
+    overflow: hidden;
+    background-color: #FFF8E7;
+}
+
+.hero-slide {
+    position: relative;
+    padding: 4rem 0;
+}
+
+.min-vh-70 {
+    min-height: 70vh;
+}
+
+.hero-image {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.hero-slide:hover .hero-image {
+    transform: translateY(-10px);
+}
+
+.hero-badge {
+    width: 80px;
+    height: 80px;
+    transform: rotate(15deg);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Hero Section */
+@media (max-width: 768px) {
+    .hero-slide {
+        padding: 2rem 0;
+    }
+
+    .min-vh-70 {
+        min-height: 50vh;
+    }
+
+    .hero-slide .display-3 {
+        font-size: 2.5rem;
+    }
+
+    .hero-slide .lead {
+        font-size: 1rem;
+    }
+
+    .hero-image {
+        margin-top: 2rem;
+        max-height: 300px;
+        object-fit: cover;
+    }
+}
+
+.btn-african-secondary:hover {
+    background-color: #8B4513;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced African-Inspired Product Cards */
+.product-card-african {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background-color: white;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.product-card-african::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(to right, #D2691E, #8B4513);
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-card-african:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(139, 69, 19, 0.15);
+}
+
+.product-card-african:hover::before {
+    opacity: 1;
+}
+
+.product-card-african .card-img-top {
+    height: 240px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.product-card-african:hover .card-img-top {
+    transform: scale(1.1);
+}
+
+.product-card-african .card-body {
+    padding: 1.5rem;
+    border-top: 2px solid rgba(210, 105, 30, 0.2);
+    position: relative;
+}
+
+.product-card-african .card-body::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background-image: url('../img/patterns/african-pattern-border.png');
+    background-size: contain;
+    background-repeat: repeat-x;
+    opacity: 0.1;
+}
+
+.product-card-african .product-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: #5D4037;
+    margin-bottom: 0.75rem;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.product-card-african:hover .product-title {
+    color: #D2691E;
+}
+
+.product-card-african .product-price {
+    font-weight: 700;
+    color: #D2691E;
+    font-size: 1.3rem;
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: rgba(210, 105, 30, 0.1);
+    border-radius: 20px;
+}
+
+/* Footer Styling */
+.footer-african {
+    background-color: #3B2F2F;
+    color: #FFF8DC;
+    padding-top: 3rem;
+    border-top: 5px solid #D2691E;
+}
+
+.footer-african h5 {
+    color: #FFF8DC;
+    font-family: 'Playfair Display', serif;
+    border-bottom: 2px solid #D2691E;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+}
+
+.footer-african a {
+    color: #FFF8DC;
+    transition: color 0.3s ease;
+}
+
+.footer-african a:hover {
+    color: #D2691E;
+    text-decoration: none;
+}
+
+/* Hero Section */
+.hero-african {
+    background-color: #FFF5E1;
+    padding: 4rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-african::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: repeating-linear-gradient(
+        45deg,
+        #D2691E,
+        #D2691E 10px,
+        #CD853F 10px,
+        #CD853F 20px
+    );
+}
+
+.hero-african h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.hero-african p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #5D4037;
+}
+
+/* Category Badge with African Pattern */
+.category-badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    background-color: rgba(210, 105, 30, 0.1);
+    color: #8B4513;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    position: relative;
+    border: 1px dashed rgba(139, 69, 19, 0.3);
+    transition: all 0.3s ease;
+}
+
+.category-badge:hover {
+    background-color: rgba(210, 105, 30, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Product Badge Styling */
+.product-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 0.35rem 0.75rem;
+    background: linear-gradient(45deg, #D2691E, #CD853F);
+    color: white;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border-radius: 20px;
+    z-index: 2;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-badge-new {
+    background: linear-gradient(45deg, #2E8B57, #3CB371);
+    left: auto;
+    right: 10px;
+}
+
+/* Product Actions Styling */
+.product-actions {
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 3;
+}
+
+.product-card-african:hover .product-actions {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    color: #8B4513;
+}
+
+.action-btn:hover {
+    background-color: #D2691E;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom Breadcrumb */
+.breadcrumb-african {
+    background-color: transparent;
+    padding: 1rem 0;
+}
+
+.breadcrumb-african .breadcrumb-item {
+    font-size: 0.9rem;
+}
+
+.breadcrumb-african .breadcrumb-item a {
+    color: #8B4513;
+}
+
+.breadcrumb-african .breadcrumb-item.active {
+    color: #D2691E;
+}
+
+.breadcrumb-african .breadcrumb-item + .breadcrumb-item::before {
+    content: "•";
+    color: #CD853F;
+}

@@ -1,0 +1,206 @@
+/*
+ * African-inspired Theme for About Page
+ * This file contains custom styles to enhance the African aesthetic of the about page
+ */
+
+/* African Banner Styling */
+.african-banner {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(139, 69, 19, 0.2);
+}
+
+.african-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.welcome-heading {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    background-color: rgba(139, 69, 19, 0.7);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-heading h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.african-pattern-divider {
+    height: 10px;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='10' viewBox='0 0 60 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 5 Q 15 0, 30 5 T 60 5' stroke='%23FFFFFF' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 60px 10px;
+    margin-top: 15px;
+    opacity: 0.8;
+}
+
+/* Cultural Heading Styling */
+.cultural-heading {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: #5D4037;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+}
+
+.cultural-heading::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(to right, #D2691E, #8B4513);
+}
+
+/* Accent Text Color */
+.text-accent {
+    color: #D2691E !important;
+}
+
+/* African Proverb Styling */
+.african-proverb {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-style: italic;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.proverb-origin {
+    font-size: 1rem;
+    opacity: 0.8;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.proverb-meaning {
+    font-size: 1.1rem;
+    display: block;
+}
+
+/* Testimonial Card Styling */
+.testimonial-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #D2691E;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.testimonial-card::before {
+    content: '"';
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    color: rgba(210, 105, 30, 0.1);
+    line-height: 1;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(139, 69, 19, 0.1);
+}
+
+.blockquote-footer {
+    color: #8B4513;
+    font-weight: 600;
+}
+
+/* Social Media Section */
+.african-social-banner {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.african-social-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(139, 69, 19, 0.7);
+    z-index: 1;
+}
+
+.social-cta {
+    position: relative;
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.social-heading {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: #5D4037;
+    font-size: 1.8rem;
+}
+
+.social-text {
+    color: #8B4513;
+    font-size: 1.1rem;
+}
+
+.social-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn-social-african {
+    background-color: #D2691E;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(210, 105, 30, 0.3);
+}
+
+.btn-social-african:hover {
+    background-color: #8B4513;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(139, 69, 19, 0.4);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767.98px) {
+    .welcome-heading h1 {
+        font-size: 1.8rem;
+    }
+    
+    .african-proverb {
+        font-size: 1.2rem;
+    }
+    
+    .social-buttons {
+        flex-direction: column;
+    }
+}

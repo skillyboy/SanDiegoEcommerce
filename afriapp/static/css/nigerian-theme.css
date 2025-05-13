@@ -1,0 +1,252 @@
+/*
+ * Nigerian-inspired Theme for San Diego Ecommerce
+ * This file contains custom styles to create an authentic Nigerian aesthetic
+ */
+
+/* Import Google Fonts - Montserrat for main text, Playfair Display for headings, and Kaushan Script for accents */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Kaushan+Script&display=swap');
+
+/* Nigerian Color Variables */
+:root {
+  --nigerian-green: #008751;
+  --nigerian-white: #ffffff;
+  --nigerian-accent: #F7C600;
+  --nigerian-dark: #2E3A23;
+  --nigerian-earth: #8B4513;
+  --nigerian-terracotta: #CD5C5C;
+  --nigerian-indigo: #4B0082;
+  --nigerian-gold: #FFD700;
+}
+
+/* General Body Styling */
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #FFFAF0;
+  color: #333;
+  position: relative;
+}
+
+/* Nigerian Pattern Background Overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23008751' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-size: 60px 60px;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+  color: var(--nigerian-dark);
+}
+
+.accent-text {
+  font-family: 'Kaushan Script', cursive;
+  color: var(--nigerian-accent);
+}
+
+/* Nigerian-inspired buttons */
+.btn-nigerian-primary {
+  background-color: var(--nigerian-green);
+  border: none;
+  color: white;
+  font-weight: 600;
+  border-radius: 30px;
+  padding: 12px 28px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 0 4px 15px rgba(0, 135, 81, 0.3);
+}
+
+.btn-nigerian-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -10px;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #006B3C, #008751);
+  transition: all 0.5s ease;
+  z-index: -1;
+}
+
+.btn-nigerian-primary:hover {
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 7px 15px rgba(0, 135, 81, 0.4);
+}
+
+.btn-nigerian-primary:hover::before {
+  width: 120%;
+}
+
+.btn-nigerian-secondary {
+  background-color: transparent;
+  border: 2px solid var(--nigerian-green);
+  color: var(--nigerian-green);
+  font-weight: 600;
+  border-radius: 30px;
+  padding: 10px 26px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-nigerian-secondary::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background-color: var(--nigerian-green);
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+.btn-nigerian-secondary:hover {
+  color: white;
+  transform: translateY(-3px);
+}
+
+.btn-nigerian-secondary:hover::after {
+  height: 100%;
+}
+
+/* Nigerian-inspired Product Card */
+.product-card-nigerian {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border: 1px solid rgba(0, 135, 81, 0.1);
+}
+
+.product-card-nigerian::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(to right, var(--nigerian-green), var(--nigerian-accent));
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card-nigerian:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 135, 81, 0.15);
+}
+
+.product-card-nigerian:hover::before {
+  opacity: 1;
+}
+
+/* Product Badge Styling */
+.product-badge-nigerian {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 0.35rem 0.75rem;
+  background: linear-gradient(45deg, var(--nigerian-green), #006B3C);
+  color: white;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border-radius: 20px;
+  z-index: 2;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-badge-new-nigerian {
+  background: linear-gradient(45deg, var(--nigerian-accent), #FFB700);
+  color: var(--nigerian-dark);
+  left: auto;
+  right: 10px;
+}
+
+/* Nigerian Pattern Divider */
+.nigerian-pattern-divider {
+  height: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='10' viewBox='0 0 60 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 5 Q 15 0, 30 5 T 60 5' stroke='%23008751' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 60px 10px;
+  margin: 2rem 0;
+}
+
+/* Hero Banner with Nigerian Styling */
+.hero-nigerian {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 135, 81, 0.2);
+  margin-bottom: 3rem;
+}
+
+.hero-nigerian::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(to right, var(--nigerian-green), var(--nigerian-accent), var(--nigerian-white), var(--nigerian-green));
+  background-size: 400% 400%;
+  animation: gradient 3s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Cultural Significance Section */
+.cultural-significance {
+  background-color: rgba(0, 135, 81, 0.05);
+  border-left: 4px solid var(--nigerian-green);
+  padding: 1.5rem;
+  border-radius: 0 8px 8px 0;
+  margin: 2rem 0;
+}
+
+.cultural-title {
+  font-family: 'Playfair Display', serif;
+  color: var(--nigerian-dark);
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767.98px) {
+  .hero-nigerian {
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+  
+  .nigerian-pattern-divider {
+    margin: 1.5rem 0;
+  }
+}

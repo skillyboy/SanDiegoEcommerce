@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 from os import getenv
@@ -36,6 +37,8 @@ STRIPE_WEBHOOK_SECRET=getenv("STRIPE_WEBHOOK_SECRET")
 
 INSTALLED_APPS = [
     'afriapp',
+    'logistics',
+    'agro_linker',  # Temporarily commented out due to ninja dependency
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "rest_framework",
+    "ninja",  # Required for Django Ninja API framework used by agro_linker
 ]
 
 MIDDLEWARE = [
@@ -109,16 +113,26 @@ WSGI_APPLICATION = 'project.wsgi.application'
 #         'NAME': os.getenv('POSTGRES_DB', 'postgres'),
 #         'USER': os.getenv('POSTGRES_USER', 'postgres'),
 #         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'skilly1234'),
-#         'HOST': os.getenv('DB_HOST', 'db'), 
+#         'HOST': os.getenv('DB_HOST', 'db'),
 #         'PORT': os.getenv('DB_PORT', '5432'),
 #     }
 # }
 
+# # Use PostgreSQL for production
+# if not 'test' in sys.argv:
+#     DATABASES = {
+#         'default': dj_database_url.parse(
+#             # 'postgresql://africandb_3g6p_user:TGvIOVHFpRqR6eZUlsuHUouM6tHOmq48@dpg-csfdi5hu0jms73ffcm90-a.oregon-postgres.render.com/africandb_3g6p'
+#             "postgresql://afrigold_owner:npg_ouZ8jIFmsUB6@ep-dry-pond-a51vp14m-pooler.us-east-2.aws.neon.tech/afrigold?sslmode=require"
+#         )
+#     }
+# Use SQLite for testing
+# else:
 DATABASES = {
-    'default': dj_database_url.parse(
-        # 'postgresql://africandb_3g6p_user:TGvIOVHFpRqR6eZUlsuHUouM6tHOmq48@dpg-csfdi5hu0jms73ffcm90-a.oregon-postgres.render.com/africandb_3g6p'
-        "postgresql://afrigold_owner:npg_ouZ8jIFmsUB6@ep-dry-pond-a51vp14m-pooler.us-east-2.aws.neon.tech/afrigold?sslmode=require"
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 # Password validation

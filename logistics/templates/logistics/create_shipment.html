@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Shipment{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Create New Shipment</h1>
+        <a href="{% url 'logistics:shipment_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-box me-1"></i>
+            Shipment Information
+        </div>
+        <div class="card-body">
+            <form action="{% url 'logistics:create_shipment' %}" method="post">
+                {% csrf_token %}
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="order_id" class="form-label">Order</label>
+                        <select name="order_id" id="order_id" class="form-select" required>
+                            <option value="">Select Order</option>
+                            {% for order in orders %}
+                                <option value="{{ order.id }}">{{ order.order_no }} - {{ order.customer.first_name }} {{ order.customer.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tracking_number" class="form-label">Tracking Number</label>
+                        <input type="text" name="tracking_number" id="tracking_number" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="delivery_partner" class="form-label">Delivery Partner</label>
+                        <select name="delivery_partner" id="delivery_partner" class="form-select">
+                            <option value="">Select Delivery Partner</option>
+                            {% for partner in delivery_partners %}
+                                <option value="{{ partner.id }}">{{ partner.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="delivery_zone" class="form-label">Delivery Zone</label>
+                        <select name="delivery_zone" id="delivery_zone" class="form-select">
+                            <option value="">Select Delivery Zone</option>
+                            {% for zone in delivery_zones %}
+                                <option value="{{ zone.id }}" data-fee="{{ zone.base_fee }}">{{ zone.name }} - ${{ zone.base_fee }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="shipping_cost" class="form-label">Shipping Cost</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" name="shipping_cost" id="shipping_cost" class="form-control" step="0.01" min="0" value="0.00">
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Create Shipment</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-fill shipping cost based on delivery zone
+        const deliveryZoneSelect = document.getElementById('delivery_zone');
+        const shippingCostInput = document.getElementById('shipping_cost');
+        
+        deliveryZoneSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.value) {
+                const baseFee = selectedOption.getAttribute('data-fee');
+                shippingCostInput.value = baseFee;
+            } else {
+                shippingCostInput.value = '0.00';
+            }
+        });
+    });
+</script>
+{% endblock %}
