@@ -2030,7 +2030,18 @@ from django.utils.text import slugify
 from .models import Service, Category, Product
 import random
 
-def populate_db(request):
+def populate_db(request=None):
+    """
+    Populate the database with initial data if it's empty.
+    Can be called from a view or as a standalone function.
+    Returns True if data was populated, False if database already had data.
+    """
+    # Check if database is already populated
+    if Product.objects.exists():
+        if request:
+            return HttpResponse("Database already populated!")
+        return False
+
     # Dummy data
     services_data = {
         "Groceries": [
@@ -2086,13 +2097,15 @@ def populate_db(request):
                         'featured': random.choice([True, False]),
                         'latest': random.choice([True, False]),
                         'available': True,
-                        'min': 1,
-                        'max': 20,
+                        'min_purchase': 1,
+                        'max_purchase': 20,
                         'rating': str(random.randint(1, 5)),
                     }
                 )
 
-    return HttpResponse("Database populated successfully!")
+    if request:
+        return HttpResponse("Database populated successfully!")
+    return True
 
 
 def generate_random_options():

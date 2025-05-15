@@ -1,6 +1,6 @@
 
 git add .
-git commit -m "Deploy"
+git commit -m "Deploy to render "
 git push origin main
 
 
