@@ -83,8 +83,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'afriapp', 'static'),  # This is your local static directory
 ]
 
-# Simplified static file serving with whitenoise
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Use the simplest static files storage to avoid issues with missing files
+STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
+
+# Skip static files collection in production if DISABLE_COLLECTSTATIC is set
+if os.environ.get('DISABLE_COLLECTSTATIC'):
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # Media files (Uploaded files)
 MEDIA_URL = '/media/'

@@ -22,8 +22,9 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('../img/patterns/african-pattern-light.png');
-    background-size: 300px;
+    /* Replace image with a CSS pattern to avoid missing file error */
+    background-image: radial-gradient(#D2691E 3px, transparent 3px);
+    background-size: 30px 30px;
     opacity: 0.03;
     pointer-events: none;
     z-index: -1;
