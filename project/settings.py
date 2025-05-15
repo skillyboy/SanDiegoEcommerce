@@ -17,7 +17,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key-for-dev")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Enable DEBUG to see detailed error messages
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 # Add logging configuration
 LOGGING = {
@@ -134,9 +134,9 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# Use PostgreSQL on Heroku and SQLite locally
+# Use PostgreSQL on Render and SQLite locally
 if 'DATABASE_URL' in os.environ:
-    # Configure database for Heroku
+    # Configure database for Render
     DATABASES = {
         'default': dj_database_url.config(
             conn_max_age=600,
