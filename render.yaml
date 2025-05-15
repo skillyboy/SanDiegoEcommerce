@@ -30,6 +30,8 @@ services:
           name: sandiegoecommerce
           type: web
           property: host
+      - key: DISABLE_COLLECTSTATIC
+        value: "1"
 
 # Database (PostgreSQL)
 databases:

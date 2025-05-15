@@ -22,8 +22,8 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 # Copy project
 COPY . .
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
+# Create static directory and copy files directly
+RUN mkdir -p staticfiles && cp -r afriapp/static/* staticfiles/ || true
 
 # Run gunicorn
 CMD gunicorn project.wsgi:application --bind 0.0.0.0:$PORT
