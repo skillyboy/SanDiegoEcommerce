@@ -476,16 +476,18 @@ class IndexView(TemplateView):
             # Fetch the last 10 products based on date_created
             latest_products = Product.objects.order_by('-date_created')[:10]
 
-        except Product.DoesNotExist:
+        except (Product.DoesNotExist, Exception) as e:
+            # Handle any database-related errors, including missing tables
+            logger.error(f"Error loading products: {str(e)}")
             featured, latest, services, latest_products = [], [], [], []
-            messages.error(request, 'Products could not be loaded.')
+            messages.error(request, 'Products could not be loaded. The site is still being set up.')
 
         context = {
-            'featured': featured,
-            'latest': latest,
-            'services': services,
+            'featured': featured if 'featured' in locals() else [],
+            'latest': latest if 'latest' in locals() else [],
+            'services': services if 'services' in locals() else [],
             'service_id': service_id,
-            'latest_products': latest_products,  # Pass latest products to context
+            'latest_products': latest_products if 'latest_products' in locals() else [],  # Pass latest products to context
         }
 
         template = 'shop.html' if service_id else 'index.html'

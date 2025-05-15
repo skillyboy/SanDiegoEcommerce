@@ -7,19 +7,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='product',
-            name='min_purchase',
-            field=models.PositiveIntegerField(default=1),
-        ),
-        migrations.AddField(
-            model_name='product',
-            name='max_purchase',
-            field=models.PositiveIntegerField(default=20),
-        ),
-        migrations.AlterField(
-            model_name='product',
-            name='slug',
-            field=models.SlugField(blank=True, unique=True),
-        ),
+        # Empty operations - these fields are already in 0001_initial
     ]

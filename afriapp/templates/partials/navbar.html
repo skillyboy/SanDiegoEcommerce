@@ -114,9 +114,13 @@
                   </a>
                 </li>
                 <li><hr class="dropdown-divider"></li>
-                {% for service in services %}
-                <li><a class="dropdown-item" href="{% url 'service' service.id %}">{{ service.name }}</a></li>
-                {% endfor %}
+                {% if services %}
+                  {% for service in services %}
+                  <li><a class="dropdown-item" href="{% url 'service' service.id %}">{{ service.name }}</a></li>
+                  {% endfor %}
+                {% else %}
+                  <li><a class="dropdown-item" href="#">Coming Soon</a></li>
+                {% endif %}
               </ul>
             </li>
             <li class="nav-item">
