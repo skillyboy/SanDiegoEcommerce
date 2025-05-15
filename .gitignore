@@ -35,3 +35,9 @@ note.txt
 
 # Environment variables
 .env
+
+# Git chat app
+chatapp/
+
+# Pay bot
+paybot/

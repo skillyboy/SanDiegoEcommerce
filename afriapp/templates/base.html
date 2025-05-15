@@ -6,7 +6,7 @@
     <!-- Enhanced SEO Meta Tags -->
     {% include 'partials/seo-meta.html' %}
 
-    <title>{% block title %}African Food San Diego{% endblock %}</title>
+    <title>{% block title %}African Food SD{% endblock %}</title>
 
     <!-- Google Analytics -->
     {% include 'partials/analytics.html' %}
@@ -21,6 +21,18 @@
 
     <!-- Custom Toast Notifications CSS -->
     <link rel="stylesheet" href="{% static 'css/toast-notifications.css' %}">
+
+    <!-- Live Search CSS -->
+    <link rel="stylesheet" href="{% static 'css/live-search.css' %}">
+
+    <!-- Mobile Fixes CSS -->
+    <link rel="stylesheet" href="{% static 'css/mobile-fixes.css' %}">
+
+    <!-- Unified Card Styles CSS -->
+    <link rel="stylesheet" href="{% static 'css/unified-card-styles.css' %}">
+
+    <!-- Consistent Card Styling CSS -->
+    <link rel="stylesheet" href="{% static 'css/consistent-card-styling.css' %}">
 
     <!-- Include SweetAlert2 CSS and JS (for important confirmations) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -40,19 +52,14 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    <!-- CSRF Token for AJAX requests -->
+    {% csrf_token %}
+
     <!-- Navbar -->
     {% include 'partials/navbar.html' %}
 
     <!-- Flash Messages -->
-    <div class="messages">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} message bg-white shadow-sm" role="alert">
-                    <h4>{{ message }}</h4>
-                </div>
-            {% endfor %}
-        {% endif %}
-    </div>
+    {% include 'partials/messages.html' %}
 
     <!-- Main Content -->
     <main role="main" class="page-wrapper">
@@ -74,6 +81,30 @@
 
     <!-- Custom Toast Notifications JS -->
     <script src="{% static 'js/toast-notifications.js' %}"></script>
+
+    <!-- Unified Card Handler JS -->
+    <script src="{% static 'js/unified-card-handler.js' %}"></script>
+
+    <!-- Enhanced Cart Flow JS -->
+    <script src="{% static 'js/enhanced-cart-flow.js' %}"></script>
+
+    <!-- Cart Handler JS -->
+    <script src="{% static 'js/cart-handler.js' %}"></script>
+
+    <!-- Cart Sidebar JS -->
+    <script src="{% static 'js/cart-sidebar.js' %}"></script>
+
+    <!-- Navbar Search JS -->
+    <script src="{% static 'js/navbar-search.js' %}"></script>
+
+    <!-- Error Sound Handler JS -->
+    <script src="{% static 'js/error-sound-handler.js' %}"></script>
+
+    <!-- Success Sound Handler JS -->
+    <script src="{% static 'js/success-sound-handler.js' %}"></script>
+
+    <!-- Cart Email Handler JS -->
+    <script src="{% static 'js/cart-email-handler.js' %}"></script>
 
     <!-- Initialize SweetAlert2 with African-inspired theme -->
     <script>
@@ -115,6 +146,29 @@
             --service-secondary: #e87e04;
             --service-accent: #f5c34b;
             --service-bg: #f9f5e8;
+        }
+
+        /* Flying item animation for cart */
+        .flying-item {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            z-index: 9999;
+            transition: all 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        }
+
+        /* Cart bounce animation */
+        @keyframes cartBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .cart-bounce {
+            animation: cartBounce 0.5s ease;
         }
 
         /* Service-specific theme classes */

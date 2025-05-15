@@ -39,4 +39,5 @@ tzdata==2023.3
 urllib3==2.2.3
 uvicorn==0.27.1
 waitress==3.0.0
+whitenoise==6.6.0
 yarl==1.15.4

@@ -138,7 +138,9 @@
 
               <div class="cultural-content">
                 <p class="cultural-text">
-                  {% if product.category.name == "Grains and Flour" %}
+                  {% if product.cultural_significance %}
+                    {{ product.cultural_significance }}
+                  {% elif product.category.name == "Grains and Flour" %}
                     This staple ingredient is central to many traditional Nigerian dishes like Jollof Rice and Pounded Yam. In Nigerian culture, these grains symbolize abundance and prosperity, often featured prominently in celebrations and family gatherings.
                   {% elif product.category.name == "Spices" %}
                     These authentic Nigerian spices are carefully sourced from local markets across Nigeria to bring you the true essence of Nigerian cuisine. Used in signature dishes like Suya and Egusi Soup, these spices connect you to centuries of culinary tradition.
@@ -698,6 +700,30 @@
     font-weight: 600;
   }
 
+  /* Quantity Control Animations */
+  .quantity-changed {
+    animation: quantityPulse 0.3s ease;
+    background-color: rgba(0, 135, 81, 0.1);
+  }
+
+  @keyframes quantityPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  .btn-shake {
+    animation: shake 0.5s ease-in-out;
+  }
+
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    50% { transform: translateX(0); }
+    75% { transform: translateX(3px); }
+    100% { transform: translateX(0); }
+  }
+
   /* Stock Indicator */
   .stock-indicator {
     font-size: 0.9rem;
@@ -1038,28 +1064,106 @@
     }
   }
 
-  // Quantity Controls
+  // Quantity Controls with improved error handling and animation
   function initQuantityControls() {
     const decreaseBtn = document.getElementById('decreaseQuantity');
     const increaseBtn = document.getElementById('increaseQuantity');
     const quantityInput = document.getElementById('quantity');
-    const maxQuantity = parseInt(quantityInput.getAttribute('max')) || 10;
 
-    if (decreaseBtn && increaseBtn && quantityInput) {
-      decreaseBtn.addEventListener('click', function() {
-        let currentValue = parseInt(quantityInput.value);
-        if (currentValue > 1) {
-          quantityInput.value = currentValue - 1;
-        }
-      });
-
-      increaseBtn.addEventListener('click', function() {
-        let currentValue = parseInt(quantityInput.value);
-        if (currentValue < maxQuantity) {
-          quantityInput.value = currentValue + 1;
-        }
-      });
+    // Exit if any element is missing
+    if (!decreaseBtn || !increaseBtn || !quantityInput) {
+      return;
     }
+
+    // Remove any existing event listeners by cloning and replacing elements
+    const newDecreaseBtn = decreaseBtn.cloneNode(true);
+    const newIncreaseBtn = increaseBtn.cloneNode(true);
+    const newQuantityInput = quantityInput.cloneNode(true);
+
+    decreaseBtn.parentNode.replaceChild(newDecreaseBtn, decreaseBtn);
+    increaseBtn.parentNode.replaceChild(newIncreaseBtn, increaseBtn);
+    quantityInput.parentNode.replaceChild(newQuantityInput, quantityInput);
+
+    // Get the new elements
+    const decreaseBtnNew = document.getElementById('decreaseQuantity');
+    const increaseBtnNew = document.getElementById('increaseQuantity');
+    const quantityInputNew = document.getElementById('quantity');
+
+    // Get max quantity
+    const maxQuantity = parseInt(quantityInputNew.getAttribute('max')) || 10;
+
+    // Decrease quantity with animation
+    decreaseBtnNew.addEventListener('click', function() {
+      // Prevent multiple clicks
+      if (window.isUpdatingQuantity) return;
+      window.isUpdatingQuantity = true;
+
+      let currentValue = parseInt(quantityInputNew.value) || 1; // Default to 1 if parsing fails
+      if (currentValue > 1) {
+        // Decrease by exactly 1
+        quantityInputNew.value = currentValue - 1;
+
+        // Add animation effect
+        quantityInputNew.classList.add('quantity-changed');
+        setTimeout(() => {
+          quantityInputNew.classList.remove('quantity-changed');
+          window.isUpdatingQuantity = false;
+        }, 300);
+      } else {
+        // Visual feedback when at minimum
+        decreaseBtnNew.classList.add('btn-shake');
+        setTimeout(() => {
+          decreaseBtnNew.classList.remove('btn-shake');
+          window.isUpdatingQuantity = false;
+        }, 500);
+      }
+    });
+
+    // Increase quantity with animation
+    increaseBtnNew.addEventListener('click', function() {
+      // Prevent multiple clicks
+      if (window.isUpdatingQuantity) return;
+      window.isUpdatingQuantity = true;
+
+      let currentValue = parseInt(quantityInputNew.value) || 1; // Default to 1 if parsing fails
+      if (currentValue < maxQuantity) {
+        // Increase by exactly 1
+        quantityInputNew.value = currentValue + 1;
+
+        // Add animation effect
+        quantityInputNew.classList.add('quantity-changed');
+        setTimeout(() => {
+          quantityInputNew.classList.remove('quantity-changed');
+          window.isUpdatingQuantity = false;
+        }, 300);
+      } else {
+        // Visual feedback when at maximum
+        increaseBtnNew.classList.add('btn-shake');
+        setTimeout(() => {
+          increaseBtnNew.classList.remove('btn-shake');
+          window.isUpdatingQuantity = false;
+        }, 500);
+
+        // Show a toast notification
+        if (window.toast) {
+          window.toast.info(`Maximum quantity is ${maxQuantity}`, {
+            title: 'Maximum Reached'
+          });
+        }
+      }
+    });
+
+    // Also handle direct input changes
+    quantityInputNew.addEventListener('change', function() {
+      let value = parseInt(this.value) || 1;
+
+      // Ensure value is within bounds
+      if (value < 1) value = 1;
+      if (value > maxQuantity) value = maxQuantity;
+
+      // Update the input value
+      this.value = value;
+    });
   }
 
   // Add to Cart Button
@@ -1083,12 +1187,18 @@
 
   // Initialize all components when the document is ready
   document.addEventListener('DOMContentLoaded', function() {
-    initProductGallery();
-    initQuantityControls();
-    initAddToCartButton();
+    // Only initialize components once
+    if (!window.componentsInitialized) {
+      initProductGallery();
+      initQuantityControls();
+      initAddToCartButton();
 
-    // Check if product is already in cart
-    checkIfProductInCart();
+      // Check if product is already in cart
+      checkIfProductInCart();
+
+      // Set flag to prevent multiple initializations
+      window.componentsInitialized = true;
+    }
   });
 
   // Check if product is already in cart
@@ -1115,5 +1225,7 @@
 </script>
 
 
+<!-- Email Collection JS -->
+<script src="{% static 'js/email-collection.js' %}"></script>
 {% endblock %}
 

@@ -12,61 +12,81 @@
 
   <!-- Body: Form -->
   <div class="offcanvas-body">
-    <form method="get" action="{% url 'search_products' %}"> <!-- Updated form action -->
-      <div class="form-group">
-        <label class="visually-hidden" for="modalSearchCategories">Categories:</label>
-        <select class="form-select" id="modalSearchCategories" name="category"> <!-- Added name for category -->
-          <option value="All Categories" {% if category == 'All Categories' %}selected{% endif %}>All Categories</option>
-          <!-- Loop through categories from the database -->
-          {% for category in categories %}
-            <option value="{{ category.name }}">{{ category.name }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="input-group input-group-merge">
-        <input class="form-control" type="search" name="search" placeholder="Search" value="{{ query }}"> <!-- Added name for search input -->
+    <div class="form-group">
+      <label class="visually-hidden" for="modalSearchCategories">Categories:</label>
+      <select class="form-select" id="modalSearchCategories" name="category">
+        <option value="All Categories" {% if category == 'All Categories' %}selected{% endif %}>All Categories</option>
+        <!-- Loop through categories from the database -->
+        {% for category in categories %}
+          <option value="{{ category.name }}">{{ category.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="input-group input-group-merge mt-3">
+      <input class="form-control" type="search" id="searchInput" placeholder="Search for products..." autocomplete="off">
+      <button class="btn btn-outline-secondary" type="button" id="searchButton">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+    <div class="form-text mt-1 text-muted">Start typing to see instant results</div>
 
-      </div>
+    <!-- Traditional search form (hidden, for fallback) -->
+    <form method="get" action="{% url 'search_products' %}" id="traditionalSearchForm" class="d-none">
+      <input type="hidden" name="search" id="traditionalSearchInput">
+      <input type="hidden" name="category" id="traditionalSearchCategory">
     </form>
   </div>
 
-  <!-- Body: Results (add `.d-none` to disable it) -->
+  <!-- Body: Results -->
   <div class="offcanvas-body border-top fs-sm">
-
     <!-- Heading -->
     <p>Search Results:</p>
 
-    <!-- Items -->
-    {% if products %}
-      {% for product in products %}
-      <div class="row align-items-center position-relative mb-5">
-        <div class="col-4 col-md-3">
-          <!-- Image -->
-          <img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-        </div>
-        <div class="col position-static">
-          <!-- Text -->
-          <p class="mb-0 fw-bold">
-            <a class="stretched-link text-body" href="{% url 'product' product.id %}">{{ product.name }}</a> <br>
-            <span class="text-muted">${{ product.price }}</span> <!-- Use the appropriate currency format -->
-          </p>
-        </div>
-      </div>
-      {% endfor %}
-    {% else %}
+    <!-- Results Container -->
+    <div id="searchResults">
+      <!-- Results will be populated by JavaScript -->
       <div class="row align-items-center position-relative mb-5">
         <div class="col">
-          <p class="mb-3 fs-sm text-center">Nothing matches your search</p>
-          <p class="mb-0 fs-sm text-center">😞</p>
+          <p class="mb-3 fs-sm text-center">Type at least 2 characters to search</p>
         </div>
       </div>
-    {% endif %}
+    </div>
 
     <!-- Button -->
-    <a class="btn btn-link px-0 text-reset" href="{% url 'shop' %}"> <!-- Use correct routing -->
-      View All <i class="fe fe-arrow-right ms-2"></i>
+    <a class="btn btn-link px-0 text-reset" href="{% url 'shop' %}">
+      View All Products <i class="fas fa-arrow-right ms-2"></i>
     </a>
-
   </div>
 
 </div>
+
+<!-- Add JavaScript for live search -->
+{% load static %}
+<script src="{% static 'js/live-search.js' %}"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Update the search endpoint in the configuration
+    LiveSearch.config.searchEndpoint = "{% url 'api_search_products' %}";
+
+    // Initialize the live search
+    LiveSearch.init();
+
+    // Add event listener for the search button
+    document.getElementById('searchButton').addEventListener('click', function() {
+      const searchTerm = document.getElementById('searchInput').value.trim();
+      const categoryValue = document.getElementById('modalSearchCategories').value;
+
+      // If search term is too short, show a message
+      if (searchTerm.length < 2) {
+        alert('Please enter at least 2 characters to search');
+        return;
+      }
+
+      // For longer searches, submit the traditional form for a full page search
+      document.getElementById('traditionalSearchInput').value = searchTerm;
+      document.getElementById('traditionalSearchCategory').value = categoryValue;
+      document.getElementById('traditionalSearchForm').submit();
+    });
+  });
+</script>

@@ -1,0 +1,385 @@
+/**
+ * Unified Card Styles
+ * Ensures consistent styling for product cards across all views
+ */
+
+/* Base card styles */
+.unified-card,
+.product-card-nigerian,
+.product-card-african,
+.featured-product-card {
+    background-color: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 1px solid rgba(0, 135, 81, 0.08);
+    will-change: transform, box-shadow;
+}
+
+/* Card hover effects */
+.unified-card:hover,
+.product-card-nigerian:hover,
+.product-card-african:hover,
+.featured-product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 135, 81, 0.15);
+}
+
+/* Product image container */
+.product-img-container {
+    position: relative;
+    overflow: hidden;
+    padding-top: 80%;
+    border-bottom: 2px solid rgba(0, 135, 81, 0.05);
+}
+
+/* Product image */
+.product-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+    z-index: 1;
+}
+
+.unified-card:hover .product-img,
+.product-card-nigerian:hover .product-img,
+.product-card-african:hover .product-img,
+.featured-product-card:hover .product-img {
+    transform: scale(1.1);
+}
+
+/* Product badges */
+.product-badge-nigerian,
+.product-badge {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sale-badge,
+.product-badge-nigerian.sale-badge {
+    background: linear-gradient(45deg, #008751, #20c997);
+    color: white;
+}
+
+.new-badge,
+.product-badge-nigerian.new-badge {
+    background: linear-gradient(45deg, #F7C600, #FFB700);
+    color: #2E3A23;
+}
+
+/* Product info section */
+.product-info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: white;
+    position: relative;
+    z-index: 4;
+}
+
+/* Category badge */
+.category-badge-nigerian {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    background-color: rgba(0, 135, 81, 0.1);
+    color: #008751;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px dashed rgba(0, 135, 81, 0.3);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.category-badge-nigerian:hover {
+    background-color: rgba(0, 135, 81, 0.2);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+/* Product title */
+.product-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+    max-height: 2.6rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.product-title a {
+    color: #2E3A23;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.product-title a:hover {
+    color: #008751;
+}
+
+/* Product price */
+.product-price {
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.price-current {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #008751;
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    background-color: rgba(0, 135, 81, 0.1);
+    border-radius: 16px;
+}
+
+.price-old {
+    font-size: 0.9rem;
+    color: #909090;
+    text-decoration: line-through;
+}
+
+/* Add to cart button */
+.btn-add-to-cart-nigerian,
+.btn-add-to-cart,
+.unified-btn {
+    margin-top: auto;
+    background-color: transparent;
+    color: #008751;
+    border: 2px solid #008751;
+    border-radius: 30px;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-add-to-cart-nigerian::after,
+.btn-add-to-cart::after,
+.unified-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: #008751;
+    transition: all 0.3s ease;
+    z-index: -1;
+}
+
+.btn-add-to-cart-nigerian:hover,
+.btn-add-to-cart:hover,
+.unified-btn:hover {
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 135, 81, 0.2);
+}
+
+.btn-add-to-cart-nigerian:hover::after,
+.btn-add-to-cart:hover::after,
+.unified-btn:hover::after {
+    height: 100%;
+}
+
+/* Added to cart state */
+.btn-add-to-cart-nigerian.added-to-cart,
+.btn-add-to-cart.added-to-cart,
+.unified-btn.added-to-cart {
+    background-color: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Responsive styles */
+@media (max-width: 991px) {
+    .product-title {
+        font-size: 1rem;
+        max-height: 2.4rem;
+    }
+    
+    .price-current {
+        font-size: 1rem;
+    }
+    
+    .product-info {
+        padding: 0.8rem;
+    }
+}
+
+@media (max-width: 767px) {
+    /* Make cards more compact on mobile */
+    .unified-card,
+    .product-card-nigerian,
+    .product-card-african,
+    .featured-product-card {
+        max-height: 380px;
+    }
+    
+    .unified-card:hover,
+    .product-card-nigerian:hover,
+    .product-card-african:hover,
+    .featured-product-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .product-img-container {
+        padding-top: 70%;
+    }
+    
+    .product-title {
+        font-size: 0.95rem;
+        margin-bottom: 0.3rem;
+        max-height: 2.3rem;
+    }
+    
+    .price-current {
+        font-size: 0.95rem;
+        padding: 0.15rem 0.5rem;
+    }
+    
+    .product-info {
+        padding: 0.75rem;
+    }
+    
+    .btn-add-to-cart-nigerian,
+    .btn-add-to-cart,
+    .unified-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Hide cultural significance on mobile */
+    .cultural-significance-short {
+        display: none;
+    }
+    
+    /* Hide action buttons on mobile */
+    .product-actions,
+    .product-actions-overlay {
+        display: none;
+    }
+}
+
+/* Ensure consistent styling during filtering and search */
+.filtered-card,
+.searched-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.filtered-card.visible,
+.searched-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Loading state for cards */
+.card-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Cart button styles */
+.cart-button-count {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.cart-button-count:hover {
+    transform: translateY(-2px);
+}
+
+/* Cart count badge */
+#cart-button-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background-color: #F7C600;
+    color: #2E3A23;
+    font-size: 0.75rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+/* Cart animations */
+@keyframes cartBounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.cart-bounce {
+    animation: cartBounce 0.5s ease;
+}
+
+/* Flying cart item */
+.flying-cart-item {
+    position: fixed;
+    z-index: 9999;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    pointer-events: none;
+}

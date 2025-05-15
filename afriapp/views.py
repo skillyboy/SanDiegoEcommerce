@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views import View
 from django.db import IntegrityError, transaction
-from django.db.models import Sum, F, FloatField
+from django.db.models import Sum, F, FloatField, Q, Count
 from django.http import JsonResponse, HttpResponse
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.utils.decorators import method_decorator
@@ -158,9 +158,13 @@ def store_locator(request):
     return render(request, 'store-locator.html')
 
 
-# 10. Shipping and Returns View
-def shipping_and_returns(request):
-    return render(request, 'shipping-and-returns.html')
+# 10. Shipping View
+def shipping(request):
+    return render(request, 'shipping.html')
+
+# 11. Returns View
+def returns(request):
+    return render(request, 'returns.html')
 
 
 # 11. Account Personal Info View
@@ -311,51 +315,47 @@ class SignupFormView(View):
     def get(self, request):
         return render(request, 'signup.html')
 
-    @transaction.atomic
     def post(self, request):
+        # Get form data
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        # Validate form inputs
+        if password1 != password2:
+            messages.error(request, "Passwords do not match.")
+            return render(request, 'signup.html')
+
+        # Check if user already exists - handle this gracefully with a message
+        if User.objects.filter(username=email).exists():
+            messages.warning(request, 'An account with that email already exists. Please log in instead.')
+            return redirect('login')
+
         try:
-            # Get form data
-            first_name = request.POST.get('first_name')
-            last_name = request.POST.get('last_name')
-            email = request.POST.get('email')
-            password1 = request.POST.get('password1')
-            password2 = request.POST.get('password2')
+            with transaction.atomic():
+                # Create the user
+                user = User.objects.create_user(
+                    username=email,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    password=password1
+                )
 
-            # Validate form inputs
-            if password1 != password2:
-                raise ValidationError("Passwords do not match.")
+                # Create the Customer profile
+                Customer.objects.create(user=user, first_name=first_name, last_name=last_name, email=email)
 
-            if User.objects.filter(username=email).exists():
-                raise IntegrityError("A user with that email already exists.")
-
-            # Create the user
-            user = User.objects.create_user(
-                username=email,
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                password=password1
-            )
-
-            # Create the Customer profile
-            Customer.objects.create(user=user, first_name=first_name, last_name=last_name, email=email)
+            # Log the user in after successful creation
             login(request, user)
-
-            messages.success(request, 'Signup successful!')
+            messages.success(request, 'Signup successful! Welcome to African Food.')
             return redirect('index')
-
-        except ValidationError as ve:
-            messages.error(request, str(ve))
-            return redirect('signup')
-
-        except IntegrityError:
-            messages.error(request, 'A user with that email already exists.')
-            return redirect('signup')
 
         except Exception as e:
             logger.error(f"Signup failed: {e}")
-            messages.error(request, 'An unexpected error occurred. Please try again later.')
-            return redirect('signup')
+            messages.error(request, 'An unexpected error occurred during signup. Please try again later.')
+            return render(request, 'signup.html')
 
 
 # 18. Login View with Error Handling
@@ -408,6 +408,51 @@ class PasswordChangeView(View):
             for error in update.errors.values():
                 messages.error(request, error)
             return redirect('password')
+
+# API endpoint for JavaScript search
+def api_search_products(request):
+    """
+    API endpoint for JavaScript-based search.
+    Returns JSON response with search results.
+    """
+    search_term = request.GET.get("search", "")
+    category_id = request.GET.get("category", None)
+
+    # Skip search if term is too short
+    if len(search_term) < 2:
+        return JsonResponse({"products": []})
+
+    # Use __icontains for case-insensitive search on product name and description
+    searched_items = Q(name__icontains=search_term) | Q(description__icontains=search_term)
+
+    # If a category is selected, filter by that category as well
+    if category_id and category_id != "All Categories":
+        try:
+            # Try to convert to integer for ID-based lookup
+            category_id = int(category_id)
+            products = Product.objects.filter(searched_items, category__id=category_id)
+        except (ValueError, TypeError):
+            # If not an integer, try to match by name
+            products = Product.objects.filter(searched_items, category__name=category_id)
+    else:
+        products = Product.objects.filter(searched_items)
+
+    # Limit results to improve performance
+    products = products[:12]
+
+    # Prepare product data for JSON response
+    product_data = []
+    for product in products:
+        product_data.append({
+            'id': product.id,
+            'name': product.name,
+            'price': float(product.price),
+            'image_url': product.image.url if product.image else '',
+            'category': product.category.name if product.category else '',
+            'url': reverse('product', args=[product.id]),
+        })
+
+    return JsonResponse({"products": product_data})
 
 # End
 
@@ -481,12 +526,46 @@ class ServiceDetailView(TemplateView):
             percentage = (product_count / total_products * 100) if total_products > 0 else 0
             categories_with_products[category]['percentage'] = percentage
 
+        # Define service-specific content
+        service_content = {}
+        if category_id == 1:  # Groceries
+            service_content = {
+                'title': 'African Grocery Marketplace',
+                'description': 'Discover authentic Nigerian ingredients and food products imported directly from West Africa.',
+                'subtitle': 'Premium Selection',
+                'detail': 'Our grocery selection features premium quality ingredients essential for preparing traditional Nigerian dishes. From spices and seasonings to grains and snacks, we offer everything you need to bring the taste of Nigeria to your kitchen.'
+            }
+        elif category_id == 2:  # Restaurant
+            service_content = {
+                'title': 'Nigerian Restaurant Experience',
+                'description': 'Experience authentic Nigerian cuisine with our delicious dishes prepared with traditional recipes.',
+                'subtitle': 'Authentic Cuisine',
+                'detail': 'Our restaurant offers a variety of traditional Nigerian dishes made with authentic recipes and fresh ingredients. From Jollof Rice to Egusi Soup, we bring the rich flavors of Nigeria to your table.'
+            }
+
+        # Get featured products for this service
+        featured_products = []
+        # Collect all products from all categories of this service
+        all_service_products = []
+        for category, data in categories_with_products.items():
+            all_service_products.extend(data['products'])
+
+        # Get featured products (up to 3)
+        featured_products = [p for p in all_service_products if p.featured][:3]
+
+        # If we don't have enough featured products, add some regular products
+        if len(featured_products) < 3:
+            regular_products = [p for p in all_service_products if p not in featured_products]
+            featured_products.extend(regular_products[:3-len(featured_products)])
+
         return render(request, self.template_name, {
             'service': service,
             'categories_with_products': categories_with_products,
             'total_products': total_products,
             'category_id': category_id,  # Pass category_id to the template
             'service_type': service_type,  # Pass service_type to the template
+            'service_content': service_content,  # Pass service-specific content
+            'featured_products': featured_products,  # Pass featured products from this service
         })
 
 
@@ -496,24 +575,56 @@ class ShopView(TemplateView):
     template_name = 'shop.html'
 
     def get(self, request, *args, **kwargs):
-        # Only load a limited number of products initially for better performance
-        products = Product.objects.all()[:12]  # Load first 12 products
-        categories = Service.objects.all()
-
         # Get the selected category ID from the request
         category_id = request.GET.get('category_id')
+        search_query = request.GET.get('search')
 
-        # If a category is selected, filter products by that category
+        # Start with all products
+        products_query = Product.objects.filter(available=True)
+
+        # Apply category filter if provided
         if category_id:
-            products = Product.objects.filter(category__id=category_id)[:12]
+            try:
+                category_id = int(category_id)
+                products_query = products_query.filter(category__id=category_id)
+            except (ValueError, TypeError):
+                # If not a valid integer, try to match by slug
+                products_query = products_query.filter(category__slug=category_id)
+
+        # Apply search filter if provided
+        if search_query:
+            products_query = products_query.filter(
+                Q(name__icontains=search_query) |
+                Q(description__icontains=search_query)
+            )
+
+        # Get all services (main categories)
+        services = Service.objects.all().prefetch_related('services')
+
+        # Get all categories with their products count
+        categories = Category.objects.all().annotate(
+            product_count=Count('products')
+        )
+
+        # Organize categories by service
+        service_categories = {}
+        for service in services:
+            service_categories[service] = categories.filter(service=service)
+
+        # Only load a limited number of products initially for better performance
+        products = products_query.order_by('-date_created')[:12]
 
         # Retrieve the cart count from the session
         cart_count = request.session.get('cart_count', 0)
 
         context = {
             'products': products,
+            'services': services,
+            'service_categories': service_categories,
             'categories': categories,
+            'selected_category_id': category_id,
             'cart_count': cart_count,
+            'search_query': search_query,
             'is_ajax': False,  # Flag to indicate this is not an AJAX request
         }
 
@@ -527,22 +638,35 @@ def load_more_products(request):
     page = int(request.GET.get('page', 1))
     per_page = int(request.GET.get('per_page', 12))
     category_id = request.GET.get('category_id')
+    search_query = request.GET.get('search')
 
     # Calculate offset
     offset = (page - 1) * per_page
 
     # Query products with pagination
-    products_query = Product.objects.all()
+    products_query = Product.objects.filter(available=True)
 
     # Apply category filter if provided
-    if category_id:
-        products_query = products_query.filter(category__id=category_id)
+    if category_id and category_id != 'all':
+        try:
+            category_id = int(category_id)
+            products_query = products_query.filter(category__id=category_id)
+        except (ValueError, TypeError):
+            # If not a valid integer, try to match by slug
+            products_query = products_query.filter(category__slug=category_id)
+
+    # Apply search filter if provided
+    if search_query:
+        products_query = products_query.filter(
+            Q(name__icontains=search_query) |
+            Q(description__icontains=search_query)
+        )
 
     # Get total count for pagination info
     total_count = products_query.count()
 
     # Apply pagination
-    products = products_query[offset:offset + per_page]
+    products = products_query.order_by('-date_created')[offset:offset + per_page]
 
     # Check if there are more products
     has_more = (offset + per_page) < total_count
@@ -556,9 +680,12 @@ def load_more_products(request):
             'price': float(product.price),
             'image_url': product.image.url if product.image else '',
             'category': product.category.name if product.category else '',
-            'is_on_sale': product.is_on_sale if hasattr(product, 'is_on_sale') else False,
-            'regular_price': float(product.regular_price) if hasattr(product, 'regular_price') and product.regular_price else None,
+            'category_id': product.category.id if product.category else None,
+            'is_on_sale': product.is_on_sale(),
+            'regular_price': float(product.price) if product.is_on_sale() else None,
+            'sale_price': float(product.sale_price) if product.is_on_sale() else None,
             'url': reverse('product', args=[product.id]),
+            'description': product.description[:100] + '...' if len(product.description) > 100 else product.description,
         })
 
     # Return JSON response
@@ -582,64 +709,138 @@ class ProductDetailView(View):
 
 # Save guest email to session and database
 def save_guest_email(request):
+    """
+    Save guest email to session and create a Customer record if needed.
+    This function handles email collection for guest users and ensures
+    they only need to provide their email once per session.
+    """
     if request.method == 'POST':
         email = request.POST.get('email')
         subscribe = request.POST.get('subscribe') == 'true'
 
-        if email:
-            # Store email in session
-            request.session['guest_email'] = email
+        if not email:
+            return JsonResponse({'success': False, 'message': 'No email provided'})
 
-            # Log the email collection
-            logger.info(f"Email collected: {email}, Subscribe: {subscribe}")
+        # Store email in session (this ensures it's available across the site)
+        request.session['guest_email'] = email
+        request.session['email_collected'] = True  # Flag to indicate email has been collected
+        request.session.modified = True  # Ensure session is saved
 
-            # Check if we need to create a guest customer
-            try:
-                guest_customer = Customer.objects.filter(email=email).first()
+        # Log the email collection
+        logger.info(f"Email collected: {email}, Subscribe: {subscribe}")
 
-                if not guest_customer:
-                    # Create a new guest customer
+        # Check if we need to create a guest customer
+        try:
+            # Try to get existing customer with this email
+            guest_customer = Customer.objects.filter(email=email).first()
+
+            if not guest_customer:
+                # Extract name from email (if possible)
+                email_name = email.split('@')[0]
+                # Capitalize and split by common separators
+                name_parts = email_name.replace('.', ' ').replace('_', ' ').replace('-', ' ').title().split()
+
+                # Set default first and last name
+                first_name = "Customer"
+                last_name = ""
+
+                # If we have name parts, use them
+                if len(name_parts) >= 2:
+                    first_name = name_parts[0]
+                    last_name = ' '.join(name_parts[1:])
+                elif len(name_parts) == 1:
+                    first_name = name_parts[0]
+
+                try:
+                    # Create a new guest customer with better naming
                     guest_customer = Customer.objects.create(
                         email=email,
-                        first_name="Guest",
-                        last_name="User",
+                        first_name=first_name,
+                        last_name=last_name,
                         is_guest=True,
                         phone_number="",  # Empty string as placeholder
                         date_joined=timezone.now()
                     )
                     logger.info(f"Created new guest customer with email: {email}")
-                elif guest_customer.is_guest:
-                    # Update last activity for existing guest customer
-                    guest_customer.date_joined = timezone.now()
-                    guest_customer.save()
-                    logger.info(f"Updated existing guest customer with email: {email}")
 
-                # If subscribe is checked, add to newsletter subscribers
-                if subscribe:
-                    # Check if we have a Newsletter model, if not, we'll create one
-                    try:
-                        from .models import Newsletter
-                        newsletter, created = Newsletter.objects.get_or_create(
-                            email=email,
-                            defaults={'subscribed_at': timezone.now()}
-                        )
-                        if created:
-                            logger.info(f"Added {email} to newsletter subscribers")
-                    except ImportError:
-                        # Newsletter model doesn't exist, log this for future implementation
-                        logger.info(f"Newsletter subscription requested for {email}, but Newsletter model not found")
+                    # Store customer ID in session for future reference
+                    request.session['guest_customer_id'] = guest_customer.id
+                    request.session.modified = True
 
+                except IntegrityError:
+                    # Handle duplicate email error gracefully
+                    logger.info(f"Email already exists: {email}")
+
+                    # Get the existing customer
+                    guest_customer = Customer.objects.filter(email=email).first()
+
+                    if guest_customer:
+                        # Store customer ID in session
+                        request.session['guest_customer_id'] = guest_customer.id
+                        request.session.modified = True
+
+                        # Check if this is a registered user's email
+                        if not guest_customer.is_guest and guest_customer.user:
+                            return JsonResponse({
+                                'success': True,
+                                'message': 'This email is already registered. Would you like to log in?',
+                                'registered': True,
+                                'customer_id': str(guest_customer.id)
+                            })
+            elif guest_customer.is_guest:
+                # Update last activity for existing guest customer
+                guest_customer.date_joined = timezone.now()
+                guest_customer.save()
+                logger.info(f"Updated existing guest customer with email: {email}")
+
+                # Store customer ID in session
+                request.session['guest_customer_id'] = guest_customer.id
+                request.session.modified = True
+            else:
+                # This is a registered user's email
+                if guest_customer.user:
+                    return JsonResponse({
+                        'success': True,
+                        'message': 'This email is already registered. Would you like to log in?',
+                        'registered': True,
+                        'customer_id': str(guest_customer.id)
+                    })
+
+            # If subscribe is checked, add to newsletter subscribers
+            if subscribe:
+                # Add to newsletter subscribers
+                try:
+                    newsletter, created = Newsletter.objects.get_or_create(
+                        email=email,
+                        defaults={'subscribed_at': timezone.now()}
+                    )
+                    if created:
+                        logger.info(f"Added {email} to newsletter subscribers")
+                    else:
+                        logger.info(f"Email {email} already subscribed to newsletter")
+                except Exception as newsletter_error:
+                    logger.error(f"Error adding to newsletter: {str(newsletter_error)}")
+
+            # Return success response with customer ID if available
+            if guest_customer:
                 return JsonResponse({
                     'success': True,
                     'message': 'Email saved successfully',
                     'customer_id': str(guest_customer.id)
                 })
-            except Exception as e:
-                logger.error(f"Error processing guest email: {str(e)}")
-                # Still return success since we saved the email to session
-                return JsonResponse({'success': True, 'message': 'Email saved to session but encountered an error'})
-        else:
-            return JsonResponse({'success': False, 'message': 'No email provided'})
+            else:
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Email saved to session successfully'
+                })
+        except Exception as e:
+            logger.error(f"Error processing guest email: {str(e)}")
+            # Still return success since we saved the email to session
+            return JsonResponse({
+                'success': True,
+                'message': 'Email saved to session successfully',
+                'warning': 'There was an issue creating your customer profile, but you can continue shopping.'
+            })
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 # 9. Add to Wishlist
@@ -653,36 +854,95 @@ def add_to_wishlist(request):
 
         if request.user.is_authenticated:
             # For authenticated users
-            wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-            wishlist.add_product(product)
-            return JsonResponse({'success': True, 'message': 'Product added to wishlist'})
+            try:
+                wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+                wishlist.add_product(product)
+                return JsonResponse({'success': True, 'message': 'Product added to wishlist'})
+            except Exception as e:
+                logger.error(f"Error adding to wishlist for authenticated user: {str(e)}")
+                return JsonResponse({'success': False, 'message': 'Error adding to wishlist. Please try again.'})
         elif guest_email:
             # For guest users with email
             try:
-                # Check if we need to create a guest customer
-                guest_customer = Customer.objects.filter(email=guest_email, is_guest=True).first()
-                if not guest_customer:
-                    # Create a new guest customer
-                    guest_customer = Customer.objects.create(
-                        email=guest_email,
-                        first_name="Guest",
-                        last_name="User",
-                        is_guest=True
-                    )
-
                 # Store email in session
                 request.session['guest_email'] = guest_email
 
-                # Create a wishlist entry for this guest
-                Wishlist.objects.create(
-                    user=None,  # No user for guests
-                    product=product,
-                    guest_email=guest_email
-                )
+                # Check if we need to create a guest customer
+                guest_customer = Customer.objects.filter(email=guest_email).first()
 
-                return JsonResponse({'success': True, 'message': 'Product added to wishlist'})
+                if not guest_customer:
+                    # Extract name from email (if possible)
+                    email_name = guest_email.split('@')[0]
+                    # Capitalize and split by common separators
+                    name_parts = email_name.replace('.', ' ').replace('_', ' ').replace('-', ' ').title().split()
+
+                    # Set default first and last name
+                    first_name = "Customer"
+                    last_name = ""
+
+                    # If we have name parts, use them
+                    if len(name_parts) >= 2:
+                        first_name = name_parts[0]
+                        last_name = ' '.join(name_parts[1:])
+                    elif len(name_parts) == 1:
+                        first_name = name_parts[0]
+
+                    try:
+                        # Create a new guest customer with better naming
+                        guest_customer = Customer.objects.create(
+                            email=guest_email,
+                            first_name=first_name,
+                            last_name=last_name,
+                            is_guest=True,
+                            phone_number="",  # Empty string as placeholder
+                            date_joined=timezone.now()
+                        )
+                        logger.info(f"Created new guest customer with email: {guest_email}")
+                    except IntegrityError:
+                        # Handle duplicate email error gracefully
+                        messages.warning(request, "This email is already registered in our system.")
+                        # Try to get the customer again (it must exist if we got an integrity error)
+                        guest_customer = Customer.objects.filter(email=guest_email).first()
+                        logger.info(f"Attempted to create duplicate customer with email: {guest_email}")
+                elif guest_customer.is_guest:
+                    # Update last activity for existing guest customer
+                    guest_customer.date_joined = timezone.now()
+                    guest_customer.save()
+                    logger.info(f"Updated existing guest customer with email: {guest_email}")
+
+                # Create a wishlist entry for this guest
+                try:
+                    # Check if this product is already in the wishlist for this email
+                    existing_wishlist = Wishlist.objects.filter(
+                        guest_email=guest_email,
+                        product=product
+                    ).first()
+
+                    if existing_wishlist:
+                        return JsonResponse({'success': True, 'message': 'Product is already in your wishlist'})
+
+                    # Create new wishlist entry
+                    if guest_customer:
+                        # If we have a customer record, associate the wishlist with it
+                        Wishlist.objects.create(
+                            customer=guest_customer,
+                            product=product,
+                            guest_email=guest_email
+                        )
+                    else:
+                        # Fallback to just using the email
+                        Wishlist.objects.create(
+                            user=None,  # No user for guests
+                            product=product,
+                            guest_email=guest_email
+                        )
+
+                    return JsonResponse({'success': True, 'message': 'Product added to wishlist'})
+                except Exception as wishlist_error:
+                    logger.error(f"Error creating wishlist entry: {str(wishlist_error)}")
+                    return JsonResponse({'success': False, 'message': 'Error adding to wishlist. Please try again.'})
             except Exception as e:
-                print(f"Error adding to wishlist for guest: {str(e)}")
+                logger.error(f"Error adding to wishlist for guest: {str(e)}")
                 return JsonResponse({'success': False, 'message': 'Error adding to wishlist. Please try again.'})
         else:
             # No email provided and not logged in
@@ -726,6 +986,11 @@ def get_cart_items(request):
 
 # This view handles adding products to the cart for both logged-in and non-logged-in users
 def add_to_cart(request, product_id):
+    """
+    Add a product to the cart for both authenticated and guest users.
+    This function handles the cart creation process and ensures proper
+    association with either a User or a Customer record.
+    """
     product = get_object_or_404(Product, id=product_id)
 
     # Use session key for non-authenticated users
@@ -745,28 +1010,66 @@ def add_to_cart(request, product_id):
             quantity = int(request.POST.get('quantity', 1))
 
             # Get email if provided (for guest users)
-            guest_email = request.POST.get('email')
+            guest_email = request.POST.get('email') or request.session.get('guest_email')
 
             # Store email in session if provided
             if guest_email and not request.user.is_authenticated:
                 request.session['guest_email'] = guest_email
+                request.session['email_collected'] = True
+                request.session.modified = True
 
-                # Check if we need to create a guest customer
-                guest_customer = None
+            # Get or create guest customer if email is provided
+            guest_customer = None
+            if guest_email and not request.user.is_authenticated:
                 try:
-                    guest_customer = Customer.objects.filter(email=guest_email, is_guest=True).first()
+                    # Try to get existing customer with this email
+                    guest_customer = Customer.objects.filter(email=guest_email).first()
+
+                    # If no customer exists, create one
                     if not guest_customer:
-                        # Create a new guest customer
+                        # Extract name from email (if possible)
+                        email_name = guest_email.split('@')[0]
+                        # Capitalize and split by common separators
+                        name_parts = email_name.replace('.', ' ').replace('_', ' ').replace('-', ' ').title().split()
+
+                        # Set default first and last name
+                        first_name = "Customer"
+                        last_name = ""
+
+                        # If we have name parts, use them
+                        if len(name_parts) >= 2:
+                            first_name = name_parts[0]
+                            last_name = ' '.join(name_parts[1:])
+                        elif len(name_parts) == 1:
+                            first_name = name_parts[0]
+
+                        # Create the customer
                         guest_customer = Customer.objects.create(
                             email=guest_email,
-                            first_name="Guest",
-                            last_name="User",
-                            is_guest=True
+                            first_name=first_name,
+                            last_name=last_name,
+                            is_guest=True,
+                            date_joined=timezone.now()
                         )
+                        logger.info(f"Created new guest customer with email: {guest_email}")
+
+                        # Store customer ID in session
+                        request.session['guest_customer_id'] = guest_customer.id
+                        request.session.modified = True
+                    elif guest_customer.is_guest:
+                        # Update last activity for existing guest customer
+                        guest_customer.date_joined = timezone.now()
+                        guest_customer.save()
+
+                        # Store customer ID in session
+                        request.session['guest_customer_id'] = guest_customer.id
+                        request.session.modified = True
                 except Exception as e:
-                    print(f"Error creating guest customer: {str(e)}")
+                    logger.error(f"Error processing guest customer: {str(e)}")
+                    # Continue without a customer - we'll handle this in the cart creation
 
             # Check if the product is already in the cart
+            cart_item = None
             if request.user.is_authenticated:
                 cart_item = ShopCart.objects.filter(
                     user=request.user,
@@ -774,11 +1077,20 @@ def add_to_cart(request, product_id):
                     paid_order=False
                 ).first()
             else:
+                # Try to find cart item by session key
                 cart_item = ShopCart.objects.filter(
                     session_key=session_key,
                     product=product,
                     paid_order=False
                 ).first()
+
+                # If guest customer exists, also check by customer
+                if not cart_item and guest_customer:
+                    cart_item = ShopCart.objects.filter(
+                        customer=guest_customer,
+                        product=product,
+                        paid_order=False
+                    ).first()
 
             # Update or create the cart item
             if cart_item:
@@ -801,19 +1113,38 @@ def add_to_cart(request, product_id):
                             paid_order=False,
                             basket_no=basket_no
                         )
+                        message = 'Product added to cart successfully!'
                     except Exception as auth_e:
-                        print(f"Error creating cart for authenticated user: {str(auth_e)}")
+                        logger.error(f"Error creating cart for authenticated user: {str(auth_e)}")
                         return JsonResponse({
                             'success': False,
                             'message': 'Unable to add item to cart. Please try again later.',
                             'error': 'Database error'
                         }, status=500)
                 else:
-                    # For guest users with email
+                    # For guest users
                     success = False
 
-                    # Try to create cart with guest email if provided
-                    if guest_email:
+                    # First try: Create cart with customer if available
+                    if guest_customer:
+                        try:
+                            ShopCart.objects.create(
+                                user=None,
+                                customer=guest_customer,
+                                session_key=session_key,
+                                product=product,
+                                quantity=quantity,
+                                paid_order=False,
+                                basket_no=basket_no
+                            )
+                            success = True
+                            message = 'Product added to cart successfully!'
+                            logger.info(f"Added product to cart with customer: {guest_customer.email}")
+                        except Exception as e:
+                            logger.error(f"Error creating cart with customer: {str(e)}")
+
+                    # Second try: Create cart with session key only
+                    if not success:
                         try:
                             ShopCart.objects.create(
                                 user=None,
@@ -825,64 +1156,26 @@ def add_to_cart(request, product_id):
                             )
                             success = True
                             message = 'Product added to cart successfully!'
+                            logger.info("Added product to cart with session key only")
                         except Exception as e:
-                            print(f"Error creating cart with guest email: {str(e)}")
+                            logger.error(f"Error creating cart with session key: {str(e)}")
 
-                    # Approach 1: Try with a dummy user
-                    if not success:
-                        try:
-                            # Get or create a dummy user for guest carts
-                            dummy_user, created = User.objects.get_or_create(
-                                username='guest_user',
-                                defaults={
-                                    'email': 'guest@example.com',
-                                    'first_name': 'Guest',
-                                    'last_name': 'User',
-                                    'is_active': False
-                                }
-                            )
-
-                            # Create the cart item with the dummy user
-                            ShopCart.objects.create(
-                                user=dummy_user,
-                                session_key=session_key,
-                                product=product,
-                                quantity=quantity,
-                                paid_order=False,
-                                basket_no=basket_no
-                            )
-                            success = True
-                        except Exception as e:
-                            print(f"Approach 1 failed: {str(e)}")
-
-                    # Approach 2: Try with user=None
-                    if not success:
-                        try:
-                            ShopCart.objects.create(
-                                user=None,
-                                session_key=session_key,
-                                product=product,
-                                quantity=quantity,
-                                paid_order=False,
-                                basket_no=basket_no
-                            )
-                            success = True
-                        except Exception as e:
-                            print(f"Approach 2 failed: {str(e)}")
-
-                    # Approach 3: Try raw SQL
+                    # Last resort: Try with direct SQL
                     if not success:
                         try:
                             from django.db import connection
                             with connection.cursor() as cursor:
+                                now = timezone.now().strftime('%Y-%m-%d %H:%M:%S')
                                 cursor.execute("""
-                                    INSERT INTO shopcart
-                                    (product_id, session_key, quantity, paid_order, basket_no, user_id)
-                                    VALUES (?, ?, ?, ?, ?, NULL)
-                                """, [product.id, session_key, quantity, False, basket_no])
+                                    INSERT INTO afriapp_shopcart
+                                    (product_id, session_key, quantity, paid_order, basket_no, date_added, last_updated)
+                                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                                """, [product.id, session_key, quantity, False, basket_no, now, now])
                             success = True
+                            message = 'Product added to cart successfully!'
+                            logger.info("Added product to cart using direct SQL")
                         except Exception as e:
-                            print(f"Approach 3 failed: {str(e)}")
+                            logger.error(f"Error creating cart with SQL: {str(e)}")
 
                     # If all approaches failed, return an error
                     if not success:
@@ -892,8 +1185,6 @@ def add_to_cart(request, product_id):
                             'error': 'All approaches failed'
                         }, status=500)
 
-                message = 'Product added to cart successfully!'
-
             # Calculate the total number of items in the cart
             try:
                 if request.user.is_authenticated:
@@ -902,16 +1193,28 @@ def add_to_cart(request, product_id):
                         paid_order=False
                     ).count()
                 else:
+                    # Count items by session key
                     cart_count = ShopCart.objects.filter(
                         session_key=session_key,
                         paid_order=False
                     ).count()
+
+                    # If guest customer exists, also count items by customer
+                    if guest_customer:
+                        customer_cart_count = ShopCart.objects.filter(
+                            customer=guest_customer,
+                            paid_order=False
+                        ).count()
+
+                        # Use the larger count (to avoid missing items)
+                        cart_count = max(cart_count, customer_cart_count)
             except Exception as count_error:
-                print(f"Error counting cart items: {str(count_error)}")
+                logger.error(f"Error counting cart items: {str(count_error)}")
                 cart_count = 0  # Default to 0 if there's an error
 
             # Store cart count in session for easy access
             request.session['cart_count'] = cart_count
+            request.session.modified = True
 
             # If the request was an AJAX request, return a JSON response
             if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
@@ -926,7 +1229,7 @@ def add_to_cart(request, product_id):
 
         except Exception as e:
             # Log the error for debugging
-            print(f"Error adding to cart: {str(e)}")
+            logger.error(f"Error adding to cart: {str(e)}")
             return JsonResponse({
                 'success': False,
                 'message': 'An error occurred while adding the product to cart. Please try again.',
@@ -939,16 +1242,88 @@ def add_to_cart(request, product_id):
 # 12. Cart View
 class CartView(View):
     def get(self, request):
+        """
+        Display the cart page with all items for both authenticated and guest users.
+        For guest users, combines items from both session and customer record if available.
+        """
         # Get cart items based on user authentication status
         if request.user.is_authenticated:
             # For authenticated users, get cart by user
             cart = ShopCart.objects.filter(user=request.user, paid_order=False)
+
+            # Check if there are any guest items to merge
+            session_key = request.session.session_key
+            if session_key:
+                # Find any items in the session that aren't associated with the user
+                guest_items = ShopCart.objects.filter(
+                    user=None,
+                    session_key=session_key,
+                    paid_order=False
+                )
+
+                # Transfer guest items to the user's account
+                for item in guest_items:
+                    # Check if this product is already in the user's cart
+                    existing_item = cart.filter(product=item.product).first()
+
+                    if existing_item:
+                        # Update quantity if the product already exists
+                        existing_item.quantity += item.quantity
+                        existing_item.save()
+                        # Delete the guest item
+                        item.delete()
+                    else:
+                        # Transfer ownership to the user
+                        item.user = request.user
+                        item.customer = None  # Clear any guest customer association
+                        item.save()
+
+                # Refresh the cart queryset after merging
+                cart = ShopCart.objects.filter(user=request.user, paid_order=False)
         else:
-            # For guest users, get cart by session key
+            # For guest users, we need to check both session and customer
             session_key = request.session.session_key
             if not session_key:
                 session_key = request.session.create()
+
+            # Start with session-based cart items
             cart = ShopCart.objects.filter(user=None, session_key=session_key, paid_order=False)
+
+            # Check if we have a guest customer ID in the session
+            guest_customer_id = request.session.get('guest_customer_id')
+            if guest_customer_id:
+                try:
+                    # Get the customer
+                    guest_customer = Customer.objects.get(id=guest_customer_id)
+
+                    # Get customer-based cart items
+                    customer_cart = ShopCart.objects.filter(
+                        customer=guest_customer,
+                        paid_order=False
+                    )
+
+                    # Merge the two querysets if needed
+                    if customer_cart.exists():
+                        # Use a set to track products we've already seen
+                        seen_products = set(item.product_id for item in cart)
+
+                        # Add customer items that aren't already in the session cart
+                        for item in customer_cart:
+                            if item.product_id not in seen_products:
+                                cart = cart | ShopCart.objects.filter(id=item.id)
+                            else:
+                                # If the product is already in the cart, we should merge quantities
+                                session_item = cart.get(product_id=item.product_id)
+                                session_item.quantity += item.quantity
+                                session_item.save()
+                                # Delete the duplicate customer item
+                                item.delete()
+                except Customer.DoesNotExist:
+                    # If the customer doesn't exist, remove the ID from session
+                    del request.session['guest_customer_id']
+                    request.session.modified = True
+                except Exception as e:
+                    logger.error(f"Error merging guest carts: {str(e)}")
 
         # Calculate total price for each cart item
         for item in cart:
@@ -967,6 +1342,10 @@ class CartView(View):
         vat = Decimal('0.075') * subtotal
         total = subtotal + vat
 
+        # Update cart count in session
+        request.session['cart_count'] = cart.count()
+        request.session.modified = True
+
         # Prepare the context for the template
         context = {
             'cart': cart,
@@ -981,51 +1360,73 @@ class CartView(View):
 # ============================================================================
 def increase_quantity(request, item_id):
     if request.method == 'POST':
-        # Get cart item based on user authentication status
-        if request.user.is_authenticated:
-            cart_item = get_object_or_404(ShopCart, id=item_id, user=request.user)
-        else:
-            session_key = request.session.session_key
-            cart_item = get_object_or_404(ShopCart, id=item_id, session_key=session_key, user=None)
+        try:
+            # Get cart item based on user authentication status
+            if request.user.is_authenticated:
+                cart_item = get_object_or_404(ShopCart, id=item_id, user=request.user)
+            else:
+                session_key = request.session.session_key
+                cart_item = get_object_or_404(ShopCart, id=item_id, session_key=session_key, user=None)
 
-        cart_item.quantity += 1
-        cart_item.save()
+            # Increase quantity by exactly 1
+            cart_item.quantity += 1
+            cart_item.save()
 
-        # Calculate updated values
-        subtotal, vat, total = calculate_cart_summary(request)
+            # Calculate updated values
+            subtotal, vat, total = calculate_cart_summary(request)
 
-        return JsonResponse({
-            'new_quantity': cart_item.quantity,
-            'new_total_price': round(cart_item.calculate_total_price(), 2),
-            'subtotal': round(float(subtotal), 2),
-            'vat': round(float(vat), 2),
-            'total': round(float(total), 2),
-        })
+            return JsonResponse({
+                'success': True,
+                'new_quantity': cart_item.quantity,
+                'new_total_price': round(cart_item.calculate_total_price(), 2),
+                'subtotal': round(float(subtotal), 2),
+                'vat': round(float(vat), 2),
+                'total': round(float(total), 2),
+            })
+        except Exception as e:
+            logger.error(f"Error increasing quantity: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'message': 'Failed to increase quantity. Please try again.'
+            }, status=500)
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
 def decrease_quantity(request, item_id):
     if request.method == 'POST':
-        # Get cart item based on user authentication status
-        if request.user.is_authenticated:
-            cart_item = get_object_or_404(ShopCart, id=item_id, user=request.user)
-        else:
-            session_key = request.session.session_key
-            cart_item = get_object_or_404(ShopCart, id=item_id, session_key=session_key, user=None)
+        try:
+            # Get cart item based on user authentication status
+            if request.user.is_authenticated:
+                cart_item = get_object_or_404(ShopCart, id=item_id, user=request.user)
+            else:
+                session_key = request.session.session_key
+                cart_item = get_object_or_404(ShopCart, id=item_id, session_key=session_key, user=None)
 
-        if cart_item.quantity > 1:
-            cart_item.quantity -= 1
-            cart_item.save()
+            # Only decrease if quantity is greater than 1
+            if cart_item.quantity > 1:
+                # Decrease quantity by exactly 1
+                cart_item.quantity -= 1
+                cart_item.save()
+            else:
+                # If quantity is already 1, don't decrease but don't return an error
+                logger.info(f"Attempted to decrease quantity below 1 for cart item {item_id}")
 
-        # Calculate updated values
-        subtotal, vat, total = calculate_cart_summary(request)
+            # Calculate updated values
+            subtotal, vat, total = calculate_cart_summary(request)
 
-        return JsonResponse({
-            'new_quantity': cart_item.quantity,
-            'new_total_price': round(cart_item.calculate_total_price(), 2),
-            'subtotal': round(float(subtotal), 2),
-            'vat': round(float(vat), 2),
-            'total': round(float(total), 2),
-        })
+            return JsonResponse({
+                'success': True,
+                'new_quantity': cart_item.quantity,
+                'new_total_price': round(cart_item.calculate_total_price(), 2),
+                'subtotal': round(float(subtotal), 2),
+                'vat': round(float(vat), 2),
+                'total': round(float(total), 2),
+            })
+        except Exception as e:
+            logger.error(f"Error decreasing quantity: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'message': 'Failed to decrease quantity. Please try again.'
+            }, status=500)
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
 def calculate_cart_summary(request):
@@ -1407,19 +1808,34 @@ class CompletedPaymentView(View):
                 # Calculate cart summary
                 subtotal, vat, total = calculate_cart_summary(request)
 
-                # Create a guest customer profile
-                guest_customer = Customer.objects.create(
-                    first_name=payment.first_name,
-                    last_name=payment.last_name,
-                    email=payment.email,
-                    phone_number=payment.phone,
-                    address=payment.address,
-                    city=payment.city,
-                    state=payment.state,
-                    postal_code=payment.postal_code,
-                    country=payment.country,
-                    is_guest=True
-                )
+                # Check if we already have a customer with this email
+                guest_customer = Customer.objects.filter(email=payment.email).first()
+
+                if not guest_customer:
+                    # Create a guest customer profile
+                    guest_customer = Customer.objects.create(
+                        first_name=payment.first_name,
+                        last_name=payment.last_name,
+                        email=payment.email,
+                        phone_number=payment.phone,
+                        address=payment.address,
+                        city=payment.city,
+                        state=payment.state,
+                        postal_code=payment.postal_code,
+                        country=payment.country,
+                        is_guest=True
+                    )
+                else:
+                    # Update existing customer with payment info
+                    guest_customer.first_name = payment.first_name
+                    guest_customer.last_name = payment.last_name
+                    guest_customer.phone_number = payment.phone
+                    guest_customer.address = payment.address
+                    guest_customer.city = payment.city
+                    guest_customer.state = payment.state
+                    guest_customer.postal_code = payment.postal_code
+                    guest_customer.country = payment.country
+                    guest_customer.save()
 
                 # Create a new order and link it to the payment record
                 order = Order.objects.create(
@@ -1535,27 +1951,39 @@ class UpdateProfile(View):
 from django.db.models import Q
 
 def search_products(request):
+    """
+    Search products by name or description.
+    Handles both GET and POST requests for backward compatibility.
+    """
+    # Get search parameters from either GET or POST
     if request.method == "POST":
-        items = request.POST.get("search", "")
+        search_term = request.POST.get("search", "")
         category_id = request.POST.get("category", None)
-
-        # Use __icontains for case-insensitive search on product name and description
-        searched_items = Q(name__icontains=items) | Q(description__icontains=items)
-
-        # If a category is selected, filter by that category as well
-        if category_id:
-            searched_goods = Product.objects.filter(searched_items, category__id=category_id)
-        else:
-            searched_goods = Product.objects.filter(searched_items)
-
-        # Create context dictionary properly
-        context = {
-            "items": items,
-            "searched_goods": searched_goods,
-        }
-        return render(request, "search.html", context)
     else:
-        return render(request, "search.html")
+        search_term = request.GET.get("search", "")
+        category_id = request.GET.get("category", None)
+
+    # Use __icontains for case-insensitive search on product name and description
+    searched_items = Q(name__icontains=search_term) | Q(description__icontains=search_term)
+
+    # If a category is selected, filter by that category as well
+    if category_id and category_id != "All Categories":
+        try:
+            # Try to convert to integer for ID-based lookup
+            category_id = int(category_id)
+            searched_goods = Product.objects.filter(searched_items, category__id=category_id)
+        except (ValueError, TypeError):
+            # If not an integer, try to match by name
+            searched_goods = Product.objects.filter(searched_items, category__name=category_id)
+    else:
+        searched_goods = Product.objects.filter(searched_items)
+
+    # Create context dictionary properly
+    context = {
+        "items": search_term,
+        "searched_goods": searched_goods,
+    }
+    return render(request, "search.html", context)
 
 
 

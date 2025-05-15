@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block title %}Shop Products{% endblock %}
 {% block content %}
@@ -22,11 +23,25 @@
     .quantity-control input {
         width: 60px;
         text-align: center;
+        transition: all 0.3s ease;
     }
 
     .quantity-button {
         border-radius: 5px;
         width: 40px;
+        transition: all 0.2s ease;
+    }
+
+    .quantity-button:disabled,
+    .quantity-button.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .quantity-button:not(:disabled):hover {
+        background-color: #008751;
+        color: white;
+        transform: translateY(-2px);
     }
 
     .add-to-cart-button {
@@ -39,11 +54,320 @@
         overflow: hidden;
         background-color: #f8f9fa;
     }
+
+    /* Quantity change animation */
+    @keyframes quantityPulse {
+        0% { transform: scale(1); background-color: white; }
+        50% { transform: scale(1.1); background-color: rgba(0, 135, 81, 0.1); }
+        100% { transform: scale(1); background-color: white; }
+    }
+
+    .quantity-changed {
+        animation: quantityPulse 0.3s ease;
+    }
+
+    /* Shop Hero Section Styles */
+    .shop-hero {
+        background-color: #f8f9fa;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .shop-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(to right, #008751, #F7C600);
+    }
+
+    .shop-title {
+        font-family: 'Playfair Display', serif;
+        color: #2E3A23;
+        position: relative;
+        display: inline-block;
+    }
+
+    .shop-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 80px;
+        height: 4px;
+        background-color: #008751;
+    }
+
+    .shop-features {
+        display: flex;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background-color: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    .feature-item i {
+        color: #008751;
+        font-size: 1.2rem;
+    }
+
+    .shop-hero-image {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+    .shop-hero-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(45deg, #008751, #20c997);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-weight: 700;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transform: rotate(5deg);
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(5deg); }
+        50% { transform: translateY(-10px) rotate(5deg); }
+    }
+
+    @media (max-width: 767px) {
+        .shop-features {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .shop-hero-badge {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Featured Products Section Styles */
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        color: #2E3A23;
+        font-size: 1.8rem;
+        position: relative;
+        margin-bottom: 0;
+    }
+
+    .section-decoration {
+        height: 3px;
+        width: 100px;
+        background: linear-gradient(to right, #008751, #F7C600);
+        margin-left: 20px;
+    }
+
+    .featured-product-card {
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        transition: all 0.4s ease;
+        height: 100%;
+    }
+
+    .featured-product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 30px rgba(0,0,0,0.12);
+    }
+
+    .featured-product-image {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+    }
+
+    .featured-product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .featured-product-card:hover .featured-product-image img {
+        transform: scale(1.1);
+    }
+
+    .featured-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: linear-gradient(45deg, #008751, #20c997);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .featured-product-content {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .featured-product-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+        color: #2E3A23;
+    }
+
+    .featured-product-description {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 15px;
+        flex-grow: 1;
+    }
+
+    .featured-product-price {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #008751;
+        margin-bottom: 15px;
+        padding: 5px 12px;
+        background-color: rgba(0,135,81,0.1);
+        border-radius: 8px;
+        display: inline-block;
+    }
+
+    .btn-view-product {
+        background-color: #008751;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        flex-grow: 1;
+    }
+
+    .btn-view-product:hover {
+        background-color: #006b3e;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .btn-add-to-cart {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background-color: #F7C600;
+        color: #2E3A23;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .btn-add-to-cart:hover {
+        transform: translateY(-3px) rotate(5deg);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    /* Category Highlights Styles */
+    .category-highlight-card {
+        height: 150px;
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+        background: linear-gradient(45deg, rgba(0,135,81,0.8), rgba(247,198,0,0.8));
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        cursor: pointer;
+        transition: all 0.4s ease;
+    }
+
+    .category-highlight-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+    }
+
+    .category-highlight-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .category-highlight-content h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+        text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .category-highlight-content p {
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+        opacity: 0.9;
+    }
+
+    .category-link {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: white;
+        color: #008751;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+
+    .category-highlight-card:hover .category-link {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Products Section Styles */
+    .products-section {
+        margin-bottom: 40px;
+    }
 </style>
 
 <body>
     <!-- BREADCRUMB -->
-    <nav class="py-5">
+    <nav class="py-3">
         <div class="container">
             <ol class="breadcrumb mb-0 fs-xs text-gray-400">
                 <li class="breadcrumb-item">
@@ -53,6 +377,39 @@
             </ol>
         </div>
     </nav>
+
+<!-- SHOP HERO SECTION -->
+<section class="py-6 bg-light shop-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 col-md-6 mb-5 mb-md-0">
+                <h1 class="display-4 mb-4 shop-title">Shop</h1>
+                <div class="shop-features">
+                    <div class="feature-item">
+                        <i class="fas fa-shipping-fast"></i>
+                        <span>Fast Shipping</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-certificate"></i>
+                        <span>Authentic Products</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-undo"></i>
+                        <span>Easy Returns</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="shop-hero-image">
+                    <img src="{% static 'img/afrocommerce/shop-hero.jpg' %}" alt="Nigerian Food Products" class="img-fluid rounded shadow-lg" onerror="this.src='{% static 'img/placeholder.png' %}'">
+                    <div class="shop-hero-badge">
+                        <span>Premium Quality</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- CONTENT -->
 <div class="container-fluid">
@@ -64,41 +421,68 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSidenavLeftCollapse" aria-controls="navbarSidenavLeftCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div id="navbarSidenavLeftCollapse">
-                    <ul class="navbar-nav fs-lg mb-6 my-lg-12 mx-sm-3" id="sidenavParent">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" id="all-products" data-category-id="">All Products</a>
-                        </li>
-                        {% for category in categories %}
+                <div id="navbarSidenavLeftCollapse" class="collapse navbar-collapse">
+                    <div class="category-sidebar">
+                        <h5 class="sidebar-heading">Categories</h5>
+                        <ul class="navbar-nav fs-lg mb-6 my-lg-4 mx-sm-3" id="sidenavParent">
                             <li class="nav-item">
-                                <a class="nav-link dropdown-toggle"
-                                   data-bs-toggle="collapse"
-                                   href="#category-{{ category.id }}"
-                                   data-category-id="{{ category.id }}"
-                                   class="category-link">
-                                   {{ category.name }}
+                                <a class="nav-link category-link active" href="#" id="all-products" data-category-id="all">
+                                    <i class="fas fa-th-large me-2"></i> All Products
                                 </a>
+                            </li>
 
-                                <div class="collapse" id="category-{{ category.id }}" data-bs-parent="#sidenavParent">
-                                    <div class="row">
-                                        <div class="col-12 py-3">
-                                            <ul class="list-styled fs-base">
-                                                {% for subcategory in category.services.all %}
-                                                    <li class="list-styled-item">
-                                                        <a class="list-styled-link category-link" href="#" data-category-id="{{ subcategory.id }}">
-                                                            {{ subcategory.name }}
-                                                        </a>
-                                                    </li>
-                                                {% empty %}
-                                                    <li class="list-styled-item">No subcategories available</li>
-                                                {% endfor %}
-                                            </ul>
+                            <!-- Services (Main Categories) -->
+                            {% for service in services %}
+                                <li class="nav-item">
+                                    <a class="nav-link dropdown-toggle"
+                                       data-bs-toggle="collapse"
+                                       href="#service-{{ service.id }}"
+                                       data-service-id="{{ service.id }}">
+                                       <i class="fas fa-tag me-2"></i> {{ service.name }}
+                                    </a>
+
+                                    <div class="collapse" id="service-{{ service.id }}" data-bs-parent="#sidenavParent">
+                                        <div class="row">
+                                            <div class="col-12 py-2">
+                                                <ul class="list-styled fs-base subcategory-list">
+                                                    {% for category in service_categories|get_item:service %}
+                                                        <li class="list-styled-item">
+                                                            <a class="list-styled-link category-link"
+                                                               href="#"
+                                                               data-category-id="{{ category.id }}">
+                                                                {{ category.name }}
+                                                                <span class="badge bg-light text-dark ms-2">{{ category.product_count }}</span>
+                                                            </a>
+                                                        </li>
+                                                    {% empty %}
+                                                        <li class="list-styled-item">No categories available</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                        <!-- Price Filter -->
+                        <div class="filter-section mt-4">
+                            <h5 class="sidebar-heading">Price Range</h5>
+                            <div class="price-slider-container px-2 py-3">
+                                <div class="price-inputs d-flex justify-content-between mb-2">
+                                    <div class="price-input">
+                                        <label for="min-price" class="form-label small">Min</label>
+                                        <input type="number" id="min-price" class="form-control form-control-sm" value="0">
+                                    </div>
+                                    <div class="price-input">
+                                        <label for="max-price" class="form-label small">Max</label>
+                                        <input type="number" id="max-price" class="form-control form-control-sm" value="1000">
+                                    </div>
                                 </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                                <button id="apply-price-filter" class="btn btn-sm btn-outline-primary w-100 mt-2">Apply Filter</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -108,16 +492,21 @@
             <!-- Search bar -->
             <nav class="navbar navbar-expand navbar-light pt-0 pt-lg-6">
                 <div class="container-fluid d-flex justify-content-between align-items-center">
-                    <form class="navbar-form w-100" method="GET" action="{% url 'shop' %}" style="max-width: 550px;">
+                    <div class="navbar-form w-100" style="max-width: 550px;">
                         <div class="input-group">
-                            <input class="form-control form-control-underline form-control-sm border-dark" type="search" name="search" placeholder="Search for items and brands" aria-label="Search">
+                            <input id="search-input" class="form-control form-control-underline form-control-sm border-dark"
+                                   type="search" name="search" placeholder="Search for items and brands"
+                                   aria-label="Search" value="{{ search_query|default:'' }}">
                             <div class="input-group-append">
-                                <button class="btn btn-underline btn-sm border-dark" type="submit">
+                                <button id="search-button" class="btn btn-underline btn-sm border-dark" type="button">
                                     <i class="fe fe-search"></i>
                                 </button>
                             </div>
                         </div>
-                    </form>
+                        <div id="search-suggestions" class="position-absolute bg-white shadow-sm rounded-bottom d-none"
+                             style="width: calc(100% - 50px); z-index: 1000; max-height: 300px; overflow-y: auto;">
+                        </div>
+                    </div>
                     <div class="cart-button-count">
                         <a href="{% url 'cart' %}" class="btn btn-dark btn-sm cart-button-count">
                             <i class="fe fe-shopping-cart"></i> Cart <span id="cart-button-count">{{ cart_count }}</span>
@@ -132,8 +521,8 @@
                 <div class="shop-header mb-5">
                     <div class="row align-items-center">
                         <div class="col-12 col-md-8">
-                            <h1 class="display-6 mb-2">African Groceries</h1>
-                            <p class="lead text-muted">Discover authentic Nigerian and African products</p>
+                            <h1 class="display-6 mb-2">Products</h1>
+                            <p class="lead text-muted"></p>
                         </div>
                         <div class="col-12 col-md-4 text-md-end">
                             <div class="d-flex justify-content-md-end align-items-center">
@@ -149,14 +538,75 @@
                     </div>
                 </div>
 
+                <!-- Featured Products Section -->
+                <div class="featured-products-section mb-5">
+                    <div class="section-header d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="section-title">Featured Products</h2>
+                        <div class="section-decoration"></div>
+                    </div>
+                    <div class="row">
+                        {% for product in products %}
+                            {% if product.featured %}
+                                <div class="col-12 col-md-6 col-lg-4 mb-4">
+                                    <div class="featured-product-card" data-product-id="{{ product.id }}">
+                                        <div class="featured-product-image">
+                                            <img src="{{ product.image.url }}" alt="{{ product.name }}" onerror="this.src='{% static 'img/placeholder.png' %}'">
+                                            <div class="featured-badge">FEATURED</div>
+                                        </div>
+                                        <div class="featured-product-content">
+                                            <h3 class="featured-product-title">{{ product.name }}</h3>
+                                            <p class="featured-product-description">{{ product.description|truncatechars:100 }}</p>
+                                            <div class="featured-product-price">${{ product.price }}</div>
+                                            <button class="btn-view-product" onclick="window.location.href='{% url 'product' product.id %}'">
+                                                View Details
+                                            </button>
+                                            <button class="btn-add-to-cart" onclick="addToCartWithAnimation({{ product.id }})">
+                                                <i class="fe fe-shopping-cart"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if forloop.counter == 3 %}
+                                    {% comment %} Stop after 3 items {% endcomment %}
+                                {% elif forloop.counter > 3 %}
+                                    {% comment %} Skip items after 3 {% endcomment %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Category Highlights -->
+                <div class="category-highlights mb-5">
+                    <div class="row">
+                        {% for category in categories|slice:":3" %}
+                            <div class="col-12 col-md-4 mb-4">
+                                <div class="category-highlight-card" onclick="filterProducts('{{ category.id }}')">
+                                    <div class="category-highlight-content">
+                                        <h3>{{ category.name }}</h3>
+                                        <p>{{ category.product_count }} Products</p>
+                                        <span class="category-link">Browse <i class="fe fe-arrow-right"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
                 <!-- Products Grid -->
-                <div class="row" id="product-list">
-                    {% for product in products %}
-                        <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-4">
-                            {% include 'partials/nigerian-product-card.html' %}
-                            {% include 'partials/modals/modal-product.html' %}
-                        </div>
-                    {% endfor %}
+                <div class="products-section">
+                    <div class="section-header d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="section-title">All Products</h2>
+                        <div class="section-decoration"></div>
+                    </div>
+                    <div class="row" id="product-list">
+                        {% for product in products %}
+                            <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-4">
+                                {% include 'partials/nigerian-product-card.html' %}
+                                {% include 'partials/modals/modal-product.html' %}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
 
                 <!-- Empty State (when no products are found) -->
@@ -190,29 +640,193 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'js/product-filter-handler.js' %}"></script>
+<script>
+    // Initialize unified card handler when document is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ensure all product cards have consistent styling
+        if (typeof UnifiedCardHandler !== 'undefined') {
+            UnifiedCardHandler.applyCardStyling();
+        }
+
+        // Override the appendProductsToDOM function to use unified styling
+        if (typeof window.appendProductsToDOM === 'function') {
+            const originalAppendFunction = window.appendProductsToDOM;
+
+            window.appendProductsToDOM = function(products) {
+                // Call the original function
+                originalAppendFunction(products);
+
+                // Apply unified styling to new cards
+                setTimeout(() => {
+                    if (typeof UnifiedCardHandler !== 'undefined') {
+                        UnifiedCardHandler.applyCardStyling();
+                    }
+                }, 100);
+            };
+        }
+    });
+</script>
 
 <!-- JavaScript to Handle Filter and Cart Actions -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Add additional styles for active category
+        const styleElement = document.createElement('style');
+        styleElement.textContent = `
+            .category-link.active {
+                font-weight: bold;
+                color: #008751 !important;
+                background-color: rgba(0, 135, 81, 0.1);
+                border-radius: 4px;
+            }
+            .sidebar-heading {
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: #333;
+                padding: 0.5rem 1rem;
+                border-bottom: 1px solid #eee;
+                margin-bottom: 0.5rem;
+            }
+            .subcategory-list {
+                padding-left: 1.5rem;
+            }
+            .filter-section {
+                border-top: 1px solid #eee;
+                padding-top: 1rem;
+            }
+        `;
+        document.head.appendChild(styleElement);
+
+        // Get all category links
         const categoryLinks = document.querySelectorAll('.category-link');
         const allProductsButton = document.getElementById('all-products');
 
-        allProductsButton.addEventListener('click', function() {
+        // Set active class for clicked category
+        function setActiveCategory(element) {
+            // Remove active class from all links
+            categoryLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Add active class to clicked link
+            element.classList.add('active');
+        }
+
+        // Handle all products button click
+        allProductsButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            setActiveCategory(this);
             filterProducts('all');
         });
 
+        // Handle category link clicks
         categoryLinks.forEach(link => {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                setActiveCategory(this);
                 const categoryId = this.getAttribute('data-category-id');
                 filterProducts(categoryId);
             });
         });
 
+        // Handle price filter
+        document.getElementById('apply-price-filter').addEventListener('click', function() {
+            const minPrice = parseFloat(document.getElementById('min-price').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('max-price').value) || 1000;
+
+            filterProductsByPrice(minPrice, maxPrice);
+        });
+
+        // Filter products by category
         function filterProducts(categoryId) {
-            const productCards = document.querySelectorAll('.product-card');
+            // Update current category ID for AJAX loading
+            currentCategoryId = categoryId;
+
+            // Reset pagination for new filter
+            currentPage = 1;
+            hasMoreProducts = true;
+
+            // Show loading indicator
+            $('#loading-indicator').removeClass('d-none');
+
+            // Clear product list
+            $('#product-list').empty();
+
+            // Reset load more button
+            $('#load-more-btn').text('Discover More Nigerian Products').removeClass('disabled').prop('disabled', false);
+
+            // Update active category in sidebar
+            $('.category-link').removeClass('active');
+            $(`.category-link[data-category-id="${categoryId}"]`).addClass('active');
+
+            // Scroll to products section
+            $('html, body').animate({
+                scrollTop: $('.products-section').offset().top - 100
+            }, 500);
+
+            // Load products for selected category
+            $.ajax({
+                url: "{% url 'load_more_products' %}",
+                type: "GET",
+                data: {
+                    'page': 1,
+                    'per_page': 12,
+                    'category_id': categoryId === 'all' ? '' : categoryId
+                },
+                success: function(response) {
+                    // Append products to the list
+                    if (response.products.length > 0) {
+                        appendProductsToDOM(response.products);
+                    } else {
+                        $('#product-list').html(`
+                            <div class="col-12 text-center py-5">
+                                <div class="mb-4">
+                                    <img src="{% static 'img/empty-cart.svg' %}" alt="No products found" style="max-width: 150px;">
+                                </div>
+                                <h3>No products found</h3>
+                                <p class="text-muted">Try adjusting your search or filter to find what you're looking for.</p>
+                            </div>
+                        `);
+                    }
+
+                    // Check if there are more products
+                    hasMoreProducts = response.has_more;
+
+                    // Update UI
+                    if (!hasMoreProducts) {
+                        $('#load-more-btn').text('No More Products').addClass('disabled');
+                    }
+
+                    // Hide loading indicator
+                    $('#loading-indicator').addClass('d-none');
+                },
+                error: function() {
+                    console.error('Error loading products');
+                    $('#loading-indicator').addClass('d-none');
+                }
+            });
+        }
+
+        // Filter products by price (client-side filtering)
+        function filterProductsByPrice(minPrice, maxPrice) {
+            const productCards = document.querySelectorAll('.product-card-nigerian');
+
             productCards.forEach(card => {
-                const productcategoryId = card.getAttribute('data-category-id');
-                card.style.display = (categoryId === 'all' || productcategoryId === categoryId) ? 'block' : 'none';
+                const priceElement = card.querySelector('.price-current');
+                if (!priceElement) return;
+
+                const priceText = priceElement.textContent.trim();
+                const price = parseFloat(priceText.replace('$', ''));
+
+                const container = card.closest('[data-product-id]');
+                if (!container) return;
+
+                if (price >= minPrice && price <= maxPrice) {
+                    container.style.display = '';
+                } else {
+                    container.style.display = 'none';
+                }
             });
         }
     });
@@ -225,7 +839,19 @@
         // Update the quantity with the provided change (positive or negative)
         quantity = Math.max(1, Math.min(10, quantity + change)); // Ensure quantity is between 1 and 10
 
+        // Update the input value
         quantityInput.value = quantity;
+
+        // Update button states if the function exists
+        if (typeof updateButtonStates === 'function') {
+            updateButtonStates(productId);
+        }
+
+        // Add animation effect
+        quantityInput.classList.add('quantity-changed');
+        setTimeout(() => {
+            quantityInput.classList.remove('quantity-changed');
+        }, 300);
     }
 </script>
 
@@ -240,8 +866,24 @@
 
     // Function to add product to cart with email collection
     function add_to_cart(product_id) {
-      // Use our new email collection function
-      addToCartWithEmail(product_id);
+        // Use our enhanced cart flow
+        if (typeof EnhancedCartFlow !== 'undefined') {
+            EnhancedCartFlow.addToCartWithEmail(product_id);
+        } else {
+            // Fallback to original function
+            addToCartWithEmail(product_id);
+        }
+    }
+
+    // Function to add product to cart with animation
+    function addToCartWithAnimation(productId) {
+        // Use our enhanced cart flow
+        if (typeof EnhancedCartFlow !== 'undefined') {
+            EnhancedCartFlow.addToCartWithAnimation(productId);
+        } else {
+            // Fallback to original function
+            add_to_cart(productId);
+        }
     }
 
 
@@ -326,7 +968,8 @@
             data: {
                 'page': currentPage + 1,
                 'per_page': 12,
-                'category_id': currentCategoryId
+                'category_id': currentCategoryId === 'all' ? '' : currentCategoryId,
+                'search': $('#search-input').val() || ''
             },
             success: function(response) {
                 // Increment page number
@@ -338,6 +981,13 @@
                 // Append products to the list
                 if (response.products.length > 0) {
                     appendProductsToDOM(response.products);
+
+                    // Apply price filter if active
+                    const minPrice = parseFloat($('#min-price').val()) || 0;
+                    const maxPrice = parseFloat($('#max-price').val()) || 1000;
+                    if (minPrice > 0 || maxPrice < 1000) {
+                        filterProductsByPrice(minPrice, maxPrice);
+                    }
                 }
 
                 // Update UI
@@ -376,11 +1026,7 @@
                         ${product.is_on_sale ? '<div class="product-badge-nigerian">Sale</div>' : ''}
                         ${product.is_new ? '<div class="product-badge-nigerian product-badge-new-nigerian">New</div>' : ''}
 
-                        <!-- Product Origin Badge -->
-                        <div class="product-origin-badge">
-                            <span class="nigeria-flag-colors-small"></span>
-                            <span>Nigerian</span>
-                        </div>
+
 
                         <img src="${product.image_url}" alt="${product.name}" class="product-img lazyload">
                         <div class="product-actions">
@@ -421,15 +1067,7 @@
                     </div>
                 </div>
 
-                <style>
-                    .nigeria-flag-colors-small {
-                        width: 16px;
-                        height: 10px;
-                        background: linear-gradient(to right, #008751 33.3%, white 33.3%, white 66.6%, #008751 66.6%);
-                        border-radius: 2px;
-                        display: inline-block;
-                    }
-                </style>
+
             `;
 
             // Append to product list
@@ -542,17 +1180,119 @@
             loadMoreProducts();
         });
 
-        // Category filter click event
-        $('.category-link, #all-products').on('click', function(e) {
-            e.preventDefault();
+        // Search functionality
+        const searchInput = $('#search-input');
+        const searchButton = $('#search-button');
+        const searchSuggestions = $('#search-suggestions');
 
-            // Get category ID
-            const categoryId = $(this).data('category-id') || '';
+        // Debounce function to limit API calls during typing
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
 
-            // Reset pagination
+        // Function to get search suggestions
+        const getSuggestions = debounce(function(query) {
+            if (query.length < 2) {
+                searchSuggestions.addClass('d-none').empty();
+                return;
+            }
+
+            $.ajax({
+                url: "{% url 'load_more_products' %}",
+                type: "GET",
+                data: {
+                    'page': 1,
+                    'per_page': 5,
+                    'search': query
+                },
+                success: function(response) {
+                    if (response.products.length > 0) {
+                        searchSuggestions.empty().removeClass('d-none');
+
+                        response.products.forEach(product => {
+                            const suggestion = $(`
+                                <div class="suggestion-item p-2 border-bottom d-flex align-items-center">
+                                    <img src="${product.image_url}" alt="${product.name}" class="suggestion-img me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                    <div>
+                                        <div class="suggestion-name">${product.name}</div>
+                                        <div class="suggestion-price text-success">$${product.price}</div>
+                                    </div>
+                                </div>
+                            `);
+
+                            suggestion.on('click', function() {
+                                window.location.href = product.url;
+                            });
+
+                            searchSuggestions.append(suggestion);
+                        });
+
+                        // Add "See all results" link
+                        searchSuggestions.append(`
+                            <div class="p-2 text-center">
+                                <a href="#" id="see-all-results" class="text-primary">See all results</a>
+                            </div>
+                        `);
+
+                        // Handle "See all results" click
+                        $('#see-all-results').on('click', function(e) {
+                            e.preventDefault();
+                            performSearch(query);
+                            searchSuggestions.addClass('d-none');
+                        });
+                    } else {
+                        searchSuggestions.addClass('d-none').empty();
+                    }
+                }
+            });
+        }, 300);
+
+        // Handle search input
+        searchInput.on('input', function() {
+            const query = $(this).val().trim();
+            getSuggestions(query);
+        });
+
+        // Handle search button click
+        searchButton.on('click', function() {
+            const query = searchInput.val().trim();
+            if (query.length > 0) {
+                performSearch(query);
+                searchSuggestions.addClass('d-none');
+            }
+        });
+
+        // Handle Enter key in search input
+        searchInput.on('keypress', function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                const query = $(this).val().trim();
+                if (query.length > 0) {
+                    performSearch(query);
+                    searchSuggestions.addClass('d-none');
+                }
+            }
+        });
+
+        // Close suggestions when clicking outside
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.navbar-form').length) {
+                searchSuggestions.addClass('d-none');
+            }
+        });
+
+        // Function to perform search
+        function performSearch(query) {
+            // Update current category ID for AJAX loading
+            currentCategoryId = 'all';
+
+            // Reset pagination for new search
             currentPage = 1;
             hasMoreProducts = true;
-            currentCategoryId = categoryId;
 
             // Show loading indicator
             $('#loading-indicator').removeClass('d-none');
@@ -561,23 +1301,31 @@
             $('#product-list').empty();
 
             // Reset load more button
-            $('#load-more-btn').text('Load More Products').removeClass('disabled').prop('disabled', false);
+            $('#load-more-btn').text('Discover More Nigerian Products').removeClass('disabled').prop('disabled', false);
 
-            // Load products for selected category
+            // Load products for search query
             $.ajax({
                 url: "{% url 'load_more_products' %}",
                 type: "GET",
                 data: {
                     'page': 1,
                     'per_page': 12,
-                    'category_id': categoryId
+                    'search': query
                 },
                 success: function(response) {
                     // Append products to the list
                     if (response.products.length > 0) {
                         appendProductsToDOM(response.products);
                     } else {
-                        $('#product-list').html('<div class="col-12 text-center py-5"><h3>No products found</h3></div>');
+                        $('#product-list').html(`
+                            <div class="col-12 text-center py-5">
+                                <div class="mb-4">
+                                    <img src="{% static 'img/empty-cart.svg' %}" alt="No products found" style="max-width: 150px;">
+                                </div>
+                                <h3>No products found</h3>
+                                <p class="text-muted">No products match your search criteria. Try different keywords.</p>
+                            </div>
+                        `);
                     }
 
                     // Check if there are more products
@@ -596,7 +1344,7 @@
                     $('#loading-indicator').addClass('d-none');
                 }
             });
-        });
+        }
 
         // Infinite scroll
         $(window).on('scroll', function() {

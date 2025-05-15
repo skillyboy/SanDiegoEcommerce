@@ -26,8 +26,9 @@ urlpatterns = [
     path('robots.txt', views.robots_txt_view, name='robots_txt'),
     # path('populate/', views.addcats, name='addcats'),
 
-    # Account Management
-    path('shipping-and-returns/', views.shipping_and_returns, name='shipping_and_returns'),
+    # Shipping and Returns
+    path('shipping/', views.shipping, name='shipping'),
+    path('returns/', views.returns, name='returns'),
     path('account-address/', views.account_address, name='account_address'),
     path('account/address/delete/<int:address_id>/', delete_address, name='delete_address'), #added
     path('payment/edit/<int:payment_id>/', edit_payment_info, name='edit_payment_info'), #added
@@ -83,6 +84,7 @@ urlpatterns = [
     # API Views
     path('cart/increase/<int:item_id>/', increase_quantity, name='increase_quantity'),
     path('cart/decrease/<int:item_id>/', decrease_quantity, name='decrease_quantity'),
+    path('api/search/', api_search_products, name='api_search_products'),
 
     # Admin Dashboard URLs
     path('africanfoodadmin/', AdminDashboardView.as_view(), name='admin_dashboard'),

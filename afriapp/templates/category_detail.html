@@ -11,6 +11,8 @@
 {% block extra_js %}
 <!-- Ensure SweetAlert2 is loaded -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Email Collection JS -->
+<script src="{% static 'js/email-collection.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -87,10 +89,10 @@
     <div class="service-groceries">
       <div class="row align-items-center">
         <div class="col-12 col-md-6">
-          <div class="service-section-badge" data-aos="fade-right">Premium Selection</div>
-          <h2 class="mb-4 text-service-primary" data-aos="fade-right" data-aos-delay="100">African Grocery Marketplace</h2>
-          <p class="lead mb-4" data-aos="fade-right" data-aos-delay="200">Discover authentic Nigerian ingredients and food products imported directly from West Africa.</p>
-          <p class="mb-5" data-aos="fade-right" data-aos-delay="300">Our grocery selection features premium quality ingredients essential for preparing traditional Nigerian dishes. From spices and seasonings to grains and snacks, we offer everything you need to bring the taste of Nigeria to your kitchen.</p>
+          <div class="service-section-badge" data-aos="fade-right">{{ service_content.subtitle }}</div>
+          <h2 class="mb-4 text-service-primary" data-aos="fade-right" data-aos-delay="100">{{ service_content.title }}</h2>
+          <p class="lead mb-4" data-aos="fade-right" data-aos-delay="200">{{ service_content.description }}</p>
+          <p class="mb-5" data-aos="fade-right" data-aos-delay="300">{{ service_content.detail }}</p>
 
           <div class="service-features">
             <div class="service-feature" data-aos="fade-up" data-aos-delay="400">
@@ -187,10 +189,10 @@
     <div class="service-restaurant">
       <div class="row align-items-center">
         <div class="col-12 col-md-6">
-          <div class="service-section-badge" data-aos="fade-right">Authentic Cuisine</div>
-          <h2 class="mb-4 text-service-primary" data-aos="fade-right" data-aos-delay="100">Nigerian Restaurant Experience</h2>
-          <p class="lead mb-4" data-aos="fade-right" data-aos-delay="200">Discover the rich flavors of Nigerian cuisine prepared with authentic recipes and fresh ingredients.</p>
-          <p class="mb-5" data-aos="fade-right" data-aos-delay="300">Our restaurant offers a diverse menu featuring traditional Nigerian dishes, from spicy jollof rice to savory egusi soup. Each dish is carefully prepared to bring you the authentic taste of Nigeria.</p>
+          <div class="service-section-badge" data-aos="fade-right">{{ service_content.subtitle }}</div>
+          <h2 class="mb-4 text-service-primary" data-aos="fade-right" data-aos-delay="100">{{ service_content.title }}</h2>
+          <p class="lead mb-4" data-aos="fade-right" data-aos-delay="200">{{ service_content.description }}</p>
+          <p class="mb-5" data-aos="fade-right" data-aos-delay="300">{{ service_content.detail }}</p>
 
           <div class="service-features">
             <div class="service-feature" data-aos="fade-up" data-aos-delay="400">
@@ -289,149 +291,94 @@
 
     <!-- Featured Items Grid -->
     <div class="row">
-      <!-- Featured Item 1 -->
-      <div class="col-12 col-md-4 mb-5" data-aos="fade-up" data-aos-delay="300">
-        <div class="featured-card">
-          <div class="featured-card-image">
-            {% if category_id == 1 %}
-              <img src="/static/img/afrocommerce/palm-oil.jpg" alt="Palm Oil" onerror="this.src='/static/img/placeholder.png'">
-              <div class="featured-badge">BESTSELLER</div>
-            {% elif category_id == 2 %}
-              <img src="/static/img/afrocommerce/jollof-rice.jpg" alt="Jollof Rice" onerror="this.src='/static/img/placeholder.png'">
-              <div class="featured-badge">POPULAR</div>
-            {% else %}
-              <img src="/static/img/afrocommerce/jollof-rice.jpg" alt="Featured Product" onerror="this.src='/static/img/placeholder.png'">
-              <div class="featured-badge">FEATURED</div>
-            {% endif %}
+      {% if featured_products %}
+        {% for product in featured_products %}
+          <div class="col-12 col-md-4 mb-5" data-aos="fade-up" data-aos-delay="{{ forloop.counter|add:200 }}">
+            <div class="featured-card" data-product-id="{{ product.id }}">
+              <div class="featured-card-image">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" onerror="this.src='/static/img/placeholder.png'">
+                <div class="featured-badge {% if forloop.first %}bg-primary{% elif forloop.counter == 2 %}bg-success{% else %}bg-danger{% endif %}">
+                  {% if product.featured %}FEATURED{% elif forloop.first %}BESTSELLER{% elif forloop.counter == 2 %}POPULAR{% else %}HOT{% endif %}
+                </div>
 
-            <div class="featured-card-actions">
-              <button class="action-button" onclick="add_to_cart(1)">
-                <i class="fe fe-shopping-cart"></i>
-              </button>
-              <button class="action-button" data-bs-toggle="modal" data-bs-target="#modalProduct">
-                <i class="fe fe-eye"></i>
-              </button>
+                <div class="featured-card-actions">
+                  <button class="action-button" onclick="add_to_cart({{ product.id }})">
+                    <i class="fe fe-shopping-cart"></i>
+                  </button>
+                  <button class="action-button" data-bs-toggle="modal" data-bs-target="#modalProduct{{ product.id }}">
+                    <i class="fe fe-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="featured-card-content">
+                <h4>{{ product.name }}</h4>
+                <p>{{ product.description|truncatechars:60 }}</p>
+                <div class="featured-card-price">${{ product.price }}</div>
+
+                <button class="btn btn-outline-service-primary w-100 btn-animated" onclick="add_to_cart({{ product.id }})">
+                  <span>Add to Cart</span>
+                  <i class="fe fe-shopping-cart ms-2"></i>
+                </button>
+              </div>
             </div>
           </div>
 
-          <div class="featured-card-content">
-            {% if category_id == 1 %}
-              <h4>Palm Oil</h4>
-              <p>Premium quality Nigerian red palm oil, perfect for traditional soups and stews</p>
-              <div class="featured-card-price">$9.99</div>
-            {% elif category_id == 2 %}
-              <h4>Jollof Rice</h4>
-              <p>Spicy tomato rice with mixed vegetables and your choice of protein</p>
-              <div class="featured-card-price">$12.99</div>
-            {% else %}
-              <h4>Featured Product</h4>
-              <p>Premium quality Nigerian product</p>
-              <div class="featured-card-price">$12.99</div>
-            {% endif %}
+          <!-- Product Modal -->
+          <div class="modal fade" id="modalProduct{{ product.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+              <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                  <i class="fe fe-x" aria-hidden="true"></i>
+                </button>
+                <div class="modal-body p-0">
+                  <div class="row">
+                    <div class="col-12 col-lg-6 p-5">
+                      <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded" onerror="this.src='/static/img/placeholder.png'">
+                    </div>
+                    <div class="col-12 col-lg-6 p-5">
+                      <h2 class="mb-4">{{ product.name }}</h2>
+                      <div class="mb-4">
+                        <span class="h5 text-service-primary">${{ product.price }}</span>
+                      </div>
+                      <p class="mb-4">{{ product.description }}</p>
 
-            <button class="btn btn-outline-service-primary w-100 btn-animated" onclick="add_to_cart(1)">
-              <span>Add to Cart</span>
-              <i class="fe fe-shopping-cart ms-2"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+                      {% if product.cultural_significance %}
+                      <div class="mb-4">
+                        <h5>Nigerian Cultural Significance</h5>
+                        <p>{{ product.cultural_significance }}</p>
+                      </div>
+                      {% endif %}
 
-      <!-- Featured Item 2 -->
-      <div class="col-12 col-md-4 mb-5" data-aos="fade-up" data-aos-delay="400">
-        <div class="featured-card">
-          <div class="featured-card-image">
-            {% if category_id == 1 %}
-              <img src="/static/img/afrocommerce/egusi-seeds.jpg" alt="Egusi Seeds" onerror="this.src='/static/img/placeholder.png'">
-              <div class="featured-badge bg-success">NEW</div>
-            {% elif category_id == 2 %}
-              <img src="/static/img/afrocommerce/egusi-soup.jpg" alt="Egusi Soup" onerror="this.src='/static/img/placeholder.png'">
-              <div class="featured-badge bg-success">CHEF'S CHOICE</div>
-            {% else %}
-              <img src="/static/img/afrocommerce/egusi-soup.jpg" alt="Featured Product" onerror="this.src='/static/img/placeholder.png'">
-              <div class="featured-badge bg-success">POPULAR</div>
-            {% endif %}
+                      <div class="d-flex align-items-center mb-4">
+                        <div class="input-group input-group-sm w-25 me-3">
+                          <input type="number" class="form-control" id="quantity-modal-{{ product.id }}" value="1" min="1" max="{{ product.stock_quantity }}">
+                        </div>
+                        <button class="btn btn-service-primary btn-animated" onclick="addToCartWithEmail({{ product.id }}, document.getElementById('quantity-modal-{{ product.id }}').value)">
+                          <span>Add to Cart</span>
+                          <i class="fe fe-shopping-cart ms-2"></i>
+                        </button>
+                      </div>
 
-            <div class="featured-card-actions">
-              <button class="action-button" onclick="add_to_cart(2)">
-                <i class="fe fe-shopping-cart"></i>
-              </button>
-              <button class="action-button" data-bs-toggle="modal" data-bs-target="#modalProduct">
-                <i class="fe fe-eye"></i>
-              </button>
+                      <div class="d-flex align-items-center">
+                        <span class="me-3"><i class="fe fe-check-circle text-success me-1"></i> In Stock</span>
+                        <span><i class="fe fe-truck me-1"></i> Free shipping</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-
-          <div class="featured-card-content">
-            {% if category_id == 1 %}
-              <h4>Egusi Seeds</h4>
-              <p>Ground melon seeds essential for making traditional Nigerian egusi soup</p>
-              <div class="featured-card-price">$7.99</div>
-            {% elif category_id == 2 %}
-              <h4>Egusi Soup</h4>
-              <p>Traditional Nigerian soup made with ground melon seeds and vegetables</p>
-              <div class="featured-card-price">$14.99</div>
-            {% else %}
-              <h4>Featured Product</h4>
-              <p>Premium quality Nigerian product</p>
-              <div class="featured-card-price">$14.99</div>
-            {% endif %}
-
-            <button class="btn btn-outline-service-primary w-100 btn-animated" onclick="add_to_cart(2)">
-              <span>Add to Cart</span>
-              <i class="fe fe-shopping-cart ms-2"></i>
-            </button>
+        {% endfor %}
+      {% else %}
+        <!-- Fallback if no featured products -->
+        <div class="col-12">
+          <div class="alert alert-info">
+            <p class="mb-0">No featured products available at this time. Please check back later.</p>
           </div>
         </div>
-      </div>
-
-      <!-- Featured Item 3 -->
-      <div class="col-12 col-md-4 mb-5" data-aos="fade-up" data-aos-delay="500">
-        <div class="featured-card">
-          <div class="featured-card-image">
-            {% if category_id == 1 %}
-              <img src="/static/img/afrocommerce/pounded-yam-flour.jpg" alt="Pounded Yam Flour" onerror="this.src='/static/img/placeholder.png'">
-              <div class="featured-badge bg-danger">HOT</div>
-            {% elif category_id == 2 %}
-              <img src="/static/img/afrocommerce/pounded-yam.jpg" alt="Pounded Yam" onerror="this.src='/static/img/placeholder.png'">
-              <div class="featured-badge bg-danger">SPECIAL</div>
-            {% else %}
-              <img src="/static/img/afrocommerce/pounded-yam.jpg" alt="Featured Product" onerror="this.src='/static/img/placeholder.png'">
-              <div class="featured-badge bg-danger">HOT</div>
-            {% endif %}
-
-            <div class="featured-card-actions">
-              <button class="action-button" onclick="add_to_cart(3)">
-                <i class="fe fe-shopping-cart"></i>
-              </button>
-              <button class="action-button" data-bs-toggle="modal" data-bs-target="#modalProduct">
-                <i class="fe fe-eye"></i>
-              </button>
-            </div>
-          </div>
-
-          <div class="featured-card-content">
-            {% if category_id == 1 %}
-              <h4>Pounded Yam Flour</h4>
-              <p>Premium quality yam flour for making smooth, delicious pounded yam</p>
-              <div class="featured-card-price">$8.99</div>
-            {% elif category_id == 2 %}
-              <h4>Pounded Yam</h4>
-              <p>Smooth, dough-like side dish perfect for dipping in Nigerian soups</p>
-              <div class="featured-card-price">$10.99</div>
-            {% else %}
-              <h4>Featured Product</h4>
-              <p>Premium quality Nigerian product</p>
-              <div class="featured-card-price">$10.99</div>
-            {% endif %}
-
-            <button class="btn btn-outline-service-primary w-100 btn-animated" onclick="add_to_cart(3)">
-              <span>Add to Cart</span>
-              <i class="fe fe-shopping-cart ms-2"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+      {% endif %}
     </div>
 
     <!-- View All Button -->
@@ -590,172 +537,12 @@
   </div>
 </section>
 
-<!-- TESTIMONIALS SECTION WITH ANIMATIONS -->
-<section class="py-7 bg-light testimonials-section">
+<!-- CALL TO ACTION SECTION -->
+<section class="py-7 bg-light cta-section">
   <div class="container">
-    <!-- Decorative Elements -->
-    <div class="testimonial-pattern-left"></div>
-    <div class="testimonial-pattern-right"></div>
-
-    <!-- Section Header -->
-    <div class="row justify-content-center mb-7">
-      <div class="col-12 col-md-10 col-lg-8 text-center">
-        <div class="section-badge" data-aos="fade-up">Customer Stories</div>
-        <h2 class="mb-4" data-aos="fade-up" data-aos-delay="100">What Our Customers Say</h2>
-        <p class="mb-5 text-muted" data-aos="fade-up" data-aos-delay="200">
-          {% if category_id == 1 %}
-            Hear from our community of Nigerian grocery enthusiasts
-          {% elif category_id == 2 %}
-            Hear from our satisfied restaurant customers
-          {% else %}
-            Read reviews from our satisfied customers
-          {% endif %}
-        </p>
-      </div>
-    </div>
-
-    <!-- Testimonials Slider -->
-    <div class="testimonial-slider" data-flickity='{"pageDots": true, "prevNextButtons": true, "wrapAround": true, "autoPlay": 5000, "cellAlign": "center"}'>
-      <!-- Testimonial 1 -->
-      <div class="testimonial-slide px-3" data-aos="fade-up" data-aos-delay="300">
-        <div class="testimonial-card">
-          <div class="testimonial-quote">
-            <i class="fas fa-quote-left"></i>
-          </div>
-          <div class="testimonial-rating">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-          </div>
-          <div class="testimonial-text">
-            {% if category_id == 1 %}
-              <p>"The quality of the palm oil and egusi seeds I purchased was exceptional! Authentic Nigerian ingredients that are hard to find elsewhere. The packaging was secure and delivery was prompt."</p>
-            {% elif category_id == 2 %}
-              <p>"The jollof rice was absolutely delicious! Perfectly spiced and authentic. The service was excellent and delivery was prompt. I'll definitely be ordering again soon."</p>
-            {% else %}
-              <p>"The products were exceptional quality! Authentic Nigerian items that are hard to find elsewhere. I'll definitely be shopping here again soon."</p>
-            {% endif %}
-          </div>
-          <div class="testimonial-author">
-            <div class="author-image">
-              <img src="/static/img/avatars/avatar-1.jpg" alt="Customer" onerror="this.src='/static/img/placeholder.png'">
-            </div>
-            <div class="author-info">
-              <h5>Sarah Johnson</h5>
-              <p>San Diego, CA</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Testimonial 2 -->
-      <div class="testimonial-slide px-3" data-aos="fade-up" data-aos-delay="400">
-        <div class="testimonial-card">
-          <div class="testimonial-quote">
-            <i class="fas fa-quote-left"></i>
-          </div>
-          <div class="testimonial-rating">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-          </div>
-          <div class="testimonial-text">
-            {% if category_id == 1 %}
-              <p>"First time trying to cook Nigerian food at home and these ingredients made it possible! The yam flour made perfect pounded yam, and the spices were so fresh and aromatic."</p>
-            {% elif category_id == 2 %}
-              <p>"First time trying Nigerian food and I'm hooked! The egusi soup was amazing and the service was excellent. I appreciate the authentic flavors and the care put into each dish."</p>
-            {% else %}
-              <p>"First time trying these products and I'm impressed! The quality is excellent and the service was outstanding. Will definitely be a repeat customer."</p>
-            {% endif %}
-          </div>
-          <div class="testimonial-author">
-            <div class="author-image">
-              <img src="/static/img/avatars/avatar-2.jpg" alt="Customer" onerror="this.src='/static/img/placeholder.png'">
-            </div>
-            <div class="author-info">
-              <h5>Michael Thompson</h5>
-              <p>La Jolla, CA</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Testimonial 3 -->
-      <div class="testimonial-slide px-3" data-aos="fade-up" data-aos-delay="500">
-        <div class="testimonial-card">
-          <div class="testimonial-quote">
-            <i class="fas fa-quote-left"></i>
-          </div>
-          <div class="testimonial-rating">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star-half-alt"></i>
-          </div>
-          <div class="testimonial-text">
-            {% if category_id == 1 %}
-              <p>"As a Nigerian living in San Diego, finding authentic ingredients has been a challenge until now! Everything I've purchased reminds me of home. The customer service is also excellent."</p>
-            {% elif category_id == 2 %}
-              <p>"The pounded yam and vegetable soup combo was perfect. Authentic flavors that reminded me of home. The quality of ingredients is exceptional and the portions are generous."</p>
-            {% else %}
-              <p>"The quality and authenticity of these products reminds me of home. Everything I've purchased has been exceptional. The customer service is also outstanding."</p>
-            {% endif %}
-          </div>
-          <div class="testimonial-author">
-            <div class="author-image">
-              <img src="/static/img/avatars/avatar-3.jpg" alt="Customer" onerror="this.src='/static/img/placeholder.png'">
-            </div>
-            <div class="author-info">
-              <h5>Chioma Okafor</h5>
-              <p>Chula Vista, CA</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Testimonial 4 -->
-      <div class="testimonial-slide px-3" data-aos="fade-up" data-aos-delay="600">
-        <div class="testimonial-card">
-          <div class="testimonial-quote">
-            <i class="fas fa-quote-left"></i>
-          </div>
-          <div class="testimonial-rating">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-          </div>
-          <div class="testimonial-text">
-            {% if category_id == 1 %}
-              <p>"The variety of Nigerian snacks available here is amazing! My kids love the chin-chin and plantain chips. Fast shipping and everything arrived in perfect condition."</p>
-            {% elif category_id == 2 %}
-              <p>"The suya was perfectly seasoned and the jollof rice had that authentic smoky flavor. Portion sizes are generous and the prices are reasonable. Highly recommend!"</p>
-            {% else %}
-              <p>"Exceptional quality and service! Everything I've ordered has exceeded my expectations. The prices are reasonable and the shipping is fast and reliable."</p>
-            {% endif %}
-          </div>
-          <div class="testimonial-author">
-            <div class="author-image">
-              <img src="/static/img/avatars/avatar-4.jpg" alt="Customer" onerror="this.src='/static/img/placeholder.png'">
-            </div>
-            <div class="author-info">
-              <h5>David Williams</h5>
-              <p>Oceanside, CA</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Call to Action -->
-    <div class="row mt-7">
-      <div class="col-12 text-center" data-aos="fade-up" data-aos-delay="700">
+    <div class="row">
+      <div class="col-12 text-center" data-aos="fade-up">
         <div class="cta-box">
           <h3 class="mb-4">
             {% if category_id == 1 %}
@@ -1434,9 +1221,53 @@
 
     // Add to cart function
     window.add_to_cart = function(product_id) {
-      let quantityElement = document.getElementById(`quantity-${product_id}`);
-      let quantity = quantityElement ? quantityElement.value : 1;
+      // Use the email collection function first
+      addToCartWithEmail(product_id);
+    };
 
+    // Add to cart with email collection
+    function addToCartWithEmail(productId, quantity = 1) {
+      // Check if we already have an email in session storage
+      const storedEmail = sessionStorage.getItem('guest_user_email');
+      if (storedEmail) {
+        // If we already have an email, add to cart directly
+        addToCartWithEmailProvided(productId, quantity, storedEmail);
+        return;
+      }
+
+      // Show the email collection modal
+      $('#emailCollectionModal').modal('show');
+
+      // Store the product ID and quantity for later use
+      $('#emailCollectionModal').attr('data-product-id', productId);
+      $('#emailCollectionModal').attr('data-quantity', quantity);
+
+      // Handle form submission
+      $('#emailCollectionForm').off('submit').on('submit', function(e) {
+        e.preventDefault();
+
+        // Get the email from the form
+        const email = $('#emailCollectionEmail').val();
+
+        // Validate the email
+        if (!validateEmail(email)) {
+          $('#emailCollectionEmail').addClass('is-invalid');
+          return;
+        }
+
+        // Save the email to session storage
+        sessionStorage.setItem('guest_user_email', email);
+
+        // Hide the modal
+        $('#emailCollectionModal').modal('hide');
+
+        // Add to cart with the email
+        addToCartWithEmailProvided(productId, quantity, email);
+      });
+    }
+
+    // Add to cart when email is already provided
+    function addToCartWithEmailProvided(productId, quantity = 1, email) {
       // Show loading indicator
       const loadingToast = Swal.mixin({
         toast: true,
@@ -1456,10 +1287,11 @@
       });
 
       $.ajax({
-        url: "{% url 'add_to_cart' 0 %}".replace('0', product_id),
+        url: "{% url 'add_to_cart' 0 %}".replace('0', productId),
         type: "POST",
         data: {
           'quantity': quantity,
+          'email': email,
           'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
         success: function(response) {
@@ -1526,8 +1358,8 @@
                 }
             });
 
-            // Also trigger the shopping cart modal to open
-            $('#modalShoppingCart').offcanvas('show');
+            // No longer automatically opening the shopping cart modal
+            // $('#modalShoppingCart').offcanvas('show');
           } else {
             Swal.fire({
               title: 'Error!',
@@ -1653,5 +1485,14 @@
       el.classList.add('bg-service-primary');
     });
   }
+
+  // Email validation function
+  function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
 </script>
+
+<!-- Include Email Collection Modal -->
+{% include 'partials/modals/modal-email-collection.html' %}
 {% endblock %}

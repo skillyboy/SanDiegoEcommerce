@@ -12,7 +12,7 @@
 
       <!-- Header with African-inspired pattern -->
       <div class="modal-header line-height-fixed fs-lg email-modal-header">
-        <h5 class="modal-title text-white" id="emailCollectionModalTitle">Save Your Shopping Experience</h5>
+        <h5 class="modal-title text-white" id="emailCollectionModalTitle">Enhance Your Shopping Experience</h5>
       </div>
 
       <!-- Body -->
@@ -26,9 +26,9 @@
             </div>
 
             <!-- Text -->
-            <h6 class="mb-2 fw-bold">Stay Connected with Your Cart</h6>
+            <h6 class="mb-2 fw-bold">Unlock a Better Shopping Experience</h6>
             <p class="mb-0 fs-sm text-gray-600">
-              Enter your email to save your shopping cart and receive exclusive offers!
+              Share your email for a personalized Nigerian shopping journey with exclusive offers and easy order tracking!
             </p>
           </div>
           <div class="col-12">
@@ -43,7 +43,7 @@
                       <span class="input-group-text bg-light">
                         <i class="fas fa-at"></i>
                       </span>
-                      <input class="form-control" id="emailCollectionEmail" type="email" placeholder="Your Email Address" required>
+                      <input class="form-control" id="emailCollectionEmail" name="email" type="email" placeholder="Your Email Address" required>
                     </div>
                     <div class="invalid-feedback">Please provide a valid email address.</div>
                   </div>
@@ -75,19 +75,23 @@
         </div>
         <div class="row">
           <div class="col-12 text-center">
-            <!-- Benefits list -->
+            <!-- Benefits list with Nigerian-themed icons -->
             <div class="email-benefits">
               <div class="benefit-item">
-                <i class="fas fa-check-circle text-success"></i>
-                <span>Save your cart for later</span>
+                <i class="fas fa-shopping-basket text-success"></i>
+                <span>Save your Nigerian favorites for later</span>
               </div>
               <div class="benefit-item">
-                <i class="fas fa-check-circle text-success"></i>
-                <span>Get order status updates</span>
+                <i class="fas fa-bell text-success"></i>
+                <span>Get personalized product recommendations</span>
               </div>
               <div class="benefit-item">
-                <i class="fas fa-check-circle text-success"></i>
-                <span>Receive exclusive offers</span>
+                <i class="fas fa-tag text-success"></i>
+                <span>Receive exclusive Nigerian product offers</span>
+              </div>
+              <div class="benefit-item">
+                <i class="fas fa-truck text-success"></i>
+                <span>Track your orders with ease</span>
               </div>
             </div>
 
@@ -106,10 +110,18 @@
 <!-- Add CSS for the enhanced email modal -->
 <style>
   /* Email modal styling */
+  .modal-content {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border: none;
+  }
+
   .email-modal-header {
-    background: linear-gradient(135deg, #D2691E, #8B4513);
+    background: linear-gradient(135deg, #008751, #006B3C);
     position: relative;
     overflow: hidden;
+    padding: 1.5rem;
   }
 
   .email-modal-header::before {
@@ -123,6 +135,12 @@
     background-size: 200px;
     opacity: 0.2;
     z-index: 0;
+    animation: slowMove 30s linear infinite;
+  }
+
+  @keyframes slowMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 200px 200px; }
   }
 
   .email-modal-header .modal-title {
@@ -133,16 +151,22 @@
   /* Animated email icon */
   .email-icon-container {
     position: relative;
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     margin: 0 auto;
+    background: rgba(0, 135, 81, 0.05);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed rgba(0, 135, 81, 0.2);
   }
 
   .email-icon {
     position: relative;
     z-index: 2;
-    font-size: 2.5rem;
-    color: #D2691E;
+    font-size: 2.8rem;
+    color: #008751;
     animation: float 3s ease-in-out infinite;
   }
 
@@ -151,10 +175,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(210,105,30,0.1) 0%, rgba(210,105,30,0) 70%);
+    background: radial-gradient(circle, rgba(0,135,81,0.1) 0%, rgba(0,135,81,0) 70%);
     z-index: 1;
     animation: pulse 2s ease-in-out infinite;
   }
@@ -173,17 +197,21 @@
 
   /* Button styling */
   .btn-email-submit {
-    background: linear-gradient(135deg, #D2691E, #8B4513);
+    background: linear-gradient(135deg, #008751, #006B3C);
     border: none;
-    padding: 10px 20px;
+    padding: 12px 25px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    border-radius: 30px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0, 135, 81, 0.3);
   }
 
   .btn-email-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(210, 105, 30, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 135, 81, 0.4);
   }
 
   .btn-email-submit::after {
@@ -202,35 +230,65 @@
     transform: translateX(100%);
   }
 
+  .btn-email-submit i {
+    transition: transform 0.3s ease;
+  }
+
+  .btn-email-submit:hover i {
+    transform: translateX(5px);
+  }
+
   /* Benefits list styling */
   .email-benefits {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-top: 15px;
+    gap: 12px;
+    margin-top: 20px;
+    background-color: rgba(0, 135, 81, 0.05);
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px dashed rgba(0, 135, 81, 0.2);
   }
 
   .benefit-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     font-size: 0.9rem;
+    transition: transform 0.2s ease;
+  }
+
+  .benefit-item:hover {
+    transform: translateX(5px);
   }
 
   .benefit-item i {
-    color: #D2691E;
+    color: #008751;
+    font-size: 1rem;
+    background: rgba(0, 135, 81, 0.1);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
   }
 
   /* Privacy note styling */
   .privacy-note {
-    border-top: 1px dashed #e0e0e0;
-    padding-top: 10px;
-    margin-top: 15px;
+    border-top: 1px dashed rgba(0, 135, 81, 0.2);
+    padding-top: 12px;
+    margin-top: 20px;
   }
 
   /* Custom checkbox styling */
   .custom-checkbox .form-check-input:checked {
-    background-color: #D2691E;
-    border-color: #D2691E;
+    background-color: #008751;
+    border-color: #008751;
+  }
+
+  .custom-checkbox .form-check-label {
+    font-size: 0.9rem;
+    color: #555;
   }
 </style>

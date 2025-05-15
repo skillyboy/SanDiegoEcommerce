@@ -1,0 +1,39 @@
+services:
+  # Web service (Django application)
+  - type: web
+    name: sandiegoecommerce
+    env: python
+    buildCommand: chmod +x build.sh && ./build.sh
+    startCommand: gunicorn project.wsgi:application
+    envVars:
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
+      - key: YOUR_DOMAIN
+        fromService:
+          name: sandiegoecommerce
+          type: web
+          property: host
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sandiegoecommerce-db
+          property: connectionString
+      - key: STRIPE_PUBLIC_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: RENDER_EXTERNAL_HOSTNAME
+        fromService:
+          name: sandiegoecommerce
+          type: web
+          property: host
+
+# Database (PostgreSQL)
+databases:
+  - name: sandiegoecommerce-db
+    plan: free
+    databaseName: sandiegoecommerce
+    user: sandiegoecommerce_user

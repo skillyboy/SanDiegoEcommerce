@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Returns & Refunds - African Food{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Returns & Refunds</li>
+                </ol>
+            </nav>
+            
+            <h1 class="display-4 mb-4">Returns & Refunds</h1>
+            
+            <div class="card shadow-sm mb-5">
+                <div class="card-body">
+                    <h2 class="h4 mb-4 text-success">Our Return Policy</h2>
+                    
+                    <div class="mb-5">
+                        <p>At African Food San Diego, we want you to be completely satisfied with your purchase. If you're not entirely happy with your order, we're here to help.</p>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <h3 class="h5 mb-3">Return Eligibility</h3>
+                        <p>You may return most new, unopened items within 30 days of delivery for a full refund. We also accept returns of opened items within 7 days if they are defective or damaged upon arrival.</p>
+                        
+                        <div class="alert alert-warning mt-3">
+                            <strong>Please Note:</strong> Due to their perishable nature, we cannot accept returns on food items once they have been opened, unless they arrived damaged or spoiled.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <h3 class="h5 mb-3">Non-Returnable Items</h3>
+                        <p>The following items cannot be returned:</p>
+                        <ul>
+                            <li>Perishable goods such as fresh produce, meat, or fish (unless damaged upon arrival)</li>
+                            <li>Gift cards</li>
+                            <li>Downloadable products</li>
+                            <li>Personal care items that have been opened</li>
+                            <li>Items marked as "Final Sale" or "Non-Returnable"</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <h3 class="h5 mb-3">Return Process</h3>
+                        <ol>
+                            <li>Contact our customer service team within 30 days of receiving your order</li>
+                            <li>Provide your order number and details about the item(s) you wish to return</li>
+                            <li>Our team will provide you with a Return Merchandise Authorization (RMA) number</li>
+                            <li>Package the item(s) securely with all original packaging</li>
+                            <li>Include the RMA number on the outside of the package</li>
+                            <li>Ship the package to the address provided by our customer service team</li>
+                        </ol>
+                    </div>
+                    
+                    <h2 class="h4 mb-4 text-success">Refund Policy</h2>
+                    
+                    <div class="mb-5">
+                        <h3 class="h5 mb-3">Processing Time</h3>
+                        <p>Once we receive your returned item(s), we will inspect them and notify you of the status of your refund. If approved, your refund will be processed within 5-7 business days. Refunds are issued to the original payment method used for the purchase.</p>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <h3 class="h5 mb-3">Shipping Costs</h3>
+                        <p>Shipping costs are non-refundable unless the return is due to our error (you received an incorrect or defective item). If you receive a refund, the cost of return shipping will be deducted from your refund unless the return is due to our error.</p>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <h3 class="h5 mb-3">Damaged Items</h3>
+                        <p>If you receive damaged items, please contact us immediately with photos of the damage. We will arrange for a replacement or refund as appropriate.</p>
+                    </div>
+                    
+                    <div class="alert alert-success" role="alert">
+                        <h4 class="alert-heading">Need to make a return?</h4>
+                        <p>If you need to return an item or have questions about our return policy, please contact our customer service team for assistance.</p>
+                        <hr>
+                        <p class="mb-0">
+                            <a href="{% url 'contact_us' %}" class="btn btn-sm btn-outline-success">Contact Us</a>
+                            <a href="{% url 'file_claim' %}" class="btn btn-sm btn-outline-success">File a Claim</a>
+                            <a href="https://wa.me/18626001974?text=Hello,%20I%20need%20to%20make%20a%20return." class="btn btn-sm btn-outline-success"><i class="fab fa-whatsapp me-1"></i> WhatsApp Support</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

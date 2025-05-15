@@ -187,7 +187,7 @@ function enhancedCartAnimation(productId, quantity = 1, email = null) {
                     cartIcon.classList.add('cart-shake');
 
                     // Make AJAX request to add to cart
-                    addToCartWithEmailProvided(productId, quantity, email);
+                    makeAddToCartRequest(productId, quantity, email);
 
                     // Remove animation elements
                     setTimeout(() => {
@@ -204,6 +204,102 @@ function enhancedCartAnimation(productId, quantity = 1, email = null) {
             }, 400);
         }, 400);
     }, 100);
+}
+
+/**
+ * Make the actual AJAX request to add to cart
+ * @param {number} productId - The product ID
+ * @param {number} quantity - The quantity to add
+ * @param {string} email - The user's email
+ */
+function makeAddToCartRequest(productId, quantity = 1, email = null) {
+    console.log('Making AJAX request to add to cart:', productId, quantity, email);
+
+    // Get CSRF token
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+    if (!csrftoken) {
+        console.error('CSRF token not found');
+        showErrorToast('Could not add to cart: CSRF token missing');
+        return;
+    }
+
+    // Prepare data
+    const data = {
+        'quantity': quantity,
+        'csrfmiddlewaretoken': csrftoken
+    };
+
+    // Add email if provided
+    if (email) {
+        data.email = email;
+    }
+
+    // Make AJAX request
+    $.ajax({
+        url: `/add_to_cart/${productId}/`,
+        type: 'POST',
+        data: data,
+        success: function(response) {
+            console.log('Add to cart response:', response);
+
+            if (response.success) {
+                // Update cart count
+                if (response.cart_count !== undefined) {
+                    updateCartCountWithEnhancedAnimation(response.cart_count);
+                }
+
+                // Show success toast
+                showSuccessToast(response.message || 'Product added to cart successfully!');
+            } else {
+                // Show error toast
+                showErrorToast(response.message || 'Failed to add product to cart');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error adding to cart:', error);
+            showErrorToast('Failed to add product to cart. Please try again.');
+        }
+    });
+}
+
+/**
+ * Show a success toast notification
+ * @param {string} message - The message to display
+ */
+function showSuccessToast(message) {
+    if (typeof Toastify === 'function') {
+        Toastify({
+            text: message,
+            duration: 3000,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            backgroundColor: '#28a745',
+            stopOnFocus: true
+        }).showToast();
+    } else {
+        alert(message);
+    }
+}
+
+/**
+ * Show an error toast notification
+ * @param {string} message - The message to display
+ */
+function showErrorToast(message) {
+    if (typeof Toastify === 'function') {
+        Toastify({
+            text: message,
+            duration: 3000,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            backgroundColor: '#dc3545',
+            stopOnFocus: true
+        }).showToast();
+    } else {
+        alert(message);
+    }
 }
 
 /**
@@ -381,8 +477,44 @@ document.addEventListener('DOMContentLoaded', function() {
             // Save the email to session storage
             sessionStorage.setItem('guest_user_email', email);
 
-            // Hide the modal
-            bootstrap.Modal.getInstance(modal).hide();
+            // Hide the modal safely using multiple fallback methods
+            if (!modal) {
+                console.error('Modal element not found');
+            } else {
+                // Try all available methods to hide the modal
+                if (window.ModalManager) {
+                    window.ModalManager.hide(modal);
+                } else if (bootstrap && bootstrap.Modal && bootstrap.Modal.hideModal) {
+                    bootstrap.Modal.hideModal(modal);
+                } else if (bootstrap && bootstrap.Modal) {
+                    try {
+                        const modalInstance = bootstrap.Modal.getInstance(modal);
+                        if (modalInstance) {
+                            modalInstance.hide();
+                        } else {
+                            const newModal = new bootstrap.Modal(modal);
+                            newModal.hide();
+                        }
+                    } catch (error) {
+                        console.error('Error hiding modal with bootstrap:', error);
+                        // Try jQuery as fallback
+                        if (typeof $ !== 'undefined') {
+                            $(modal).modal('hide');
+                        } else {
+                            // Last resort: manual DOM manipulation
+                            modal.classList.remove('show');
+                            modal.style.display = 'none';
+                            document.body.classList.remove('modal-open');
+
+                            // Remove backdrop if exists
+                            const backdrop = document.querySelector('.modal-backdrop');
+                            if (backdrop && backdrop.parentNode) {
+                                backdrop.parentNode.removeChild(backdrop);
+                            }
+                        }
+                    }
+                }
+            }
 
             // Add to cart with the email
             if (productId) {

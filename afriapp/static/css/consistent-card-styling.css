@@ -1,0 +1,221 @@
+/**
+ * Consistent Card Styling
+ * This CSS ensures product cards maintain consistent styling during filtering and searching
+ */
+
+/* Base card styling */
+.unified-card,
+.product-card-nigerian,
+.product-card-african,
+.featured-product-card {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 16px !important;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08) !important;
+    transition: all 0.4s ease !important;
+    height: 100%;
+    border: none !important;
+}
+
+/* Card hover effect */
+.unified-card:hover,
+.product-card-nigerian:hover,
+.product-card-african:hover,
+.featured-product-card:hover {
+    transform: translateY(-10px) !important;
+    box-shadow: 0 20px 30px rgba(0,0,0,0.12) !important;
+}
+
+/* Product image container */
+.product-img-container,
+.featured-product-image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+/* Product image */
+.product-img,
+.featured-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+/* Product image hover effect */
+.unified-card:hover .product-img,
+.product-card-nigerian:hover .product-img,
+.product-card-african:hover .product-img,
+.featured-product-card:hover .featured-product-image img {
+    transform: scale(1.1);
+}
+
+/* Product info container */
+.product-info,
+.featured-product-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Product title */
+.product-title,
+.featured-product-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #2E3A23;
+}
+
+/* Product description */
+.product-description,
+.featured-product-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+/* Product price */
+.product-price,
+.featured-product-price,
+.price-current {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #008751;
+    margin-bottom: 15px;
+    padding: 5px 12px;
+    background-color: rgba(0,135,81,0.1);
+    border-radius: 8px;
+    display: inline-block;
+}
+
+/* Add to cart button */
+.btn-add-to-cart-nigerian,
+.btn-add-to-cart {
+    background-color: #008751;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-add-to-cart-nigerian:hover,
+.btn-add-to-cart:hover {
+    background-color: #006b3e;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Product badge */
+.product-badge-nigerian,
+.featured-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(45deg, #008751, #20c997);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Product badge - new */
+.product-badge-new-nigerian {
+    background: linear-gradient(45deg, #F7C600, #FFA500);
+}
+
+/* Category badge */
+.category-badge-nigerian {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: rgba(0,135,81,0.1);
+    color: #008751;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* Product actions */
+.product-actions {
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: rgba(255,255,255,0.9);
+    transition: bottom 0.3s ease;
+}
+
+.product-card-nigerian:hover .product-actions,
+.product-card-african:hover .product-actions {
+    bottom: 0;
+}
+
+/* Action button */
+.action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    background-color: #008751;
+    color: white;
+}
+
+/* Cultural significance */
+.cultural-significance-short {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .product-img-container,
+    .featured-product-image {
+        height: 200px;
+    }
+    
+    .product-info,
+    .featured-product-content {
+        padding: 15px;
+    }
+    
+    .product-title,
+    .featured-product-title {
+        font-size: 1.1rem;
+    }
+    
+    .product-price,
+    .featured-product-price,
+    .price-current {
+        font-size: 1rem;
+    }
+}

@@ -12,16 +12,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Load Environment Variables
 load_dotenv(BASE_DIR / ".env")
 
-
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key-for-dev")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = getenv("DEBUG")
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['*','localhost',]
+# Configure allowed hosts for Render
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# Add Render domain to allowed hosts
+RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
+# Allow all hosts in development if DEBUG is True
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
 
 YOUR_DOMAIN = os.getenv("YOUR_DOMAIN", "http://127.0.0.1:8000")
 
@@ -51,12 +57,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add whitenoise for static files on Heroku
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'afriapp.middleware.SessionCookieMiddleware',  # Custom middleware to sync session to cookies
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -74,6 +82,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'afriapp', 'static'),  # This is your local static directory
 ]
+
+# Simplified static file serving with whitenoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files (Uploaded files)
 MEDIA_URL = '/media/'
@@ -100,40 +111,23 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('POSTGRES_DB', 'postgres'),
-#         'USER': os.getenv('POSTGRES_USER', 'postgres'),
-#         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'skilly1234'),
-#         'HOST': os.getenv('DB_HOST', 'db'),
-#         'PORT': os.getenv('DB_PORT', '5432'),
-#     }
-# }
-
-# # Use PostgreSQL for production
-# if not 'test' in sys.argv:
-#     DATABASES = {
-#         'default': dj_database_url.parse(
-#             # 'postgresql://africandb_3g6p_user:TGvIOVHFpRqR6eZUlsuHUouM6tHOmq48@dpg-csfdi5hu0jms73ffcm90-a.oregon-postgres.render.com/africandb_3g6p'
-#             "postgresql://afrigold_owner:npg_ouZ8jIFmsUB6@ep-dry-pond-a51vp14m-pooler.us-east-2.aws.neon.tech/afrigold?sslmode=require"
-#         )
-#     }
-# Use SQLite for testing
-# else:
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Use PostgreSQL on Heroku and SQLite locally
+if 'DATABASE_URL' in os.environ:
+    # Configure database for Heroku
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            ssl_require=True
+        )
     }
-}
+else:
+    # Use SQLite for local development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

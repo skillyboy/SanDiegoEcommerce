@@ -182,6 +182,37 @@ function initMobileMenu() {
 }
 
 /**
+ * Update cart count with animation
+ * This function updates the cart count in the navbar with a nice animation
+ */
+function updateCartCountWithAnimation(count) {
+    // Find all cart count elements
+    const cartCountElements = document.querySelectorAll('.cart-counter');
+
+    if (cartCountElements.length === 0) {
+        console.warn('Cart count elements not found');
+        return;
+    }
+
+    // Update each cart count element with animation
+    cartCountElements.forEach(element => {
+        // Add animation class
+        element.classList.add('cart-count-updated');
+
+        // Update the count
+        element.textContent = count;
+
+        // Remove animation class after animation completes
+        setTimeout(() => {
+            element.classList.remove('cart-count-updated');
+        }, 500);
+    });
+
+    // Store the cart count in localStorage for persistence
+    localStorage.setItem('cartCount', count);
+}
+
+/**
  * Enhanced Add to Cart with Modern Animation and Feedback
  * This function handles both the animation and the actual cart addition
  * with improved UX and error handling

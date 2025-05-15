@@ -1,0 +1,136 @@
+/*
+ * Mobile Fixes for San Diego Ecommerce
+ * This file contains fixes for mobile-specific issues
+ */
+
+/* Fix for Add to Cart button on mobile */
+@media (max-width: 767px) {
+    /* Make product cards shorter on mobile */
+    .product-card-nigerian,
+    .product-card-african,
+    .featured-card,
+    .product-item {
+        max-height: 380px;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Ensure product image container is not too tall */
+    .product-img-container,
+    .featured-card-image,
+    .product-image {
+        height: 160px;
+    }
+
+    /* Make product info section more compact */
+    .product-info,
+    .featured-card-content,
+    .product-details {
+        padding: 0.75rem;
+    }
+
+    /* Hide cultural significance on mobile to save space */
+    .cultural-significance-short {
+        display: none;
+    }
+
+    /* Hide action buttons on mobile */
+    .product-actions,
+    .product-actions-overlay,
+    .featured-card-actions {
+        display: none;
+    }
+
+    /* Make Add to Cart button more prominent and visible */
+    .btn-add-to-cart-nigerian,
+    .btn-outline-service-primary,
+    .btn-add-to-cart {
+        width: 100%;
+        padding: 0.6rem 0.5rem;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        font-weight: 600;
+    }
+
+    /* Fix for modal product view on mobile */
+    .modal-dialog-centered {
+        align-items: flex-end;
+    }
+
+    .modal-content {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    /* Ensure quantity control is visible and usable on mobile */
+    .quantity-control {
+        width: 100%;
+        max-width: 120px;
+    }
+
+    .quantity-button {
+        width: 36px;
+        height: 36px;
+    }
+
+    /* Fix for Nigerian Cultural Significance section on mobile */
+    .nigerian-cultural-significance {
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+
+    .cultural-text {
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+
+    .region-tag {
+        padding: 0.15rem 0.5rem;
+        font-size: 0.7rem;
+    }
+
+    /* Fix for service page product grid */
+    .product-grid .col-md-6,
+    .product-grid .col-lg-4,
+    .product-grid .col-xl-3 {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    /* Fix for add to cart button on service pages */
+    .product-details .btn-outline-service-primary,
+    .featured-card-content .btn-outline-service-primary {
+        background-color: var(--service-primary, #008751);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Fix for modal on service pages */
+    #modalProduct .modal-dialog {
+        margin: 0.5rem;
+        max-width: calc(100% - 1rem);
+    }
+
+    /* Fix for add to cart button in modals */
+    .modal-body .btn-service-primary {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    /* Fix for quantity input in modals */
+    .modal-body .input-group {
+        width: 100% !important;
+        margin-right: 0 !important;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Fix for modal actions on mobile */
+    .modal-body .d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+}

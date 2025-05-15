@@ -1,0 +1,144 @@
+# SanDiegoEcommerce
+
+An e-commerce platform for selling Nigerian products to customers in San Diego, USA. The application features product management, user authentication, shopping cart functionality, payment processing with Stripe, and order management.
+
+## Features
+
+- Product browsing by category
+- User authentication and profile management
+- Shopping cart and checkout process
+- Payment processing with Stripe
+- Order tracking and management
+- Wishlist functionality
+- Product reviews and ratings
+- Responsive design with Nigerian/African styling
+
+## Tech Stack
+
+- **Backend**: Django (Python web framework)
+- **Database**: PostgreSQL (production), SQLite (development)
+- **Frontend**: HTML, CSS, JavaScript with Bootstrap
+- **Payment Processing**: Stripe API
+- **Deployment**: Render
+
+## Deployment on Render
+
+### Prerequisites
+
+- Git installed
+- Render account (https://render.com)
+- Python 3.11+ installed
+- Stripe account (for payment processing)
+
+### Deployment Steps
+
+#### Option 1: Deploy with render.yaml (Recommended)
+
+1. **Fork or clone this repository**:
+   ```
+   git clone <repository-url>
+   cd SanDiegoEcommerce
+   ```
+
+2. **Push to your GitHub repository**:
+   ```
+   git remote set-url origin <your-github-repo-url>
+   git push -u origin main
+   ```
+
+3. **Deploy to Render**:
+   - Go to your Render dashboard: https://dashboard.render.com
+   - Click "New" and select "Blueprint"
+   - Connect your GitHub repository
+   - Render will automatically detect the render.yaml file and set up your services
+   - Configure your environment variables for Stripe in the Render dashboard:
+     - STRIPE_PUBLIC_KEY
+     - STRIPE_SECRET_KEY
+     - STRIPE_WEBHOOK_SECRET
+
+4. **Create a superuser**:
+   - Once your service is deployed, go to the "Shell" tab in your Render dashboard
+   - Run: `python manage.py createsuperuser`
+   - Follow the prompts to create an admin account
+
+#### Option 2: Manual Deployment
+
+1. **Create a new Web Service on Render**:
+   - Go to your Render dashboard: https://dashboard.render.com
+   - Click "New" and select "Web Service"
+   - Connect your GitHub repository
+   - Name: sandiegoecommerce (or your preferred name)
+   - Environment: Python
+   - Build Command: `./build.sh`
+   - Start Command: `gunicorn project.wsgi:application`
+
+2. **Configure environment variables**:
+   - Add the following environment variables in the Render dashboard:
+     ```
+     DEBUG=False
+     SECRET_KEY=<your-secret-key>
+     YOUR_DOMAIN=<your-render-domain>
+     STRIPE_PUBLIC_KEY=<your-stripe-public-key>
+     STRIPE_SECRET_KEY=<your-stripe-secret-key>
+     STRIPE_WEBHOOK_SECRET=<your-stripe-webhook-secret>
+     ```
+
+3. **Add a PostgreSQL database**:
+   - Go to your Render dashboard
+   - Click "New" and select "PostgreSQL"
+   - Name: sandiegoecommerce-db (or your preferred name)
+   - Connect your web service to this database by adding the environment variable:
+     ```
+     DATABASE_URL=<your-database-internal-connection-string>
+     ```
+
+4. **Create a superuser**:
+   - Once your service is deployed, go to the "Shell" tab in your Render dashboard
+   - Run: `python manage.py createsuperuser`
+   - Follow the prompts to create an admin account
+
+## Local Development
+
+1. **Clone the repository**:
+   ```
+   git clone <repository-url>
+   cd SanDiegoEcommerce
+   ```
+
+2. **Create and activate a virtual environment**:
+   ```
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies**:
+   ```
+   pip install -r requirements.txt
+   ```
+
+4. **Create a .env file with the following variables**:
+   ```
+   SECRET_KEY=your_secret_key
+   DEBUG=True
+   YOUR_DOMAIN=http://127.0.0.1:8000
+   STRIPE_PUBLIC_KEY=your_stripe_public_key
+   STRIPE_SECRET_KEY=your_stripe_secret_key
+   STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+   ```
+
+5. **Run migrations**:
+   ```
+   python manage.py migrate
+   ```
+
+6. **Create a superuser**:
+   ```
+   python manage.py createsuperuser
+   ```
+
+7. **Run the development server**:
+   ```
+   python manage.py runserver
+   ```
+
+8. Access the site at http://127.0.0.1:8000

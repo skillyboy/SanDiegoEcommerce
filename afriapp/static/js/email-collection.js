@@ -25,8 +25,23 @@ const EmailCollection = {
             console.log('Email already provided:', this.userEmail);
         }
 
+        // Check for Django session flag via cookie (more reliable across page loads)
+        const emailCollectedCookie = this.getCookie('email_collected');
+        if (emailCollectedCookie === 'true') {
+            this.emailProvided = true;
+            console.log('Email already collected according to Django session');
+        }
+
         // Set up event listeners
         this.setupEventListeners();
+    },
+
+    // Helper function to get cookie value
+    getCookie: function(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
     },
 
     // Set up event listeners for the email collection form
@@ -62,16 +77,41 @@ const EmailCollection = {
         // Otherwise, store the pending action and show the modal
         this.pendingAction = pendingAction;
 
-        // Show the modal
-        const modal = new bootstrap.Modal(document.getElementById('emailCollectionModal'));
-        modal.show();
+        // Show the modal safely using ModalManager
+        const emailModal = document.getElementById('emailCollectionModal');
+        if (window.ModalManager && emailModal) {
+            window.ModalManager.show(emailModal);
+        } else {
+            try {
+                const modal = new bootstrap.Modal(emailModal);
+                modal.show();
+            } catch (error) {
+                console.error('Error showing modal:', error);
+                // Try to show with jQuery as fallback
+                if (typeof $ !== 'undefined' && emailModal) {
+                    $(emailModal).modal('show');
+                }
+            }
+        }
     },
 
     // Submit the email collection form
     submitEmailForm: function() {
-        // Get the email from the form
-        const email = $('#emailCollectionEmail').val();
-        const consent = $('#emailCollectionConsent').is(':checked');
+        // Get the email from the form safely
+        const emailInput = document.getElementById('emailCollectionEmail');
+        if (!emailInput) {
+            console.error('Email input element not found');
+            toast.error('Could not find email input field. Please try again or refresh the page.');
+            return;
+        }
+
+        const email = emailInput.value;
+        const consentCheckbox = document.getElementById('emailCollectionConsent');
+        const consent = consentCheckbox ? consentCheckbox.checked : true; // Default to true if checkbox not found
+
+        // Clear previous validation errors
+        $('#emailCollectionEmail').removeClass('is-invalid');
+        $('#emailCollectionConsent').removeClass('is-invalid');
 
         // Validate the email
         if (!this.validateEmail(email)) {
@@ -93,7 +133,7 @@ const EmailCollection = {
         submitBtn.html('<i class="fas fa-spinner fa-spin me-2"></i>Saving...');
         submitBtn.prop('disabled', true);
 
-        // Store the email
+        // Store the email locally first (this ensures the functionality works even if the AJAX call fails)
         this.userEmail = email;
         this.emailProvided = true;
 
@@ -106,7 +146,7 @@ const EmailCollection = {
             type: 'POST',
             data: {
                 'email': email,
-                'consent': consent,
+                'subscribe': consent,
                 'csrfmiddlewaretoken': document.querySelector('[name=csrfmiddlewaretoken]').value
             },
             success: (response) => {
@@ -116,8 +156,57 @@ const EmailCollection = {
                 submitBtn.html(originalBtnText);
                 submitBtn.prop('disabled', false);
 
-                // Hide the modal
-                bootstrap.Modal.getInstance(document.getElementById('emailCollectionModal')).hide();
+                // Check if this is a registered user's email
+                if (response.registered) {
+                    // Show a message asking if they want to log in
+                    if (window.toast && window.toast.info) {
+                        window.toast.info(response.message, {
+                            title: 'Account Found',
+                            actionText: 'Log In',
+                            actionUrl: '/login/'
+                        });
+                    }
+                }
+
+                // Hide the modal safely using multiple fallback methods
+                const emailModal = document.getElementById('emailCollectionModal');
+                if (!emailModal) {
+                    console.error('Email modal element not found');
+                } else {
+                    // Try all available methods to hide the modal
+                    if (window.ModalManager) {
+                        window.ModalManager.hide(emailModal);
+                    } else if (bootstrap && bootstrap.Modal && bootstrap.Modal.hideModal) {
+                        bootstrap.Modal.hideModal(emailModal);
+                    } else if (bootstrap && bootstrap.Modal) {
+                        try {
+                            const modalInstance = bootstrap.Modal.getInstance(emailModal);
+                            if (modalInstance) {
+                                modalInstance.hide();
+                            } else {
+                                const newModal = new bootstrap.Modal(emailModal);
+                                newModal.hide();
+                            }
+                        } catch (error) {
+                            console.error('Error hiding modal with bootstrap:', error);
+                            // Try jQuery as fallback
+                            if (typeof $ !== 'undefined') {
+                                $(emailModal).modal('hide');
+                            } else {
+                                // Last resort: manual DOM manipulation
+                                emailModal.classList.remove('show');
+                                emailModal.style.display = 'none';
+                                document.body.classList.remove('modal-open');
+
+                                // Remove backdrop if exists
+                                const backdrop = document.querySelector('.modal-backdrop');
+                                if (backdrop && backdrop.parentNode) {
+                                    backdrop.parentNode.removeChild(backdrop);
+                                }
+                            }
+                        }
+                    }
+                }
 
                 // Execute the pending action if there is one
                 if (this.pendingAction) {
@@ -127,13 +216,20 @@ const EmailCollection = {
                 }
 
                 // Show a success toast with animation
-                toast.success('Email saved! Your cart will be associated with this email.', {
+                toast.success(response.message || 'Email saved! Your cart will be associated with this email.', {
                     title: 'Thank You!',
                     icon: '<i class="fas fa-envelope-open-text"></i>',
                     style: {
                         borderLeft: '4px solid #D2691E'
                     }
                 });
+
+                // If there's a warning, show it
+                if (response.warning && window.toast && window.toast.warning) {
+                    window.toast.warning(response.warning, {
+                        title: 'Note'
+                    });
+                }
             },
             error: (xhr, status, error) => {
                 console.error('Error saving email:', error);
@@ -142,9 +238,60 @@ const EmailCollection = {
                 submitBtn.html(originalBtnText);
                 submitBtn.prop('disabled', false);
 
-                // Show error message
-                toast.error('There was an error saving your email. Please try again.', {
-                    title: 'Error'
+                // Even if the server request fails, we still want to proceed with the action
+                // since we've already stored the email locally
+
+                // Hide the modal safely using multiple fallback methods
+                const emailModal = document.getElementById('emailCollectionModal');
+                if (!emailModal) {
+                    console.error('Email modal element not found');
+                } else {
+                    // Try all available methods to hide the modal
+                    if (window.ModalManager) {
+                        window.ModalManager.hide(emailModal);
+                    } else if (bootstrap && bootstrap.Modal && bootstrap.Modal.hideModal) {
+                        bootstrap.Modal.hideModal(emailModal);
+                    } else if (bootstrap && bootstrap.Modal) {
+                        try {
+                            const modalInstance = bootstrap.Modal.getInstance(emailModal);
+                            if (modalInstance) {
+                                modalInstance.hide();
+                            } else {
+                                const newModal = new bootstrap.Modal(emailModal);
+                                newModal.hide();
+                            }
+                        } catch (error) {
+                            console.error('Error hiding modal with bootstrap:', error);
+                            // Try jQuery as fallback
+                            if (typeof $ !== 'undefined') {
+                                $(emailModal).modal('hide');
+                            } else {
+                                // Last resort: manual DOM manipulation
+                                emailModal.classList.remove('show');
+                                emailModal.style.display = 'none';
+                                document.body.classList.remove('modal-open');
+
+                                // Remove backdrop if exists
+                                const backdrop = document.querySelector('.modal-backdrop');
+                                if (backdrop && backdrop.parentNode) {
+                                    backdrop.parentNode.removeChild(backdrop);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Execute the pending action if there is one
+                if (this.pendingAction) {
+                    console.log('Executing pending action with email despite server error:', email);
+                    this.pendingAction(email);
+                    this.pendingAction = null;
+                }
+
+                // Show a warning toast
+                toast.warning('Your action was completed, but we had trouble saving your email for future sessions.', {
+                    title: 'Partial Success',
+                    icon: '<i class="fas fa-exclamation-triangle"></i>'
                 });
             }
         });
@@ -307,14 +454,6 @@ function addToCartWithEmailProvided(productId, quantity = 1, email) {
 
                 // Update the add to cart button state
                 updateAddToCartButtonState(productId, true);
-
-                // Refresh the cart modal if it's open
-                if ($('#modalShoppingCart').hasClass('show')) {
-                    // Trigger a click on the cart icon to refresh the modal
-                    setTimeout(() => {
-                        $('.navbar .fa-shopping-cart').parent().click();
-                    }, 500);
-                }
             } else {
                 // Show error toast
                 toast.error(response.message || 'Failed to add product to cart', {
@@ -618,6 +757,13 @@ function updateAddToCartButtonState(productId, inCart) {
  * @param {string} action - 'increase' or 'decrease'
  */
 function updateCartQuantity(productId, action) {
+    // Prevent multiple clicks
+    if (window.isUpdatingCart) {
+        return;
+    }
+
+    window.isUpdatingCart = true;
+
     // Show loading toast
     const loadingToast = toast.loading(`${action === 'increase' ? 'Increasing' : 'Decreasing'} quantity...`);
 
@@ -629,6 +775,7 @@ function updateCartQuantity(productId, action) {
             'csrfmiddlewaretoken': document.querySelector('[name=csrfmiddlewaretoken]').value
         },
         success: function(response) {
+            window.isUpdatingCart = false;
             toast.close(loadingToast);
 
             if (response.success) {
@@ -656,6 +803,7 @@ function updateCartQuantity(productId, action) {
             }
         },
         error: function() {
+            window.isUpdatingCart = false;
             toast.close(loadingToast);
             toast.error(`Failed to ${action} quantity. Please try again.`, {
                 title: 'Error'

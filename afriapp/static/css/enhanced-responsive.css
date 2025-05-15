@@ -17,52 +17,72 @@
     .product-card-african,
     .product-card-nigerian {
         margin-bottom: 1.5rem;
+        height: auto;
+        max-height: 350px;
     }
-    
+
     .product-img-container {
-        height: 200px;
+        height: 180px;
     }
-    
+
     .product-img {
         height: 100%;
         object-fit: cover;
     }
-    
+
     .product-title {
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .cultural-significance-short {
-        font-size: 0.8rem;
-        margin-bottom: 0.5rem;
-        -webkit-line-clamp: 2;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
+        font-size: 0.95rem;
+        margin-bottom: 0.3rem;
+        height: auto;
+        max-height: 40px;
         overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
-    
+
+    .cultural-significance-short {
+        display: none; /* Hide on mobile to save space */
+    }
+
     .product-price {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.3rem;
     }
-    
+
     .price-current {
-        font-size: 1rem;
+        font-size: 0.95rem;
+        font-weight: 600;
     }
-    
+
+    /* Hide basket and love buttons on mobile */
     .product-actions {
-        flex-wrap: wrap;
+        display: none;
     }
-    
-    .action-btn {
-        width: 35px;
-        height: 35px;
-        font-size: 0.8rem;
-    }
-    
+
+    /* Make add to cart button more prominent */
     .btn-add-to-cart {
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
+        width: 100%;
+        padding: 0.5rem;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-add-to-cart i {
+        margin-right: 5px;
+    }
+
+    /* Improve category badge */
+    .category-badge-nigerian {
+        font-size: 0.7rem;
+        padding: 2px 6px;
+    }
+
+    /* Improve product info section */
+    .product-info {
+        padding: 0.5rem;
     }
 }
 
@@ -71,23 +91,23 @@
     .navbar-brand img {
         max-height: 40px;
     }
-    
+
     .navbar-toggler {
         padding: 0.25rem 0.5rem;
         font-size: 1rem;
     }
-    
+
     .navbar-collapse {
         max-height: 80vh;
         overflow-y: auto;
         padding: 1rem;
     }
-    
+
     .nav-link {
         padding: 0.75rem 1rem;
         border-bottom: 1px solid rgba(0,0,0,0.05);
     }
-    
+
     .dropdown-menu {
         border: none;
         padding: 0 0 0 1rem;
@@ -95,7 +115,7 @@
         background-color: transparent;
         box-shadow: none;
     }
-    
+
     .dropdown-item {
         padding: 0.5rem 1rem;
         color: inherit;
@@ -107,28 +127,28 @@
     .hero-slide {
         padding: 2rem 0;
     }
-    
+
     .min-vh-70 {
         min-height: auto;
         padding: 3rem 0;
     }
-    
+
     .hero-slide .display-3 {
         font-size: 2rem;
         margin-bottom: 1rem;
     }
-    
+
     .hero-slide .lead {
         font-size: 1rem;
         margin-bottom: 1.5rem;
     }
-    
+
     .hero-image {
         margin-top: 2rem;
         max-height: 250px;
         object-fit: cover;
     }
-    
+
     .btn-lg {
         padding: 0.5rem 1rem;
         font-size: 0.9rem;
@@ -140,25 +160,25 @@
     .footer {
         padding: 2rem 0;
     }
-    
+
     .footer-title {
         margin-top: 1.5rem;
         margin-bottom: 1rem;
     }
-    
+
     .footer-links {
         margin-bottom: 1.5rem;
     }
-    
+
     .footer-social {
         margin-top: 1rem;
     }
-    
+
     .footer-bottom {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .footer-bottom .footer-links {
         margin-top: 1rem;
     }
@@ -170,24 +190,24 @@
         padding: 1rem;
         margin-bottom: 1rem;
     }
-    
+
     .cart-item-image {
         width: 80px;
         height: 80px;
     }
-    
+
     .cart-item-title {
         font-size: 0.9rem;
     }
-    
+
     .cart-item-price {
         font-size: 0.9rem;
     }
-    
+
     .cart-quantity-input {
         width: 60px;
     }
-    
+
     .cart-summary {
         padding: 1rem;
     }
@@ -196,7 +216,7 @@
 /* ===== IMPROVED TOUCH TARGETS ===== */
 @media (max-width: 767px) {
     /* Larger touch targets for mobile */
-    .btn, 
+    .btn,
     .nav-link,
     .dropdown-item,
     .form-control,
@@ -204,12 +224,12 @@
     .product-link-overlay {
         min-height: 44px; /* Apple's recommended minimum touch target size */
     }
-    
+
     /* Add more space between clickable elements */
     .btn + .btn {
         margin-left: 0.5rem;
     }
-    
+
     /* Ensure form elements are easily tappable */
     input[type="checkbox"],
     input[type="radio"] {
@@ -223,31 +243,31 @@
     .mobile-text-center {
         text-align: center !important;
     }
-    
+
     .mobile-mt-3 {
         margin-top: 1rem !important;
     }
-    
+
     .mobile-mb-3 {
         margin-bottom: 1rem !important;
     }
-    
+
     .mobile-p-2 {
         padding: 0.5rem !important;
     }
-    
+
     .mobile-order-1 {
         order: 1 !important;
     }
-    
+
     .mobile-order-2 {
         order: 2 !important;
     }
-    
+
     .mobile-d-none {
         display: none !important;
     }
-    
+
     .mobile-d-block {
         display: block !important;
     }
