@@ -4,7 +4,7 @@ services:
     name: sandiegoecommerce
     env: python
     buildCommand: chmod +x build.sh && ./build.sh
-    startCommand: gunicorn project.wsgi:application
+    startCommand: python manage.py migrate && gunicorn project.wsgi:application
     envVars:
       - key: DEBUG
         value: False

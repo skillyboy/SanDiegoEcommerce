@@ -39,9 +39,16 @@ from django.conf import settings
 from django.shortcuts import render
 from django.urls import reverse
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
 # Logging configuration
 logger = logging.getLogger(__name__)
+
+# Set Stripe API key with error handling
+try:
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    if not stripe.api_key:
+        logger.error("Stripe API key is not set or empty")
+except Exception as e:
+    logger.error(f"Error setting Stripe API key: {e}")
 
 # from rest_framework.response import Response
 from django.contrib.auth.forms import PasswordChangeForm
