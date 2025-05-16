@@ -24,7 +24,6 @@ class Customer(models.Model):
     is_guest = models.BooleanField(default=False)
 
     class Meta:
-        db_table = 'customer'
         managed = True
         verbose_name = 'customer'
         verbose_name_plural = 'customers'

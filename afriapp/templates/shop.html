@@ -71,6 +71,7 @@
         background-color: #f8f9fa;
         position: relative;
         overflow: hidden;
+        padding: 10px 0;
     }
 
     .shop-hero::before {
@@ -79,31 +80,8 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: 5px;
+        height: 3px;
         background: linear-gradient(to right, #008751, #F7C600);
-    }
-
-    .shop-title {
-        font-family: 'Playfair Display', serif;
-        color: #2E3A23;
-        position: relative;
-        display: inline-block;
-    }
-
-    .shop-title::after {
-        content: '';
-        position: absolute;
-        bottom: -10px;
-        left: 0;
-        width: 80px;
-        height: 4px;
-        background-color: #008751;
-    }
-
-    .shop-features {
-        display: flex;
-        gap: 20px;
-        margin-top: 30px;
     }
 
     .feature-item {
@@ -111,15 +89,15 @@
         align-items: center;
         gap: 10px;
         background-color: white;
-        padding: 10px 15px;
+        padding: 8px 15px;
         border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         transition: all 0.3s ease;
     }
 
     .feature-item:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
     .feature-item i {
@@ -127,41 +105,23 @@
         font-size: 1.2rem;
     }
 
-    .shop-hero-image {
-        position: relative;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-    }
-
-    .shop-hero-badge {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        background: linear-gradient(45deg, #008751, #20c997);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 30px;
-        font-weight: 700;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        transform: rotate(5deg);
-        animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-        0%, 100% { transform: translateY(0) rotate(5deg); }
-        50% { transform: translateY(-10px) rotate(5deg); }
-    }
-
-    @media (max-width: 767px) {
-        .shop-features {
-            flex-direction: column;
-            gap: 10px;
+    /* Responsive adjustments */
+    @media (max-width: 767.98px) {
+        .shop-hero {
+            padding: 5px 0;
         }
 
-        .shop-hero-badge {
-            padding: 8px 15px;
+        .feature-item {
+            padding: 5px 10px;
             font-size: 0.9rem;
+        }
+
+        .feature-item i {
+            font-size: 1rem;
+        }
+
+        .shop-header {
+            margin-bottom: 0.5rem !important;
         }
     }
 
@@ -266,36 +226,60 @@
         padding: 10px 20px;
         border-radius: 8px;
         font-weight: 600;
-        margin-right: 10px;
         transition: all 0.3s ease;
         cursor: pointer;
         flex-grow: 1;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
 
     .btn-view-product:hover {
         background-color: #006b3e;
         transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .featured-product-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
     }
 
     .btn-add-to-cart {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
         background-color: #F7C600;
         color: #2E3A23;
         border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
         transition: all 0.3s ease;
         cursor: pointer;
         box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-grow: 1;
     }
 
     .btn-add-to-cart:hover {
-        transform: translateY(-3px) rotate(5deg);
+        transform: translateY(-3px);
+        background-color: #e6b800;
         box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .btn-add-to-cart i {
+        font-size: 1.1rem;
+    }
+
+    /* Add to cart animation */
+    @keyframes addingToCart {
+        0% { transform: scale(1); background-color: #F7C600; }
+        50% { transform: scale(1.05); background-color: #008751; color: white; }
+        100% { transform: scale(1); background-color: #F7C600; }
+    }
+
+    .adding-to-cart {
+        animation: addingToCart 1s ease-in-out;
+        pointer-events: none;
     }
 
     /* Category Highlights Styles */
@@ -363,6 +347,52 @@
     .products-section {
         margin-bottom: 40px;
     }
+
+    /* Lazy loading image styles */
+    img.lazyload {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    img.loaded {
+        opacity: 1;
+    }
+
+    /* Search input styles */
+    #search-input {
+        transition: all 0.2s ease-in-out;
+    }
+
+    #search-input.searching {
+        background-color: rgba(0, 135, 81, 0.05);
+        border-color: #008751;
+    }
+
+    /* Improve search suggestions appearance */
+    #search-suggestions {
+        border: 1px solid #dee2e6;
+        border-top: none;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        border-radius: 0 0 0.25rem 0.25rem;
+    }
+
+    .suggestion-item {
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .suggestion-item:hover {
+        background-color: rgba(0, 135, 81, 0.05);
+    }
+
+    .suggestion-name {
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .suggestion-price {
+        font-size: 0.8rem;
+    }
 </style>
 
 <body>
@@ -379,31 +409,22 @@
     </nav>
 
 <!-- SHOP HERO SECTION -->
-<section class="py-6 bg-light shop-hero">
+<section class="py-2 bg-light shop-hero">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-12 col-md-6 mb-5 mb-md-0">
-                <h1 class="display-4 mb-4 shop-title">Shop</h1>
-                <div class="shop-features">
+            <div class="col-12">
+                <div class="d-flex align-items-center justify-content-between">
                     <div class="feature-item">
                         <i class="fas fa-shipping-fast"></i>
                         <span>Fast Shipping</span>
                     </div>
-                    <div class="feature-item">
+                    <div class="feature-item d-none d-md-flex">
                         <i class="fas fa-certificate"></i>
                         <span>Authentic Products</span>
                     </div>
-                    <div class="feature-item">
+                    <div class="feature-item d-none d-md-flex">
                         <i class="fas fa-undo"></i>
                         <span>Easy Returns</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <div class="shop-hero-image">
-                    <img src="{% static 'img/afrocommerce/shop-hero.jpg' %}" alt="Nigerian Food Products" class="img-fluid rounded shadow-lg" onerror="this.src='{% static 'img/placeholder.png' %}'">
-                    <div class="shop-hero-badge">
-                        <span>Premium Quality</span>
                     </div>
                 </div>
             </div>
@@ -415,72 +436,67 @@
 <div class="container-fluid">
     <div class="row gx-0">
 
-        <!-- Category Selection -->
-        <div class="col-12 col-lg-auto">
-            <nav class="navbar navbar-expand-lg navbar-vertical navbar-light sticky-start px-lg-7">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSidenavLeftCollapse" aria-controls="navbarSidenavLeftCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div id="navbarSidenavLeftCollapse" class="collapse navbar-collapse">
-                    <div class="category-sidebar">
-                        <h5 class="sidebar-heading">Categories</h5>
-                        <ul class="navbar-nav fs-lg mb-6 my-lg-4 mx-sm-3" id="sidenavParent">
+        <!-- Category Selection - Visible only on large screens -->
+        <div class="col-12 col-lg-auto d-none d-lg-block">
+            <nav class="navbar navbar-expand navbar-vertical navbar-light sticky-start px-lg-7">
+                <div class="category-sidebar">
+                    <h5 class="sidebar-heading">Categories</h5>
+                    <ul class="navbar-nav fs-lg mb-6 my-lg-4 mx-sm-3" id="sidenavParent">
+                        <li class="nav-item">
+                            <a class="nav-link category-link active" href="#" id="all-products" data-category-id="all">
+                                <i class="fas fa-th-large me-2"></i> All Products
+                            </a>
+                        </li>
+
+                        <!-- Services (Main Categories) -->
+                        {% for service in services %}
                             <li class="nav-item">
-                                <a class="nav-link category-link active" href="#" id="all-products" data-category-id="all">
-                                    <i class="fas fa-th-large me-2"></i> All Products
+                                <a class="nav-link dropdown-toggle"
+                                   data-bs-toggle="collapse"
+                                   href="#service-{{ service.id }}"
+                                   data-service-id="{{ service.id }}">
+                                   <i class="fas fa-tag me-2"></i> {{ service.name }}
                                 </a>
-                            </li>
 
-                            <!-- Services (Main Categories) -->
-                            {% for service in services %}
-                                <li class="nav-item">
-                                    <a class="nav-link dropdown-toggle"
-                                       data-bs-toggle="collapse"
-                                       href="#service-{{ service.id }}"
-                                       data-service-id="{{ service.id }}">
-                                       <i class="fas fa-tag me-2"></i> {{ service.name }}
-                                    </a>
-
-                                    <div class="collapse" id="service-{{ service.id }}" data-bs-parent="#sidenavParent">
-                                        <div class="row">
-                                            <div class="col-12 py-2">
-                                                <ul class="list-styled fs-base subcategory-list">
-                                                    {% for category in service_categories|get_item:service %}
-                                                        <li class="list-styled-item">
-                                                            <a class="list-styled-link category-link"
-                                                               href="#"
-                                                               data-category-id="{{ category.id }}">
-                                                                {{ category.name }}
-                                                                <span class="badge bg-light text-dark ms-2">{{ category.product_count }}</span>
-                                                            </a>
-                                                        </li>
-                                                    {% empty %}
-                                                        <li class="list-styled-item">No categories available</li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
+                                <div class="collapse" id="service-{{ service.id }}" data-bs-parent="#sidenavParent">
+                                    <div class="row">
+                                        <div class="col-12 py-2">
+                                            <ul class="list-styled fs-base subcategory-list">
+                                                {% for category in service_categories|get_item:service %}
+                                                    <li class="list-styled-item">
+                                                        <a class="list-styled-link category-link"
+                                                           href="#"
+                                                           data-category-id="{{ category.id }}">
+                                                            {{ category.name }}
+                                                            <span class="badge bg-light text-dark ms-2">{{ category.product_count }}</span>
+                                                        </a>
+                                                    </li>
+                                                {% empty %}
+                                                    <li class="list-styled-item">No categories available</li>
+                                                {% endfor %}
+                                            </ul>
                                         </div>
                                     </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-
-                        <!-- Price Filter -->
-                        <div class="filter-section mt-4">
-                            <h5 class="sidebar-heading">Price Range</h5>
-                            <div class="price-slider-container px-2 py-3">
-                                <div class="price-inputs d-flex justify-content-between mb-2">
-                                    <div class="price-input">
-                                        <label for="min-price" class="form-label small">Min</label>
-                                        <input type="number" id="min-price" class="form-control form-control-sm" value="0">
-                                    </div>
-                                    <div class="price-input">
-                                        <label for="max-price" class="form-label small">Max</label>
-                                        <input type="number" id="max-price" class="form-control form-control-sm" value="1000">
-                                    </div>
                                 </div>
-                                <button id="apply-price-filter" class="btn btn-sm btn-outline-primary w-100 mt-2">Apply Filter</button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- Price Filter -->
+                    <div class="filter-section mt-4">
+                        <h5 class="sidebar-heading">Price Range</h5>
+                        <div class="price-slider-container px-2 py-3">
+                            <div class="price-inputs d-flex justify-content-between mb-2">
+                                <div class="price-input">
+                                    <label for="min-price" class="form-label small">Min</label>
+                                    <input type="number" id="min-price" class="form-control form-control-sm" value="0">
+                                </div>
+                                <div class="price-input">
+                                    <label for="max-price" class="form-label small">Max</label>
+                                    <input type="number" id="max-price" class="form-control form-control-sm" value="1000">
+                                </div>
                             </div>
+                            <button id="apply-price-filter" class="btn btn-sm btn-outline-primary w-100 mt-2">Apply Filter</button>
                         </div>
                     </div>
                 </div>
@@ -489,44 +505,50 @@
         <!-- Category ends -->
 
         <div class="col-12 col-lg">
-            <!-- Search bar -->
-            <nav class="navbar navbar-expand navbar-light pt-0 pt-lg-6">
+            <!-- Search bar and cart in one line with dropdown -->
+            <nav class="navbar navbar-expand navbar-light pt-0 pt-lg-3">
                 <div class="container-fluid d-flex justify-content-between align-items-center">
-                    <div class="navbar-form w-100" style="max-width: 550px;">
-                        <div class="input-group">
-                            <input id="search-input" class="form-control form-control-underline form-control-sm border-dark"
-                                   type="search" name="search" placeholder="Search for items and brands"
-                                   aria-label="Search" value="{{ search_query|default:'' }}">
-                            <div class="input-group-append">
-                                <button id="search-button" class="btn btn-underline btn-sm border-dark" type="button">
-                                    <i class="fe fe-search"></i>
-                                </button>
+                    <div class="d-flex align-items-center w-100">
+                        <div class="dropdown me-1 me-md-2">
+                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="d-none d-sm-inline">Categories</span>
+                                <span class="d-inline d-sm-none"><i class="fas fa-list"></i></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                                <li><a class="dropdown-item" href="#" onclick="filterProducts('all')">All Products</a></li>
+                                {% for category in categories %}
+                                <li><a class="dropdown-item" href="#" onclick="filterProducts('{{ category.id }}')">{{ category.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="navbar-form flex-grow-1 me-1 me-md-2" style="max-width: 550px;">
+                            <div class="input-group">
+                                <input id="search-input" class="form-control form-control-underline form-control-sm border-dark"
+                                       type="search" name="search" placeholder="Search..."
+                                       aria-label="Search" value="{{ search_query|default:'' }}" onkeyup="searchProducts(event)">
+                            </div>
+                            <div id="search-suggestions" class="position-absolute bg-white shadow-sm rounded-bottom d-none"
+                                 style="width: calc(100% - 50px); z-index: 1000; max-height: 300px; overflow-y: auto;">
                             </div>
                         </div>
-                        <div id="search-suggestions" class="position-absolute bg-white shadow-sm rounded-bottom d-none"
-                             style="width: calc(100% - 50px); z-index: 1000; max-height: 300px; overflow-y: auto;">
+                        <div class="cart-button-count">
+                            <a href="{% url 'cart' %}" class="btn btn-dark btn-sm cart-button-count">
+                                <i class="fe fe-shopping-cart"></i> <span class="d-none d-sm-inline">Cart</span> <span id="cart-button-count">{{ cart_count }}</span>
+                            </a>
                         </div>
-                    </div>
-                    <div class="cart-button-count">
-                        <a href="{% url 'cart' %}" class="btn btn-dark btn-sm cart-button-count">
-                            <i class="fe fe-shopping-cart"></i> Cart <span id="cart-button-count">{{ cart_count }}</span>
-                        </a>
                     </div>
                 </div>
             </nav>
 
             <!-- PRODUCT CARDS DISPLAY -->
             <section class="pb-12">
-                <!-- Shop Header with Title and Description -->
-                <div class="shop-header mb-5">
+                <!-- Shop Header with Title and Description - Hidden on small screens -->
+                <div class="shop-header mb-4">
                     <div class="row align-items-center">
-                        <div class="col-12 col-md-8">
-                            <h1 class="display-6 mb-2">Products</h1>
-                            <p class="lead text-muted"></p>
-                        </div>
-                        <div class="col-12 col-md-4 text-md-end">
-                            <div class="d-flex justify-content-md-end align-items-center">
-                                <label for="sort-products" class="me-2 text-muted">Sort by:</label>
+                        <div class="col-12 d-flex justify-content-between align-items-center">
+                            <h1 class="display-6 mb-0 d-none d-md-block">Products</h1>
+                            <div class="d-flex align-items-center">
+                                <label for="sort-products" class="me-2 text-muted mb-0">Sort by:</label>
                                 <select id="sort-products" class="form-select form-select-sm" style="width: auto;">
                                     <option value="newest">Newest</option>
                                     <option value="price-low">Price: Low to High</option>
@@ -557,12 +579,14 @@
                                             <h3 class="featured-product-title">{{ product.name }}</h3>
                                             <p class="featured-product-description">{{ product.description|truncatechars:100 }}</p>
                                             <div class="featured-product-price">${{ product.price }}</div>
-                                            <button class="btn-view-product" onclick="window.location.href='{% url 'product' product.id %}'">
-                                                View Details
-                                            </button>
-                                            <button class="btn-add-to-cart" onclick="addToCartWithAnimation({{ product.id }})">
-                                                <i class="fe fe-shopping-cart"></i>
-                                            </button>
+                                            <div class="featured-product-buttons">
+                                                <button class="btn-view-product" onclick="window.location.href='{% url 'product' product.id %}'">
+                                                    View Details
+                                                </button>
+                                                <button class="btn-add-to-cart" onclick="addToCartWithAnimation({{ product.id }})">
+                                                    <i class="fe fe-shopping-cart"></i> Add to Cart
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -694,6 +718,13 @@
             .filter-section {
                 border-top: 1px solid #eee;
                 padding-top: 1rem;
+            }
+
+            /* Hide filter sidebar on small screens */
+            @media (max-width: 991.98px) {
+                .category-sidebar {
+                    display: none !important;
+                }
             }
         `;
         document.head.appendChild(styleElement);
@@ -877,12 +908,43 @@
 
     // Function to add product to cart with animation
     function addToCartWithAnimation(productId) {
-        // Use our enhanced cart flow
-        if (typeof EnhancedCartFlow !== 'undefined') {
-            EnhancedCartFlow.addToCartWithAnimation(productId);
+        // First show visual feedback on the button
+        const button = event.currentTarget;
+        if (button) {
+            // Add a visual feedback class
+            button.classList.add('adding-to-cart');
+
+            // Add a temporary "Adding..." text
+            const originalContent = button.innerHTML;
+            button.innerHTML = '<i class="fe fe-shopping-cart"></i> Adding...';
+
+            // Disable the button temporarily to prevent multiple clicks
+            button.disabled = true;
+
+            // After a short delay, restore the button and add to cart
+            setTimeout(() => {
+                // Use our enhanced cart flow
+                if (typeof EnhancedCartFlow !== 'undefined') {
+                    EnhancedCartFlow.addToCartWithAnimation(productId);
+                } else {
+                    // Fallback to original function
+                    add_to_cart(productId);
+                }
+
+                // Restore button after animation
+                setTimeout(() => {
+                    button.classList.remove('adding-to-cart');
+                    button.innerHTML = originalContent;
+                    button.disabled = false;
+                }, 1000);
+            }, 300);
         } else {
-            // Fallback to original function
-            add_to_cart(productId);
+            // If button not found, just add to cart
+            if (typeof EnhancedCartFlow !== 'undefined') {
+                EnhancedCartFlow.addToCartWithAnimation(productId);
+            } else {
+                add_to_cart(productId);
+            }
         }
     }
 
@@ -952,6 +1014,121 @@
                 cartIcon.style.animation = '';
             }, 800);
         }, 10);
+    }
+
+    // Optimized search functionality with better performance
+    let searchTimeout;
+    let lastSearchQuery = '';
+    let searchCache = {}; // Simple cache for search results
+
+    function searchProducts(event) {
+        // Clear previous timeout
+        clearTimeout(searchTimeout);
+
+        // If Enter key is pressed, search immediately
+        if (event.key === 'Enter') {
+            performSearch();
+            return;
+        }
+
+        // Otherwise, set a timeout to search after typing stops (reduced from 500ms to 300ms)
+        searchTimeout = setTimeout(performSearch, 300);
+    }
+
+    // Function to perform the actual search with optimizations
+    function performSearch() {
+        const searchQuery = $('#search-input').val().trim();
+
+        // Don't search if query is too short or same as last search
+        if (searchQuery.length < 2) {
+            return;
+        }
+
+        if (searchQuery === lastSearchQuery) {
+            return; // Avoid duplicate searches
+        }
+
+        lastSearchQuery = searchQuery;
+
+        // Reset pagination
+        currentPage = 1;
+        hasMoreProducts = true;
+        currentCategoryId = '';
+
+        // Show loading indicator
+        $('#loading-indicator').removeClass('d-none');
+
+        // Add loading state to search input
+        $('#search-input').addClass('searching');
+
+        // Clear product list with animation
+        $('#product-list').fadeOut(150, function() {
+            $(this).empty();
+
+            // Check cache first
+            if (searchCache[searchQuery]) {
+                handleSearchResults(searchCache[searchQuery]);
+                return;
+            }
+
+            // Reset load more button
+            $('#load-more-btn').text('Discover More Nigerian Products').removeClass('disabled').prop('disabled', false);
+
+            // Load products matching search query
+            $.ajax({
+                url: "{% url 'load_more_products' %}",
+                type: "GET",
+                data: {
+                    'page': 1,
+                    'per_page': 12,
+                    'search': searchQuery
+                },
+                success: function(response) {
+                    // Cache the results
+                    searchCache[searchQuery] = response;
+
+                    // Handle the results
+                    handleSearchResults(response);
+                },
+                error: function() {
+                    console.error('Error searching products');
+                    $('#loading-indicator').addClass('d-none');
+                    $('#search-input').removeClass('searching');
+                    $('#product-list').fadeIn(150);
+                }
+            });
+        });
+    }
+
+    // Separate function to handle search results (improves code organization)
+    function handleSearchResults(response) {
+        // Append products to the list
+        if (response.products.length > 0) {
+            appendProductsToDOM(response.products);
+        } else {
+            $('#product-list').html(`
+                <div class="col-12 text-center py-5">
+                    <div class="mb-4">
+                        <img src="{% static 'img/empty-cart.svg' %}" alt="No products found" style="max-width: 150px;">
+                    </div>
+                    <h3>No products found</h3>
+                    <p class="text-muted">Try adjusting your search to find what you're looking for.</p>
+                </div>
+            `);
+        }
+
+        // Check if there are more products
+        hasMoreProducts = response.has_more;
+
+        // Update UI
+        if (!hasMoreProducts) {
+            $('#load-more-btn').text('No More Products').addClass('disabled');
+        }
+
+        // Hide loading indicator and show results with animation
+        $('#loading-indicator').addClass('d-none');
+        $('#search-input').removeClass('searching');
+        $('#product-list').fadeIn(200);
     }
 
     // Function to load more products
@@ -1028,7 +1205,7 @@
 
 
 
-                        <img src="${product.image_url}" alt="${product.name}" class="product-img lazyload">
+                        <img data-src="${product.image_url}" src="{% static 'img/placeholder.png' %}" alt="${product.name}" class="product-img lazyload" loading="lazy">
                         <div class="product-actions">
                             <button class="action-btn" data-bs-toggle="modal" data-bs-target="#modalProduct${product.id}" title="Quick View">
                                 <i class="fas fa-eye"></i>
@@ -1129,32 +1306,201 @@
         document.body.appendChild(modalElement);
     }
 
-    // Initialize lazy loading for images
+    // Initialize lazy loading for images with improved performance
     function initLazyLoading() {
         const lazyImages = document.querySelectorAll('img.lazyload');
 
         if ('IntersectionObserver' in window) {
+            // Use a single observer for all images with optimized options
             const imageObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const img = entry.target;
-                        img.src = img.dataset.src;
-                        img.classList.remove('lazyload');
+                        if (img.dataset.src) {
+                            // Create a new image to preload
+                            const tempImg = new Image();
+                            tempImg.onload = function() {
+                                // Once preloaded, update the visible image
+                                img.src = img.dataset.src;
+                                img.classList.add('loaded');
+                                img.classList.remove('lazyload');
+                                // Remove the data-src to prevent potential reloading
+                                img.removeAttribute('data-src');
+                            };
+                            tempImg.src = img.dataset.src;
+                        }
+                        // Stop observing this image
                         observer.unobserve(img);
                     }
                 });
+            }, {
+                // Optimize observer options
+                rootMargin: '50px 0px', // Start loading when image is 50px from viewport
+                threshold: 0.1 // Trigger when at least 10% of the image is visible
             });
 
+            // Observe all lazy images
             lazyImages.forEach(img => {
                 imageObserver.observe(img);
             });
         } else {
             // Fallback for browsers that don't support IntersectionObserver
-            lazyImages.forEach(img => {
-                img.src = img.dataset.src;
-                img.classList.remove('lazyload');
-            });
+            // Load images with a slight delay to prevent blocking the main thread
+            setTimeout(() => {
+                lazyImages.forEach(img => {
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.classList.add('loaded');
+                        img.classList.remove('lazyload');
+                    }
+                });
+            }, 100);
         }
+    }
+
+    // Optimized function to create product modal (used by the optimized product rendering)
+    function createProductModalOptimized(product) {
+        // Create modal element
+        const modalElement = document.createElement('div');
+        modalElement.className = 'modal fade';
+        modalElement.id = `modalProduct${product.id}`;
+        modalElement.tabIndex = '-1';
+        modalElement.role = 'dialog';
+        modalElement.setAttribute('aria-hidden', 'true');
+
+        // Set modal HTML with lazy loading for the image
+        modalElement.innerHTML = `
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 15px; right: 15px;">
+                        <i class="fe fe-x"></i>
+                    </button>
+                    <div class="container-fluid px-xl-0">
+                        <div class="row align-items-center mx-xl-0">
+                            <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0">
+                                <img data-src="${product.image_url}" src="{% static 'img/placeholder.png' %}" class="img-fluid rounded lazyload" alt="${product.name}" style="border-radius: 10px;" loading="lazy">
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-7 py-4 py-xl-0">
+                                <h4 class="mb-3" style="font-weight: 600; font-size: 1.5rem; color: #343a40;">${product.name}</h4>
+                                <div class="mb-3">
+                                    <span class="h5" style="color: #28a745;">$${product.price}</span>
+                                </div>
+                                <p class="mb-4" style="color: #6c757d;">${product.description || 'No description available'}</p>
+                                <div class="quantity-control d-flex align-items-center mb-3" style="gap: 10px;">
+                                    <button class="btn btn-outline-secondary quantity-button" onclick="updateQuantity(${product.id}, -1)" style="width: 40px; height: 40px; border-radius: 8px;">-</button>
+                                    <input type="number" class="form-control text-center" value="1" min="1" max="10" id="quantity-${product.id}" style="width: 60px; border-radius: 8px; font-size: 1rem; padding: 5px;">
+                                    <button class="btn btn-outline-secondary quantity-button" onclick="updateQuantity(${product.id}, 1)" style="width: 40px; height: 40px; border-radius: 8px;">+</button>
+                                </div>
+                                <button class="btn btn-sm btn-primary add-to-cart-button" onclick="add_to_cart(${product.id})">Add to Cart</button>
+                                <a class="btn btn-link w-100 mt-3" href="${product.url}" style="color: #007bff;">
+                                    More Product Info <i class="fe fe-info ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Return the element instead of appending to body
+        return modalElement;
+    }
+
+    // Optimized function to append products to DOM with better performance
+    function appendProductsToDOM(products) {
+        const productList = document.getElementById('product-list');
+
+        // Use document fragment for better performance (reduces reflows)
+        const fragment = document.createDocumentFragment();
+
+        // Create all modals in a single batch
+        const modalFragment = document.createDocumentFragment();
+
+        // Process products in batches for smoother rendering
+        const batchSize = 4;
+        const batches = Math.ceil(products.length / batchSize);
+
+        function processBatch(batchIndex) {
+            if (batchIndex >= batches) {
+                // All batches processed, append to DOM and initialize
+                productList.appendChild(fragment);
+                document.body.appendChild(modalFragment);
+                initLazyLoading();
+                return;
+            }
+
+            const start = batchIndex * batchSize;
+            const end = Math.min(start + batchSize, products.length);
+
+            for (let i = start; i < end; i++) {
+                const product = products[i];
+
+                // Create product card
+                const productCard = document.createElement('div');
+                productCard.className = 'col-12 col-md-6 col-lg-4 col-xl-3 mb-4';
+                productCard.setAttribute('data-product-id', product.id);
+                productCard.setAttribute('data-category-id', product.category_id);
+
+                // Optimize HTML generation
+                const saleTag = product.is_on_sale ? '<div class="product-badge-nigerian">Sale</div>' : '';
+                const newTag = product.is_new ? '<div class="product-badge-nigerian product-badge-new-nigerian">New</div>' : '';
+                const priceDisplay = product.is_on_sale && product.regular_price
+                    ? `<span class="price-old">$${product.regular_price}</span><span class="price-current">$${product.price}</span>`
+                    : `<span class="price-current">$${product.price}</span>`;
+
+                // Set product card HTML with optimized template
+                productCard.innerHTML = `
+                    <div class="product-card-nigerian">
+                        <div class="product-img-container">
+                            ${saleTag}
+                            ${newTag}
+                            <img data-src="${product.image_url}" src="{% static 'img/placeholder.png' %}" alt="${product.name}" class="product-img lazyload" loading="lazy">
+                            <div class="product-actions">
+                                <button class="action-btn" data-bs-toggle="modal" data-bs-target="#modalProduct${product.id}" title="Quick View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn" onclick="add_to_cart(${product.id})" title="Add to Cart">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
+                                <button class="action-btn" title="Add to Wishlist">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">
+                                <span class="category-badge-nigerian">${product.category}</span>
+                            </div>
+                            <h3 class="product-title">
+                                <a href="${product.url}">${product.name}</a>
+                            </h3>
+                            <div class="cultural-significance-short">
+                                Authentic Nigerian product
+                            </div>
+                            <div class="product-price">
+                                ${priceDisplay}
+                            </div>
+                            <button class="btn-add-to-cart-nigerian" onclick="add_to_cart(${product.id})">
+                                <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Add to fragment instead of directly to DOM
+                fragment.appendChild(productCard);
+
+                // Create modal for product and add to modal fragment
+                const modalElement = createProductModalOptimized(product);
+                modalFragment.appendChild(modalElement);
+            }
+
+            // Process next batch with a small delay to keep UI responsive
+            setTimeout(() => processBatch(batchIndex + 1), 10);
+        }
+
+        // Start processing batches
+        processBatch(0);
     }
 
     // Add shake animation keyframes
@@ -1346,12 +1692,40 @@
             });
         }
 
-        // Infinite scroll
+        // Optimized infinite scroll with throttling
+        let scrollTimeout;
+        let lastScrollTime = 0;
+        const scrollThrottle = 100; // Throttle to once every 100ms
+
         $(window).on('scroll', function() {
-            if ($(window).scrollTop() + $(window).height() > $(document).height() - 200) {
-                loadMoreProducts();
+            const now = Date.now();
+
+            // Throttle scroll events
+            if (now - lastScrollTime < scrollThrottle) {
+                // If we're throttling, set a timeout to check after the throttle period
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(checkScrollPosition, scrollThrottle);
+                return;
             }
+
+            lastScrollTime = now;
+            checkScrollPosition();
         });
+
+        // Separate function to check scroll position
+        function checkScrollPosition() {
+            // Use requestAnimationFrame for better performance
+            requestAnimationFrame(() => {
+                const windowHeight = $(window).height();
+                const scrollTop = $(window).scrollTop();
+                const docHeight = $(document).height();
+
+                // Load more when user is 300px from bottom
+                if (scrollTop + windowHeight > docHeight - 300) {
+                    loadMoreProducts();
+                }
+            });
+        }
     });
 </script>
 

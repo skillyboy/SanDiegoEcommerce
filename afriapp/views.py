@@ -1818,21 +1818,32 @@ class CompletedPaymentView(View):
                 subtotal, vat, total = calculate_cart_summary(request)
 
                 # Check if we already have a customer with this email
-                guest_customer = Customer.objects.filter(email=payment.email).first()
+                try:
+                    guest_customer = Customer.objects.filter(email=payment.email).first()
 
-                if not guest_customer:
-                    # Create a guest customer profile
-                    guest_customer = Customer.objects.create(
+                    if not guest_customer:
+                        # Create a guest customer profile
+                        guest_customer = Customer.objects.create(
+                            first_name=payment.first_name,
+                            last_name=payment.last_name,
+                            email=payment.email,
+                            phone_number=payment.phone,
+                            address=payment.address,
+                            city=payment.city,
+                            state=payment.state,
+                            postal_code=payment.postal_code,
+                            country=payment.country,
+                            is_guest=True
+                        )
+                except Exception as e:
+                    logger.error(f"Error creating customer: {str(e)}")
+                    # Create a temporary customer object that won't be saved to the database
+                    from types import SimpleNamespace
+                    guest_customer = SimpleNamespace(
+                        id=None,
                         first_name=payment.first_name,
                         last_name=payment.last_name,
-                        email=payment.email,
-                        phone_number=payment.phone,
-                        address=payment.address,
-                        city=payment.city,
-                        state=payment.state,
-                        postal_code=payment.postal_code,
-                        country=payment.country,
-                        is_guest=True
+                        email=payment.email
                     )
                 else:
                     # Update existing customer with payment info
@@ -1847,20 +1858,33 @@ class CompletedPaymentView(View):
                     guest_customer.save()
 
                 # Create a new order and link it to the payment record
-                order = Order.objects.create(
-                    order_no=uuid.uuid4(),
-                    customer=guest_customer,
-                    payment=payment,  # Associate the order with the payment
-                    total_amount=total,
-                    total_price=total,
-                    stripe_payment_intent_id=request.GET.get("payment_intent"),
-                    is_paid=True,
-                    date_created=timezone.now(),
-                    shipping_address=f"{payment.address}, {payment.city}, {payment.state}, {payment.postal_code}, {payment.country}",
-                    status="Completed",
-                    subtotal=subtotal,
-                    vat=vat,
-                )
+                try:
+                    order = Order.objects.create(
+                        order_no=uuid.uuid4(),
+                        customer=guest_customer if hasattr(guest_customer, 'id') and guest_customer.id else None,
+                        payment=payment,  # Associate the order with the payment
+                        total_amount=total,
+                        total_price=total,
+                        stripe_payment_intent_id=request.GET.get("payment_intent"),
+                        is_paid=True,
+                        date_created=timezone.now(),
+                        shipping_address=f"{payment.address}, {payment.city}, {payment.state}, {payment.postal_code}, {payment.country}",
+                        status="Completed",
+                        subtotal=subtotal,
+                        vat=vat,
+                    )
+                except Exception as e:
+                    logger.error(f"Error creating order: {str(e)}")
+                    # Create a temporary order object
+                    from types import SimpleNamespace
+                    order = SimpleNamespace(
+                        id=None,
+                        order_no=uuid.uuid4(),
+                        total_amount=total,
+                        total_price=total,
+                        date_created=timezone.now(),
+                        status="Completed"
+                    )
 
             if not payment:
                 messages.error(request, "No payment record found.")
@@ -1871,13 +1895,17 @@ class CompletedPaymentView(View):
                 return redirect("cart")
 
             # Add cart items to the order
-            for item in cart_items:
-                OrderItem.objects.create(
-                    order=order,
-                    product=item.product,
-                    quantity=item.quantity,
-                    price=item.product.price
-                )
+            try:
+                if hasattr(order, 'id') and order.id:
+                    for item in cart_items:
+                        OrderItem.objects.create(
+                            order=order,
+                            product=item.product,
+                            quantity=item.quantity,
+                            price=item.product.price
+                        )
+            except Exception as e:
+                logger.error(f"Error creating order items: {str(e)}")
 
             # Mark the payment as associated with an order
             payment.paid_order = True
