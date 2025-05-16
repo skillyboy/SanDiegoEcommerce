@@ -12,6 +12,7 @@ pip install -r requirements.txt
 echo "Creating migrations..."
 python manage.py makemigrations afriapp logistics agro_linker
 
+
 # Run migrations with verbosity to see detailed output, but skip initial migrations
 # to avoid conflicts with existing database schema
 echo "Running migrations..."
