@@ -15,6 +15,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views import View
+from django.core.validators import validate_email
 from django.db import IntegrityError, transaction
 from django.db.models import Sum, F, FloatField, Q, Count
 from django.http import JsonResponse, HttpResponse
@@ -38,6 +39,8 @@ import stripe
 from django.conf import settings
 from django.shortcuts import render
 from django.urls import reverse
+from django.template.loader import render_to_string
+from django.core.mail import send_mail, EmailMessage
 
 # Logging configuration
 logger = logging.getLogger(__name__)
@@ -461,6 +464,12 @@ def api_search_products(request):
 
     return JsonResponse({"products": product_data})
 
+def search_products(request):
+    """Compatibility wrapper for `search_products` URL that delegates to `api_search_products`.
+    Kept for backwards compatibility with routes expecting a view named `search_products`.
+    """
+    return api_search_products(request)
+
 # End
 
 
@@ -709,681 +718,157 @@ def load_more_products(request):
 # 8. Product Detail View with DRF
 class ProductDetailView(View):
     def get(self, request, id):
-        # Use DRF's get_object_or_404 to fetch the product or raise a 404 error
         product = get_object_or_404(Product, pk=id)
-        # Return a response with the context data
         return render(request, 'product.html', {'product': product})
 
-
-
-# Save guest email to session and database
-def save_guest_email(request):
-    """
-    Save guest email to session and create a Customer record if needed.
-    This function handles email collection for guest users and ensures
-    they only need to provide their email once per session.
-    """
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        subscribe = request.POST.get('subscribe') == 'true'
-
-        if not email:
-            return JsonResponse({'success': False, 'message': 'No email provided'})
-
-        # Store email in session (this ensures it's available across the site)
-        request.session['guest_email'] = email
-        request.session['email_collected'] = True  # Flag to indicate email has been collected
-        request.session.modified = True  # Ensure session is saved
-
-        # Log the email collection
-        logger.info(f"Email collected: {email}, Subscribe: {subscribe}")
-
-        # Check if we need to create a guest customer
-        try:
-            # Try to get existing customer with this email
-            guest_customer = Customer.objects.filter(email=email).first()
-
-            if not guest_customer:
-                # Extract name from email (if possible)
-                email_name = email.split('@')[0]
-                # Capitalize and split by common separators
-                name_parts = email_name.replace('.', ' ').replace('_', ' ').replace('-', ' ').title().split()
-
-                # Set default first and last name
-                first_name = "Customer"
-                last_name = ""
-
-                # If we have name parts, use them
-                if len(name_parts) >= 2:
-                    first_name = name_parts[0]
-                    last_name = ' '.join(name_parts[1:])
-                elif len(name_parts) == 1:
-                    first_name = name_parts[0]
-
-                try:
-                    # Create a new guest customer with better naming
-                    guest_customer = Customer.objects.create(
-                        email=email,
-                        first_name=first_name,
-                        last_name=last_name,
-                        is_guest=True,
-                        phone_number="",  # Empty string as placeholder
-                        date_joined=timezone.now()
-                    )
-                    logger.info(f"Created new guest customer with email: {email}")
-
-                    # Store customer ID in session for future reference
-                    request.session['guest_customer_id'] = guest_customer.id
-                    request.session.modified = True
-
-                except IntegrityError:
-                    # Handle duplicate email error gracefully
-                    logger.info(f"Email already exists: {email}")
-
-                    # Get the existing customer
-                    guest_customer = Customer.objects.filter(email=email).first()
-
-                    if guest_customer:
-                        # Store customer ID in session
-                        request.session['guest_customer_id'] = guest_customer.id
-                        request.session.modified = True
-
-                        # Check if this is a registered user's email
-                        if not guest_customer.is_guest and guest_customer.user:
-                            return JsonResponse({
-                                'success': True,
-                                'message': 'This email is already registered. Would you like to log in?',
-                                'registered': True,
-                                'customer_id': str(guest_customer.id)
-                            })
-            elif guest_customer.is_guest:
-                # Update last activity for existing guest customer
-                guest_customer.date_joined = timezone.now()
-                guest_customer.save()
-                logger.info(f"Updated existing guest customer with email: {email}")
-
-                # Store customer ID in session
-                request.session['guest_customer_id'] = guest_customer.id
-                request.session.modified = True
-            else:
-                # This is a registered user's email
-                if guest_customer.user:
-                    return JsonResponse({
-                        'success': True,
-                        'message': 'This email is already registered. Would you like to log in?',
-                        'registered': True,
-                        'customer_id': str(guest_customer.id)
-                    })
-
-            # If subscribe is checked, add to newsletter subscribers
-            if subscribe:
-                # Add to newsletter subscribers
-                try:
-                    newsletter, created = Newsletter.objects.get_or_create(
-                        email=email,
-                        defaults={'subscribed_at': timezone.now()}
-                    )
-                    if created:
-                        logger.info(f"Added {email} to newsletter subscribers")
-                    else:
-                        logger.info(f"Email {email} already subscribed to newsletter")
-                except Exception as newsletter_error:
-                    logger.error(f"Error adding to newsletter: {str(newsletter_error)}")
-
-            # Return success response with customer ID if available
-            if guest_customer:
-                return JsonResponse({
-                    'success': True,
-                    'message': 'Email saved successfully',
-                    'customer_id': str(guest_customer.id)
-                })
-            else:
-                return JsonResponse({
-                    'success': True,
-                    'message': 'Email saved to session successfully'
-                })
-        except Exception as e:
-            logger.error(f"Error processing guest email: {str(e)}")
-            # Still return success since we saved the email to session
-            return JsonResponse({
-                'success': True,
-                'message': 'Email saved to session successfully',
-                'warning': 'There was an issue creating your customer profile, but you can continue shopping.'
-            })
-    return JsonResponse({'success': False, 'message': 'Invalid request method'})
-
 # 9. Add to Wishlist
+@login_required
 def add_to_wishlist(request):
     if request.method == 'POST':
         product_id = request.POST.get('product_id')
         product = get_object_or_404(Product, id=product_id)
-
-        # Get email if provided (for guest users)
-        guest_email = request.POST.get('email')
-
-        if request.user.is_authenticated:
-            # For authenticated users
-            try:
-                wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-                wishlist.add_product(product)
-                return JsonResponse({'success': True, 'message': 'Product added to wishlist'})
-            except Exception as e:
-                logger.error(f"Error adding to wishlist for authenticated user: {str(e)}")
-                return JsonResponse({'success': False, 'message': 'Error adding to wishlist. Please try again.'})
-        elif guest_email:
-            # For guest users with email
-            try:
-                # Store email in session
-                request.session['guest_email'] = guest_email
-
-                # Check if we need to create a guest customer
-                guest_customer = Customer.objects.filter(email=guest_email).first()
-
-                if not guest_customer:
-                    # Extract name from email (if possible)
-                    email_name = guest_email.split('@')[0]
-                    # Capitalize and split by common separators
-                    name_parts = email_name.replace('.', ' ').replace('_', ' ').replace('-', ' ').title().split()
-
-                    # Set default first and last name
-                    first_name = "Customer"
-                    last_name = ""
-
-                    # If we have name parts, use them
-                    if len(name_parts) >= 2:
-                        first_name = name_parts[0]
-                        last_name = ' '.join(name_parts[1:])
-                    elif len(name_parts) == 1:
-                        first_name = name_parts[0]
-
-                    try:
-                        # Create a new guest customer with better naming
-                        guest_customer = Customer.objects.create(
-                            email=guest_email,
-                            first_name=first_name,
-                            last_name=last_name,
-                            is_guest=True,
-                            phone_number="",  # Empty string as placeholder
-                            date_joined=timezone.now()
-                        )
-                        logger.info(f"Created new guest customer with email: {guest_email}")
-                    except IntegrityError:
-                        # Handle duplicate email error gracefully
-                        messages.warning(request, "This email is already registered in our system.")
-                        # Try to get the customer again (it must exist if we got an integrity error)
-                        guest_customer = Customer.objects.filter(email=guest_email).first()
-                        logger.info(f"Attempted to create duplicate customer with email: {guest_email}")
-                elif guest_customer.is_guest:
-                    # Update last activity for existing guest customer
-                    guest_customer.date_joined = timezone.now()
-                    guest_customer.save()
-                    logger.info(f"Updated existing guest customer with email: {guest_email}")
-
-                # Create a wishlist entry for this guest
-                try:
-                    # Check if this product is already in the wishlist for this email
-                    existing_wishlist = Wishlist.objects.filter(
-                        guest_email=guest_email,
-                        product=product
-                    ).first()
-
-                    if existing_wishlist:
-                        return JsonResponse({'success': True, 'message': 'Product is already in your wishlist'})
-
-                    # Create new wishlist entry
-                    if guest_customer:
-                        # If we have a customer record, associate the wishlist with it
-                        Wishlist.objects.create(
-                            customer=guest_customer,
-                            product=product,
-                            guest_email=guest_email
-                        )
-                    else:
-                        # Fallback to just using the email
-                        Wishlist.objects.create(
-                            user=None,  # No user for guests
-                            product=product,
-                            guest_email=guest_email
-                        )
-
-                    return JsonResponse({'success': True, 'message': 'Product added to wishlist'})
-                except Exception as wishlist_error:
-                    logger.error(f"Error creating wishlist entry: {str(wishlist_error)}")
-                    return JsonResponse({'success': False, 'message': 'Error adding to wishlist. Please try again.'})
-            except Exception as e:
-                logger.error(f"Error adding to wishlist for guest: {str(e)}")
-                return JsonResponse({'success': False, 'message': 'Error adding to wishlist. Please try again.'})
-        else:
-            # No email provided and not logged in
-            return JsonResponse({'success': False, 'message': 'Please provide an email or log in to add to wishlist'})
-
+        try:
+            wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+            wishlist.add_product(product)
+            return JsonResponse({'success': True, 'message': 'Product added to wishlist'})
+        except Exception as e:
+            logger.error(f"Error adding to wishlist: {str(e)}")
+            return JsonResponse({'success': False, 'message': 'Error adding to wishlist. Please try again.'})
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 # 11. Add to Cart
+@require_POST
+@transaction.atomic
+def add_to_cart(request, id=None, product_id=None):
+    # Normalize parameter name: some URL patterns pass `id`, others `product_id`
+    pid = product_id or id or request.POST.get('product_id')
+    try:
+        pid = int(pid)
+    except (TypeError, ValueError):
+        return JsonResponse({'success': False, 'error': 'Invalid product identifier'}, status=400)
 
-# ============================================================================
+    # If user is not authenticated, handle AJAX and normal requests differently
+    if not request.user.is_authenticated:
+        # AJAX requests should get a JSON 401 so client doesn't receive HTML login page
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'message': 'Authentication required'}, status=401)
+        # Non-AJAX: redirect to login as before
+        from django.contrib.auth.views import redirect_to_login
+        return redirect_to_login(request.path)
 
-# Get cart items for JavaScript to check which items are already in cart
-def get_cart_items(request):
-    # Use session key for non-authenticated users
-    session_key = request.session.session_key
-    if not session_key:
-        request.session.save()  # Create a session if not already present
-        session_key = request.session.session_key
-
-    # Get cart items based on user authentication status
-    if request.user.is_authenticated:
-        cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
-    else:
-        cart_items = ShopCart.objects.filter(session_key=session_key, paid_order=False)
-
-    # Format the response
-    items = []
-    for item in cart_items:
-        items.append({
-            'product_id': item.product.id,
-            'quantity': item.quantity,
-            'name': item.product.name,
-            'price': float(item.product.price),
-            'total': float(item.calculate_total_price())
+    try:
+        quantity = int(request.POST.get('quantity', 1))
+        if quantity < 1:
+            return JsonResponse({'success': False, 'error': 'Invalid quantity'})
+        product = get_object_or_404(Product, id=pid)
+        # Some Product models may not have `is_active`; treat missing attribute as active
+        if not getattr(product, 'is_active', True):
+            return JsonResponse({'success': False, 'error': 'This product is currently unavailable'})
+        cart_item, created = ShopCart.objects.get_or_create(
+            user=request.user,
+            product=product,
+            paid_order=False,
+            defaults={'quantity': 0}
+        )
+        new_quantity = cart_item.quantity + quantity
+        if new_quantity > product.max_purchase:
+            return JsonResponse({'success': False, 'error': f'Maximum {product.max_purchase} items allowed per order'})
+        if new_quantity < product.min_purchase:
+            new_quantity = product.min_purchase
+        if new_quantity > product.stock_quantity:
+            return JsonResponse({'success': False, 'error': f'Sorry, only {product.stock_quantity} items available in stock'})
+        cart_item.quantity = new_quantity
+        cart_item.save()
+        cart_count = ShopCart.objects.filter(user=request.user, paid_order=False).aggregate(
+            total_items=Sum('quantity'),
+            total_amount=Sum(F('quantity') * F('product__price'), output_field=FloatField())
+        )
+        return JsonResponse({
+            'success': True,
+            'message': f'{product.name} added to cart successfully',
+            'cart_count': cart_count['total_items'] or 0,
+            'cart_total': "{:.2f}".format(cart_count['total_amount'] or 0),
+            'item_count': new_quantity
         })
-
-    return JsonResponse({
-        'success': True,
-        'cart_items': items,
-        'cart_count': len(items)
-    })
-
-# This view handles adding products to the cart for both logged-in and non-logged-in users
-def add_to_cart(request, product_id):
-    """
-    Add a product to the cart for both authenticated and guest users.
-    This function handles the cart creation process and ensures proper
-    association with either a User or a Customer record.
-    """
-    product = get_object_or_404(Product, id=product_id)
-
-    # Use session key for non-authenticated users
-    session_key = request.session.session_key
-    if not session_key:
-        request.session.save()  # Create a session if not already present
-        session_key = request.session.session_key
-
-    # Generate a unique basket number if not already in session
-    if 'basket_no' not in request.session:
-        request.session['basket_no'] = get_random_string(20)
-    basket_no = request.session['basket_no']
-
-    # Handle POST request for adding to cart
-    if request.method == 'POST':
-        try:
-            quantity = int(request.POST.get('quantity', 1))
-
-            # Get email if provided (for guest users)
-            guest_email = request.POST.get('email') or request.session.get('guest_email')
-
-            # Store email in session if provided
-            if guest_email and not request.user.is_authenticated:
-                request.session['guest_email'] = guest_email
-                request.session['email_collected'] = True
-                request.session.modified = True
-
-            # Get or create guest customer if email is provided
-            guest_customer = None
-            if guest_email and not request.user.is_authenticated:
-                try:
-                    # Try to get existing customer with this email
-                    guest_customer = Customer.objects.filter(email=guest_email).first()
-
-                    # If no customer exists, create one
-                    if not guest_customer:
-                        # Extract name from email (if possible)
-                        email_name = guest_email.split('@')[0]
-                        # Capitalize and split by common separators
-                        name_parts = email_name.replace('.', ' ').replace('_', ' ').replace('-', ' ').title().split()
-
-                        # Set default first and last name
-                        first_name = "Customer"
-                        last_name = ""
-
-                        # If we have name parts, use them
-                        if len(name_parts) >= 2:
-                            first_name = name_parts[0]
-                            last_name = ' '.join(name_parts[1:])
-                        elif len(name_parts) == 1:
-                            first_name = name_parts[0]
-
-                        # Create the customer
-                        guest_customer = Customer.objects.create(
-                            email=guest_email,
-                            first_name=first_name,
-                            last_name=last_name,
-                            is_guest=True,
-                            date_joined=timezone.now()
-                        )
-                        logger.info(f"Created new guest customer with email: {guest_email}")
-
-                        # Store customer ID in session
-                        request.session['guest_customer_id'] = guest_customer.id
-                        request.session.modified = True
-                    elif guest_customer.is_guest:
-                        # Update last activity for existing guest customer
-                        guest_customer.date_joined = timezone.now()
-                        guest_customer.save()
-
-                        # Store customer ID in session
-                        request.session['guest_customer_id'] = guest_customer.id
-                        request.session.modified = True
-                except Exception as e:
-                    logger.error(f"Error processing guest customer: {str(e)}")
-                    # Continue without a customer - we'll handle this in the cart creation
-
-            # Check if the product is already in the cart
-            cart_item = None
-            if request.user.is_authenticated:
-                cart_item = ShopCart.objects.filter(
-                    user=request.user,
-                    product=product,
-                    paid_order=False
-                ).first()
-            else:
-                # Try to find cart item by session key
-                cart_item = ShopCart.objects.filter(
-                    session_key=session_key,
-                    product=product,
-                    paid_order=False
-                ).first()
-
-                # If guest customer exists, also check by customer
-                if not cart_item and guest_customer:
-                    cart_item = ShopCart.objects.filter(
-                        customer=guest_customer,
-                        product=product,
-                        paid_order=False
-                    ).first()
-
-            # Update or create the cart item
-            if cart_item:
-                # Update quantity if the product is already in the cart
-                if cart_item.quantity == quantity:
-                    message = 'Product was already added to the cart!'
-                else:
-                    cart_item.quantity = quantity
-                    cart_item.save()
-                    message = 'Quantity updated successfully!'
-            else:
-                # Create a new cart item
-                if request.user.is_authenticated:
-                    # For authenticated users
-                    try:
-                        ShopCart.objects.create(
-                            user=request.user,
-                            product=product,
-                            quantity=quantity,
-                            paid_order=False,
-                            basket_no=basket_no
-                        )
-                        message = 'Product added to cart successfully!'
-                    except Exception as auth_e:
-                        logger.error(f"Error creating cart for authenticated user: {str(auth_e)}")
-                        return JsonResponse({
-                            'success': False,
-                            'message': 'Unable to add item to cart. Please try again later.',
-                            'error': 'Database error'
-                        }, status=500)
-                else:
-                    # For guest users
-                    success = False
-
-                    # First try: Create cart with customer if available
-                    if guest_customer:
-                        try:
-                            ShopCart.objects.create(
-                                user=None,
-                                customer=guest_customer,
-                                session_key=session_key,
-                                product=product,
-                                quantity=quantity,
-                                paid_order=False,
-                                basket_no=basket_no
-                            )
-                            success = True
-                            message = 'Product added to cart successfully!'
-                            logger.info(f"Added product to cart with customer: {guest_customer.email}")
-                        except Exception as e:
-                            logger.error(f"Error creating cart with customer: {str(e)}")
-
-                    # Second try: Create cart with session key only
-                    if not success:
-                        try:
-                            ShopCart.objects.create(
-                                user=None,
-                                session_key=session_key,
-                                product=product,
-                                quantity=quantity,
-                                paid_order=False,
-                                basket_no=basket_no
-                            )
-                            success = True
-                            message = 'Product added to cart successfully!'
-                            logger.info("Added product to cart with session key only")
-                        except Exception as e:
-                            logger.error(f"Error creating cart with session key: {str(e)}")
-
-                    # Last resort: Try with direct SQL
-                    if not success:
-                        try:
-                            from django.db import connection
-                            with connection.cursor() as cursor:
-                                now = timezone.now().strftime('%Y-%m-%d %H:%M:%S')
-                                cursor.execute("""
-                                    INSERT INTO afriapp_shopcart
-                                    (product_id, session_key, quantity, paid_order, basket_no, date_added, last_updated)
-                                    VALUES (%s, %s, %s, %s, %s, %s, %s)
-                                """, [product.id, session_key, quantity, False, basket_no, now, now])
-                            success = True
-                            message = 'Product added to cart successfully!'
-                            logger.info("Added product to cart using direct SQL")
-                        except Exception as e:
-                            logger.error(f"Error creating cart with SQL: {str(e)}")
-
-                    # If all approaches failed, return an error
-                    if not success:
-                        return JsonResponse({
-                            'success': False,
-                            'message': 'Unable to add item to cart. Please try again later.',
-                            'error': 'All approaches failed'
-                        }, status=500)
-
-            # Calculate the total number of items in the cart
-            try:
-                if request.user.is_authenticated:
-                    cart_count = ShopCart.objects.filter(
-                        user=request.user,
-                        paid_order=False
-                    ).count()
-                else:
-                    # Count items by session key
-                    cart_count = ShopCart.objects.filter(
-                        session_key=session_key,
-                        paid_order=False
-                    ).count()
-
-                    # If guest customer exists, also count items by customer
-                    if guest_customer:
-                        customer_cart_count = ShopCart.objects.filter(
-                            customer=guest_customer,
-                            paid_order=False
-                        ).count()
-
-                        # Use the larger count (to avoid missing items)
-                        cart_count = max(cart_count, customer_cart_count)
-            except Exception as count_error:
-                logger.error(f"Error counting cart items: {str(count_error)}")
-                cart_count = 0  # Default to 0 if there's an error
-
-            # Store cart count in session for easy access
-            request.session['cart_count'] = cart_count
-            request.session.modified = True
-
-            # If the request was an AJAX request, return a JSON response
-            if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
-                return JsonResponse({
-                    'success': True,
-                    'message': message,
-                    'cart_count': cart_count
-                })
-
-            # For normal form submissions, redirect to the cart page
-            return redirect('cart')
-
-        except Exception as e:
-            # Log the error for debugging
-            logger.error(f"Error adding to cart: {str(e)}")
-            return JsonResponse({
-                'success': False,
-                'message': 'An error occurred while adding the product to cart. Please try again.',
-                'error': str(e)
-            }, status=500)
-
-    # Handle invalid request methods (e.g., if someone tried to use GET)
-    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
+    except Product.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Product not found'})
+    except ValueError:
+        return JsonResponse({'success': False, 'error': 'Invalid quantity specified'})
+    except Exception as e:
+        logger.error(f"Error adding to cart: {str(e)}")
+        return JsonResponse({'success': False, 'error': 'An error occurred while adding to cart'})
 
 # 12. Cart View
+@method_decorator(login_required, name='dispatch')
 class CartView(View):
     def get(self, request):
-        """
-        Display the cart page with all items for both authenticated and guest users.
-        For guest users, combines items from both session and customer record if available.
-        """
-        # Get cart items based on user authentication status
-        if request.user.is_authenticated:
-            # For authenticated users, get cart by user
-            cart = ShopCart.objects.filter(user=request.user, paid_order=False)
+        # Ensure the session has a session_key
+        if not request.session.session_key:
+            request.session.save()
+        session_key = request.session.session_key
 
-            # Check if there are any guest items to merge
-            session_key = request.session.session_key
-            if session_key:
-                # Find any items in the session that aren't associated with the user
-                guest_items = ShopCart.objects.filter(
-                    user=None,
-                    session_key=session_key,
-                    paid_order=False
-                )
+        # If user is authenticated, merge any session-based cart items into the user's cart
+        try:
+            with transaction.atomic():
+                if request.user.is_authenticated:
+                    session_items = ShopCart.objects.filter(session_key=session_key, paid_order=False)
+                    for s_item in session_items:
+                        # try find existing cart item for this user & product
+                        existing = ShopCart.objects.filter(user=request.user, product=s_item.product, paid_order=False).first()
+                        if existing:
+                            existing.quantity = min(existing.quantity + s_item.quantity, s_item.product.max_purchase)
+                            existing.save()
+                            s_item.delete()
+                        else:
+                            s_item.user = request.user
+                            s_item.session_key = None
+                            s_item.save()
 
-                # Transfer guest items to the user's account
-                for item in guest_items:
-                    # Check if this product is already in the user's cart
-                    existing_item = cart.filter(product=item.product).first()
-
-                    if existing_item:
-                        # Update quantity if the product already exists
-                        existing_item.quantity += item.quantity
-                        existing_item.save()
-                        # Delete the guest item
-                        item.delete()
-                    else:
-                        # Transfer ownership to the user
-                        item.user = request.user
-                        item.customer = None  # Clear any guest customer association
-                        item.save()
-
-                # Refresh the cart queryset after merging
+            # After any merge, fetch cart items for display
+            if request.user.is_authenticated:
                 cart = ShopCart.objects.filter(user=request.user, paid_order=False)
-        else:
-            # For guest users, we need to check both session and customer
-            session_key = request.session.session_key
-            if not session_key:
-                session_key = request.session.create()
+            else:
+                cart = ShopCart.objects.filter(session_key=session_key, paid_order=False)
 
-            # Start with session-based cart items
-            cart = ShopCart.objects.filter(user=None, session_key=session_key, paid_order=False)
-
-            # Check if we have a guest customer ID in the session
-            guest_customer_id = request.session.get('guest_customer_id')
-            if guest_customer_id:
+            # Calculate totals for display
+            for item in cart:
                 try:
-                    # Get the customer
-                    guest_customer = Customer.objects.get(id=guest_customer_id)
+                    item.total_price = item.calculate_total_price()
+                except Exception:
+                    # fallback if method missing
+                    item.total_price = (getattr(item.product, 'price', 0) or 0) * (item.quantity or 0)
 
-                    # Get customer-based cart items
-                    customer_cart = ShopCart.objects.filter(
-                        customer=guest_customer,
-                        paid_order=False
-                    )
+            cartreader = sum(item.quantity for item in cart)
+            subtotal = sum(getattr(item, 'total_price', 0) for item in cart)
+            from decimal import Decimal
+            if not isinstance(subtotal, Decimal):
+                subtotal = Decimal(str(subtotal))
+            vat = Decimal('0.075') * subtotal
+            total = subtotal + vat
+            request.session['cart_count'] = cart.count()
+            request.session.modified = True
+            context = {
+                'cart': cart,
+                'cartreader': cartreader,
+                'subtotal': round(float(subtotal), 2),
+                'vat': round(float(vat), 2),
+                'total': round(float(total), 2),
+            }
+            return render(request, 'cart.html', context)
+        except Exception as e:
+            logger.error(f"Error loading cart view: {e}")
+            messages.error(request, 'There was an error loading your cart. Please try again.')
+            return render(request, 'cart.html', {})
 
-                    # Merge the two querysets if needed
-                    if customer_cart.exists():
-                        # Use a set to track products we've already seen
-                        seen_products = set(item.product_id for item in cart)
-
-                        # Add customer items that aren't already in the session cart
-                        for item in customer_cart:
-                            if item.product_id not in seen_products:
-                                cart = cart | ShopCart.objects.filter(id=item.id)
-                            else:
-                                # If the product is already in the cart, we should merge quantities
-                                session_item = cart.get(product_id=item.product_id)
-                                session_item.quantity += item.quantity
-                                session_item.save()
-                                # Delete the duplicate customer item
-                                item.delete()
-                except Customer.DoesNotExist:
-                    # If the customer doesn't exist, remove the ID from session
-                    del request.session['guest_customer_id']
-                    request.session.modified = True
-                except Exception as e:
-                    logger.error(f"Error merging guest carts: {str(e)}")
-
-        # Calculate total price for each cart item
-        for item in cart:
-            item.total_price = item.calculate_total_price()
-
-        # Calculate cart summary
-        cartreader = sum(item.quantity for item in cart)
-        subtotal = sum(item.calculate_total_price() for item in cart)
-
-        # Calculate VAT and total price - convert to Decimal to avoid type mismatch
-        from decimal import Decimal
-        # Convert subtotal to Decimal if it's not already
-        if not isinstance(subtotal, Decimal):
-            subtotal = Decimal(str(subtotal))
-
-        vat = Decimal('0.075') * subtotal
-        total = subtotal + vat
-
-        # Update cart count in session
-        request.session['cart_count'] = cart.count()
-        request.session.modified = True
-
-        # Prepare the context for the template
-        context = {
-            'cart': cart,
-            'cartreader': cartreader,
-            'subtotal': round(float(subtotal), 2),
-            'vat': round(float(vat), 2),
-            'total': round(float(total), 2),
-        }
-
-        return render(request, 'cart.html', context)
-
-# ============================================================================
+# Increase/Decrease/Remove Cart Items (user only)
+@login_required
 def increase_quantity(request, item_id):
     if request.method == 'POST':
         try:
-            # Get cart item based on user authentication status
-            if request.user.is_authenticated:
-                cart_item = get_object_or_404(ShopCart, id=item_id, user=request.user)
-            else:
-                session_key = request.session.session_key
-                cart_item = get_object_or_404(ShopCart, id=item_id, session_key=session_key, user=None)
-
-            # Increase quantity by exactly 1
+            cart_item = get_object_or_404(ShopCart, id=item_id, user=request.user)
             cart_item.quantity += 1
             cart_item.save()
-
-            # Calculate updated values
             subtotal, vat, total = calculate_cart_summary(request)
-
             return JsonResponse({
                 'success': True,
                 'new_quantity': cart_item.quantity,
@@ -1394,34 +879,18 @@ def increase_quantity(request, item_id):
             })
         except Exception as e:
             logger.error(f"Error increasing quantity: {str(e)}")
-            return JsonResponse({
-                'success': False,
-                'message': 'Failed to increase quantity. Please try again.'
-            }, status=500)
+            return JsonResponse({'success': False, 'message': 'Failed to increase quantity. Please try again.'}, status=500)
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
+@login_required
 def decrease_quantity(request, item_id):
     if request.method == 'POST':
         try:
-            # Get cart item based on user authentication status
-            if request.user.is_authenticated:
-                cart_item = get_object_or_404(ShopCart, id=item_id, user=request.user)
-            else:
-                session_key = request.session.session_key
-                cart_item = get_object_or_404(ShopCart, id=item_id, session_key=session_key, user=None)
-
-            # Only decrease if quantity is greater than 1
+            cart_item = get_object_or_404(ShopCart, id=item_id, user=request.user)
             if cart_item.quantity > 1:
-                # Decrease quantity by exactly 1
                 cart_item.quantity -= 1
                 cart_item.save()
-            else:
-                # If quantity is already 1, don't decrease but don't return an error
-                logger.info(f"Attempted to decrease quantity below 1 for cart item {item_id}")
-
-            # Calculate updated values
             subtotal, vat, total = calculate_cart_summary(request)
-
             return JsonResponse({
                 'success': True,
                 'new_quantity': cart_item.quantity,
@@ -1432,172 +901,72 @@ def decrease_quantity(request, item_id):
             })
         except Exception as e:
             logger.error(f"Error decreasing quantity: {str(e)}")
-            return JsonResponse({
-                'success': False,
-                'message': 'Failed to decrease quantity. Please try again.'
-            }, status=500)
+            return JsonResponse({'success': False, 'message': 'Failed to decrease quantity. Please try again.'}, status=500)
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
-def calculate_cart_summary(request):
-    """Calculate the cart summary for the given request (authenticated or guest)."""
-    if request.user.is_authenticated:
-        cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
-    else:
-        session_key = request.session.session_key
-        if not session_key:
-            session_key = request.session.create()
-        cart_items = ShopCart.objects.filter(user=None, session_key=session_key, paid_order=False)
-
-    # Calculate subtotal using aggregate, ensure it's handled as Decimal
-    subtotal = cart_items.aggregate(
-        subtotal=Sum(F('product__price') * F('quantity'))
-    )['subtotal'] or Decimal('0.0')  # Ensure this is a Decimal
-
-    # Calculate VAT and total
-    vat = subtotal * Decimal('0.075')  # Assuming a 7.5% VAT
-    total = subtotal + vat
-
-    # Convert Decimal values to float before returning
-    return float(subtotal), float(vat), float(total)
-
-
-
+@login_required
 def remove_from_cart(request, cart_item_id):
     if request.method == 'POST':
         try:
-            # Get cart item based on user authentication status
-            if request.user.is_authenticated:
-                cart_item = get_object_or_404(ShopCart, id=cart_item_id, user=request.user)
-            else:
-                session_key = request.session.session_key
-                cart_item = get_object_or_404(ShopCart, id=cart_item_id, session_key=session_key, user=None)
-
+            cart_item = get_object_or_404(ShopCart, id=cart_item_id, user=request.user)
             cart_item.delete()
-
-            # Check if it's an AJAX request
             if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
                 subtotal, vat, total = calculate_cart_summary(request)
-
-                # Check if cart is empty based on user authentication status
-                if request.user.is_authenticated:
-                    cart_empty = not ShopCart.objects.filter(user=request.user, paid_order=False).exists()
-                else:
-                    cart_empty = not ShopCart.objects.filter(session_key=session_key, user=None, paid_order=False).exists()
-
+                cart_empty = not ShopCart.objects.filter(user=request.user, paid_order=False).exists()
                 return JsonResponse({
                     'success': True,
                     'subtotal': subtotal,
                     'vat': vat,
                     'total': total,
-                    'cart_empty': cart_empty  # Handle empty cart state
+                    'cart_empty': cart_empty
                 })
-
-            # Handle non-AJAX request
             return redirect(request.META.get('HTTP_REFERER', 'cart'))
-
         except ShopCart.DoesNotExist:
-            return JsonResponse({
-                'success': False,
-                'message': 'Cart item not found. Please refresh the page and try again.'
-            }, status=404)
-
+            return JsonResponse({'success': False, 'message': 'Cart item not found. Please refresh the page and try again.'}, status=404)
     return JsonResponse({'success': False, 'message': 'Invalid request method. Please use POST.'}, status=400)
 
-
-
-
-
-
-
+@login_required
 def remove_from_wishlist(request, product_id):
     if request.method == 'POST':
         product = get_object_or_404(Product, id=product_id)
-
         wishlist = Wishlist.objects.get(user=request.user)
         wishlist.remove_product(product)
-
         return JsonResponse({'success': True, 'message': 'Product removed from wishlist'})
 
-# ============================================================================
+# Cart summary for authenticated user only
+def calculate_cart_summary(request):
+    cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
+    subtotal = cart_items.aggregate(subtotal=Sum(F('product__price') * F('quantity')))['subtotal'] or Decimal('0.0')
+    vat = subtotal * Decimal('0.075')
+    total = subtotal + vat
+    return float(subtotal), float(vat), float(total)
 
-from django.views.generic import TemplateView
-from django.shortcuts import redirect, render
-from django.contrib import messages
-from django.conf import settings
-from .models import ShopCart, Customer
-
+# Checkout view (user only)
+@method_decorator(login_required, name='dispatch')
 class CheckoutView(TemplateView):
     def get(self, request):
-        # Get cart items based on user authentication status
-        if request.user.is_authenticated:
-            # For authenticated users, get cart by user
-            cart = ShopCart.objects.filter(user=request.user, paid_order=False)
-            customer = Customer.objects.filter(user=request.user).first()
-
-            # Check if there are guest cart items in the session to transfer
-            session_key = request.session.session_key
-            if session_key:
-                guest_cart = ShopCart.objects.filter(user=None, session_key=session_key, paid_order=False)
-                if guest_cart.exists():
-                    # Transfer guest cart items to the user's cart
-                    for item in guest_cart:
-                        # Check if the user already has this product in their cart
-                        user_cart_item = ShopCart.objects.filter(
-                            user=request.user,
-                            product=item.product,
-                            paid_order=False
-                        ).first()
-
-                        if user_cart_item:
-                            # Update quantity if the product already exists in the user's cart
-                            user_cart_item.quantity += item.quantity
-                            user_cart_item.save()
-                            item.delete()
-                        else:
-                            # Transfer the item to the user's cart
-                            item.user = request.user
-                            item.session_key = None
-                            item.save()
-
-                    # Refresh the cart queryset
-                    cart = ShopCart.objects.filter(user=request.user, paid_order=False)
-        else:
-            # For guest users, get cart by session key
-            session_key = request.session.session_key
-            if not session_key:
-                session_key = request.session.create()
-
-            cart = ShopCart.objects.filter(user=None, session_key=session_key, paid_order=False)
-            customer = None  # No customer for guest users
-
-        # Check if there are no items in the cart
+        cart = ShopCart.objects.filter(user=request.user, paid_order=False)
+        customer = Customer.objects.filter(user=request.user).first()
         if not cart.exists():
             messages.error(request, 'No items in the cart.')
-            return redirect('cart')  # Redirect user if no cart items
-
-        # Calculate total price of items in the cart
+            return redirect('cart')
         total_price = sum(item.calculate_total_price() for item in cart)
-
-        # Get basket number from the first item in the cart (assuming all items share the same basket number)
         basket_no = cart.first().basket_no if cart.exists() else None
-
-        # Prepare the context for rendering the checkout page
         context = {
             "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY,
             'cart': cart,
             'customer': customer,
-            'total_price': total_price,  # Total price calculation for display
-            'basket_no': basket_no,  # Pass basket number to context
-            'is_guest': not request.user.is_authenticated,  # Flag to indicate if user is a guest
+            'total_price': total_price,
+            'basket_no': basket_no,
+            'is_guest': False,
         }
-
         return render(request, 'checkout.html', context)
-# ================================================================================================================================================================================================================
-from django.utils.crypto import get_random_string
+
+# Payment pipeline (user only)
+@method_decorator(login_required, name='dispatch')
 class PaymentPipelineView(View):
     def post(self, request, *args, **kwargs):
         try:
-            # Extract form data
             basket_no = request.POST.get('basket_no')
             shipping_option = request.POST.get('shipping_option')
             first_name = request.POST.get('first_name')
@@ -1609,46 +978,26 @@ class PaymentPipelineView(View):
             postal_code = request.POST.get('postal_code')
             country = request.POST.get('country')
             payment_method = request.POST.get('payment_method', 'credit_card')
+            user = request.user
 
-            # Get email for guest users
-            email = request.POST.get('email')
-
-            # Fetch cart items based on user authentication status
-            if request.user.is_authenticated:
-                cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
-                user = request.user
-            else:
-                # For guest users, get cart by session key
-                session_key = request.session.session_key
-                if not session_key:
-                    session_key = request.session.create()
-
-                cart_items = ShopCart.objects.filter(user=None, session_key=session_key, paid_order=False)
-
-                # For guest users, check if email is provided
-                if not email:
-                    return JsonResponse({'error': 'Email is required for guest checkout.'}, status=400)
-
-                # Create a temporary user for the guest
-                user = None
-
+            cart_items = ShopCart.objects.filter(user=user, paid_order=False)
             if not cart_items.exists():
-                return JsonResponse({'error': 'No items in cart.'}, status=404)
+                messages.error(request, 'No items in the cart.')
+                return redirect('cart')
 
-            # Calculate total amount
+            # Calculate total amount in cents
             total_price_with_shipping = sum(item.product.price * item.quantity for item in cart_items)
-            total_amount = int(float(total_price_with_shipping) * 100)  # Convert to cents for Stripe
+            total_amount = int(float(total_price_with_shipping) * 100)
 
-            # Debugging log
-            print("Creating Stripe session...")
-            # Generate unique pay_code and transaction_id
+            from django.utils.crypto import get_random_string
             pay_code = get_random_string(12)
             transaction_id = get_random_string(20)
 
-            # Create payment info
+            # Create a PaymentInfo record to track this attempt
             payment = PaymentInfo.objects.create(
-                user=user,  # Can be None for guest users
+                user=user,
                 amount=total_amount,
+                stripe_payment_intent_id=None,
                 basket_no=basket_no,
                 pay_code=pay_code,
                 first_name=first_name,
@@ -1662,248 +1011,155 @@ class PaymentPipelineView(View):
                 payment_method=payment_method,
                 transaction_id=transaction_id,
                 created_at=timezone.now(),
-                email=email if not user else user.email,  # Store email for guest users
+                email=user.email if user and user.email else (request.POST.get('email') or ''),
             )
 
-            print("Payment", payment)
-
-            # Create Stripe Checkout session
-            YOUR_DOMAIN = "http://127.0.0.1:8000"  # Update to your actual domain
+            # Build Stripe line items from cart
+            YOUR_DOMAIN = request.build_absolute_uri('/')[:-1]  # e.g. http://localhost:8000
             line_items = []
-
             for item in cart_items:
+                try:
+                    unit_amount = int(float(item.product.price) * 100)
+                except Exception:
+                    unit_amount = 0
                 line_items.append({
                     'price_data': {
                         'currency': 'usd',
                         'product_data': {
-                            'name': item.product.name,  # Customize product name
+                            'name': item.product.name,
                         },
-                        'unit_amount': int(item.product.price * 100),  # Price in cents
+                        'unit_amount': unit_amount,
                     },
-                    'quantity': item.quantity,  # Use the quantity from the cart
+                    'quantity': int(item.quantity),
                 })
 
-            # Store session key in metadata for guest users
-            metadata = {"basket_no": basket_no}
-            if not request.user.is_authenticated:
-                metadata["session_key"] = session_key
-                metadata["guest_email"] = email
+            # Pass customer name and email to Stripe so the Checkout form is prefilled
+            customer_email = payment.email if payment.email else None
+            customer_name = ' '.join(filter(None, [payment.first_name, payment.last_name])) or None
 
-            # Using f-strings for URL formatting
+            # Create a Stripe Checkout Session and redirect the browser to it
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
                 line_items=line_items,
-                metadata=metadata,
+                metadata={"payment_id": str(payment.id), "basket_no": basket_no},
                 mode='payment',
                 success_url=f'{YOUR_DOMAIN}/successpayment/',
                 cancel_url=f'{YOUR_DOMAIN}/cancelpayment/',
+                customer_email=customer_email,
+                customer_details={ 'name': customer_name } if customer_name else None,
             )
 
-            # Update payment intent ID
-            payment.stripe_payment_intent_id = checkout_session.payment_intent
-            payment.save()
+            # Associate the session id with our payment record for later verification
+            try:
+                payment.stripe_payment_intent_id = checkout_session.id
+                payment.save()
+            except Exception:
+                logger.exception("Failed to save stripe_session_id on payment record")
 
-            # Redirect the user to Stripe Checkout
+            # Redirect the browser to the Stripe Checkout URL (hosted by Stripe)
             return redirect(checkout_session.url)
 
         except Exception as e:
-            print("Error creating checkout session:", str(e))
-            # return redirect("cart")
-            return JsonResponse({'error': str(e)}, status=500)
-# ================================================================================================================================================================================================================
+            logger.error(f"Payment pipeline error: {str(e)}")
+            messages.error(request, 'Payment initiation failed. Please try again.')
+            return redirect('cart')
 
-
+@method_decorator(login_required, name='dispatch')
 class WhatsappPaymentView(View):
+    """Create a Stripe Checkout Session for WhatsApp/local-payment flow and return session id as JSON."""
     def post(self, request, *args, **kwargs):
+        basket_no = request.POST.get('basket_no')
+        user = request.user
+
+        # Ensure there are cart items
+        cart_items = ShopCart.objects.filter(user=user, paid_order=False)
+        if not cart_items.exists():
+            return JsonResponse({'error': 'No items in cart'}, status=400)
+
+        # Build line items
+        line_items = []
+        for item in cart_items:
+            try:
+                unit_amount = int(float(item.product.price) * 100)
+            except Exception:
+                unit_amount = 0
+            line_items.append({
+                'price_data': {
+                    'currency': 'usd',
+                    'product_data': {'name': item.product.name if item.product else 'Item'},
+                    'unit_amount': unit_amount,
+                },
+                'quantity': int(item.quantity),
+            })
+
         try:
-            # Extract form data
-            basket_no = request.POST.get('basket_no')
-            shipping_option = request.POST.get('shipping_option')
-
-            # Fetch the user's cart
-            cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
-
-            if not cart_items.exists():
-                return JsonResponse({'error': 'No items in cart.'}, status=404)
-
-            # Calculate total amount
-            total_price_with_shipping = sum(item.product.price * item.quantity for item in cart_items)
-            total_amount = int(float(total_price_with_shipping) * 100)  # Convert to cents for Stripe
-
-            # Debugging log
-            print("Creating Stripe session...")
-
-
-            # Create Stripe Checkout session
-            YOUR_DOMAIN = "http://127.0.0.1:8000"  # Update to your actual domain
-            line_items = []
-
-            for item in cart_items:
-                line_items.append({
-                    'price_data': {
-                        'currency': 'usd',
-                        'product_data': {
-                            'name': item.product.name,  # Customize product name
-                        },
-                        'unit_amount': int(item.product.price * 100),  # Price in cents
-                    },
-                    'quantity': item.quantity,  # Use the quantity from the cart
-                })
-
-            # Using f-strings for URL formatting
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
-                line_items=line_items,  # Add line items for each product in the cart
-                metadata={"basket_no": basket_no},  # You can include basket_no in metadata
+                line_items=line_items,
+                metadata={'basket_no': basket_no},
                 mode='payment',
-                success_url=f'{YOUR_DOMAIN}/successpayment/',  # Redirection after successful payment
-                cancel_url=f'{YOUR_DOMAIN}/cancelpayment/',  # Redirection after cancellation
+                success_url=request.build_absolute_uri('/successpayment/'),
+                cancel_url=request.build_absolute_uri('/cancelpayment/'),
             )
-
-            # Return the session ID as a JSON response
-            return JsonResponse({'id': checkout_session.id})
         except Exception as e:
-            print("Error creating checkout session:", str(e))
-            return JsonResponse({'error': str(e)}, status=500)
+            logger.exception('Error creating WhatsApp checkout session: %s', e)
+            return JsonResponse({'error': 'Failed to create checkout session'}, status=500)
 
+        return JsonResponse({'id': getattr(checkout_session, 'id', None)})
 
-# ================================================================================================================================================================================================================
-import uuid
+# Update CompletedPaymentView to return early if PaymentInfo already processed
 class CompletedPaymentView(View):
     def get(self, request):
         try:
-            # Check if user is authenticated
-            if request.user.is_authenticated:
-                # Get the latest payment info for the authenticated user
-                payment = PaymentInfo.objects.filter(user=request.user, paid_order=False).order_by('-created_at').first()
-
-                # Fetch cart items for authenticated user
-                cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
-
-                # Calculate cart summary
-                subtotal, vat, total = calculate_cart_summary(request)
-
-                # Create customer profile if it doesn't exist
-                customer = Customer.objects.filter(user=request.user).first()
-
-                # Create a new order and link it to the payment record
-                order = Order.objects.create(
-                    order_no=uuid.uuid4(),
-                    customer=customer,
-                    payment=payment,  # Associate the order with the payment
-                    total_amount=total,
-                    total_price=total,
-                    stripe_payment_intent_id=request.GET.get("payment_intent"),
-                    is_paid=True,
-                    date_created=timezone.now(),
-                    shipping_address=f"{payment.address}, {payment.city}, {payment.state}, {payment.postal_code}, {payment.country}",
-                    status="Completed",
-                    subtotal=subtotal,
-                    vat=vat,
-                )
-            else:
-                # For guest users, get the session key
-                session_key = request.session.session_key
-                if not session_key:
-                    messages.error(request, "Session expired. Please try again.")
-                    return redirect("cart")
-
-                # Get the latest payment info for the guest user
-                payment = PaymentInfo.objects.filter(user=None, paid_order=False).order_by('-created_at').first()
-
-                # Fetch cart items for guest user
-                cart_items = ShopCart.objects.filter(user=None, session_key=session_key, paid_order=False)
-
-                # Calculate cart summary
-                subtotal, vat, total = calculate_cart_summary(request)
-
-                # Check if we already have a customer with this email
-                try:
-                    guest_customer = Customer.objects.filter(email=payment.email).first()
-
-                    if not guest_customer:
-                        # Create a guest customer profile
-                        guest_customer = Customer.objects.create(
-                            first_name=payment.first_name,
-                            last_name=payment.last_name,
-                            email=payment.email,
-                            phone_number=payment.phone,
-                            address=payment.address,
-                            city=payment.city,
-                            state=payment.state,
-                            postal_code=payment.postal_code,
-                            country=payment.country,
-                            is_guest=True
-                        )
-                except Exception as e:
-                    logger.error(f"Error creating customer: {str(e)}")
-                    # Create a temporary customer object that won't be saved to the database
-                    from types import SimpleNamespace
-                    guest_customer = SimpleNamespace(
-                        id=None,
-                        first_name=payment.first_name,
-                        last_name=payment.last_name,
-                        email=payment.email
-                    )
-                else:
-                    # Update existing customer with payment info
-                    guest_customer.first_name = payment.first_name
-                    guest_customer.last_name = payment.last_name
-                    guest_customer.phone_number = payment.phone
-                    guest_customer.address = payment.address
-                    guest_customer.city = payment.city
-                    guest_customer.state = payment.state
-                    guest_customer.postal_code = payment.postal_code
-                    guest_customer.country = payment.country
-                    guest_customer.save()
-
-                # Create a new order and link it to the payment record
-                try:
-                    order = Order.objects.create(
-                        order_no=uuid.uuid4(),
-                        customer=guest_customer if hasattr(guest_customer, 'id') and guest_customer.id else None,
-                        payment=payment,  # Associate the order with the payment
-                        total_amount=total,
-                        total_price=total,
-                        stripe_payment_intent_id=request.GET.get("payment_intent"),
-                        is_paid=True,
-                        date_created=timezone.now(),
-                        shipping_address=f"{payment.address}, {payment.city}, {payment.state}, {payment.postal_code}, {payment.country}",
-                        status="Completed",
-                        subtotal=subtotal,
-                        vat=vat,
-                    )
-                except Exception as e:
-                    logger.error(f"Error creating order: {str(e)}")
-                    # Create a temporary order object
-                    from types import SimpleNamespace
-                    order = SimpleNamespace(
-                        id=None,
-                        order_no=uuid.uuid4(),
-                        total_amount=total,
-                        total_price=total,
-                        date_created=timezone.now(),
-                        status="Completed"
-                    )
+            # Only authenticated users supported now
+            payment = PaymentInfo.objects.filter(user=request.user, paid_order=False).order_by('-created_at').first()
 
             if not payment:
                 messages.error(request, "No payment record found.")
                 return redirect("cart")
 
+            # If already processed by webhook, redirect to order history
+            if payment.paid_order:
+                messages.info(request, "Payment already processed.")
+                return redirect('order_history')
+
+            cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
+
             if not cart_items.exists():
                 messages.error(request, "No paid items found in cart.")
                 return redirect("cart")
 
+            # Calculate cart summary
+            subtotal, vat, total = calculate_cart_summary(request)
+
+            # Create customer profile if it doesn't exist
+            customer = Customer.objects.filter(user=request.user).first()
+
+            # Create a new order and link it to the payment record
+            order = Order.objects.create(
+                order_no=uuid.uuid4(),
+                customer=customer,
+                payment=payment,
+                total_amount=total,
+                total_price=total,
+                stripe_payment_intent_id=request.GET.get("payment_intent"),
+                is_paid=True,
+                date_created=timezone.now(),
+                shipping_address=f"{payment.address}, {payment.city}, {payment.state}, {payment.postal_code}, {payment.country}",
+                status="Completed",
+                subtotal=subtotal,
+                vat=vat,
+            )
+
             # Add cart items to the order
             try:
-                if hasattr(order, 'id') and order.id:
-                    for item in cart_items:
-                        OrderItem.objects.create(
-                            order=order,
-                            product=item.product,
-                            quantity=item.quantity,
-                            price=item.product.price
-                        )
+                for item in cart_items:
+                    OrderItem.objects.create(
+                        order=order,
+                        product=item.product,
+                        quantity=item.quantity,
+                        price=item.product.price
+                    )
             except Exception as e:
                 logger.error(f"Error creating order items: {str(e)}")
 
@@ -1918,10 +1174,10 @@ class CompletedPaymentView(View):
             return render(request, "order_completed.html", {"order": order})
 
         except Exception as e:
+            logger.error(f"CompletedPaymentView error: {str(e)}")
             messages.error(request, f"An error occurred: {str(e)}")
             return redirect("cart")
 
-# ================================================================================================================================================================================================================
 from django.core.paginator import Paginator
 
 class OrderHistory(View):
@@ -1985,160 +1241,339 @@ class UpdateProfile(View):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-from django.db.models import Q
+# Guest email collection endpoint (disabled)
+@require_POST
+def collect_email(request):
+    """Guest email collection disabled. Site requires authenticated users for shopping."""
+    logger.info("collect_email called but guest flow is disabled; enforce login.")
+    return JsonResponse({
+        'success': False,
+        'error': 'Guest checkout is disabled. Please sign up or log in to continue.',
+        'requires_login': True,
+        'redirect_url': reverse('login')
+    }, status=403)
 
-def search_products(request):
+def save_guest_email(request):
+    """Guest email saving disabled. Require authentication."""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=400)
+    return JsonResponse({
+        'success': False,
+        'error': 'Guest checkout is disabled. Please sign up or log in to continue.',
+        'requires_login': True,
+        'redirect_url': reverse('login')
+    }, status=403)
+
+
+def check_email_status(request):
+    """Email status endpoint for backward compatibility; always requires login now."""
+    if request.method != 'GET':
+        return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=400)
+    return JsonResponse({
+        'success': False,
+        'error': 'Guest email flow disabled. Please authenticate to proceed.',
+        'requires_login': True,
+        'redirect_url': reverse('login')
+    }, status=403)
+
+
+@login_required
+def check_stock_availability(request, product_id):
+    """Return JSON indicating whether the requested quantity of a product is available.
+
+    - Requires authenticated users (login_required decorator).
+    - Accepts optional `quantity` GET param (defaults to 1).
+    - Returns stock_quantity, min/max purchase limits and a message.
     """
-    Search products by name or description.
-    Handles both GET and POST requests for backward compatibility.
-    """
-    # Get search parameters from either GET or POST
-    if request.method == "POST":
-        search_term = request.POST.get("search", "")
-        category_id = request.POST.get("category", None)
-    else:
-        search_term = request.GET.get("search", "")
-        category_id = request.GET.get("category", None)
-
-    # Use __icontains for case-insensitive search on product name and description
-    searched_items = Q(name__icontains=search_term) | Q(description__icontains=search_term)
-
-    # If a category is selected, filter by that category as well
-    if category_id and category_id != "All Categories":
+    try:
+        product = get_object_or_404(Product, id=product_id)
+        # parse quantity from query params, default to 1
         try:
-            # Try to convert to integer for ID-based lookup
-            category_id = int(category_id)
-            searched_goods = Product.objects.filter(searched_items, category__id=category_id)
+            qty = int(request.GET.get('quantity', 1))
         except (ValueError, TypeError):
-            # If not an integer, try to match by name
-            searched_goods = Product.objects.filter(searched_items, category__name=category_id)
-    else:
-        searched_goods = Product.objects.filter(searched_items)
+            return JsonResponse({'success': False, 'error': 'Invalid quantity'}, status=400)
 
-    # Create context dictionary properly
-    context = {
-        "items": search_term,
-        "searched_goods": searched_goods,
-    }
-    return render(request, "search.html", context)
+        if qty < 1:
+            qty = 1
 
+        stock_qty = getattr(product, 'stock_quantity', None)
+        max_purchase = getattr(product, 'max_purchase', None)
+        min_purchase = getattr(product, 'min_purchase', None)
 
+        available = True
+        reasons = []
+        if stock_qty is not None and qty > stock_qty:
+            available = False
+            reasons.append(f'Only {stock_qty} items left in stock')
+        if max_purchase is not None and qty > max_purchase:
+            available = False
+            reasons.append(f'Maximum {max_purchase} items allowed per order')
+        if min_purchase is not None and qty < min_purchase:
+            available = False
+            reasons.append(f'Minimum {min_purchase} items required')
 
+        message = 'Available' if available else '; '.join(reasons) or 'Unavailable'
 
+        return JsonResponse({
+            'success': True,
+            'available': available,
+            'requested_quantity': qty,
+            'stock_quantity': stock_qty,
+            'max_purchase': max_purchase,
+            'min_purchase': min_purchase,
+            'message': message,
+        })
 
+    except Product.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Product not found'}, status=404)
+    except Exception as e:
+        logger.error(f"check_stock_availability error: {e}")
+        return JsonResponse({'success': False, 'error': 'Error checking stock'}, status=500)
 
-
-def filter_products(request):
-    category = request.GET.getlist('category')
-    category = request.GET.getlist('category')
-    min_price = request.GET.get('min_price')
-    max_price = request.GET.get('max_price')
-    color = request.GET.getlist('color')
-    size = request.GET.getlist('size')
-
-    products = Product.objects.all()
-
-    if category:
-        products = products.filter(category__in=category)
-    if category:
-        products = products.filter(category__in=category)
-    if min_price:
-        products = products.filter(price__gte=min_price)
-    if max_price:
-        products = products.filter(price__lte=max_price)
-    if color:
-        products = products.filter(color__id__in=color)
-    if size:
-        products = products.filter(size__id__in=size)
-
-    return render(request, 'includes/product_grid.html', {'products': products})
-
-from django.http import HttpResponse
-from django.utils.text import slugify
-from .models import Service, Category, Product
-import random
-
-def populate_db(request=None):
+@login_required
+def populate_db(request):
     """
-    Populate the database with initial data if it's empty.
-    Can be called from a view or as a standalone function.
-    Returns True if data was populated, False if database already had data.
+    Safe populate DB endpoint used during development.
+    Only accessible to staff users. To execute, visit ?run=1
     """
-    # Check if database is already populated
-    if Product.objects.exists():
-        if request:
-            return HttpResponse("Database already populated!")
-        return False
+    if not request.user.is_staff:
+        return JsonResponse({'success': False, 'message': 'Permission denied. Staff only.'}, status=403)
 
-    # Dummy data
-    services_data = {
-        "Groceries": [
-            {"category": "Frozen", "products": [
-                {"name": "Chicken", "price": 15.00, "description": "Fresh frozen chicken", "stock_quantity": 10},
-                {"name": "Spinach", "price": 3.50, "description": "Fresh frozen spinach", "stock_quantity": 20},
-            ]},
-            {"category": "Grains and Flour", "products": [
-                {"name": "Basmati Rice", "price": 12.00, "description": "Premium basmati rice", "stock_quantity": 50},
-                {"name": "Kidney Beans", "price": 4.00, "description": "Organic kidney beans", "stock_quantity": 30},
-            ]}
-        ],
-        "Restaurant": [
-            {"category": "Fast Food", "products": [
-                {"name": "Burger", "price": 8.00, "description": "Juicy beef burger", "stock_quantity": 15},
-                {"name": "Pizza", "price": 12.00, "description": "Cheese pizza", "stock_quantity": 10},
-            ]},
-            {"category": "Beverages", "products": [
-                {"name": "Coke", "price": 1.50, "description": "Refreshing coke", "stock_quantity": 100},
-                {"name": "Orange Juice", "price": 3.00, "description": "Freshly squeezed orange juice", "stock_quantity": 50},
-            ]}
-        ]
-    }
+    if request.GET.get('run') != '1':
+        return JsonResponse({'success': True, 'message': "populate_db available. Append ?run=1 to create sample records."})
 
-    for service_name, categories in services_data.items():
-        # Create or get Service
-        service_obj, created = Service.objects.get_or_create(
-            name=service_name,
-            slug=slugify(service_name),
-            defaults={'description': f'{service_name} description', 'image': 'pix.jpg'}
-        )
+    try:
+        # create minimal sample records if they don't exist
+        svc, _ = Service.objects.get_or_create(name='Default Service', defaults={'slug': 'default-service'})
+        cat, _ = Category.objects.get_or_create(name='Default Category', defaults={'slug': 'default-category', 'service': svc})
+        Product.objects.get_or_create(name='Sample Product', defaults={
+            'price': Decimal('9.99'),
+            'available': True,
+            'category': cat,
+        })
+        return JsonResponse({'success': True, 'message': 'Sample data created.'})
+    except Exception as e:
+        logger.error(f"populate_db error: {e}")
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
-        for category_data in categories:
-            category_name = category_data['category']
-            # Create or get Category
-            category_obj, created = Category.objects.get_or_create(
-                name=category_name,
-                service=service_obj,
-                slug=slugify(category_name)
-            )
+@login_required
+def get_cart_items(request):
+    """Return JSON list of current user's cart items and cart summary."""
+    try:
+        cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
+        items = []
+        for ci in cart_items.select_related('product'):
+            product = ci.product
+            items.append({
+                'cart_item_id': ci.id,
+                'product_id': product.id if product else None,
+                'name': product.name if product else '',
+                'quantity': ci.quantity,
+                'unit_price': float(product.price) if product and product.price is not None else 0.0,
+                'total_price': float((product.price * ci.quantity) if product and product.price is not None else 0.0),
+                'image_url': product.image.url if product and getattr(product, 'image', None) else '',
+                'url': reverse('product', args=[product.id]) if product else '',
+            })
 
-            # Create Products for each category
-            for product_data in category_data['products']:
-                Product.objects.get_or_create(
-                    name=product_data['name'],
-                    category=category_obj,
-                    defaults={
-                        'price': product_data['price'],
-                        'description': product_data['description'],
-                        'stock_quantity': product_data['stock_quantity'],
-                        'options': generate_random_options(),
-                        'image': 'pix.jpg',
-                        'featured': random.choice([True, False]),
-                        'latest': random.choice([True, False]),
-                        'available': True,
-                        'min_purchase': 1,
-                        'max_purchase': 20,
-                        'rating': str(random.randint(1, 5)),
-                    }
-                )
+        subtotal = sum((ci.product.price * ci.quantity) for ci in cart_items) if cart_items.exists() else Decimal('0.0')
+        if not isinstance(subtotal, Decimal):
+            subtotal = Decimal(str(subtotal))
+        vat = subtotal * Decimal('0.075')
+        total = subtotal + vat
+        count = cart_items.aggregate(total_items=Sum('quantity'))['total_items'] or 0
 
-    if request:
-        return HttpResponse("Database populated successfully!")
-    return True
+        return JsonResponse({
+            'success': True,
+            'items': items,
+            'subtotal': round(float(subtotal), 2),
+            'vat': round(float(vat), 2),
+            'total': round(float(total), 2),
+            'count': count,
+        })
+    except Exception as e:
+        logger.error(f"get_cart_items error: {e}")
+        return JsonResponse({'success': False, 'message': 'Failed to retrieve cart items.'}, status=500)
 
+@csrf_exempt
+def stripe_webhook(request):
+    """Receive Stripe webhooks, verify signature, and process important events.
+    Expects STRIPE_WEBHOOK_SECRET in settings for signature verification.
+    This handler is idempotent: it will skip processing if payment record already marked paid.
+    """
+    payload = request.body
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE', '')
 
-def generate_random_options():
-    return {
-        "sizes": random.choice([["S", "M", "L"], ["M", "L", "XL"]]),
-        "colors": random.choice([["Red", "Blue"], ["Green", "Yellow"]]),
-        "types": random.choice([["Cotton", "Polyester"], ["Wool", "Silk"]])
-    }
+    # Verify webhook signature if secret is configured
+    try:
+        if getattr(settings, 'STRIPE_WEBHOOK_SECRET', None):
+            event = stripe.Webhook.construct_event(payload, sig_header, settings.STRIPE_WEBHOOK_SECRET)
+        else:
+            # If webhook secret not configured, parse without verification (not recommended for production)
+            event = stripe.Event.construct_from(json.loads(payload.decode('utf-8')), stripe.api_key)
+    except ValueError as e:
+        # Invalid payload
+        logger.error(f"Invalid Stripe payload: {e}")
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        logger.error(f"Stripe signature verification failed: {e}")
+        return HttpResponse(status=400)
+    except Exception as e:
+        logger.exception(f"Unexpected error verifying Stripe webhook: {e}")
+        return HttpResponse(status=400)
+
+    try:
+        event_type = event['type']
+        data = event['data']['object']
+
+        # Helper to send receipt email
+        def send_receipt_email(payment, order=None):
+            try:
+                subject = f"Your order {payment.basket_no} receipt"
+                context = {'payment': payment, 'order': order}
+                message = render_to_string('emails/payment_receipt.txt', context)
+                html_message = render_to_string('emails/payment_receipt.html', context) if True else None
+                # send_mail returns number of emails sent
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [payment.email or (payment.user.email if payment.user else None)], html_message=html_message, fail_silently=True)
+            except Exception:
+                logger.exception('Failed to send receipt email')
+
+        # Handle checkout.session.completed
+        if event_type == 'checkout.session.completed':
+            session = data
+            metadata = session.get('metadata') or {}
+            payment_id = metadata.get('payment_id')
+            session_id = session.get('id')
+            payment_intent = session.get('payment_intent')
+
+            payment = None
+            if payment_id:
+                try:
+                    payment = PaymentInfo.objects.filter(id=payment_id).first()
+                except Exception:
+                    payment = None
+
+            # Fallback: try by stripe_session_id
+            if not payment and session_id:
+                payment = PaymentInfo.objects.filter(stripe_payment_intent_id=session_id).first()
+
+            # If still not found, try by basket_no metadata
+            if not payment and metadata.get('basket_no'):
+                payment = PaymentInfo.objects.filter(basket_no=metadata.get('basket_no')).order_by('-created_at').first()
+
+            if not payment:
+                logger.warning('Stripe webhook: payment record not found for session %s', session_id)
+                return HttpResponse(status=200)
+
+            # Idempotency: if already processed, skip
+            if payment.paid_order:
+                logger.info('Stripe webhook: payment already processed for PaymentInfo id=%s', payment.id)
+                return HttpResponse(status=200)
+
+            # Update payment with intent/session ids
+            try:
+                payment.stripe_payment_intent_id = payment_intent or session_id
+                payment.save()
+            except Exception:
+                logger.exception('Failed to save stripe ids on payment')
+
+            # Create Order if not exists
+            try:
+                existing_order = Order.objects.filter(payment=payment).first()
+                if existing_order:
+                    order = existing_order
+                else:
+                    # Build customer
+                    customer = None
+                    if payment.user:
+                        customer = Customer.objects.filter(user=payment.user).first()
+                    else:
+                        customer, _ = Customer.objects.get_or_create(email=payment.email, defaults={'first_name': payment.first_name or '', 'last_name': payment.last_name or '', 'is_guest': True})
+
+                    # Create order
+                    order = Order.objects.create(
+                        customer=customer,
+                        payment=payment,
+                        subtotal=0,
+                        shipping_cost=0,
+                        tax=0,
+                        discount=0,
+                        total=payment.amount or 0,
+                        stripe_payment_intent_id=payment.stripe_payment_intent_id,
+                        is_paid=True,
+                        paid_at=timezone.now(),
+                        date_created=timezone.now(),
+                        status='processing',
+                    )
+
+                    # Move cart items into order items
+                    cart_items = ShopCart.objects.filter(user=payment.user, paid_order=False)
+                    for item in cart_items:
+                        try:
+                            OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity, price=item.product.price)
+                        except Exception:
+                            logger.exception('Failed to create order item')
+
+                    # Mark carts as paid and delete them
+                    cart_items.delete()
+
+            except Exception:
+                logger.exception('Failed to create order from payment')
+
+            # Mark payment as paid
+            try:
+                payment.paid_order = True
+                payment.save()
+            except Exception:
+                logger.exception('Failed to mark payment as paid')
+
+            # Send receipt email (best effort)
+            try:
+                send_receipt_email(payment, order)
+            except Exception:
+                logger.exception('Failed sending receipt')
+
+            return HttpResponse(status=200)
+
+        # Handle payment_intent.succeeded
+        if event_type == 'payment_intent.succeeded':
+            intent = data
+            intent_id = intent.get('id')
+            # Find matching payment by stripe_payment_intent_id
+            payment = PaymentInfo.objects.filter(stripe_payment_intent_id=intent_id).first()
+            if payment and not payment.paid_order:
+                try:
+                    payment.paid_order = True
+                    payment.save()
+                    # create order if needed (similar to above)
+                    existing_order = Order.objects.filter(payment=payment).first()
+                    if not existing_order:
+                        customer = Customer.objects.filter(user=payment.user).first() if payment.user else Customer.objects.filter(email=payment.email).first()
+                        order = Order.objects.create(customer=customer, payment=payment, total=payment.amount or 0, stripe_payment_intent_id=intent_id, is_paid=True, paid_at=timezone.now(), date_created=timezone.now(), status='processing')
+                        cart_items = ShopCart.objects.filter(user=payment.user, paid_order=False)
+                        for item in cart_items:
+                            OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity, price=item.product.price)
+                        cart_items.delete()
+                    send_receipt_email(payment, existing_order if existing_order else order)
+                except Exception:
+                    logger.exception('Error processing payment_intent.succeeded')
+            return HttpResponse(status=200)
+
+        # Handle failed payments
+        if event_type == 'payment_intent.payment_failed':
+            intent = data
+            intent_id = intent.get('id')
+            payment = PaymentInfo.objects.filter(stripe_payment_intent_id=intent_id).first()
+            if payment:
+                try:
+                    payment.paid_order = False
+                    payment.save()
+                    # Optionally notify user by email
+                except Exception:
+                    logger.exception('Error marking payment failed')
+            return HttpResponse(status=200)
+
+    except Exception as e:
+        logger.exception(f"Error processing Stripe webhook: {e}")
+        return HttpResponse(status=500)
+
+    return HttpResponse(status=200)

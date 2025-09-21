@@ -63,8 +63,11 @@ urlpatterns = [
     # Payment and Checkout
     path('checkout/', CheckoutView.as_view(), name='checkout'),
     path('payment_pipeline/', PaymentPipelineView.as_view(), name='payment_pipeline'),
+    path('stripe/webhook/', views.stripe_webhook, name='stripe_webhook'),
     path('successpayment/', CompletedPaymentView.as_view(), name='successpayment'),
-    path('whatsapp_payment/', WhatsappPaymentView.as_view(), name='whatsapp_payment'),
+    # WhatsappPaymentView is not defined in the codebase and causes a NameError when Django loads urls.
+    # Commenting out the route until the view is implemented or correctly imported.
+    # path('whatsapp_payment/', WhatsappPaymentView.as_view(), name='whatsapp_payment'),
 
 
 
@@ -128,4 +131,12 @@ urlpatterns = [
     # API endpoints temporarily disabled
     # path('api/price-discovery/', price_discovery_api, name='price_discovery_api'),
     # path('api/process-thrift-data/', process_thrift_data_api, name='process_thrift_data_api'),
+
+    # Email Collection URLs
+    path('collect-email/', views.collect_email, name='collect_email'),
+    path('check-email-status/', views.check_email_status, name='check_email_status'),
+
+    # Cart-related URLs
+    path('check-stock/<int:product_id>/', views.check_stock_availability, name='check_stock_availability'),
+    path('add-to-cart/<int:id>/', views.add_to_cart, name='add_to_cart'),
 ]

@@ -1,0 +1,6 @@
+<html><body>
+  <h2>Thank you for your order</h2>
+  <p>Order: {{ order.order_no if order else payment.basket_no }}</p>
+  <p>Amount: ${{ payment.amount|floatformat:2 }}</p>
+  <p>If you have any questions, contact support.</p>
+</body></html>

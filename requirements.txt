@@ -19,13 +19,13 @@ gunicorn==20.1.0
 idna==3.10
 multidict==6.1.0
 packaging==24.1
-Pillow==9.5.0
+Pillow==11.2.1
 propcache==0.2.0
 # Remove psycopg2 as it requires system dependencies
 # psycopg2==2.9.10
 # Use psycopg2-binary instead which includes all dependencies
 psycopg2-binary==2.9.10
-pydantic==2.6.3
+pydantic>=2.7.1
 # Comment out pydantic-settings as it's only used in the microservice
 # pydantic-settings>=2.6.1
 PyJWT==2.9.0

@@ -35,6 +35,10 @@ note.txt
 
 # Environment variables
 .env
+.env.local
+
+# Hide local secrets example (but keep the example in repo)
+.env.example
 
 # Git chat app
 chatapp/

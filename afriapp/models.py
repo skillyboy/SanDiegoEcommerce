@@ -602,3 +602,19 @@ class Message(models.Model):
 
     def __str__(self):
         return self.forum.name
+
+class GuestProfile(models.Model):
+    """Model to track guest users and their preferences"""
+    email = models.EmailField(unique=True)
+    newsletter_subscribed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_active = models.DateTimeField(auto_now=True)
+    last_action = models.CharField(max_length=50, default='browse')  # browse, cart, wishlist, etc.
+    conversion_attempts = models.IntegerField(default=0)  # track how many times we try to convert to full user
+
+    def __str__(self):
+        return f"Guest: {self.email}"
+
+    class Meta:
+        verbose_name = "Guest Profile"
+        verbose_name_plural = "Guest Profiles"

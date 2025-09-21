@@ -1,111 +1,26 @@
 {% load static %}
 
-<!-- Enhanced Email Collection Modal -->
-<div class="modal fade" id="emailCollectionModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
+{# Email collection modal disabled per user request. Replaced content with a safe no-op so templates including this partial do not render the popup. #}
+<div id="emailCollectionModal-disabled" style="display:none;"><!-- disabled --></div>
+<script>
+// Remove any existing modal element and prevent future attempts to show it
+document.addEventListener('DOMContentLoaded', function(){
+    try {
+        var modal = document.getElementById('emailCollectionModal');
+        if (modal && modal.parentNode) {
+            modal.parentNode.removeChild(modal);
+            console.info('emailCollectionModal removed to disable popup');
+        }
+    } catch (e) {
+        console.warn('Could not remove emailCollectionModal:', e);
+    }
 
-      <!-- Close -->
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-        <i class="fe fe-x" aria-hidden="true"></i>
-      </button>
-
-      <!-- Header with African-inspired pattern -->
-      <div class="modal-header line-height-fixed fs-lg email-modal-header">
-        <h5 class="modal-title text-white" id="emailCollectionModalTitle">Enhance Your Shopping Experience</h5>
-      </div>
-
-      <!-- Body -->
-      <div class="modal-body">
-        <div class="row mb-4">
-          <div class="col-12 text-center mb-4">
-            <!-- Animated Icon -->
-            <div class="mb-4 email-icon-container">
-              <i class="fas fa-envelope-open-text email-icon"></i>
-              <div class="email-icon-circle"></div>
-            </div>
-
-            <!-- Text -->
-            <h6 class="mb-2 fw-bold">Unlock a Better Shopping Experience</h6>
-            <p class="mb-0 fs-sm text-gray-600">
-              Share your email for a personalized Nigerian shopping journey with exclusive offers and easy order tracking!
-            </p>
-          </div>
-          <div class="col-12">
-            <!-- Form -->
-            <form id="emailCollectionForm">
-              <div class="row">
-                <div class="col-12">
-                  <!-- Email with enhanced styling -->
-                  <div class="form-group">
-                    <label class="form-label" for="emailCollectionEmail">Email Address *</label>
-                    <div class="input-group">
-                      <span class="input-group-text bg-light">
-                        <i class="fas fa-at"></i>
-                      </span>
-                      <input class="form-control" id="emailCollectionEmail" name="email" type="email" placeholder="Your Email Address" required>
-                    </div>
-                    <div class="invalid-feedback">Please provide a valid email address.</div>
-                  </div>
-                </div>
-                <div class="col-12 mt-3">
-                  <!-- Checkbox with enhanced styling -->
-                  <div class="form-group">
-                    <div class="form-check custom-checkbox">
-                      <input class="form-check-input" id="emailCollectionConsent" type="checkbox" required>
-                      <label class="form-check-label" for="emailCollectionConsent">
-                        I agree to receive emails about my cart and special offers
-                      </label>
-                      <div class="invalid-feedback">
-                        You must agree before submitting.
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 text-center mt-4">
-                  <!-- Button with animation -->
-                  <button class="btn btn-primary btn-email-submit" id="emailCollectionSubmit" type="submit">
-                    <span>Continue Shopping</span>
-                    <i class="fas fa-arrow-right ms-2"></i>
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12 text-center">
-            <!-- Benefits list with Nigerian-themed icons -->
-            <div class="email-benefits">
-              <div class="benefit-item">
-                <i class="fas fa-shopping-basket text-success"></i>
-                <span>Save your Nigerian favorites for later</span>
-              </div>
-              <div class="benefit-item">
-                <i class="fas fa-bell text-success"></i>
-                <span>Get personalized product recommendations</span>
-              </div>
-              <div class="benefit-item">
-                <i class="fas fa-tag text-success"></i>
-                <span>Receive exclusive Nigerian product offers</span>
-              </div>
-              <div class="benefit-item">
-                <i class="fas fa-truck text-success"></i>
-                <span>Track your orders with ease</span>
-              </div>
-            </div>
-
-            <!-- Reassurance text -->
-            <p class="mt-3 mb-0 fs-xs text-gray-500 privacy-note">
-              <i class="fas fa-lock me-1"></i> Your privacy is important to us. We'll never share your information.
-            </p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
+    // Provide a safe no-op function in case other scripts call it
+    window.showEmailCollectionModal = function(){
+        console.info('Email collection modal is disabled.');
+    };
+});
+</script>
 
 <!-- Add CSS for the enhanced email modal -->
 <style>

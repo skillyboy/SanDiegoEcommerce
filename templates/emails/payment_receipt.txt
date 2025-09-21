@@ -1,0 +1,6 @@
+Thank you for your order.
+
+Order: {{ order.order_no if order else payment.basket_no }}
+Amount: ${{ payment.amount|floatformat:2 }}
+
+If you have questions, reply to this email.

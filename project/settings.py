@@ -134,17 +134,62 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# Use PostgreSQL on Render and SQLite locally
-if 'DATABASE_URL' in os.environ:
-    # Configure database for Render
+# Priority order:
+# 1. If DATABASE_URL is provided (e.g., Railway or Render), use dj_database_url to parse it.
+# 2. If explicit PG environment variables are provided (PGHOST, PGDATABASE, PGPASSWORD, PGPORT, PGUSER), use them.
+# 3. Fall back to local SQLite for development.
+# NOTE: Do NOT store secrets in source control. Provide these in .env or your host's secret manager.
+PG_HOST = os.getenv('PGHOST') or os.getenv('DB_HOST') or None
+PG_NAME = os.getenv('PGDATABASE') or os.getenv('POSTGRES_DB') or None
+PG_PASSWORD = os.getenv('PGPASSWORD') or os.getenv('POSTGRES_PASSWORD') or None
+PG_PORT = os.getenv('PGPORT') or os.getenv('DB_PORT') or None
+PG_USER = os.getenv('PGUSER') or os.getenv('POSTGRES_USER') or None
+
+if os.getenv('DATABASE_URL'):
     DATABASES = {
         'default': dj_database_url.config(
             conn_max_age=600,
             ssl_require=True
         )
     }
+elif PG_HOST and PG_NAME and PG_PASSWORD and PG_PORT:
+    # Use explicit Postgres connection settings provided via environment
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': PG_NAME,
+            'USER': PG_USER,
+            'PASSWORD': PG_PASSWORD,
+            'HOST': PG_HOST,
+            'PORT': PG_PORT,
+        }
+    }
 else:
     # Use SQLite for local development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
+# Safety: ensure DATABASES always contains a valid default ENGINE (avoid ImproperlyConfigured)
+try:
+    if not isinstance(DATABASES, dict) or 'default' not in DATABASES:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
+    else:
+        default_db = DATABASES.get('default') or {}
+        if not default_db.get('ENGINE'):
+            default_db.setdefault('ENGINE', 'django.db.backends.sqlite3')
+            default_db.setdefault('NAME', BASE_DIR / 'db.sqlite3')
+            DATABASES['default'] = default_db
+except Exception:
+    # As a last resort, fall back to SQLite
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -192,3 +237,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Ensure DEFAULT_FROM_EMAIL exists for sending receipts
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
+
+# Railway compatible settings: allow RAILWAY_STATIC_URL if provided
+RAILWAY_STATIC_URL = os.getenv('RAILWAY_STATIC_URL')
+if RAILWAY_STATIC_URL:
+    STATIC_URL = RAILWAY_STATIC_URL
+
+# Add Railway hostname to ALLOWED_HOSTS if provided
+RAILWAY_APP_NAME = os.getenv('RAILWAY_STATIC_URL') or os.getenv('RAILWAY_ENVIRONMENT')
+if RAILWAY_APP_NAME:
+    ALLOWED_HOSTS.append(RAILWAY_APP_NAME)

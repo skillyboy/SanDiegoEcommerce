@@ -895,16 +895,32 @@
     let hasMoreProducts = true;
     let currentCategoryId = '';
 
-    // Function to add product to cart with email collection
-    function add_to_cart(product_id) {
-        // Use our enhanced cart flow
-        if (typeof EnhancedCartFlow !== 'undefined') {
-            EnhancedCartFlow.addToCartWithEmail(product_id);
-        } else {
-            // Fallback to original function
-            addToCartWithEmail(product_id);
+    // Ensure any global modal-based addToCartWithEmail is disabled on the shop page
+    (function(){
+        function directAddToCart(productId, quantity){
+            try{
+                const qty = Number(quantity) || 1;
+                if (typeof addToCart === 'function') {
+                    addToCart(productId, qty);
+                    return;
+                }
+                if (typeof EnhancedCartFlow !== 'undefined' && typeof EnhancedCartFlow.addToCart === 'function') {
+                    EnhancedCartFlow.addToCart(productId, qty);
+                    return;
+                }
+                // Fallback to any previously saved original function if present
+                if (typeof window.originalAddToCartWithEmail === 'function') {
+                    window.originalAddToCartWithEmail(productId, qty);
+                    return;
+                }
+                console.warn('No direct addToCart implementation found.');
+            } catch (err) {
+                console.error('directAddToCart error:', err);
+            }
         }
-    }
+        // Force the global function to the direct implementation
+        window.addToCartWithEmail = directAddToCart;
+    })();
 
     // Function to add product to cart with animation
     function addToCartWithAnimation(productId) {
@@ -1317,17 +1333,17 @@
                     if (entry.isIntersecting) {
                         const img = entry.target;
                         if (img.dataset.src) {
-                            // Create a new image to preload
-                            const tempImg = new Image();
-                            tempImg.onload = function() {
-                                // Once preloaded, update the visible image
-                                img.src = img.dataset.src;
-                                img.classList.add('loaded');
-                                img.classList.remove('lazyload');
-                                // Remove the data-src to prevent potential reloading
-                                img.removeAttribute('data-src');
-                            };
-                            tempImg.src = img.dataset.src;
+                          // Create a new image to preload
+                          const tempImg = new Image();
+                          tempImg.onload = function() {
+                            // Once preloaded, update the visible image
+                            img.src = img.dataset.src;
+                            img.classList.add('loaded');
+                            img.classList.remove('lazyload');
+                            // Remove the data-src to prevent potential reloading
+                            img.removeAttribute('data-src');
+                          };
+                          tempImg.src = img.dataset.src;
                         }
                         // Stop observing this image
                         observer.unobserve(img);
@@ -1727,8 +1743,79 @@
             });
         }
     });
+
+    // Force direct add-to-cart behavior after all scripts load to prevent modal popups
+    <script>
+window.addEventListener('load', function() {
+    function directAddToCart(productId, quantity){
+        try{
+            const qty = Number(quantity) || 1;
+            if (typeof addToCart === 'function') {
+                addToCart(productId, qty);
+                return;
+            }
+            if (typeof EnhancedCartFlow !== 'undefined' && typeof EnhancedCartFlow.addToCart === 'function') {
+                EnhancedCartFlow.addToCart(productId, qty);
+                return;
+            }
+            if (typeof window.originalAddToCartWithEmail === 'function') {
+                window.originalAddToCartWithEmail(productId, qty);
+                return;
+            }
+            console.warn('No addToCart implementation found when forcing directAddToCart.');
+        } catch (err) {
+            console.error('directAddToCart error:', err);
+        }
+    }
+
+    // Reassign global functions to direct implementation
+    window.addToCartWithEmail = directAddToCart;
+    window.add_to_cart = function(product_id){ directAddToCart(product_id, 1); };
+});
 </script>
 
+<script>
+window.addEventListener('load', function() {
+    // No-op safeguard for email collection modal removal already present
+    // Direct wishlist handler that posts to the server and shows a toast
+    function directAddToWishlist(productId) {
+        try {
+            const csrftokenEl = document.querySelector('[name=csrfmiddlewaretoken]');
+            const csrftoken = csrftokenEl ? csrftokenEl.value : null;
+            if (!productId) return;
+            $.ajax({
+                url: '/add_to_wishlist/',
+                type: 'POST',
+                data: {
+                    'product_id': productId,
+                    'csrfmiddlewaretoken': csrftoken
+                },
+                success: function(res) {
+                    if (res && res.success) {
+                        // Update wishlist UI if needed
+                        try { if (typeof updateWishlistCount === 'function') updateWishlistCount(res.wishlist_count); } catch(e){}
+                        // Show inline toast
+                        if (typeof Toastify === 'function') {
+                            Toastify({ text: res.message || 'Added to wishlist', duration: 3000, close: true, gravity: 'top', position: 'right', backgroundColor: '#28a745' }).showToast();
+                        } else {
+                            console.info(res.message || 'Added to wishlist');
+                        }
+                    } else {
+                        if (res && res.message) alert(res.message); else alert('Failed to add to wishlist');
+                    }
+                },
+                error: function(err) {
+                    console.error('Wishlist error', err);
+                    alert('Failed to add to wishlist.');
+                }
+            });
+        } catch (e) { console.error(e); }
+    }
 
+    // Force global overrides
+    window.addToWishlistWithEmail = directAddToWishlist;
+    window.add_to_wishlist = function(productId){ directAddToWishlist(productId); };
+});
+</script>
 </body>
 {% endblock %}

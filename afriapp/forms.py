@@ -67,10 +67,6 @@ class ShopCartForm(forms.ModelForm):
             'quantity': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'})
         }
 
-
-
-
-
 class CheckoutForm(forms.Form): 
     first_name = forms.CharField(max_length=100, required=True)
     last_name = forms.CharField(max_length=100, required=True)
@@ -133,3 +129,19 @@ class PaymentInfoForm(forms.ModelForm):
         widgets = {
             'payment_method': forms.Select(choices=PaymentInfo._meta.get_field('payment_method').choices)
         }
+
+class EmailCollectionForm(forms.Form):
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your email to continue shopping',
+            'required': True
+        })
+    )
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        # Check if a user with this email already exists
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already registered. Please login instead.")
+        return email
