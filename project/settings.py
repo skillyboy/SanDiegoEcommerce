@@ -134,44 +134,56 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# Priority order:
-# 1. If DATABASE_URL is provided (e.g., Railway or Render), use dj_database_url to parse it.
-# 2. If explicit PG environment variables are provided (PGHOST, PGDATABASE, PGPASSWORD, PGPORT, PGUSER), use them.
-# 3. Fall back to local SQLite for development.
-# NOTE: Do NOT store secrets in source control. Provide these in .env or your host's secret manager.
-PG_HOST = os.getenv('PGHOST') or os.getenv('DB_HOST') or None
-PG_NAME = os.getenv('PGDATABASE') or os.getenv('POSTGRES_DB') or None
-PG_PASSWORD = os.getenv('PGPASSWORD') or os.getenv('POSTGRES_PASSWORD') or None
-PG_PORT = os.getenv('PGPORT') or os.getenv('DB_PORT') or None
-PG_USER = os.getenv('PGUSER') or os.getenv('POSTGRES_USER') or None
+# Allow forcing SQLite for local/dev use while Postgres is being configured.
+# Set USE_SQLITE=true in your .env to force SQLite regardless of DATABASE_URL.
+USE_SQLITE = os.getenv('USE_SQLITE', 'False').lower() in ('1', 'true', 'yes')
 
-if os.getenv('DATABASE_URL'):
-    DATABASES = {
-        'default': dj_database_url.config(
-            conn_max_age=600,
-            ssl_require=True
-        )
-    }
-elif PG_HOST and PG_NAME and PG_PASSWORD and PG_PORT:
-    # Use explicit Postgres connection settings provided via environment
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': PG_NAME,
-            'USER': PG_USER,
-            'PASSWORD': PG_PASSWORD,
-            'HOST': PG_HOST,
-            'PORT': PG_PORT,
-        }
-    }
-else:
-    # Use SQLite for local development
+if USE_SQLITE:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+else:
+    # Priority order:
+    # 1. If DATABASE_URL is provided (e.g., Railway or Render), use dj_database_url to parse it.
+    # 2. If explicit PG environment variables are provided (PGHOST, PGDATABASE, PGPASSWORD, PGPORT, PGUSER), use them.
+    # 3. Fall back to local SQLite for development.
+    # NOTE: Do NOT store secrets in source control. Provide these in .env or your host's secret manager.
+    PG_HOST = os.getenv('PGHOST') or os.getenv('DB_HOST') or None
+    PG_NAME = os.getenv('PGDATABASE') or os.getenv('POSTGRES_DB') or None
+    PG_PASSWORD = os.getenv('PGPASSWORD') or os.getenv('POSTGRES_PASSWORD') or None
+    PG_PORT = os.getenv('PGPORT') or os.getenv('DB_PORT') or None
+    PG_USER = os.getenv('PGUSER') or os.getenv('POSTGRES_USER') or None
+
+    if os.getenv('DATABASE_URL'):
+        DATABASES = {
+            'default': dj_database_url.config(
+                conn_max_age=600,
+                ssl_require=True
+            )
+        }
+    elif PG_HOST and PG_NAME and PG_PASSWORD and PG_PORT:
+        # Use explicit Postgres connection settings provided via environment
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': PG_NAME,
+                'USER': PG_USER,
+                'PASSWORD': PG_PASSWORD,
+                'HOST': PG_HOST,
+                'PORT': PG_PORT,
+            }
+        }
+    else:
+        # Use SQLite for local development
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 
 # Safety: ensure DATABASES always contains a valid default ENGINE (avoid ImproperlyConfigured)
 try:
