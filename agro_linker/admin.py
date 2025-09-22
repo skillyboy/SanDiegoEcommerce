@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin.sites import AlreadyRegistered
 from .models.user import User, FarmerProfile, BuyerProfile
 from .models.models import Cooperative, Vehicle, LogisticsRequest, TrackingStatus, Notification, FarmerSubscription, CropCalendar, WeatherData, AgroAnalytics, SystemSettings
 from .models.market import ProductCategory, Product, ProductImage, ProductReview, CropListing, Bid, Offer, Order, OrderItem, PriceTrend
@@ -7,48 +8,19 @@ from .models.thrift import ThriftGroup, ThriftMembership, ThriftContribution, Th
 from .models.chat import ChatRoom, ChatMessage
 
 # Register models
-admin.site.register(User)
-admin.site.register(FarmerProfile)
-admin.site.register(BuyerProfile)
-admin.site.register(Cooperative)
-admin.site.register(Vehicle)
-admin.site.register(LogisticsRequest)
-admin.site.register(TrackingStatus)
-admin.site.register(Notification)
-admin.site.register(FarmerSubscription)
-admin.site.register(CropCalendar)
-admin.site.register(WeatherData)
-admin.site.register(AgroAnalytics)
-admin.site.register(SystemSettings)
-admin.site.register(ProductCategory)
-admin.site.register(Product)
-admin.site.register(ProductImage)
-admin.site.register(ProductReview)
-admin.site.register(CropListing)
-admin.site.register(Bid)
-admin.site.register(Offer)
-admin.site.register(Order)
-admin.site.register(OrderItem)
-admin.site.register(PriceTrend)
-admin.site.register(Wallet)
-admin.site.register(WalletTransaction)
-admin.site.register(Contract)
-admin.site.register(SavingsAccount)
-admin.site.register(SavingsTransaction)
-admin.site.register(LoanApplication)
-admin.site.register(LoanRepayment)
-admin.site.register(RepaymentSchedule)
-admin.site.register(CropInsurance)
-admin.site.register(InsuranceClaim)
-admin.site.register(ThriftGroup)
-admin.site.register(ThriftMembership)
-admin.site.register(ThriftContribution)
-admin.site.register(ThriftPayout)
-admin.site.register(ThriftCycle)
-admin.site.register(ThriftMeeting)
-admin.site.register(ThriftAttendance)
-admin.site.register(ThriftPenalty)
-admin.site.register(ThriftLoan)
-admin.site.register(ThriftLoanRepayment)
-admin.site.register(ChatRoom)
-admin.site.register(ChatMessage)
+for model in [
+	User, FarmerProfile, BuyerProfile, Cooperative, Vehicle, LogisticsRequest,
+	TrackingStatus, Notification, FarmerSubscription, CropCalendar, WeatherData,
+	AgroAnalytics, SystemSettings, ProductCategory, Product, ProductImage,
+	ProductReview, CropListing, Bid, Offer, Order, OrderItem, PriceTrend,
+	Wallet, WalletTransaction, Contract, SavingsAccount, SavingsTransaction,
+	LoanApplication, LoanRepayment, RepaymentSchedule, CropInsurance,
+	InsuranceClaim, ThriftGroup, ThriftMembership, ThriftContribution,
+	ThriftPayout, ThriftCycle, ThriftMeeting, ThriftAttendance, ThriftPenalty,
+	ThriftLoan, ThriftLoanRepayment, ChatRoom, ChatMessage,
+]:
+	try:
+		admin.site.register(model)
+	except AlreadyRegistered:
+		# Model was already registered (e.g., due to reloads); ignore to avoid noisy warnings
+		pass

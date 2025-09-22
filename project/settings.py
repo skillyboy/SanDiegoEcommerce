@@ -256,7 +256,8 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
 # Railway compatible settings: allow RAILWAY_STATIC_URL if provided
 RAILWAY_STATIC_URL = os.getenv('RAILWAY_STATIC_URL')
 if RAILWAY_STATIC_URL:
-    STATIC_URL = RAILWAY_STATIC_URL
+    # Ensure trailing slash to satisfy Django's STATIC_URL requirement
+    STATIC_URL = RAILWAY_STATIC_URL if RAILWAY_STATIC_URL.endswith('/') else RAILWAY_STATIC_URL + '/'
 
 # Add Railway hostname to ALLOWED_HOSTS if provided
 RAILWAY_APP_NAME = os.getenv('RAILWAY_STATIC_URL') or os.getenv('RAILWAY_ENVIRONMENT')

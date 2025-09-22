@@ -49,9 +49,9 @@ logger = logging.getLogger(__name__)
 try:
     stripe.api_key = settings.STRIPE_SECRET_KEY
     if not stripe.api_key:
-        logger.error("Stripe API key is not set or empty")
+        logger.warning("Stripe API key is not set or empty")
 except Exception as e:
-    logger.error(f"Error setting Stripe API key: {e}")
+    logger.warning(f"Error setting Stripe API key: {e}")
 
 # from rest_framework.response import Response
 from django.contrib.auth.forms import PasswordChangeForm
