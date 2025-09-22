@@ -63,7 +63,7 @@ STRIPE_WEBHOOK_SECRET=getenv("STRIPE_WEBHOOK_SECRET")
 INSTALLED_APPS = [
     'afriapp',
     'logistics',
-    'agro_linker',  # Temporarily commented out due to ninja dependency
+    # 'agro_linker',  # disabled for now (caused duplicate model registration warnings)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
