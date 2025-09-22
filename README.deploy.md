@@ -24,3 +24,10 @@ Railway deployment notes
 
 6. Secrets
    - Do not commit production secrets to the repo.
+
+7. Duplicate model registration (Deployment warning)
+    - If you see runtime warnings like "Model 'agro_linker.loanapplication' was already registered",
+       it usually means some module is importing models or registering signals at import time more than once.
+    - Recommendation: Move any signal or API registration that imports models into the app's
+       AppConfig.ready() method (e.g., in `agro_linker/apps.py`) instead of at top-level module import.
+       This ensures registration runs exactly once when Django starts and avoids "already registered" warnings.
