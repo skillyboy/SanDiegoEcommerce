@@ -37,15 +37,20 @@ LOGGING = {
 }
 
 
-# Configure allowed hosts for Render
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-# Add Render domain to allowed hosts
-RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+"""
+Allowed hosts configuration
 
-# Allow all hosts in development if DEBUG is True
-if DEBUG:
+By default we accept an explicit comma-separated `ALLOWED_HOSTS` env var. If not provided
+we default to `['*']` which is helpful for quick deployments (Railway assigns a dynamic
+hostname). For production you should set `ALLOWED_HOSTS` to the exact host(s) you expect.
+"""
+
+# If the user provided an ALLOWED_HOSTS env var, use it (comma-separated). Otherwise
+# default to allowing all hosts so Railway's dynamic domain won't be rejected by Django.
+env_allowed = os.getenv('ALLOWED_HOSTS')
+if env_allowed:
+    ALLOWED_HOSTS = [h.strip() for h in env_allowed.split(',') if h.strip()]
+else:
     ALLOWED_HOSTS = ['*']
 
 YOUR_DOMAIN = os.getenv("YOUR_DOMAIN", "http://127.0.0.1:8000")
