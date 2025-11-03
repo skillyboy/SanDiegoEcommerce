@@ -154,16 +154,8 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 # Allow forcing SQLite for local/dev use while Postgres is being configured.
 # Set USE_SQLITE=true in your .env to force SQLite regardless of DATABASE_URL.
-USE_SQLITE = os.getenv('USE_SQLITE', 'False').lower() in ('1', 'true', 'yes')
 
-if USE_SQLITE:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-else:
+if os.getenv('USE_SQLITE', 'False').lower() == 'true':
     # Priority order:
     # 1. If DATABASE_URL is provided (e.g., Railway or Render), use dj_database_url to parse it.
     # 2. If explicit PG environment variables are provided (PGHOST, PGDATABASE, PGPASSWORD, PGPORT, PGUSER), use them.
