@@ -58,9 +58,22 @@ YOUR_DOMAIN = os.getenv("YOUR_DOMAIN", "http://127.0.0.1:8000")
 
 # Stripe settings
 
-STRIPE_PUBLIC_KEY = getenv("STRIPE_PUBLIC_KEY")
-STRIPE_SECRET_KEY  = getenv("STRIPE_SECRET_KEY")
-STRIPE_WEBHOOK_SECRET=getenv("STRIPE_WEBHOOK_SECRET")
+# Load Stripe keys from environment (provided via .env or host secrets)
+STRIPE_PUBLIC_KEY = getenv("STRIPE_PUBLIC_KEY") or os.getenv("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY = getenv("STRIPE_SECRET_KEY") or os.getenv("STRIPE_SECRET_KEY")
+STRIPE_WEBHOOK_SECRET = getenv("STRIPE_WEBHOOK_SECRET") or os.getenv("STRIPE_WEBHOOK_SECRET")
+
+# Optionally initialize the stripe library with the secret key so other modules
+# can use `import stripe` and have api_key already set. Wrap in try/except so
+# missing `stripe` package doesn't break Django startup in environments where
+# Stripe is not used.
+try:
+    import stripe
+    if STRIPE_SECRET_KEY:
+        stripe.api_key = STRIPE_SECRET_KEY
+except Exception:
+    # If stripe isn't installed or fails to initialize, continue gracefully.
+    pass
 
 
 # Application definition
