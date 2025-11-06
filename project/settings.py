@@ -58,22 +58,9 @@ YOUR_DOMAIN = os.getenv("YOUR_DOMAIN", "http://127.0.0.1:8000")
 
 # Stripe settings
 
-# Load Stripe keys from environment (provided via .env or host secrets)
-STRIPE_PUBLIC_KEY = getenv("STRIPE_PUBLIC_KEY") or os.getenv("STRIPE_PUBLIC_KEY")
-STRIPE_SECRET_KEY = getenv("STRIPE_SECRET_KEY") or os.getenv("STRIPE_SECRET_KEY")
-STRIPE_WEBHOOK_SECRET = getenv("STRIPE_WEBHOOK_SECRET") or os.getenv("STRIPE_WEBHOOK_SECRET")
-
-# Optionally initialize the stripe library with the secret key so other modules
-# can use `import stripe` and have api_key already set. Wrap in try/except so
-# missing `stripe` package doesn't break Django startup in environments where
-# Stripe is not used.
-try:
-    import stripe
-    if STRIPE_SECRET_KEY:
-        stripe.api_key = STRIPE_SECRET_KEY
-except Exception:
-    # If stripe isn't installed or fails to initialize, continue gracefully.
-    pass
+STRIPE_PUBLIC_KEY = getenv("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY  = getenv("STRIPE_SECRET_KEY")
+STRIPE_WEBHOOK_SECRET=getenv("STRIPE_WEBHOOK_SECRET")
 
 
 # Application definition
@@ -154,8 +141,16 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 # Allow forcing SQLite for local/dev use while Postgres is being configured.
 # Set USE_SQLITE=true in your .env to force SQLite regardless of DATABASE_URL.
+USE_SQLITE = os.getenv('USE_SQLITE', 'False').lower() in ('1', 'true', 'yes')
 
-if os.getenv('USE_SQLITE', 'False').lower() == 'true':
+if USE_SQLITE:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
     # Priority order:
     # 1. If DATABASE_URL is provided (e.g., Railway or Render), use dj_database_url to parse it.
     # 2. If explicit PG environment variables are provided (PGHOST, PGDATABASE, PGPASSWORD, PGPORT, PGUSER), use them.
