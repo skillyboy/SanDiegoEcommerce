@@ -55,6 +55,11 @@ else:
 
 YOUR_DOMAIN = os.getenv("YOUR_DOMAIN", "http://127.0.0.1:8000")
 
+env_csrf = os.getenv('CSRF_TRUSTED_ORIGINS')
+if env_csrf:
+    CSRF_TRUSTED_ORIGINS = [o.strip() for o in env_csrf.split(',') if o.strip()]
+else:
+    CSRF_TRUSTED_ORIGINS = ['https://africanfoodsd.com', 'https://www.africanfoodsd.com']
 
 # Stripe settings
 
