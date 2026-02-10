@@ -1,6 +1,6 @@
 /**
- * Enhanced Cart Handler with Email Collection
- * This script handles adding products to cart with email collection
+ * Enhanced Cart Handler
+ * This script handles adding products to cart
  * and provides smooth animations and error handling
  */
 
@@ -85,6 +85,56 @@ function saveEmailToSession(email, subscribeToNewsletter) {
 }
 
 /**
+ * Check stock availability for a product.
+ * Falls back to "available" if the check fails to avoid blocking add-to-cart.
+ */
+function checkStockAvailability(productId, quantity = 1) {
+    return new Promise((resolve) => {
+        if (!productId) {
+            resolve({ available: true });
+            return;
+        }
+
+        const qty = Number(quantity) || 1;
+        const url = `/check-stock/${productId}/?quantity=${encodeURIComponent(qty)}`;
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json,text/*'
+            },
+            credentials: 'same-origin'
+        })
+        .then(async (resp) => {
+            // If auth is required or redirected, allow add-to-cart to handle login
+            if (resp.status === 401 || resp.status === 302) {
+                resolve({ available: true });
+                return;
+            }
+            const text = await resp.text();
+            let data = {};
+            try {
+                data = text ? JSON.parse(text) : {};
+            } catch (e) {
+                resolve({ available: true });
+                return;
+            }
+            if (!resp.ok || data.success === false) {
+                resolve({ available: true, message: data.error || data.message });
+                return;
+            }
+            resolve({
+                available: typeof data.available === 'boolean' ? data.available : true,
+                message: data.message || ''
+            });
+        })
+        .catch(() => {
+            resolve({ available: true });
+        });
+    });
+}
+
+/**
  * Add to cart
  * @param {number} productId - The ID of the product to add
  * @param {number} quantity - The quantity to add
@@ -128,58 +178,18 @@ function addToCart(productId, quantity) {
 
                 const text = await resp.text();
 
-                // Helper: create and show a login prompt modal
-                function showLoginPromptModal(message) {
-                    const next = encodeURIComponent(window.location.pathname + window.location.search);
-                    const existing = document.getElementById('loginPromptModal');
-                    const safeMsg = (message || 'Please sign in to add items to your cart').replace(/</g, '&lt;');
-                    if (!existing) {
-                        const modalHtml = `
-<div class="modal fade" id="loginPromptModal" tabindex="-1" role="dialog" aria-labelledby="loginPromptModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="loginPromptModalLabel">Please sign in</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      </div>
-      <div class="modal-body"><p>${safeMsg}</p></div>
-      <div class="modal-footer">
-        <a href="/login/?next=${next}" class="btn btn-primary">Sign in</a>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>`;
-                        const wrapper = document.createElement('div');
-                        wrapper.innerHTML = modalHtml;
-                        document.body.appendChild(wrapper);
-                    } else {
-                        const body = existing.querySelector('.modal-body');
-                        if (body) body.innerHTML = `<p>${safeMsg}</p>`;
-                    }
-
-                    // Show modal using Bootstrap if available
-                    if (typeof $ === 'function' && $.fn && $.fn.modal) {
-                        $('#loginPromptModal').modal('show');
-                    } else {
-                        // fallback: toast then redirect after a delay
-                        showToast(safeMsg, 'error');
-                        setTimeout(() => {
-                            window.location.href = '/login/?next=' + next;
-                        }, 2000);
-                    }
-                }
-
-                // Handle explicit authentication failure (401) by prompting user to login in a modal
+                // Handle explicit authentication failure (401) by redirecting to login
                 if (resp.status === 401) {
                     // ensure flag cleared
                     isAddingToCart = false;
                     try {
                         const maybeJson = text ? JSON.parse(text) : null;
-                        const msg = (maybeJson && maybeJson.message) ? maybeJson.message : 'Please sign in to add items to your cart';
-                        showLoginPromptModal(msg);
+                        const loginUrl = (maybeJson && maybeJson.login_url) ? maybeJson.login_url : null;
+                        const next = encodeURIComponent(window.location.pathname + window.location.search);
+                        window.location.href = loginUrl || (`/accounts/login/?next=${next}`);
                     } catch (e) {
-                        showLoginPromptModal('Please sign in to add items to your cart');
+                        const next = encodeURIComponent(window.location.pathname + window.location.search);
+                        window.location.href = `/accounts/login/?next=${next}`;
                     }
                     return;
                 }
@@ -420,6 +430,7 @@ function updateCartCount(count) {
             cartCountElement.classList.remove('cart-count-updated');
         }, 1000);
     }
+    updateAllCartReaders(count);
 }
 
 // Update all cart reader UI elements asynchronously when cart changes
@@ -430,6 +441,8 @@ function updateAllCartReaders(count, total) {
     // Update common cart count targets
     const selectors = [
         '#cart-button-count',
+        '#navbar-cart-count',
+        '.cart-counter',
         '.cart-reader',
         '[data-cart-count]'
     ];
@@ -644,6 +657,15 @@ function updateCartSummary(subtotal, vat, total) {
  * @param {string} type - The type of toast (success, error, info, loading)
  */
 function showToast(message, type) {
+    if (type === 'loading') {
+        // Avoid multiple add-to-cart notifications (skip loading toast)
+        return;
+    }
+    if (window.toast && typeof window.toast[type] === 'function') {
+        const titleMap = { success: 'Success', error: 'Error', info: 'Info' };
+        window.toast[type](message, { title: titleMap[type] || 'Notification' });
+        return;
+    }
     // Check if Toastify is available
     if (typeof Toastify === 'function') {
         Toastify({
@@ -703,65 +725,32 @@ function getCookie(name) {
     return null;
 }
 
-// Intercept clicks on add-to-cart buttons (delegation) to force direct endpoint call
-function extractProductIdFromOnclick(onclick) {
-    try {
-        const m = onclick.match(/add_to_cart\((\d+)\)/);
-        if (m) return Number(m[1]);
-    } catch (e) {}
-    return null;
-}
-
-document.addEventListener('click', function(e) {
-    try {
-        const btn = e.target.closest('button, a, input');
-        if (!btn) return;
-        const onclick = (btn.getAttribute && btn.getAttribute('onclick')) || '';
-        const isAddBtn = btn.classList && (btn.classList.contains('add-to-cart-button') || btn.classList.contains('btn-add-to-cart-nigerian') || btn.classList.contains('action-btn')) || onclick.indexOf('add_to_cart(') !== -1;
-        if (!isAddBtn) return;
-
-        // prevent default and stop propagation so other handlers/modal code don't run
-        e.preventDefault();
-        e.stopImmediatePropagation && e.stopImmediatePropagation();
-
-        // determine product id
-        let pid = null;
-        if (btn.dataset && btn.dataset.productId) pid = Number(btn.dataset.productId);
-        if (!pid && btn.closest && btn.closest('[data-product-id]')) {
-            pid = Number(btn.closest('[data-product-id]').dataset.productId);
-        }
-        if (!pid && onclick) pid = extractProductIdFromOnclick(onclick);
-
-        if (!pid) {
-            // try to find within parent element attributes
-            const parent = btn.closest('[data-product-id]');
-            if (parent) pid = Number(parent.dataset.productId);
-        }
-
-        if (!pid || isNaN(pid)) {
-            console.warn('Could not determine product id for add-to-cart click', btn, onclick);
-            return;
-        }
-
-        // call the safe API path
-        try {
-            // ensure globals point to safe functions
-            window.addToCartWithEmail = window.addToCartWithEmail || function(id,q){ addToCart(id,q||1); };
-            window.add_to_cart = window.add_to_cart || function(id){ addToCart(id, 1); };
-            addToCart(pid, 1);
-        } catch (err) {
-            console.error('Error forcing addToCart:', err);
-        }
-    } catch (err) {
-        // swallow handler errors
-    }
-}, true); // capture phase to run before other listeners
-
 // Ensure globals point to safe functions as last resort
 try {
     window.addToCartWithEmail = function(pid, qty) { try { addToCart(pid, qty || 1); } catch(e){ console.error(e); } };
     window.add_to_cart = function(pid, qty) { try { addToCart(pid, qty || 1); } catch(e){ console.error(e); } };
 } catch (e) {}
+
+// Ensure wishlist calls don't rely on removed email modal scripts
+try {
+    if (typeof window.addToWishlistWithEmail !== 'function') {
+        window.addToWishlistWithEmail = function(pid) {
+            try {
+                if (typeof addToWishlist === 'function') {
+                    addToWishlist(pid);
+                    return;
+                }
+            } catch (e) {
+                console.error('addToWishlist error:', e);
+            }
+            // Fallback to login page if wishlist handler isn't available
+            const next = encodeURIComponent(window.location.pathname + window.location.search);
+            window.location.href = `/accounts/login/?next=${next}`;
+        };
+    }
+} catch (e) {
+    // ignore
+}
 
 // Initialize on document ready
 $(document).ready(function() {

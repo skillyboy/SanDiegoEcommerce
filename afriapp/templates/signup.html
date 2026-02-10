@@ -22,6 +22,7 @@
             <!-- Form -->
             <form method="post" action="{% url 'signupform' %}">
               {% csrf_token %}
+              <input type="hidden" name="next" value="{{ next|default:request.GET.next|default:'' }}">
               <div class="mb-4">
                 <!-- First Name -->
                 <label class="form-label" for="registerFirstName">First Name</label>
@@ -54,7 +55,7 @@
 
               <!-- Already have an account -->
               <p class="text-center mt-4" style="color: #8B4513;">Already have an account? 
-                <a href="{% url 'login' %}" style="color: #FFA726;">Sign in here</a>
+                <a href="{% url 'login' %}?next={{ next|default:request.GET.next|default:'' }}" style="color: #FFA726;">Sign in here</a>
               </p>
             </form>
 

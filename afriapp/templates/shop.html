@@ -292,11 +292,20 @@
         box-shadow: 0 10px 25px rgba(0,0,0,0.08);
         cursor: pointer;
         transition: all 0.4s ease;
+        width: 100%;
+        border: none;
+        padding: 0;
+        text-align: center;
     }
 
     .category-highlight-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+    }
+
+    .category-highlight-card:focus-visible {
+        outline: 3px solid #ffffff;
+        outline-offset: -3px;
     }
 
     .category-highlight-content {
@@ -605,13 +614,13 @@
                     <div class="row">
                         {% for category in categories|slice:":3" %}
                             <div class="col-12 col-md-4 mb-4">
-                                <div class="category-highlight-card" onclick="filterProducts('{{ category.id }}')">
+                                <button type="button" class="category-highlight-card" onclick="filterProducts('{{ category.id }}')" aria-label="Browse {{ category.name }}">
                                     <div class="category-highlight-content">
                                         <h3>{{ category.name }}</h3>
                                         <p>{{ category.product_count }} Products</p>
                                         <span class="category-link">Browse <i class="fe fe-arrow-right"></i></span>
                                     </div>
-                                </div>
+                                </button>
                             </div>
                         {% endfor %}
                     </div>

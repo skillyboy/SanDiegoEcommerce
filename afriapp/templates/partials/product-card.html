@@ -58,6 +58,13 @@
             <button class="btn-add-to-cart" onclick="addToCartWithEmail({{ product.id }})" aria-label="Add {{ product.name }} to cart">
                 <i class="fas fa-shopping-cart me-2"></i>Add to Cart
             </button>
+            <noscript>
+                <form action="{% url 'add_to_cart' product.id %}" method="post" class="mt-2">
+                    {% csrf_token %}
+                    <input type="hidden" name="quantity" value="1">
+                    <button class="btn-add-to-cart" type="submit">Add to Cart</button>
+                </form>
+            </noscript>
         </div>
     </div>
 </div>
@@ -343,6 +350,13 @@
 
     .btn-add-to-cart:hover::after {
         height: 100%;
+    }
+
+    @media (min-width: 1200px) {
+        .btn-add-to-cart {
+            min-height: 48px;
+            font-size: 0.95rem;
+        }
     }
 
     /* Responsive Adjustments */

@@ -24,6 +24,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.utils import timezone
 from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
+from urllib.parse import quote
 
 from .forms import AccountUpdateForm  # Ensure you create a form class for handling user input
 
@@ -176,6 +178,10 @@ def shipping(request):
 def returns(request):
     return render(request, 'returns.html')
 
+# Terms and Conditions page view
+def terms(request):
+    return render(request, 'terms.html')
+
 
 # 11. Account Personal Info View
 @login_required
@@ -323,7 +329,7 @@ def robots_txt_view(request):
 
 class SignupFormView(View):
     def get(self, request):
-        return render(request, 'signup.html')
+        return render(request, 'signup.html', {'next': request.GET.get('next', '')})
 
     def post(self, request):
         # Get form data
@@ -333,14 +339,19 @@ class SignupFormView(View):
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
+        # Preserve redirect target as early as possible
+        next_url = request.POST.get('next') or request.GET.get('next') or request.session.get('pending_cart_next') or ''
+
         # Validate form inputs
         if password1 != password2:
             messages.error(request, "Passwords do not match.")
-            return render(request, 'signup.html')
+            return render(request, 'signup.html', {'next': next_url})
 
         # Check if user already exists - handle this gracefully with a message
         if User.objects.filter(username=email).exists():
             messages.warning(request, 'An account with that email already exists. Please log in instead.')
+            if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+                return redirect(f"{reverse('login')}?next={quote(next_url, safe='')}")
             return redirect('login')
 
         try:
@@ -360,22 +371,92 @@ class SignupFormView(View):
             # Log the user in after successful creation
             login(request, user)
             messages.success(request, 'Signup successful! Welcome to African Food.')
+            # Handle pending buy-now flow (priority over regular cart add)
+            try:
+                pending_buy_now = request.session.get('pending_buy_now')
+                if pending_buy_now:
+                    pid = pending_buy_now.get('product_id')
+                    qty = pending_buy_now.get('quantity', 1)
+                    if pid:
+                        product = get_object_or_404(Product, id=pid)
+                        cart_item, created = ShopCart.objects.get_or_create(
+                            user=request.user,
+                            product=product,
+                            paid_order=False,
+                            defaults={'quantity': 0}
+                        )
+                        # Normalize quantity with min/max/stock constraints
+                        try:
+                            qty = int(qty)
+                        except (TypeError, ValueError):
+                            qty = 1
+                        if qty < product.min_purchase:
+                            qty = product.min_purchase
+                        if qty > product.max_purchase:
+                            qty = product.max_purchase
+                        if qty > product.stock_quantity:
+                            qty = product.stock_quantity
+                        cart_item.quantity = qty
+                        cart_item.save()
+                        request.session['buy_now_product_id'] = product.id
+                        request.session['buy_now_quantity'] = qty
+                    request.session.pop('pending_buy_now', None)
+                    request.session.pop('pending_cart_add', None)
+                    request.session.pop('pending_cart_next', None)
+                    return redirect('checkout')
+            except Exception as e:
+                logger.warning(f"Buy-now after signup failed: {e}")
+            # Attempt to auto-add pending cart item
+            try:
+                pending = request.session.get('pending_cart_add')
+                if pending:
+                    pid = pending.get('product_id')
+                    qty = pending.get('quantity', 1)
+                    if pid:
+                        product = get_object_or_404(Product, id=pid)
+                        cart_item, created = ShopCart.objects.get_or_create(
+                            user=request.user,
+                            product=product,
+                            paid_order=False,
+                            defaults={'quantity': 0}
+                        )
+                        new_quantity = cart_item.quantity + int(qty)
+                        if new_quantity > product.max_purchase:
+                            new_quantity = product.max_purchase
+                        if new_quantity < product.min_purchase:
+                            new_quantity = product.min_purchase
+                        if new_quantity > product.stock_quantity:
+                            messages.warning(request, f'Only {product.stock_quantity} items available in stock.')
+                        else:
+                            cart_item.quantity = new_quantity
+                            cart_item.save()
+                request.session.pop('pending_cart_add', None)
+                request.session.pop('pending_cart_next', None)
+            except Exception as e:
+                logger.warning(f"Auto-add after signup failed: {e}")
+
+            if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+                return redirect(next_url)
             return redirect('index')
 
         except Exception as e:
             logger.error(f"Signup failed: {e}")
             messages.error(request, 'An unexpected error occurred during signup. Please try again later.')
-            return render(request, 'signup.html')
+            return render(request, 'signup.html', {'next': next_url})
 
 
 # 18. Login View with Error Handling
 class LoginPageView(View):
     def get(self, request):
-        return render(request, 'login.html')
+        return render(request, 'login.html', {'next': request.GET.get('next', '')})
 
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
+        next_url = request.POST.get('next') or request.GET.get('next') or request.session.get('pending_cart_next') or ''
+        # Avoid redirecting back to add-to-cart endpoints
+        if next_url and ('/add_to_cart/' in next_url or '/add-to-cart/' in next_url):
+            next_url = request.session.get('pending_cart_next') or ''
 
         # change email to password every other thing still remains the same
         user = authenticate(request, username=username, password=password)  # Email is treated as username
@@ -383,9 +464,77 @@ class LoginPageView(View):
         if user is not None:
             login(request, user)
             messages.success(request, 'Login successful')
+            # Handle pending buy-now flow (priority over regular cart add)
+            try:
+                pending_buy_now = request.session.get('pending_buy_now')
+                if pending_buy_now:
+                    pid = pending_buy_now.get('product_id')
+                    qty = pending_buy_now.get('quantity', 1)
+                    if pid:
+                        product = get_object_or_404(Product, id=pid)
+                        cart_item, created = ShopCart.objects.get_or_create(
+                            user=request.user,
+                            product=product,
+                            paid_order=False,
+                            defaults={'quantity': 0}
+                        )
+                        # Normalize quantity with min/max/stock constraints
+                        try:
+                            qty = int(qty)
+                        except (TypeError, ValueError):
+                            qty = 1
+                        if qty < product.min_purchase:
+                            qty = product.min_purchase
+                        if qty > product.max_purchase:
+                            qty = product.max_purchase
+                        if qty > product.stock_quantity:
+                            qty = product.stock_quantity
+                        cart_item.quantity = qty
+                        cart_item.save()
+                        request.session['buy_now_product_id'] = product.id
+                        request.session['buy_now_quantity'] = qty
+                    request.session.pop('pending_buy_now', None)
+                    request.session.pop('pending_cart_add', None)
+                    request.session.pop('pending_cart_next', None)
+                    return redirect('checkout')
+            except Exception as e:
+                logger.warning(f"Buy-now after login failed: {e}")
+            # Attempt to auto-add pending cart item
+            try:
+                pending = request.session.get('pending_cart_add')
+                if pending:
+                    pid = pending.get('product_id')
+                    qty = pending.get('quantity', 1)
+                    if pid:
+                        product = get_object_or_404(Product, id=pid)
+                        cart_item, created = ShopCart.objects.get_or_create(
+                            user=request.user,
+                            product=product,
+                            paid_order=False,
+                            defaults={'quantity': 0}
+                        )
+                        new_quantity = cart_item.quantity + int(qty)
+                        if new_quantity > product.max_purchase:
+                            new_quantity = product.max_purchase
+                        if new_quantity < product.min_purchase:
+                            new_quantity = product.min_purchase
+                        if new_quantity > product.stock_quantity:
+                            messages.warning(request, f'Only {product.stock_quantity} items available in stock.')
+                        else:
+                            cart_item.quantity = new_quantity
+                            cart_item.save()
+                request.session.pop('pending_cart_add', None)
+                request.session.pop('pending_cart_next', None)
+            except Exception as e:
+                logger.warning(f"Auto-add after login failed: {e}")
+
+            if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+                return redirect(next_url)
             return redirect('index')
         else:
             messages.error(request, 'Email/password incorrect')
+            if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+                return redirect(f"{reverse('login')}?next={quote(next_url, safe='')}")
             return redirect('login')
 
 
@@ -749,12 +898,26 @@ def add_to_cart(request, id=None, product_id=None):
 
     # If user is not authenticated, handle AJAX and normal requests differently
     if not request.user.is_authenticated:
+        # Store pending cart add for post-login auto-add
+        try:
+            pending_qty = int(request.POST.get('quantity', 1))
+        except (TypeError, ValueError):
+            pending_qty = 1
+        request.session['pending_cart_add'] = {'product_id': pid, 'quantity': pending_qty}
+
+        # Prefer referrer for next so we return to the product/listing page
+        referrer = request.META.get('HTTP_REFERER')
+        next_url = referrer if (referrer and url_has_allowed_host_and_scheme(referrer, allowed_hosts={request.get_host()})) else request.get_full_path()
+        if '/add_to_cart/' in next_url or '/add-to-cart/' in next_url:
+            next_url = '/'
+        request.session['pending_cart_next'] = next_url
+
+        login_url = f"{reverse('login')}?next={quote(next_url, safe='')}"
         # AJAX requests should get a JSON 401 so client doesn't receive HTML login page
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({'success': False, 'message': 'Authentication required'}, status=401)
+            return JsonResponse({'success': False, 'message': 'Authentication required', 'login_url': login_url}, status=401)
         # Non-AJAX: redirect to login as before
-        from django.contrib.auth.views import redirect_to_login
-        return redirect_to_login(request.path)
+        return redirect(login_url)
 
     try:
         quantity = int(request.POST.get('quantity', 1))
@@ -797,6 +960,57 @@ def add_to_cart(request, id=None, product_id=None):
     except Exception as e:
         logger.error(f"Error adding to cart: {str(e)}")
         return JsonResponse({'success': False, 'error': 'An error occurred while adding to cart'})
+
+# Buy Now (single item checkout)
+@require_POST
+@transaction.atomic
+def buy_now(request, product_id=None, id=None):
+    pid = product_id or id or request.POST.get('product_id')
+    try:
+        pid = int(pid)
+    except (TypeError, ValueError):
+        messages.error(request, 'Invalid product identifier.')
+        return redirect('shop')
+
+    # Quantity from form
+    try:
+        qty = int(request.POST.get('quantity', 1))
+    except (TypeError, ValueError):
+        qty = 1
+
+    if not request.user.is_authenticated:
+        request.session['pending_buy_now'] = {'product_id': pid, 'quantity': qty}
+        login_url = f"{reverse('login')}?next={quote(reverse('checkout'), safe='')}"
+        return redirect(login_url)
+
+    try:
+        product = get_object_or_404(Product, id=pid)
+
+        # Normalize quantity with product constraints
+        if qty < product.min_purchase:
+            qty = product.min_purchase
+        if qty > product.max_purchase:
+            qty = product.max_purchase
+        if qty > product.stock_quantity:
+            qty = product.stock_quantity
+
+        cart_item, created = ShopCart.objects.get_or_create(
+            user=request.user,
+            product=product,
+            paid_order=False,
+            defaults={'quantity': 0}
+        )
+        cart_item.quantity = qty
+        cart_item.save()
+
+        request.session['buy_now_product_id'] = product.id
+        request.session['buy_now_quantity'] = qty
+
+        return redirect('checkout')
+    except Exception as e:
+        logger.error(f"Buy now failed: {e}")
+        messages.error(request, 'Unable to process Buy Now. Please try again.')
+        return redirect('product', pid)
 
 # 12. Cart View
 @method_decorator(login_required, name='dispatch')
@@ -845,7 +1059,7 @@ class CartView(View):
                 subtotal = Decimal(str(subtotal))
             vat = Decimal('0.075') * subtotal
             total = subtotal + vat
-            request.session['cart_count'] = cart.count()
+            request.session['cart_count'] = cartreader
             request.session.modified = True
             context = {
                 'cart': cart,
@@ -945,7 +1159,11 @@ def calculate_cart_summary(request):
 @method_decorator(login_required, name='dispatch')
 class CheckoutView(TemplateView):
     def get(self, request):
-        cart = ShopCart.objects.filter(user=request.user, paid_order=False)
+        buy_now_product_id = request.session.get('buy_now_product_id')
+        if buy_now_product_id:
+            cart = ShopCart.objects.filter(user=request.user, paid_order=False, product_id=buy_now_product_id)
+        else:
+            cart = ShopCart.objects.filter(user=request.user, paid_order=False)
         customer = Customer.objects.filter(user=request.user).first()
         if not cart.exists():
             messages.error(request, 'No items in the cart.')
@@ -959,6 +1177,7 @@ class CheckoutView(TemplateView):
             'total_price': total_price,
             'basket_no': basket_no,
             'is_guest': False,
+            'buy_now_only': bool(buy_now_product_id),
         }
         return render(request, 'checkout.html', context)
 
@@ -967,6 +1186,16 @@ class CheckoutView(TemplateView):
 class PaymentPipelineView(View):
     def post(self, request, *args, **kwargs):
         try:
+            stripe_secret = getattr(settings, 'STRIPE_SECRET_KEY', None)
+            if not stripe_secret or 'your_key_here' in str(stripe_secret):
+                messages.error(request, 'Stripe is not configured. Please set STRIPE_SECRET_KEY in your environment.')
+                return redirect('checkout')
+
+            # Ensure Stripe is initialized for this request
+            stripe.api_key = stripe_secret
+            # Temporary debug log to confirm Stripe key is loaded in runtime
+            logger.info("Stripe key prefix: %s", stripe_secret[:8])
+
             basket_no = request.POST.get('basket_no')
             shipping_option = request.POST.get('shipping_option')
             first_name = request.POST.get('first_name')
@@ -977,10 +1206,14 @@ class PaymentPipelineView(View):
             state = request.POST.get('state')
             postal_code = request.POST.get('postal_code')
             country = request.POST.get('country')
-            payment_method = request.POST.get('payment_method', 'credit_card')
+            payment_method = 'credit_card'
             user = request.user
 
-            cart_items = ShopCart.objects.filter(user=user, paid_order=False)
+            buy_now_product_id = request.session.get('buy_now_product_id')
+            if buy_now_product_id:
+                cart_items = ShopCart.objects.filter(user=user, paid_order=False, product_id=buy_now_product_id)
+            else:
+                cart_items = ShopCart.objects.filter(user=user, paid_order=False)
             if not cart_items.exists():
                 messages.error(request, 'No items in the cart.')
                 return redirect('cart')
@@ -1046,7 +1279,6 @@ class PaymentPipelineView(View):
                 success_url=f'{YOUR_DOMAIN}/successpayment/',
                 cancel_url=f'{YOUR_DOMAIN}/cancelpayment/',
                 customer_email=customer_email,
-                customer_details={ 'name': customer_name } if customer_name else None,
             )
 
             # Associate the session id with our payment record for later verification
@@ -1064,49 +1296,6 @@ class PaymentPipelineView(View):
             messages.error(request, 'Payment initiation failed. Please try again.')
             return redirect('cart')
 
-@method_decorator(login_required, name='dispatch')
-class WhatsappPaymentView(View):
-    """Create a Stripe Checkout Session for WhatsApp/local-payment flow and return session id as JSON."""
-    def post(self, request, *args, **kwargs):
-        basket_no = request.POST.get('basket_no')
-        user = request.user
-
-        # Ensure there are cart items
-        cart_items = ShopCart.objects.filter(user=user, paid_order=False)
-        if not cart_items.exists():
-            return JsonResponse({'error': 'No items in cart'}, status=400)
-
-        # Build line items
-        line_items = []
-        for item in cart_items:
-            try:
-                unit_amount = int(float(item.product.price) * 100)
-            except Exception:
-                unit_amount = 0
-            line_items.append({
-                'price_data': {
-                    'currency': 'usd',
-                    'product_data': {'name': item.product.name if item.product else 'Item'},
-                    'unit_amount': unit_amount,
-                },
-                'quantity': int(item.quantity),
-            })
-
-        try:
-            checkout_session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=line_items,
-                metadata={'basket_no': basket_no},
-                mode='payment',
-                success_url=request.build_absolute_uri('/successpayment/'),
-                cancel_url=request.build_absolute_uri('/cancelpayment/'),
-            )
-        except Exception as e:
-            logger.exception('Error creating WhatsApp checkout session: %s', e)
-            return JsonResponse({'error': 'Failed to create checkout session'}, status=500)
-
-        return JsonResponse({'id': getattr(checkout_session, 'id', None)})
-
 # Update CompletedPaymentView to return early if PaymentInfo already processed
 class CompletedPaymentView(View):
     def get(self, request):
@@ -1123,7 +1312,11 @@ class CompletedPaymentView(View):
                 messages.info(request, "Payment already processed.")
                 return redirect('order_history')
 
-            cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
+            buy_now_product_id = request.session.get('buy_now_product_id')
+            if buy_now_product_id:
+                cart_items = ShopCart.objects.filter(user=request.user, paid_order=False, product_id=buy_now_product_id)
+            else:
+                cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
 
             if not cart_items.exists():
                 messages.error(request, "No paid items found in cart.")
@@ -1140,15 +1333,14 @@ class CompletedPaymentView(View):
                 order_no=uuid.uuid4(),
                 customer=customer,
                 payment=payment,
-                total_amount=total,
-                total_price=total,
+                subtotal=subtotal,
+                tax=vat,
+                total=total,
                 stripe_payment_intent_id=request.GET.get("payment_intent"),
                 is_paid=True,
-                date_created=timezone.now(),
+                paid_at=timezone.now(),
                 shipping_address=f"{payment.address}, {payment.city}, {payment.state}, {payment.postal_code}, {payment.country}",
-                status="Completed",
-                subtotal=subtotal,
-                vat=vat,
+                status="processing",
             )
 
             # Add cart items to the order
@@ -1169,6 +1361,8 @@ class CompletedPaymentView(View):
 
             # Clear the cart after order creation
             cart_items.delete()
+            request.session.pop('buy_now_product_id', None)
+            request.session.pop('buy_now_quantity', None)
 
             messages.success(request, "Payment successful! Order has been created.")
             return render(request, "order_completed.html", {"order": order})
@@ -1184,7 +1378,7 @@ class OrderHistory(View):
     def get(self, request):
         user = request.user
         try:
-            orders = Order.objects.filter(customer__user=user).order_by('-date_created')  # Filter by user and sort by latest orders
+            orders = Order.objects.filter(customer__user=user).order_by('-created_at')  # Filter by user and sort by latest orders
 
             paginator = Paginator(orders, 3)  # Show 3 orders per page
             page_number = request.GET.get('page')  # Get the current page number from query parameters
@@ -1360,7 +1554,7 @@ def populate_db(request):
 def get_cart_items(request):
     """Return JSON list of current user's cart items and cart summary."""
     try:
-        cart_items = ShopCart.objects.filter(user=request.user, paid_order=False)
+        cart_items = ShopCart.objects.filter(user=request.user, paid_order=False, quantity__gt=0)
         items = []
         for ci in cart_items.select_related('product'):
             product = ci.product
@@ -1501,7 +1695,6 @@ def stripe_webhook(request):
                         stripe_payment_intent_id=payment.stripe_payment_intent_id,
                         is_paid=True,
                         paid_at=timezone.now(),
-                        date_created=timezone.now(),
                         status='processing',
                     )
 
@@ -1548,7 +1741,15 @@ def stripe_webhook(request):
                     existing_order = Order.objects.filter(payment=payment).first()
                     if not existing_order:
                         customer = Customer.objects.filter(user=payment.user).first() if payment.user else Customer.objects.filter(email=payment.email).first()
-                        order = Order.objects.create(customer=customer, payment=payment, total=payment.amount or 0, stripe_payment_intent_id=intent_id, is_paid=True, paid_at=timezone.now(), date_created=timezone.now(), status='processing')
+                        order = Order.objects.create(
+                            customer=customer,
+                            payment=payment,
+                            total=payment.amount or 0,
+                            stripe_payment_intent_id=intent_id,
+                            is_paid=True,
+                            paid_at=timezone.now(),
+                            status='processing'
+                        )
                         cart_items = ShopCart.objects.filter(user=payment.user, paid_order=False)
                         for item in cart_items:
                             OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity, price=item.product.price)

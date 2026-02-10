@@ -188,8 +188,9 @@ function initMobileMenu() {
 function updateCartCountWithAnimation(count) {
     // Find all cart count elements
     const cartCountElements = document.querySelectorAll('.cart-counter');
+    const navbarCount = document.getElementById('navbar-cart-count');
 
-    if (cartCountElements.length === 0) {
+    if (cartCountElements.length === 0 && !navbarCount) {
         console.warn('Cart count elements not found');
         return;
     }
@@ -207,6 +208,14 @@ function updateCartCountWithAnimation(count) {
             element.classList.remove('cart-count-updated');
         }, 500);
     });
+
+    if (navbarCount) {
+        navbarCount.textContent = count;
+        navbarCount.classList.add('cart-count-updated');
+        setTimeout(() => {
+            navbarCount.classList.remove('cart-count-updated');
+        }, 500);
+    }
 
     // Store the cart count in localStorage for persistence
     localStorage.setItem('cartCount', count);
@@ -406,7 +415,7 @@ function addToCartWithAnimation(productId, quantity = 1) {
     }
 
     // Show enhanced loading animation
-    const loadingToast = toast.loading('Adding to cart...');
+    const loadingToast = null;
 
     // Create a flying element with enhanced styling
     const flyingElement = document.createElement('div');
@@ -469,6 +478,9 @@ function addToCartWithAnimation(productId, quantity = 1) {
             $.ajax({
                 url: `/add_to_cart/${productId}/`,
                 type: "POST",
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
                 data: {
                     'quantity': quantity,
                     'csrfmiddlewaretoken': document.querySelector('[name=csrfmiddlewaretoken]').value
@@ -514,8 +526,21 @@ function addToCartWithAnimation(productId, quantity = 1) {
                     }
                 },
                 error: function(xhr) {
+                    if (xhr && xhr.status === 401) {
+                        const next = encodeURIComponent(window.location.pathname + window.location.search);
+                        try {
+                            const resp = xhr.responseJSON || JSON.parse(xhr.responseText || '{}');
+                            const loginUrl = resp.login_url;
+                            window.location.href = loginUrl || (`/accounts/login/?next=${next}`);
+                        } catch (e) {
+                            window.location.href = `/accounts/login/?next=${next}`;
+                        }
+                        return;
+                    }
                     // Close loading toast
-                    toast.close(loadingToast);
+                    if (loadingToast && toast && toast.close) {
+                        toast.close(loadingToast);
+                    }
                     window.isAddingToCart = false;
 
                     // Try to parse the error response
@@ -547,18 +572,23 @@ function addToCartWithAnimation(productId, quantity = 1) {
  */
 function addToCartWithoutAnimation(productId, quantity = 1) {
     // Show loading toast
-    const loadingToast = toast.loading('Adding to cart...');
+    const loadingToast = null;
 
     // Make AJAX call directly
     $.ajax({
         url: `/add_to_cart/${productId}/`,
         type: "POST",
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        },
         data: {
             'quantity': quantity,
             'csrfmiddlewaretoken': document.querySelector('[name=csrfmiddlewaretoken]').value
         },
         success: function(response) {
-            toast.close(loadingToast);
+                    if (loadingToast && toast && toast.close) {
+                        toast.close(loadingToast);
+                    }
             window.isAddingToCart = false;
 
             if (response.success) {
@@ -586,8 +616,21 @@ function addToCartWithoutAnimation(productId, quantity = 1) {
                 });
             }
         },
-        error: function() {
-            toast.close(loadingToast);
+        error: function(xhr) {
+            if (xhr && xhr.status === 401) {
+                const next = encodeURIComponent(window.location.pathname + window.location.search);
+                try {
+                    const resp = xhr.responseJSON || JSON.parse(xhr.responseText || '{}');
+                    const loginUrl = resp.login_url;
+                    window.location.href = loginUrl || (`/accounts/login/?next=${next}`);
+                } catch (e) {
+                    window.location.href = `/accounts/login/?next=${next}`;
+                }
+                return;
+            }
+            if (loadingToast && toast && toast.close) {
+                toast.close(loadingToast);
+            }
             window.isAddingToCart = false;
 
             toast.error('Failed to add product to cart. Please try again.', {
@@ -714,7 +757,9 @@ function addToWishlist(productId) {
         },
         success: function(response) {
             // Close loading toast
-            toast.close(loadingToast);
+            if (loadingToast && toast && toast.close) {
+                toast.close(loadingToast);
+            }
 
             if (response.success) {
                 // Show success toast

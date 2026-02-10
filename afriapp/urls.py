@@ -29,6 +29,7 @@ urlpatterns = [
     # Shipping and Returns
     path('shipping/', views.shipping, name='shipping'),
     path('returns/', views.returns, name='returns'),
+    path('terms/', views.terms, name='terms'),
     path('account-address/', views.account_address, name='account_address'),
     path('account/address/delete/<int:address_id>/', delete_address, name='delete_address'), #added
     path('payment/edit/<int:payment_id>/', edit_payment_info, name='edit_payment_info'), #added
@@ -53,6 +54,7 @@ urlpatterns = [
     path('groceries/', ServiceDetailView.as_view(), {'service_type': 'groceries'}, name='groceries'),
     path('restaurant/', ServiceDetailView.as_view(), {'service_type': 'restaurant'}, name='restaurant'),
     path('add_to_cart/<int:product_id>/', add_to_cart, name='add_to_cart'),
+    path('buy_now/<int:product_id>/', buy_now, name='buy_now'),
     path('api/load-more-products/', load_more_products, name='load_more_products'),  # AJAX endpoint for loading more products
 
     # Cart and Checkout

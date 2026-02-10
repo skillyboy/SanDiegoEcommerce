@@ -6,11 +6,11 @@
         <i class="fe fe-x" aria-hidden="true"></i>
     </button>
 
-    {% if cart and cart.count > 0 %}
+    {% if cart and cart_count > 0 %}
     <!-- Cart with Items -->
     <!-- Header with Cart Summary -->
     <div class="offcanvas-header lh-fixed fs-lg d-flex justify-content-between align-items-center">
-        <strong>Your Cart ({{ cart.count }})</strong>
+        <strong>Your Cart ({{ cart_count }})</strong>
     </div>
 
     <!-- Progress Bar for Free Shipping -->
@@ -84,12 +84,11 @@
     <!-- JavaScript for cart item removal -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const removeButtons = document.querySelectorAll('.remove-item');
-
-            removeButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const itemId = this.getAttribute('data-id');
-                    const cartItemElement = document.getElementById(`cart-item-${itemId}`);
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.remove-item');
+                if (!btn) return;
+                const itemId = btn.getAttribute('data-id');
+                const cartItemElement = document.getElementById(`cart-item-${itemId}`);
 
                     // Use SweetAlert2 for confirmation
                     Swal.fire({
@@ -113,22 +112,19 @@
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
-                                    // Remove the cart item from the UI
-                                    cartItemElement.remove();
+                                    if (cartItemElement) {
+                                        cartItemElement.remove();
+                                    }
 
-                                    // Update cart count in navbar
-                                    const cartCount = document.querySelectorAll('#cartItemsList li').length;
-                                    document.getElementById('navbar-cart-count').textContent = cartCount;
+                                    // Refresh sidebar items and counters
+                                    if (window.refreshCartSidebar) {
+                                        window.refreshCartSidebar();
+                                    }
 
                                     // Show success message
                                     toast.success('Item removed from cart', {
                                         title: 'Success'
                                     });
-
-                                    // If cart is now empty, refresh the page to show empty cart state
-                                    if (data.cart_empty) {
-                                        location.reload();
-                                    }
                                 } else {
                                     toast.error('Failed to remove item', {
                                         title: 'Error'
@@ -143,7 +139,6 @@
                             });
                         }
                     });
-                });
             });
         });
     </script>

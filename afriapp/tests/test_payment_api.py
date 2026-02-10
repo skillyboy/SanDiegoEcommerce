@@ -2,7 +2,6 @@ from django.test import TestCase
 from django.urls import reverse
 from afriapp.models import PaymentInfo, Order, ShopCart
 from .test_base import BaseTestCase
-import json
 from unittest.mock import patch, MagicMock
 from decimal import Decimal
 
@@ -15,7 +14,7 @@ class PaymentAPITestCase(BaseTestCase):
         # Mock the Stripe checkout session
         mock_session = MagicMock()
         mock_session.url = 'https://stripe.com/checkout/test-session'
-        mock_session.payment_intent = 'pi_test_123456789'
+        mock_session.id = 'cs_test_123456789'
         mock_stripe_session.return_value = mock_session
         
         # Create a cart item first
@@ -53,47 +52,14 @@ class PaymentAPITestCase(BaseTestCase):
         self.assertIsNotNone(payment)
         self.assertEqual(payment.first_name, 'Test')
         self.assertEqual(payment.last_name, 'User')
-        self.assertEqual(payment.stripe_payment_intent_id, 'pi_test_123456789')
+        self.assertEqual(payment.stripe_payment_intent_id, 'cs_test_123456789')
         
         # Verify Stripe session was created with correct parameters
         mock_stripe_session.assert_called_once()
         call_kwargs = mock_stripe_session.call_args[1]
         self.assertEqual(call_kwargs['payment_method_types'], ['card'])
-        self.assertEqual(call_kwargs['metadata'], {'basket_no': 'test-basket-123'})
-        self.assertEqual(call_kwargs['mode'], 'payment')
-    
-    @patch('stripe.checkout.Session.create')
-    def test_whatsapp_payment(self, mock_stripe_session):
-        """Test the WhatsApp payment option"""
-        # Mock the Stripe checkout session
-        mock_session = MagicMock()
-        mock_session.id = 'cs_test_123456789'
-        mock_stripe_session.return_value = mock_session
-        
-        # Create a cart item first
-        cart_item = self.create_test_cart()
-        
-        # Login
-        client = self.create_authenticated_client()
-        
-        url = reverse('whatsapp_payment')
-        data = {
-            'basket_no': 'test-basket-123',
-            'shipping_option': 'standard'
-        }
-        
-        response = client.post(url, data)
-        
-        # Check response status and content
-        self.assertEqual(response.status_code, 200)
-        response_data = json.loads(response.content)
-        self.assertEqual(response_data['id'], 'cs_test_123456789')
-        
-        # Verify Stripe session was created with correct parameters
-        mock_stripe_session.assert_called_once()
-        call_kwargs = mock_stripe_session.call_args[1]
-        self.assertEqual(call_kwargs['payment_method_types'], ['card'])
-        self.assertEqual(call_kwargs['metadata'], {'basket_no': 'test-basket-123'})
+        self.assertEqual(call_kwargs['metadata']['basket_no'], 'test-basket-123')
+        self.assertEqual(call_kwargs['metadata']['payment_id'], str(payment.id))
         self.assertEqual(call_kwargs['mode'], 'payment')
     
     @patch('stripe.PaymentIntent.retrieve')

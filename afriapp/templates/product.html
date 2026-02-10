@@ -226,20 +226,6 @@
             <form id="add-to-cart-form" action="{% url 'add_to_cart' product.id %}" method="post">
               {% csrf_token %}
 
-              <!-- Quantity Selector -->
-              <div class="form-group mb-4">
-                <label for="quantity" class="form-label fw-bold">Quantity:</label>
-                <div class="quantity-selector">
-                  <button type="button" class="quantity-btn" id="decreaseQuantity" aria-label="Decrease quantity">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock_quantity }}" class="quantity-input" readonly>
-                  <button type="button" class="quantity-btn" id="increaseQuantity" aria-label="Increase quantity">
-                    <i class="fas fa-plus"></i>
-                  </button>
-                </div>
-              </div>
-
               <!-- Product Availability -->
               <div class="mb-4">
                 <div class="d-flex align-items-center">
@@ -254,16 +240,30 @@
                 </div>
               </div>
 
-              <!-- Enhanced Add to Cart Button with Nigerian Styling -->
-              <div class="mb-4">
-                <button type="button" id="add-to-cart-btn" class="btn w-100 btn-add-to-cart-nigerian-large" data-product-id="{{ product.id }}" {% if product.stock_quantity <= 0 %}disabled{% endif %}>
-                  <i class="fas fa-shopping-cart me-2"></i>Add to Cart
-                </button>
+              <!-- Quantity + Add to Cart (desktop aligned) -->
+              <div class="product-form-grid mb-4">
+                <div class="form-group quantity-block">
+                  <label for="quantity" class="form-label fw-bold">Quantity:</label>
+                  <div class="quantity-selector">
+                    <button type="button" class="quantity-btn" id="decreaseQuantity" aria-label="Decrease quantity">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock_quantity }}" class="quantity-input" readonly>
+                    <button type="button" class="quantity-btn" id="increaseQuantity" aria-label="Increase quantity">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="add-to-cart-block">
+                  <button type="submit" id="add-to-cart-btn" class="btn w-100 btn-add-to-cart-nigerian-large" data-product-id="{{ product.id }}" {% if product.stock_quantity <= 0 %}disabled{% endif %}>
+                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                  </button>
+                </div>
               </div>
 
               <!-- Quick Buy Button with Nigerian pattern -->
               <div class="mb-4">
-                <button type="button" class="btn w-100 btn-buy-now-nigerian" {% if product.stock_quantity <= 0 %}disabled{% endif %}>
+                <button type="submit" class="btn w-100 btn-buy-now-nigerian" formaction="{% url 'buy_now' product.id %}" {% if product.stock_quantity <= 0 %}disabled{% endif %}>
                   <i class="fas fa-bolt me-2"></i>Buy Now
                 </button>
               </div>
@@ -809,6 +809,23 @@
     outline: none;
   }
 
+  .product-form-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 1200px) {
+    .product-form-grid {
+      grid-template-columns: minmax(220px, 1fr) minmax(240px, 1fr);
+      align-items: end;
+    }
+
+    .product-form-grid .quantity-block,
+    .product-form-grid .add-to-cart-block {
+      margin-bottom: 0;
+    }
+  }
+
   /* Nigerian Add to Cart Button */
   .btn-add-to-cart-nigerian-large {
     background-color: #008751;
@@ -1205,7 +1222,7 @@
         const productId = {{ product.id }};
         const quantity = parseInt(document.getElementById('quantity').value);
 
-        // Call the email collection function first, which will then call add to cart
+        // Add to cart directly (no email modal)
         addToCartWithEmail(productId, quantity);
       });
     }
@@ -1251,7 +1268,5 @@
 </script>
 
 
-<!-- Email Collection JS -->
-<script src="{% static 'js/email-collection.js' %}"></script>
 {% endblock %}
 

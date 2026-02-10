@@ -14,8 +14,8 @@ def context_processor(request):
 
     # Check if user is authenticated
     if request.user.is_authenticated:
-        cart = ShopCart.objects.filter(user=request.user, paid_order=False)
-        cart_count = cart.count()
+        cart = ShopCart.objects.filter(user=request.user, paid_order=False, quantity__gt=0)
+        cart_count = cart.aggregate(total_items=Sum('quantity'))['total_items'] or 0
     # For guest users, use session key
     else:
         # Get or create session key
@@ -23,8 +23,8 @@ def context_processor(request):
             request.session.create()
 
         session_key = request.session.session_key
-        cart = ShopCart.objects.filter(session_key=session_key, user=None, paid_order=False)
-        cart_count = cart.count()
+        cart = ShopCart.objects.filter(session_key=session_key, user=None, paid_order=False, quantity__gt=0)
+        cart_count = cart.aggregate(total_items=Sum('quantity'))['total_items'] or 0
 
         # Check if we have a guest email in the session
         guest_email = request.session.get('guest_email')

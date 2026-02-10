@@ -42,4 +42,10 @@ rgins, flex, text-center)
 - No inline styles—keep layout in CSS files.
 
 —  
-Please proceed step by step, starting with the **navbar and hero section** in `index.html` and `css/layout.css`. Show me the HTML/CSS diff, then explain.  
+Please proceed step by step, starting with the **navbar and hero section** in `index.html` and `css/layout.css`. Show me the HTML/CSS diff, then explain.
+
+## Local Stripe Setup (Dev)
+Add Stripe test keys to `.env` (this file is ignored by git):
+- `STRIPE_PUBLIC_KEY=pk_test_...`
+- `STRIPE_SECRET_KEY=sk_test_...`
+- `STRIPE_WEBHOOK_SECRET=whsec_...` (optional for local webhook testing)

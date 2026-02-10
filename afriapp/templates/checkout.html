@@ -185,7 +185,7 @@
             <h3 class="mb-4">Checkout</h3>
             <!-- Subheading -->
             <p class="mb-5">
-              Already have an account? <a class="fw-bold text-reset" href="#!">Click here to login</a>
+              Already have an account? <a class="fw-bold text-reset" href="{% url 'login' %}?next={{ request.path }}">Click here to login</a>
             </p>
           </div>
         </div>
@@ -238,7 +238,7 @@
               <input type="hidden" name="basket_no" value="{{ basket_no }}">
               <input type="hidden" name="total" value="{{ total_price|floatformat:2 }}">
               <input type="hidden" name="stripe_publishable_key" id="stripe_publishable_key" value="{{ STRIPE_PUBLIC_KEY }}">
-              <input type="hidden" name="stripe_token" id="stripe_token" value="">
+              <input type="hidden" name="payment_method" value="credit_card">
 
               <!-- Billing details -->
               <h6 class="mb-7">Billing Details</h6>
@@ -310,19 +310,6 @@
               <!-- Payment section -->
               <h6 class="mb-7">Payment</h6>
               <div id="payment-form">
-                  <!-- Payment Method Selection -->
-                  <div class="form-group mb-4">
-                      <label class="form-label d-block">Payment Method</label>
-                      <div class="btn-group-toggle" data-toggle="buttons">
-                          <label class="btn btn-outline-primary active me-3">
-                              <input type="radio" name="payment_method" value="credit_card" checked> Credit Card
-                          </label>
-                          <label class="btn btn-outline-primary">
-                              <input type="radio" name="payment_method" value="whatsapp"> WhatsApp Payment
-                          </label>
-                      </div>
-                  </div>
-
                   <!-- Payment Button -->
                   <button type="button" id="proceed-payment-btn" class="btn btn-african-primary btn-lg mt-4 w-100">
                       <i class="fas fa-lock me-2"></i> Proceed to Payment
@@ -341,9 +328,6 @@
                     form.reportValidity();
                     return;
                 }
-
-                // Get selected payment method
-                const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
 
                 // Get form data
                 const firstName = document.getElementById('checkoutBillingFirstName').value;
@@ -368,7 +352,7 @@
                             </div>
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Payment Method:</span>
-                                <span>${paymentMethod === 'credit_card' ? 'Credit Card' : 'WhatsApp Payment'}</span>
+                                <span>Card</span>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Shipping Address:</span>
@@ -406,82 +390,14 @@
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        if (paymentMethod === 'whatsapp') {
-                            // Handle WhatsApp payment
-                            sendWhatsApp();
-                        } else {
-                            // Submit the form for credit card payment
-                            form.submit();
-                        }
+                        // Submit the form for card payment (Stripe Checkout)
+                        form.submit();
                     }
                 });
             });
-
-            function sendWhatsApp() {
-              // Get values from the input fields
-              var phone = document.getElementById('checkoutBillingPhone').value;
-              var address = document.getElementById('checkoutBillingAddress').value;
-              var city = document.getElementById('checkoutBillingTown').value;
-              var country = document.getElementById('checkoutBillingCountry').value;
-              var zip = document.getElementById('checkoutBillingZIP').value;
-              var basketNo = '{{ basket_no }}';
-              var total = '{{ total_price|floatformat:2 }}';
-              var firstName = document.getElementById('checkoutBillingFirstName').value;
-              var lastName = document.getElementById('checkoutBillingLastName').value;
-              var email = document.getElementById('checkoutBillingEmail').value;
-
-              // Construct the WhatsApp message
-              var message = encodeURIComponent("Hi! I want to confirm my order.\n\nOrder Details:\n" +
-                  "Basket Number: " + basketNo + "\n" +
-                  "Total: $" + total + "\n" +
-                  "Name: " + firstName + " " + lastName + "\n" +
-                  "Email: " + email + "\n" +
-                  "Phone: " + phone + "\n" +
-                  "Address: " + address + "\n" +
-                  "City: " + city + "\n" +
-                  "Country: " + country + "\n" +
-                  "ZIP: " + zip + "\n" +
-                  "Items Ordered:\n");
-
-              // Loop through the cart items if needed (assuming you have a way to get them)
-              {% for item in cart %}
-                  message += "- {{ item.product.name }} (Qty: {{ item.quantity }}, Price: ${{ item.calculate_total_price|floatformat:2 }})\n";
-              {% endfor %}
-
-              // Construct the WhatsApp URL
-              var whatsappUrl = "https://wa.me/18626001974?text=" + message;
-
-              // Open the WhatsApp URL in a new tab
-              window.open(whatsappUrl, '_blank');
-
-              // Show success message
-              Swal.fire({
-                  title: 'Order Sent!',
-                  text: 'Your order details have been sent via WhatsApp. Please complete the payment process there.',
-                  icon: 'success',
-                  confirmButtonText: 'OK'
-              });
-
-              // Prevent form submission
-              return false;
-            }
             </script>
 
             <style>
-                /* Payment method styling */
-                .btn-group-toggle .btn {
-                    padding: 0.75rem 1.5rem;
-                    border-radius: 8px;
-                    font-weight: 500;
-                    transition: all 0.3s ease;
-                }
-
-                .btn-group-toggle .btn.active {
-                    background-color: #D2691E;
-                    border-color: #D2691E;
-                    color: white;
-                }
-
                 /* Order summary styling for SweetAlert */
                 .order-summary {
                     text-align: left;
@@ -506,15 +422,10 @@
             <!-- Form Navigation Buttons -->
             <div class="form-navigation mt-5">
               <div class="row">
-                <div class="col-6">
+                <div class="col-12">
                   <a href="{% url 'cart' %}" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left me-2"></i>Back to Cart
                   </a>
-                </div>
-                <div class="col-6 text-end">
-                  <button type="button" id="next-step-btn" class="btn btn-african-primary">
-                    Continue to Payment<i class="fas fa-arrow-right ms-2"></i>
-                  </button>
                 </div>
               </div>
             </div>
@@ -591,7 +502,7 @@
                   <span class="fw-bold">Total</span>
                   <span class="fw-bold">${{ total_price }}</span>
                 </div>
-                <p class="mb-0 fs-sm text-muted">By completing this purchase, you agree to our <a href="#!">Terms and Conditions</a>.</p>
+                <p class="mb-0 fs-sm text-muted">By completing this purchase, you agree to our <a href="{% url 'terms' %}">Terms and Conditions</a>.</p>
               </div>
             </div>
 
@@ -769,4 +680,6 @@
   }
 </script>
 {% endblock %}
+
+{% block extra_js %}{% endblock %}
 
