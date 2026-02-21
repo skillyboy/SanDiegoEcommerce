@@ -11,6 +11,9 @@ Django==4.2
 django-cors-headers==3.14.0
 djangorestframework==3.14.0
 django-ninja==1.0.1
+django-allauth==0.63.3
+# Google OAuth dependency for allauth
+requests-oauthlib==2.0.0
 # Comment out microservice dependencies that are not needed for the main app
 # fastmcp==0.1.0
 # fastapi==0.110.0

@@ -22,7 +22,7 @@
             <!-- Form -->
             <form method="post" action="{% url 'login' %}">
               {% csrf_token %}
-              <input type="hidden" name="next" value="{{ next|default:request.GET.next|default:'' }}">
+              <input type="hidden" name="next" value="{{ next|default:'' }}">
               <div class="mb-4">
                 <!-- Email -->
                 <label class="form-label" for="loginEmail">Email Address</label>
@@ -53,7 +53,7 @@
           <div class="card-body text-center" style="background-color: #FFF; border: 1px solid #8B4513;">
             <p class="mb-4" style="color: #8B4513;">Don't have an account? You need one to place an order.</p>
             <!-- Sign Up Button -->
-            <a href="{% url 'signupform' %}?next={{ next|default:request.GET.next|default:'' }}" class="btn btn-outline-primary" style="border-color: #8B4513; color: #8B4513;">Create an Account</a>
+            <a href="{% url 'signupform' %}?next={{ next|default:'' }}" class="btn btn-outline-primary" style="border-color: #8B4513; color: #8B4513;">Create an Account</a>
           </div>
         </div>
 

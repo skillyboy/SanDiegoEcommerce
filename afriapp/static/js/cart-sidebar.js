@@ -10,6 +10,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize cart sidebar functionality
     initCartSidebar();
+    // Initial fetch so sidebar has content on first open
+    refreshCartItems();
 });
 
 /**
@@ -25,10 +27,7 @@ function initCartSidebar() {
 
     // Listen for the custom 'cartUpdated' event
     document.addEventListener('cartUpdated', function(event) {
-        // Show the cart sidebar
         showCartSidebar();
-        
-        // Refresh cart items
         refreshCartItems();
     });
     
@@ -66,7 +65,7 @@ function showCartSidebar() {
  */
 function refreshCartItems() {
     // Make an AJAX request to get the latest cart items
-    fetch('/get-cart-items/')
+    fetch('/get-cart-items/', { credentials: 'same-origin', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -87,7 +86,8 @@ function updateCartSidebar(data) {
     const navbarCount = document.getElementById('navbar-cart-count');
     const cartButtonCount = document.getElementById('cart-button-count');
     const headerStrong = document.querySelector('#modalShoppingCart .offcanvas-header strong');
-    const subtotalEl = document.querySelector('#modalShoppingCart .offcanvas-footer strong.ms-auto');
+    const subtotalEl = document.getElementById('cartSidebarSubtotalValue') || document.querySelector('#modalShoppingCart .offcanvas-footer strong.ms-auto');
+    const subtotalInline = document.getElementById('cartSidebarSubtotal');
 
     const items = data.items || data.cart_items || data.cartItems || [];
     const count = data.count || data.cart_count || data.cartCount || (Array.isArray(items) ? items.reduce((s, i) => s + (i.quantity || i.qty || 0), 0) : 0);
@@ -99,6 +99,9 @@ function updateCartSidebar(data) {
     if (headerStrong) headerStrong.textContent = `Your Cart (${count})`;
     if (subtotalEl && typeof subtotal !== 'undefined') {
         subtotalEl.textContent = `$${Number(subtotal).toFixed(2)}`;
+    }
+    if (subtotalInline && typeof subtotal !== 'undefined') {
+        subtotalInline.textContent = `$${Number(subtotal).toFixed(2)}`;
     }
 
     if (!cartItemsList) {

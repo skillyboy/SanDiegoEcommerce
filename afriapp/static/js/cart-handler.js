@@ -146,18 +146,12 @@ function addToCart(productId, quantity) {
         return;
     }
 
-    // Show loading toast
-    showToast('Adding to cart...', 'loading');
-
     // Check stock availability first
     checkStockAvailability(productId, quantity).then(response => {
         if (!response.available) {
             showToast(response.message || 'Product is out of stock', 'error');
             return;
         }
-
-        // Add flying animation
-        addToCartAnimation(productId);
 
         // Use fetch instead of jQuery.ajax to avoid other scripts' global handlers
         (async function() {
@@ -215,10 +209,17 @@ function addToCart(productId, quantity) {
                 }
 
                 if (json.success) {
-                    updateCartCount(json.cart_count);
-                    showToast(json.message || 'Product added to cart successfully!', 'success');
+                    const newCount = (typeof json.cart_count !== 'undefined') ? json.cart_count : undefined;
+                    const newTotal = (typeof json.cart_total !== 'undefined') ? json.cart_total : undefined;
+                    if (typeof newCount !== 'undefined') {
+                        updateCartCount(newCount);
+                    } else {
+                        updateCartCount((Number(document.getElementById('cart-button-count')?.textContent || 0) + quantity));
+                    }
+                    updateAllCartReaders(newCount, newTotal);
+                    showToast(json.message || 'Added to cart', 'success');
                     document.dispatchEvent(new CustomEvent('cartUpdated', {
-                        detail: { productId: productId, quantity: quantity, cartCount: json.cart_count }
+                        detail: { productId: productId, quantity: quantity, cartCount: newCount, cartTotal: newTotal }
                     }));
 
                     
@@ -423,7 +424,7 @@ function addToCartAnimation(productId) {
  */
 function updateCartCount(count) {
     const cartCountElement = document.getElementById('cart-button-count');
-    if (cartCountElement) {
+    if (cartCountElement && typeof count !== 'undefined') {
         cartCountElement.textContent = count;
         cartCountElement.classList.add('cart-count-updated');
         setTimeout(() => {
@@ -529,6 +530,8 @@ function increaseCartQuantity(itemId) {
 
                 // Update cart summary
                 updateCartSummary(response.subtotal, response.vat, response.total);
+                updateAllCartReaders(response.cart_count, response.cart_total);
+                document.dispatchEvent(new CustomEvent('cartUpdated', { detail: { cartCount: response.cart_count, cartTotal: response.cart_total } }));
             } else {
                 // Show error toast
                 showToast(response.message || 'Failed to increase quantity', 'error');
@@ -598,6 +601,8 @@ function decreaseCartQuantity(itemId) {
 
                 // Update cart summary
                 updateCartSummary(response.subtotal, response.vat, response.total);
+                updateAllCartReaders(response.cart_count, response.cart_total);
+                document.dispatchEvent(new CustomEvent('cartUpdated', { detail: { cartCount: response.cart_count, cartTotal: response.cart_total } }));
             } else {
                 // Show error toast
                 showToast(response.message || 'Failed to decrease quantity', 'error');

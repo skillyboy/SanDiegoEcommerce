@@ -888,6 +888,72 @@ function showToast(message, type = 'info') {
     }
 }
 
+// Wishlist handler (delegated, single toast, login-aware)
+document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.btn-wishlist');
+    if (!btn) return;
+    e.preventDefault();
+    const productId = btn.dataset.productId || btn.dataset.itemId || btn.getAttribute('data-product-id') || btn.getAttribute('data-item-id');
+    if (!productId) return;
+
+    const csrf = (document.querySelector('[name=csrfmiddlewaretoken]') || {}).value || getCsrfFromCookie();
+    (async () => {
+        try {
+            const resp = await fetch('/add_to_wishlist/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrf,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: new URLSearchParams({ product_id: productId })
+            });
+
+            if (resp.status === 401 || resp.status === 302 || resp.status === 403) {
+                const next = encodeURIComponent(window.location.pathname + window.location.search);
+                window.location.href = `/accounts/login/?next=${next}`;
+                return;
+            }
+
+            const text = await resp.text();
+            let data = {};
+            try { data = text ? JSON.parse(text) : {}; } catch (err) { throw err; }
+
+            if (data.success) {
+                const icon = btn.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas', 'text-danger');
+                }
+                if (typeof toast !== 'undefined') {
+                    toast.success(data.message || 'Added to wishlist', { playSound: false });
+                }
+            } else {
+                if (data && data.message && typeof toast !== 'undefined') {
+                    toast.error(data.message, { playSound: false });
+                } else if (typeof toast !== 'undefined') {
+                    toast.error('Failed to add to wishlist', { playSound: false });
+                }
+            }
+        } catch (err) {
+            console.error('Wishlist error', err);
+            if (typeof toast !== 'undefined') {
+                toast.error('Unable to add to wishlist. Please try again.', { playSound: false });
+            }
+        }
+    })();
+});
+
+// Helper: CSRF from cookie fallback
+function getCsrfFromCookie() {
+    const name = 'csrftoken';
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return '';
+}
+
 // Add CSS for enhanced animations and modern UI elements
 const style = document.createElement('style');
 style.textContent = `

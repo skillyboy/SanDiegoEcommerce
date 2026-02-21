@@ -1799,7 +1799,7 @@ window.addEventListener('load', function() {
                     'product_id': productId,
                     'csrfmiddlewaretoken': csrftoken
                 },
-                success: function(res) {
+                success: function(res, status, xhr) {
                     if (res && res.success) {
                         // Update wishlist UI if needed
                         try { if (typeof updateWishlistCount === 'function') updateWishlistCount(res.wishlist_count); } catch(e){}
@@ -1809,12 +1809,19 @@ window.addEventListener('load', function() {
                         } else {
                             console.info(res.message || 'Added to wishlist');
                         }
+                    } else if (res && res.login_url) {
+                        window.location.href = res.login_url;
                     } else {
                         if (res && res.message) alert(res.message); else alert('Failed to add to wishlist');
                     }
                 },
-                error: function(err) {
-                    console.error('Wishlist error', err);
+                error: function(xhr) {
+                    if (xhr && (xhr.status === 401 || xhr.status === 302)) {
+                        const next = encodeURIComponent(window.location.pathname + window.location.search);
+                        window.location.href = `/accounts/login/?next=${next}`;
+                        return;
+                    }
+                    console.error('Wishlist error', xhr);
                     alert('Failed to add to wishlist.');
                 }
             });

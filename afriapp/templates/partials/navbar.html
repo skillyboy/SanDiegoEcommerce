@@ -49,7 +49,7 @@
             <!-- Cart Icon - Important for all users -->
             <a class="nav-link position-relative me-3 cart-icon-link" href="#modalShoppingCart" data-bs-toggle="offcanvas" aria-label="Shopping Cart">
                 <i class="fas fa-shopping-cart"></i>
-                <span id="cart-button-count" class="badge rounded-pill cart-counter position-absolute top-0 start-100 translate-middle">
+                <span id="cart-button-count" class="badge rounded-pill cart-counter position-absolute top-0 start-100 translate-middle" data-cart-count>
                     {{ cart_count|default:"0" }}
                 </span>
             </a>

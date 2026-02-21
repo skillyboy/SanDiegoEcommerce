@@ -72,11 +72,16 @@
             {% endif %}
         </div>
 
-        <!-- Add to Cart Button -->
-        <button class="btn-add-to-cart-nigerian" onclick="addToCartWithAnimation({{ product.id }})">
-            <span class="btn-text">Add to Cart</span>
-            <i class="fe fe-shopping-cart ms-2"></i>
-        </button>
+        <!-- Add to Cart / Wishlist Buttons -->
+        <div class="d-grid gap-2">
+            <button class="btn-add-to-cart-nigerian" onclick="addToCart({{ product.id }}, 1)">
+                <span class="btn-text">Add to Cart</span>
+                <i class="fe fe-shopping-cart ms-2"></i>
+            </button>
+            <button class="btn btn-outline-success w-100 btn-wishlist" data-product-id="{{ product.id }}">
+                <i class="far fa-heart me-2"></i>Add to Wishlist
+            </button>
+        </div>
     </div>
 </div>
 

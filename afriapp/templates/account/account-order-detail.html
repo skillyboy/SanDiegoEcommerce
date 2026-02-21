@@ -75,7 +75,7 @@
                               <p class="card-text">
                                   <strong>Order Date:</strong> {{ order.created_at|date:"d M, Y" }}<br>
                                   <strong>Status:</strong> {{ order.status }}<br>
-                                  <strong>Total Amount:</strong> ${{ order.total_amount }}
+                                  <strong>Total Amount:</strong> ${{ order.total|floatformat:2 }}
                               </p>
                           </div>
                       </div>
@@ -164,11 +164,11 @@
                                       </tr> -->
                                       <tr>
                                           <td>Tax:</td>
-                                          <td class="text-right">${{ order.vat }}</td>
+                                          <td class="text-right">${{ order.tax }}</td>
                                       </tr>
                                       <tr class="font-weight-bold">
                                           <td>Total Amount:</td>
-                                          <td class="text-right">${{ order.total_amount }}</td>
+                                          <td class="text-right">${{ order.total|floatformat:2 }}</td>
                                       </tr>
                                   </table>
                               </div>

@@ -1,22 +1,22 @@
-from pydantic_settings import BaseSettings
-from typing import List, Optional
-import os
 from functools import lru_cache
+from typing import List
+
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+
     # API Settings
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "AgroLinker Microservice"
     
     # Security
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-here")
+    SECRET_KEY: str = Field(..., env="SECRET_KEY")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
     # Database
-    DATABASE_URL: str = os.getenv(
-        "DATABASE_URL", 
-        "postgresql://user:password@localhost:5432/agrolinker"
-    )
+    DATABASE_URL: str = Field(..., env="DATABASE_URL")
     
     # CORS
     ALLOWED_ORIGINS: List[str] = [
@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     ]
     
     # Redis
-    REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379")
+    REDIS_URL: str = Field("redis://localhost:6379", env="REDIS_URL")
     
     class Config:
         case_sensitive = True

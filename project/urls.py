@@ -9,6 +9,7 @@ urlpatterns = [
     # Logistics related pages
     path('logistics/', include('logistics.urls', namespace='logistics')),
     path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

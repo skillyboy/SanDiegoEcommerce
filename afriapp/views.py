@@ -269,7 +269,12 @@ def add_address(request):
 
 # 14. Account Wishlist View
 def account_wishlist(request):
-    return render(request, 'account/account-wishlist.html')
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    wishlist = Wishlist.objects.filter(user=request.user).prefetch_related('products').first()
+    items = wishlist.products.all() if wishlist else []
+    return render(request, 'account/account-wishlist.html', {'items': items})
 
 
 # 15. Error 404 Page
@@ -871,15 +876,24 @@ class ProductDetailView(View):
         return render(request, 'product.html', {'product': product})
 
 # 9. Add to Wishlist
-@login_required
 def add_to_wishlist(request):
     if request.method == 'POST':
+        # Enforce login-first with AJAX-friendly response
+        if not request.user.is_authenticated:
+            next_url = request.META.get('HTTP_REFERER') or request.get_full_path()
+            login_url = f"{reverse('login')}?next={quote(next_url or '/', safe='')}"
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'message': 'Authentication required', 'login_url': login_url}, status=401)
+            return redirect(login_url)
+
         product_id = request.POST.get('product_id')
         product = get_object_or_404(Product, id=product_id)
         try:
-            wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-            wishlist.add_product(product)
-            return JsonResponse({'success': True, 'message': 'Product added to wishlist'})
+            wl_obj, created = Wishlist.objects.get_or_create(user=request.user, product=product)
+            return JsonResponse({
+                'success': True,
+                'message': 'Product added to wishlist' if created else 'Already in your wishlist'
+            })
         except Exception as e:
             logger.error(f"Error adding to wishlist: {str(e)}")
             return JsonResponse({'success': False, 'message': 'Error adding to wishlist. Please try again.'})
@@ -933,6 +947,21 @@ def add_to_cart(request, id=None, product_id=None):
             paid_order=False,
             defaults={'quantity': 0}
         )
+
+        if not created:
+            # Already in cart: do not increase quantity, just inform user
+            cart_count = ShopCart.objects.filter(user=request.user, paid_order=False).aggregate(
+                total_items=Sum('quantity'),
+                total_amount=Sum(F('quantity') * F('product__price'), output_field=FloatField())
+            )
+            return JsonResponse({
+                'success': True,
+                'message': f'{product.name} is already in your cart',
+                'cart_count': cart_count['total_items'] or 0,
+                'cart_total': "{:.2f}".format(cart_count['total_amount'] or 0),
+                'item_count': cart_item.quantity
+            })
+
         new_quantity = cart_item.quantity + quantity
         if new_quantity > product.max_purchase:
             return JsonResponse({'success': False, 'error': f'Maximum {product.max_purchase} items allowed per order'})
@@ -1083,6 +1112,10 @@ def increase_quantity(request, item_id):
             cart_item.quantity += 1
             cart_item.save()
             subtotal, vat, total = calculate_cart_summary(request)
+            cart_count = ShopCart.objects.filter(user=request.user, paid_order=False).aggregate(
+                total_items=Sum('quantity'),
+                total_amount=Sum(F('quantity') * F('product__price'), output_field=FloatField())
+            )
             return JsonResponse({
                 'success': True,
                 'new_quantity': cart_item.quantity,
@@ -1090,6 +1123,8 @@ def increase_quantity(request, item_id):
                 'subtotal': round(float(subtotal), 2),
                 'vat': round(float(vat), 2),
                 'total': round(float(total), 2),
+                'cart_count': cart_count['total_items'] or 0,
+                'cart_total': "{:.2f}".format(cart_count['total_amount'] or 0),
             })
         except Exception as e:
             logger.error(f"Error increasing quantity: {str(e)}")
@@ -1105,6 +1140,10 @@ def decrease_quantity(request, item_id):
                 cart_item.quantity -= 1
                 cart_item.save()
             subtotal, vat, total = calculate_cart_summary(request)
+            cart_count = ShopCart.objects.filter(user=request.user, paid_order=False).aggregate(
+                total_items=Sum('quantity'),
+                total_amount=Sum(F('quantity') * F('product__price'), output_field=FloatField())
+            )
             return JsonResponse({
                 'success': True,
                 'new_quantity': cart_item.quantity,
@@ -1112,6 +1151,8 @@ def decrease_quantity(request, item_id):
                 'subtotal': round(float(subtotal), 2),
                 'vat': round(float(vat), 2),
                 'total': round(float(total), 2),
+                'cart_count': cart_count['total_items'] or 0,
+                'cart_total': "{:.2f}".format(cart_count['total_amount'] or 0),
             })
         except Exception as e:
             logger.error(f"Error decreasing quantity: {str(e)}")
@@ -1127,12 +1168,18 @@ def remove_from_cart(request, cart_item_id):
             if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
                 subtotal, vat, total = calculate_cart_summary(request)
                 cart_empty = not ShopCart.objects.filter(user=request.user, paid_order=False).exists()
+                cart_count = ShopCart.objects.filter(user=request.user, paid_order=False).aggregate(
+                    total_items=Sum('quantity'),
+                    total_amount=Sum(F('quantity') * F('product__price'), output_field=FloatField())
+                )
                 return JsonResponse({
                     'success': True,
                     'subtotal': subtotal,
                     'vat': vat,
                     'total': total,
-                    'cart_empty': cart_empty
+                    'cart_empty': cart_empty,
+                    'cart_count': cart_count['total_items'] or 0,
+                    'cart_total': "{:.2f}".format(cart_count['total_amount'] or 0),
                 })
             return redirect(request.META.get('HTTP_REFERER', 'cart'))
         except ShopCart.DoesNotExist:
@@ -1361,8 +1408,10 @@ class CompletedPaymentView(View):
 
             # Clear the cart after order creation
             cart_items.delete()
+            request.session['cart_count'] = 0
             request.session.pop('buy_now_product_id', None)
             request.session.pop('buy_now_quantity', None)
+            request.session.modified = True
 
             messages.success(request, "Payment successful! Order has been created.")
             return render(request, "order_completed.html", {"order": order})

@@ -7,9 +7,15 @@ import os
 import requests
 from django.conf import settings
 
+def _require_env(name: str) -> str:
+    value = os.getenv(name)
+    if value:
+        return value
+    raise RuntimeError(f"Missing required environment variable: {name}")
+
 # Microservice connection settings
 MICROSERVICE_BASE_URL = os.getenv('MICROSERVICE_BASE_URL', 'http://localhost:8001')
-MICROSERVICE_API_KEY = os.getenv('MICROSERVICE_API_KEY', 'development_api_key')
+MICROSERVICE_API_KEY = _require_env('MICROSERVICE_API_KEY')
 MICROSERVICE_TIMEOUT = int(os.getenv('MICROSERVICE_TIMEOUT', '5'))  # seconds
 
 # API endpoints

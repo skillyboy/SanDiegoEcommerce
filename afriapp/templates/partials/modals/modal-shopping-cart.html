@@ -6,60 +6,31 @@
         <i class="fe fe-x" aria-hidden="true"></i>
     </button>
 
-    {% if cart and cart_count > 0 %}
-    <!-- Cart with Items -->
-    <!-- Header with Cart Summary -->
+    <!-- Cart Header -->
     <div class="offcanvas-header lh-fixed fs-lg d-flex justify-content-between align-items-center">
-        <strong>Your Cart ({{ cart_count }})</strong>
+        <strong>Your Cart (<span id="cart-sidebar-count">{{ cart_count|default:"0" }}</span>)</strong>
     </div>
 
     <!-- Progress Bar for Free Shipping -->
     <div class="px-4 py-2 bg-light">
         <div class="d-flex justify-content-between align-items-center">
             <span class="fs-xs">Spend $50 more to get FREE SHIPPING!</span>
-            <span class="fs-xs">${{ subtotal|default:"0.00" }} / $50.00</span>
+            <span class="fs-xs"><span id="cartSidebarSubtotal">$0.00</span> / $50.00</span>
         </div>
         <div class="progress mt-2" style="height: 5px;">
-            <div class="progress-bar bg-success" role="progressbar" style="width: {{ subtotal|default:0|floatformat:0 }}%;" aria-valuenow="{{ subtotal|default:0 }}" aria-valuemin="0" aria-valuemax="50"></div>
+            <div class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="50"></div>
         </div>
     </div>
 
     <!-- Cart Items List -->
     <ul class="list-group list-group-lg list-group-flush" id="cartItemsList">
-      {% for item in cart %}
-      <li class="list-group-item" id="cart-item-{{ item.id }}">
-          <div class="row align-items-center">
-              <div class="col-4">
-                  <!-- Product Image with Hover Effect -->
-                  <a href="{% url 'product' item.product.id %}" class="position-relative">
-                      <img class="img-fluid rounded shadow-sm" src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
-                      <div class="product-hover-overlay position-absolute start-0 top-0 w-100 h-100 bg-dark opacity-50 d-none"></div>
-                  </a>
-              </div>
-              <div class="col-8">
-                  <!-- Product Details -->
-                  <p class="fs-sm fw-bold mb-1">
-                      <a class="text-body" href="{% url 'product' item.product.id %}">{{ item.product.name }}</a>
-                  </p>
-                  <span class="text-muted d-block mb-3">${{ item.calculate_total_price|floatformat:2 }} ({{ item.quantity }} x ${{ item.product.price|floatformat:2 }})</span>
-
-                  <!-- Quantity Selector & Remove Button -->
-                  <div class="d-flex align-items-center">
-                      <!-- Remove Button -->
-                      <button class="fs-xs text-danger ms-auto remove-item" data-id="{{ item.id }}">
-                          <i class="fe fe-x"></i> Remove
-                      </button>
-                  </div>
-              </div>
-          </div>
-      </li>
-      {% endfor %}
+        <li class="list-group-item text-center text-muted py-4">Loading cart…</li>
     </ul>
 
-    <!-- Cart Summary & Estimated Delivery Time -->
+    <!-- Cart Summary -->
     <div class="offcanvas-footer justify-between lh-fixed fs-sm bg-light mt-auto px-4 py-3">
         <strong>Subtotal</strong>
-        <strong class="ms-auto">${{ subtotal|default:"0.00"|floatformat:2 }}</strong>
+        <strong class="ms-auto" id="cartSidebarSubtotalValue">$0.00</strong>
     </div>
 
     <!-- Cart Actions -->
@@ -71,16 +42,6 @@
         </a>
     </div>
 
-    {% else %}
-    <!-- Empty Cart -->
-    <div class="d-flex flex-column justify-content-center align-items-center text-center p-5">
-        <i class="fe fe-shopping-cart fs-1 mb-4"></i>
-        <h5 class="mb-4">Your cart is empty 😞</h5>
-        <p class="fs-sm text-muted mb-4">Add products to your cart and they will appear here.</p>
-        <a class="btn w-100 btn-outline-dark btn-lg" href="{% url 'shop' %}">Continue Shopping</a>
-    </div>
-    {% endif %}
-
     <!-- JavaScript for cart item removal -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -90,55 +51,45 @@
                 const itemId = btn.getAttribute('data-id');
                 const cartItemElement = document.getElementById(`cart-item-${itemId}`);
 
-                    // Use SweetAlert2 for confirmation
-                    Swal.fire({
-                        title: 'Remove Item?',
-                        text: "Are you sure you want to remove this item from your cart?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: 'var(--service-primary, #008751)',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, remove it!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Send AJAX request to remove item
-                            fetch(`/cart/remove/${itemId}/`, {
-                                method: 'POST',
-                                headers: {
-                                    'X-Requested-With': 'XMLHttpRequest',
-                                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                Swal.fire({
+                    title: 'Remove Item?',
+                    text: "Are you sure you want to remove this item from your cart?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'var(--service-primary, #008751)',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, remove it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/cart/remove/${itemId}/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                if (cartItemElement) {
+                                    cartItemElement.remove();
                                 }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    if (cartItemElement) {
-                                        cartItemElement.remove();
-                                    }
 
-                                    // Refresh sidebar items and counters
-                                    if (window.refreshCartSidebar) {
-                                        window.refreshCartSidebar();
-                                    }
-
-                                    // Show success message
-                                    toast.success('Item removed from cart', {
-                                        title: 'Success'
-                                    });
-                                } else {
-                                    toast.error('Failed to remove item', {
-                                        title: 'Error'
-                                    });
+                                if (window.refreshCartSidebar) {
+                                    window.refreshCartSidebar();
                                 }
-                            })
-                            .catch(error => {
-                                console.error("Error removing item:", error);
-                                toast.error('An error occurred', {
-                                    title: 'Error'
-                                });
-                            });
-                        }
-                    });
+
+                                toast.success('Item removed from cart', { title: 'Success' });
+                            } else {
+                                toast.error('Failed to remove item', { title: 'Error' });
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error removing item:", error);
+                            toast.error('An error occurred', { title: 'Error' });
+                        });
+                    }
+                });
             });
         });
     </script>

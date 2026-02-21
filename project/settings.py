@@ -4,16 +4,29 @@ from pathlib import Path
 from dotenv import load_dotenv
 from os import getenv
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
 
 
 # Define the base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Django sites framework (required for django-allauth)
+SITE_ID = int(os.getenv("SITE_ID", "1"))
+
 # Load Environment Variables
 load_dotenv(BASE_DIR / ".env")
 
+
+def require_env(name: str) -> str:
+    """Return required environment variable or raise for clearer failures."""
+    value = os.getenv(name)
+    if value:
+        return value
+    raise ImproperlyConfigured(f"Missing required environment variable: {name}")
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key-for-dev")
+SECRET_KEY = require_env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Enable DEBUG to see detailed error messages
@@ -64,9 +77,9 @@ else:
 # Stripe settings
 
 # Load Stripe keys from environment (provided via .env or host secrets)
-STRIPE_PUBLIC_KEY = getenv("STRIPE_PUBLIC_KEY") or os.getenv("STRIPE_PUBLIC_KEY")
-STRIPE_SECRET_KEY = getenv("STRIPE_SECRET_KEY") or os.getenv("STRIPE_SECRET_KEY")
-STRIPE_WEBHOOK_SECRET = getenv("STRIPE_WEBHOOK_SECRET") or os.getenv("STRIPE_WEBHOOK_SECRET")
+STRIPE_PUBLIC_KEY = require_env("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY = require_env("STRIPE_SECRET_KEY")
+STRIPE_WEBHOOK_SECRET = require_env("STRIPE_WEBHOOK_SECRET")
 
 # Optionally initialize the stripe library with the secret key so other modules
 # can use `import stripe` and have api_key already set. Wrap in try/except so
@@ -93,8 +106,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     "rest_framework",
     "ninja",  # Required for Django Ninja API framework used by agro_linker
+    # Authentication / social login
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
 ]
 
 MIDDLEWARE = [
@@ -110,6 +129,35 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'project.urls'
+
+# Authentication backends (django-allauth + Django default)
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+# django-allauth configuration
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_VERIFICATION = "none"  # change to "mandatory" if you want email verification flow
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+# Google OAuth configuration (uses env vars; falls back to admin-configured SocialApp if absent)
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": GOOGLE_CLIENT_ID or "",
+            "secret": GOOGLE_CLIENT_SECRET or "",
+            "key": "",
+        },
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {"access_type": "online"},
+    }
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -266,7 +314,20 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Ensure DEFAULT_FROM_EMAIL exists for sending receipts
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
+# Email / SMTP (Gmail)
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True").lower() == "true"
+
+# If credentials are provided, use SMTP; otherwise fall back to console for dev
+if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'webmaster@localhost')
 
 # Railway compatible settings: allow RAILWAY_STATIC_URL if provided
 RAILWAY_STATIC_URL = os.getenv('RAILWAY_STATIC_URL')
