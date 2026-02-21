@@ -13,6 +13,16 @@ def _require_env(name: str) -> str:
         return value
     raise RuntimeError(f"Missing required environment variable: {name}")
 
+
+
+class MicroserviceClient:
+    """Dummy MicroserviceClient. Microservice integration is disabled."""
+    def __getattr__(self, name):
+        def dummy(*args, **kwargs):
+            return None
+        return dummy
+    
+    
 # # Microservice connection settings
 # MICROSERVICE_BASE_URL = os.getenv('MICROSERVICE_BASE_URL', 'http://localhost:8001')
 
