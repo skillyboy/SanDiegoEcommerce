@@ -50,7 +50,7 @@ trio==0.31.0
 trio-websocket==0.12.2
 twilio==9.3.3
 # typing-inspection==0.4.2
-typing_extensions==4.12.2
+# typing_extensions==4.12.2
 tzdata==2023.3
 # urllib3==2.2.3
 userpath==1.9.2
