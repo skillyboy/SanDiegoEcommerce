@@ -15,7 +15,7 @@ def _require_env(name: str) -> str:
 
 # Microservice connection settings
 MICROSERVICE_BASE_URL = os.getenv('MICROSERVICE_BASE_URL', 'http://localhost:8001')
-MICROSERVICE_API_KEY = _require_env('MICROSERVICE_API_KEY')
+MICROSERVICE_API_KEY = os.getenv('MICROSERVICE_API_KEY', '')  # Now optional, defaults to empty string
 MICROSERVICE_TIMEOUT = int(os.getenv('MICROSERVICE_TIMEOUT', '5'))  # seconds
 
 # API endpoints
@@ -33,10 +33,10 @@ class MicroserviceClient:
     @staticmethod
     def _get_headers():
         """Get the headers for API requests"""
-        return {
-            'Authorization': f'Bearer {MICROSERVICE_API_KEY}',
-            'Content-Type': 'application/json',
-        }
+        headers = {'Content-Type': 'application/json'}
+        if MICROSERVICE_API_KEY:
+            headers['Authorization'] = f'Bearer {MICROSERVICE_API_KEY}'
+        return headers
     
     @classmethod
     def get(cls, endpoint, params=None):
