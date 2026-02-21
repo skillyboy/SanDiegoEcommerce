@@ -116,6 +116,10 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
 ]
 
+
+
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Add whitenoise for static files on Render
@@ -123,11 +127,11 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',  # Required by django-allauth
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'afriapp.middleware.SessionCookieMiddleware',  # Custom middleware to sync session to cookies
 ]
-
 ROOT_URLCONF = 'project.urls'
 
 # Authentication backends (django-allauth + Django default)
