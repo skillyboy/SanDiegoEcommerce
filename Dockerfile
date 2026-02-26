@@ -22,8 +22,6 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 # Copy project
 COPY . .
 
-# Create static directory and copy files directly
-RUN mkdir -p staticfiles && cp -r afriapp/static/* staticfiles/ || true
-
-# Run gunicorn
-CMD gunicorn project.wsgi:application --bind 0.0.0.0:$PORT
+# Use the same startup flow everywhere (migrate -> collectstatic -> gunicorn).
+RUN chmod +x entrypoint.sh
+CMD ["bash", "entrypoint.sh"]

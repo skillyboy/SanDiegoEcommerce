@@ -14,6 +14,7 @@ Railway deployment notes
    - `SECURE_SSL_REDIRECT=true` (recommended once domain + HTTPS are ready)
    - `DEFAULT_FROM_EMAIL`
    - `DB_CONNECT_TIMEOUT=10` (already defaulted in settings)
+   - `MIGRATE_MAX_RETRIES=12` and `MIGRATE_RETRY_DELAY=5` (entrypoint retry behavior)
 
 4. Optional Stripe variables
    - `STRIPE_PUBLIC_KEY`
@@ -25,4 +26,4 @@ Railway deployment notes
 
 6. Notes on Postgres timeouts
    - If you see `postgres-*.railway.internal ... connection timed out`, verify the Postgres plugin is attached to the same Railway project and `DATABASE_URL` points to that plugin.
-   - The app now fails fast when DB is unreachable instead of booting and timing out workers repeatedly.
+   - Startup now retries migrations for transient DB availability, then fails clearly after configured retries.

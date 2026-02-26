@@ -170,10 +170,12 @@ STATIC_URL = '/static/'
 # The directory where 'collectstatic' will collect static files for deployment
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Additional directories to look for static files (if you have a 'static' directory in your apps)
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'afriapp', 'static'),  # This is your local static directory
-]
+# Additional project-level static directory.
+# App-level static folders (e.g. afriapp/static) are discovered automatically via AppDirectoriesFinder.
+STATICFILES_DIRS = []
+project_static_dir = BASE_DIR / 'static'
+if project_static_dir.exists():
+    STATICFILES_DIRS.append(project_static_dir)
 
 # Use the simplest static files storage to avoid issues with missing files
 STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
