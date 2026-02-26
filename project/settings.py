@@ -65,6 +65,10 @@ if not ALLOWED_HOSTS:
 if RAILWAY_PUBLIC_DOMAIN and RAILWAY_PUBLIC_DOMAIN not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
 
+# Railway health checks use this host header.
+if "healthcheck.railway.app" not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append("healthcheck.railway.app")
+
 CSRF_TRUSTED_ORIGINS = split_csv_env("CSRF_TRUSTED_ORIGINS")
 if RAILWAY_PUBLIC_DOMAIN:
     railway_origin = f"https://{RAILWAY_PUBLIC_DOMAIN}"
