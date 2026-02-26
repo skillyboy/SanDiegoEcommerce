@@ -209,13 +209,22 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# Priority:
-# 1. If USE_SQLITE=true, always use local SQLite.
-# 2. Else if DATABASE_URL exists (Railway/Render), parse it.
-# 3. Else if explicit PG* env vars exist, use those.
-# 4. Else fall back to SQLite for local development.
-USE_SQLITE = os.getenv("USE_SQLITE", "False").lower() == "true"
+# Database mode:
+# - local/dev default: SQLite
+# - Railway default: Postgres
+# Override with DB_MODE=sqlite|postgres|auto (default auto).
+# Backward compatibility: USE_SQLITE=true forces sqlite.
 DATABASE_URL = os.getenv("DATABASE_URL")
+DB_MODE = os.getenv("DB_MODE", "auto").strip().lower()
+
+if os.getenv("USE_SQLITE", "False").lower() == "true":
+    DB_MODE = "sqlite"
+
+IS_RAILWAY = bool(
+    os.getenv("RAILWAY_PROJECT_ID")
+    or os.getenv("RAILWAY_SERVICE_ID")
+    or os.getenv("RAILWAY_ENVIRONMENT_ID")
+)
 
 PG_HOST = os.getenv("PGHOST") or os.getenv("DB_HOST")
 PG_NAME = os.getenv("PGDATABASE") or os.getenv("POSTGRES_DB")
@@ -223,7 +232,10 @@ PG_PASSWORD = os.getenv("PGPASSWORD") or os.getenv("POSTGRES_PASSWORD")
 PG_PORT = os.getenv("PGPORT") or os.getenv("DB_PORT")
 PG_USER = os.getenv("PGUSER") or os.getenv("POSTGRES_USER")
 
-if USE_SQLITE:
+if DB_MODE not in {"auto", "sqlite", "postgres"}:
+    raise ImproperlyConfigured("DB_MODE must be one of: auto, sqlite, postgres")
+
+if DB_MODE == "sqlite" or (DB_MODE == "auto" and not IS_RAILWAY):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -250,12 +262,9 @@ elif PG_HOST and PG_NAME and PG_PASSWORD and PG_PORT:
         }
     }
 else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
+    raise ImproperlyConfigured(
+        "Postgres selected but DATABASE_URL/PG* variables are missing."
+    )
 
 # Keep DB failures fast on managed platforms so workers don't stall indefinitely.
 if DATABASES["default"].get("ENGINE") == "django.db.backends.postgresql":
