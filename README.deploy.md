@@ -1,33 +1,28 @@
 Railway deployment notes
 
-1. Set environment variables in Railway:
-   - DATABASE_URL (Postgres)
-   - SECRET_KEY
-   - STRIPE_SECRET_KEY
-   - STRIPE_PUBLIC_KEY
-   - STRIPE_WEBHOOK_SECRET
-   - DEFAULT_FROM_EMAIL
-   - DISABLE_COLLECTSTATIC (optional)
+1. Connect repository to Railway
+   - Railway will read `railway.json` and run `bash entrypoint.sh`.
+   - Startup now runs: `migrate` -> `collectstatic` -> `gunicorn`.
 
-2. Build and runtime
-   - Uses Python 3.11.16
-   - The Dockerfile and entrypoint.sh run migrations and collectstatic before starting gunicorn
+2. Required environment variables
+   - `SECRET_KEY`
+   - `DATABASE_URL` (from Railway Postgres plugin)
+   - `ALLOWED_HOSTS` (recommended, comma-separated)
 
-3. Webhooks
-   - Add endpoint /stripe/webhook/ and configure Stripe to send webhooks to it.
+3. Recommended environment variables
+   - `CSRF_TRUSTED_ORIGINS` (comma-separated, include your custom domain)
+   - `SECURE_SSL_REDIRECT=true` (recommended once domain + HTTPS are ready)
+   - `DEFAULT_FROM_EMAIL`
+   - `DB_CONNECT_TIMEOUT=10` (already defaulted in settings)
 
-4. Static files
-   - WhiteNoise is configured for static serving. If using Railway Static, set RAILWAY_STATIC_URL.
+4. Optional Stripe variables
+   - `STRIPE_PUBLIC_KEY`
+   - `STRIPE_SECRET_KEY`
+   - `STRIPE_WEBHOOK_SECRET`
 
-5. Postgres
-   - Railway provides a DATABASE_URL; dj-database-url will configure it.
+5. Health check
+   - Health endpoint is `/healthz/` and is configured in `railway.json`.
 
-6. Secrets
-   - Do not commit production secrets to the repo.
-
-7. Duplicate model registration (Deployment warning)
-    - If you see runtime warnings like "Model 'agro_linker.loanapplication' was already registered",
-       it usually means some module is importing models or registering signals at import time more than once.
-    - Recommendation: Move any signal or API registration that imports models into the app's
-       AppConfig.ready() method (e.g., in `agro_linker/apps.py`) instead of at top-level module import.
-       This ensures registration runs exactly once when Django starts and avoids "already registered" warnings.
+6. Notes on Postgres timeouts
+   - If you see `postgres-*.railway.internal ... connection timed out`, verify the Postgres plugin is attached to the same Railway project and `DATABASE_URL` points to that plugin.
+   - The app now fails fast when DB is unreachable instead of booting and timing out workers repeatedly.

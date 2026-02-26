@@ -1,10 +1,17 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.http import HttpResponse
 
 from django.conf import settings
 from django.conf.urls.static import static
 
+
+def healthz(_request):
+    return HttpResponse("ok", content_type="text/plain")
+
+
 urlpatterns = [
+    path('healthz/', healthz),
     path('', include('afriapp.urls')),
     # Logistics related pages
     path('logistics/', include('logistics.urls', namespace='logistics')),

@@ -1,8 +1,6 @@
 import os
-import sys
 from pathlib import Path
 from dotenv import load_dotenv
-from os import getenv
 import dj_database_url
 from django.core.exceptions import ImproperlyConfigured
 
@@ -23,6 +21,12 @@ def require_env(name: str) -> str:
     if value:
         return value
     raise ImproperlyConfigured(f"Missing required environment variable: {name}")
+
+
+def split_csv_env(name: str) -> list[str]:
+    """Parse comma-separated env var into a clean list."""
+    raw = os.getenv(name, "")
+    return [item.strip() for item in raw.split(",") if item.strip()]
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -50,36 +54,30 @@ LOGGING = {
 }
 
 
-"""
-Allowed hosts configuration
-
-By default we accept an explicit comma-separated `ALLOWED_HOSTS` env var. If not provided
-we default to `['*']` which is helpful for quick deployments (Railway assigns a dynamic
-hostname). For production you should set `ALLOWED_HOSTS` to the exact host(s) you expect.
-"""
-
-# If the user provided an ALLOWED_HOSTS env var, use it (comma-separated). Otherwise
-# default to allowing all hosts so Railway's dynamic domain won't be rejected by Django.
-env_allowed = os.getenv('ALLOWED_HOSTS')
-if env_allowed:
-    ALLOWED_HOSTS = [h.strip() for h in env_allowed.split(',') if h.strip()]
-else:
-    ALLOWED_HOSTS = ['*']
-
+RAILWAY_PUBLIC_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN")
 YOUR_DOMAIN = os.getenv("YOUR_DOMAIN", "http://127.0.0.1:8000")
 
-env_csrf = os.getenv('CSRF_TRUSTED_ORIGINS')
-if env_csrf:
-    CSRF_TRUSTED_ORIGINS = [o.strip() for o in env_csrf.split(',') if o.strip()]
-else:
-    CSRF_TRUSTED_ORIGINS = ['https://africanfoodsd.com', 'https://www.africanfoodsd.com']
+# In production, set ALLOWED_HOSTS explicitly via env var.
+# For Railway convenience, include RAILWAY_PUBLIC_DOMAIN automatically.
+ALLOWED_HOSTS = split_csv_env("ALLOWED_HOSTS")
+if not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ["*"]
+if RAILWAY_PUBLIC_DOMAIN and RAILWAY_PUBLIC_DOMAIN not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
+
+CSRF_TRUSTED_ORIGINS = split_csv_env("CSRF_TRUSTED_ORIGINS")
+if RAILWAY_PUBLIC_DOMAIN:
+    railway_origin = f"https://{RAILWAY_PUBLIC_DOMAIN}"
+    if railway_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(railway_origin)
 
 # Stripe settings
 
-# Load Stripe keys from environment (provided via .env or host secrets)
-STRIPE_PUBLIC_KEY = require_env("STRIPE_PUBLIC_KEY")
-STRIPE_SECRET_KEY = require_env("STRIPE_SECRET_KEY")
-STRIPE_WEBHOOK_SECRET = require_env("STRIPE_WEBHOOK_SECRET")
+# Load Stripe keys from environment (optional at startup).
+# Payment endpoints should still validate missing keys at runtime.
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 
 # Optionally initialize the stripe library with the secret key so other modules
 # can use `import stripe` and have api_key already set. Wrap in try/except so
@@ -209,72 +207,59 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# Allow forcing SQLite for local/dev use while Postgres is being configured.
-# Set USE_SQLITE=true in your .env to force SQLite regardless of DATABASE_URL.
+# Priority:
+# 1. If USE_SQLITE=true, always use local SQLite.
+# 2. Else if DATABASE_URL exists (Railway/Render), parse it.
+# 3. Else if explicit PG* env vars exist, use those.
+# 4. Else fall back to SQLite for local development.
+USE_SQLITE = os.getenv("USE_SQLITE", "False").lower() == "true"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-if os.getenv('USE_SQLITE', 'False').lower() == 'true':
-    # Priority order:
-    # 1. If DATABASE_URL is provided (e.g., Railway or Render), use dj_database_url to parse it.
-    # 2. If explicit PG environment variables are provided (PGHOST, PGDATABASE, PGPASSWORD, PGPORT, PGUSER), use them.
-    # 3. Fall back to local SQLite for development.
-    # NOTE: Do NOT store secrets in source control. Provide these in .env or your host's secret manager.
-    PG_HOST = os.getenv('PGHOST') or os.getenv('DB_HOST') or None
-    PG_NAME = os.getenv('PGDATABASE') or os.getenv('POSTGRES_DB') or None
-    PG_PASSWORD = os.getenv('PGPASSWORD') or os.getenv('POSTGRES_PASSWORD') or None
-    PG_PORT = os.getenv('PGPORT') or os.getenv('DB_PORT') or None
-    PG_USER = os.getenv('PGUSER') or os.getenv('POSTGRES_USER') or None
+PG_HOST = os.getenv("PGHOST") or os.getenv("DB_HOST")
+PG_NAME = os.getenv("PGDATABASE") or os.getenv("POSTGRES_DB")
+PG_PASSWORD = os.getenv("PGPASSWORD") or os.getenv("POSTGRES_PASSWORD")
+PG_PORT = os.getenv("PGPORT") or os.getenv("DB_PORT")
+PG_USER = os.getenv("PGUSER") or os.getenv("POSTGRES_USER")
 
-    if os.getenv('DATABASE_URL'):
-        DATABASES = {
-            'default': dj_database_url.config(
-                conn_max_age=600,
-                ssl_require=True
-            )
-        }
-    elif PG_HOST and PG_NAME and PG_PASSWORD and PG_PORT:
-        # Use explicit Postgres connection settings provided via environment
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': PG_NAME,
-                'USER': PG_USER,
-                'PASSWORD': PG_PASSWORD,
-                'HOST': PG_HOST,
-                'PORT': PG_PORT,
-            }
-        }
-    else:
-        # Use SQLite for local development
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': BASE_DIR / 'db.sqlite3',
-            }
-        }
-
-# Safety: ensure DATABASES always contains a valid default ENGINE (avoid ImproperlyConfigured)
-try:
-    if not isinstance(DATABASES, dict) or 'default' not in DATABASES:
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': BASE_DIR / 'db.sqlite3',
-            }
-        }
-    else:
-        default_db = DATABASES.get('default') or {}
-        if not default_db.get('ENGINE'):
-            default_db.setdefault('ENGINE', 'django.db.backends.sqlite3')
-            default_db.setdefault('NAME', BASE_DIR / 'db.sqlite3')
-            DATABASES['default'] = default_db
-except Exception:
-    # As a last resort, fall back to SQLite
+if USE_SQLITE:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+elif DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
+elif PG_HOST and PG_NAME and PG_PASSWORD and PG_PORT:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": PG_NAME,
+            "USER": PG_USER,
+            "PASSWORD": PG_PASSWORD,
+            "HOST": PG_HOST,
+            "PORT": PG_PORT,
+        }
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+
+# Keep DB failures fast on managed platforms so workers don't stall indefinitely.
+if DATABASES["default"].get("ENGINE") == "django.db.backends.postgresql":
+    db_options = DATABASES["default"].get("OPTIONS", {})
+    db_options.setdefault("connect_timeout", int(os.getenv("DB_CONNECT_TIMEOUT", "10")))
+    DATABASES["default"]["OPTIONS"] = db_options
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -333,13 +318,9 @@ else:
 
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'webmaster@localhost')
 
-# Railway compatible settings: allow RAILWAY_STATIC_URL if provided
-RAILWAY_STATIC_URL = os.getenv('RAILWAY_STATIC_URL')
-if RAILWAY_STATIC_URL:
-    # Ensure trailing slash to satisfy Django's STATIC_URL requirement
-    STATIC_URL = RAILWAY_STATIC_URL if RAILWAY_STATIC_URL.endswith('/') else RAILWAY_STATIC_URL + '/'
-
-# Add Railway hostname to ALLOWED_HOSTS if provided
-RAILWAY_APP_NAME = os.getenv('RAILWAY_STATIC_URL') or os.getenv('RAILWAY_ENVIRONMENT')
-if RAILWAY_APP_NAME:
-    ALLOWED_HOSTS.append(RAILWAY_APP_NAME)
+# Railway / reverse-proxy compatibility.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
+SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "False").lower() == "true"
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
