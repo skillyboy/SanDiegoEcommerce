@@ -23,6 +23,7 @@ class MicroserviceClient:
         return dummy
     
     
+    
 # # Microservice connection settings
 # MICROSERVICE_BASE_URL = os.getenv('MICROSERVICE_BASE_URL', 'http://localhost:8001')
 
